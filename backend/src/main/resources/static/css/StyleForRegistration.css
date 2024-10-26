@@ -1,0 +1,186 @@
+body {
+  /*  font-family: sans-serif;*/
+}
+form {
+    width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.w-8{
+width:3rem;
+}
+.h-8{
+height:3rem;
+}
+.flex-row{
+display: flex;
+flex-direction: row;
+gap: 8px;
+/*padding: 16px;*/
+}
+.flex-row a{
+padding-top: 12px;
+padding-left: 10px;
+padding-right: 10px;
+}
+.fill{
+flex-grow:1
+}
+
+a, a:visited {text-decoration: none; color:white !important; }
+
+
+input[type="text"],
+input[type="email"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000; 
+    
+    background: url(/images/fon2.svg);
+    background-repeat: cover;
+    background-size: 170%;
+}
+
+form{
+    background-color: white; 
+}
+
+h1
+{
+    text-align: center;
+}
+
+footer {
+    background-color: #333; /*темно-серый цвет*/
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+nav {
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  
+  nav ul li {
+    display: inline-block;
+  }
+  
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+
+nav ul li.right {
+    float: right;
+}
+
+nav {
+    text-align: left;
+}
+
+nav ul li img {
+    width: 50px;
+    height: auto; 
+   /* display: inline-block; /* Устанавливаем элементы как инлайн-блоки */
+}
+
+nav ul li.right a {
+    display: inline-block;
+    margin-right: 10px; /* Отступ между кнопками */
+}
+
+.fas {
+    font-size: 20px; /* Размер иконки */
+    color: white; /* Цвет иконки (белый) */
+}
+
+.fa {
+    margin-left: 5px; /* Расстояние между текстом и иконкой */
+}
+
+.fa-user::before {
+    content: "\f007"; /* Unicode для иконки пользователя */
+}
+
+
+button {
+            width: 100%; /* Занимает всю ширину формы */
+            margin-top: 10px; /* Отступ сверху */
+            padding: 10px; /* Отступ внутри кнопки */
+            color: white;
+            border: none;
+            border-radius: 15px; /* Скругленные углы */
+            cursor: pointer; /* Курсор указатель */
+
+        }
+
+
+
+
+
+a, a:visited {text-decoration: none; color:white !important; }
+
+h1 {
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    margin-top: 60px;
+    text-shadow: 10px 10px 25px 10px rgba(34, 60, 80, 0.3);
+}
+
+button:first-of-type {
+    background-color: green;
+    color: white;
+}
+
+button:last-of-type {
+    background-color: darkgray;
+    color: white;
+}

@@ -1,0 +1,38 @@
+/* Модальное окно (скрыто по умолчанию) */
+.modal {
+     display: none; /* Скрыть по умолчанию */
+     position: fixed; /* Оставить модальное окно на месте */
+     z-index: 1; /* Слой поверх других элементов */
+     left: 0;
+     top: 0;
+     width: 100%; /* Полная ширина */
+     height: 100%; /* Полная высота */
+     overflow: auto; /* Включить прокрутку, если нужно */
+     background-color: rgb(0,0,0); /* Черный фон с прозрачностью */
+     background-color: rgba(0,0,0,0.4); /* Черный с прозрачностью */
+}
+
+/* Модальное содержание/коробка */
+.modal-content {
+     background-color: #fefefe;
+     margin: 15% auto; /* 15% от верхнего и центрового выравнивания */
+     padding: 20px;
+     border: 1px solid #888;
+     width: 80%; /* Ширина может быть изменена */
+     max-width: 500px; /* Максимальная ширина */
+}
+
+/* Кнопка закрытия (X) */
+.close {
+     color: #aaa;
+     float: right;
+     font-size: 28px;
+     font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+     color: black;
+     text-decoration: none;
+     cursor: pointer;
+}

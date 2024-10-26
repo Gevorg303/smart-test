@@ -1,0 +1,331 @@
+.card {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    margin: 20px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+    background-color: #f5f5f5;
+}
+
+.card-body {
+    padding: 10px;
+}
+.w-8{
+width:3rem;
+}
+.h-8{
+height:3rem;
+}
+.flex-col{
+display:flex;
+flex-direction:column;
+gap: 8px;
+}
+.flex-row{
+display: flex;
+flex-direction: row;
+gap: 8px;
+/*padding: 16px;*/
+}
+.flex-row a{
+padding-top: 12px;
+padding-left: 10px;
+padding-right: 10px;
+}
+.fill{
+flex-grow:1
+}
+.max-x{
+width:100%;
+min-width:100%;
+}
+nav a, a:visited {
+    text-decoration: none;
+    color:white;
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    max-width:100%;
+    background: url(/images/fon2.svg);
+    background-repeat: cover;
+    background-size: 170%;
+}
+
+h1 {
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+modal-content{
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    text-align: center;
+     touch-action: none;
+}
+h2 {
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5%;
+    padding: 0;
+}
+.link{
+ color: black;
+ text-decoration:none;
+ text-decoration-thickness: 25%;
+}
+nav ul li.right {
+    float: right;
+}
+
+nav {
+    text-align: left;
+}
+nav {
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+nav ul li img {
+    width: 50px;
+    height: auto;
+    /* display: inline-block; /* Устанавливаем элементы как инлайн-блоки */
+}
+
+nav ul li.right a {
+    display: inline-block;
+    margin-right: 10px;
+    /* Отступ между кнопками */
+}
+
+/* Стили для иконок через Font Awesome классы */
+.fas {
+    font-size: 20px;
+    /* Размер иконки */
+    color: white;
+    /* Цвет иконки (белый) */
+}
+
+.fa {
+    margin-left: 5px;
+    /* Расстояние между текстом и иконкой */
+}
+
+.fa-user::before {
+    content: "\f007";
+    /* Unicode для иконки пользователя */
+}
+.h2{
+    margin: 0px;
+    color: black;
+    text-shadow: none !important;
+}
+.flex{
+    display: flex;
+}
+.align-center{
+    align-items:center;
+    justify-content:center;
+}
+.mb-32{
+    margin-bottom:32px;
+}
+.mb-95{
+    margin-bottom:95px;
+}
+footer {
+    background-color: #333;
+    /*темно-серый цвет*/
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Центрирование элементов по горизонтали */
+}
+.edit-button {
+    background-color: green !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s !important; /* плавный переход */
+}
+
+.edit-button:hover {
+    background-color: darkgreen !important; /* изменение цвета при наведении */
+}
+/*стили для заглушек для тестов*/
+.testlink {
+    background-color: lightgreen !important;
+    color: black !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s !important; /* плавный переход */
+}
+
+.testlink:hover {
+    background-color: aqua !important; /* изменение цвета при наведении */
+}
+
+@media screen and (max-width: 768px) {
+    .product-card {
+        width: 250px;
+        /* Уменьшаем ширину при сжатии экрана */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .product-card {
+        width: 100%;
+        /* Занимаем всю ширину на маленьких экранах */
+    }
+}
+
+
+.product-card {
+    position: relative;
+    padding: 20px;
+    margin: 15px;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    z-index: -1;
+}
+
+h1 {
+    text-align: center;
+}
+
+.card-wrapper {
+    background: white no-repeat;
+    background-position: center top;
+    background-attachment: fixed;
+    background-size: cover;
+    padding: 60px;
+    /* Увеличиваем отступы на 50px */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Добавление тени */
+    margin-left: auto;
+    /* Контролируйте ширину содержимого и автоматически выравнивайте слева и справа */
+    margin-right: auto;
+    /* То же самое для правого отступа */
+    width: 70%;
+    /* Любой процент для ширины карточки или можно использовать фиксированную ширину */
+}
+
+.card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.container {
+    background: #f0f0f0;
+    /* Цвет фона */
+    padding: 10px;
+    /* Отступы внутри контейнера */
+    margin: 16px;
+    /* Убираем внешние отступы контейнера */
+}
+
+.card {
+    padding: 10px;
+    /* Отступы внутри карточки */
+    margin: 5px;
+    /* Отступы вокруг карточки */
+}
+
+.product-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+    /* Добавляем плавный переход для тени */
+}
+
+.product-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    /* Более насыщенная тень при наведении */
+}
+.edit-button {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* плавный переход */
+}
+
+.edit-button:hover {
+    background-color: darkgreen; /* потемнение при наведении */
+}

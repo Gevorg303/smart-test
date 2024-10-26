@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.login-box {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    padding: 30px; width: 300px;
+}
+.login-box h2 {
+    margin: 0 0 20px;
+    text-align: center;
+}
+.login-box input[type="text"],
+.login-box input[type="password"] {
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     font-size: 14px;
+     padding: 10px;
+     width: 100%;
+     box-sizing: border-box;
+     margin-bottom: 20px;
+}
+.login-box button[type="submit"] {
+     background-color: #4CAF50;
+     border: none;
+     border-radius: 5px;
+     color: #fff;
+     cursor: pointer;
+     font-size: 14px;
+     padding: 10px;
+     width: 100%;
+     margin-bottom: 10px;
+}
+.login-box button[type="button"] {
+     background-color: transparent;
+     border: none;
+     color: #007BFF;
+     cursor: pointer;
+     font-size: 14px;
+     padding: 0;
+     width: auto;
+     margin: 0;
+}
+.form-container {
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 1em;
+        border: 1px solid #ccc;
+        border-radius: 1em;
+}
+
+.form-container label,
+.form-container input {
+         display: block;
+         margin-bottom: 0.5em;
+}
+
+.button-container {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-top: 1em;
+}
+
+.button-container a {
+          text-decoration: none;
+}
+
+.button-container button {
+           width: 48%;
+}

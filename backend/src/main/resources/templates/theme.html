@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/StylesForTheme.css">
+    <link rel="stylesheet" href="../static/css/theme_modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico">
+</head>
+<body>
+
+<nav>
+    <div class="flex-row">
+        <img class="w-8 h-8" src="/images/в.png" alt="Логотип">
+        <a href="main">Предметы</a>
+        <a id="adduserbutton" href="registration">Зарегистрировать пользователя</a>
+        <a href="#Справка">Справка</a>
+        <div class="fill"> </div>
+        <a href="#"><i class="fas fa-bell"></i></a>
+        <a href="#"><i class="fas fa-comments"></i></a>
+        <a href="account">Личный кабинет</a>
+
+    </div>
+</nav>
+<h1>Темы по предмету</h1><br>
+<h1 id="titlesubject"></h1>
+<div class="flex-col align-center mb-95">
+    <div class="container" id="subjects-container"></div>
+    <button class="edit-button" id="openModal">Добавить / Удалить тему</button>
+</div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <h2>Выберите действие и введите название темы:</h2>
+        <label>
+            <input checked type="radio" name="action" id="radioAdd" value="add"> Добавить тему
+        </label>
+        <label>
+            <input  type="radio" name="action" id="radioDel" value="delete"> Удалить тему
+        </label>
+
+        <br>
+        <label id="labelitemName" for="itemName">Название темы</label>
+        <input type="text" id="itemName" placeholder="Название темы" onblur="validate(this, 'errorItemName')">
+        <br>
+        <label  id="labelselectTheme" for="selectTheme">Выберите тему</label>
+        <select id="selectTheme">
+
+        </select>
+        <br>
+        <button id="confirmAction">Подтвердить</button>
+    </div>
+</div>
+<script>
+function validate(field, errorFieldId) {
+    if (field.value.trim() === '') {
+        field.style.borderColor = 'red';
+        document.getElementById(errorFieldId).innerText = 'Поле не должно состоять из одних пробелов.';
+        document.getElementById('confirmAction').disabled = true;
+    } else {
+        field.style.borderColor = 'green';
+        document.getElementById(errorFieldId).innerText = '';
+        document.getElementById('confirmAction').disabled = false;
+    }
+}
+
+document.getElementById('itemName').addEventListener('input', function() {
+    validate(this, 'errorItemName');
+});
+
+document.getElementById('itemDescription').addEventListener('input', function() {
+    validate(this, 'errorItemDescription');
+});
+</script>
+
+</body>
+<script src="../js/theme.js"></script>
+<script src="../js/theme_modal.js"></script>
+<script src="../js/theme_modal_2.js"></script>
+<script src="/js/security.js"></script>
+<footer>
+    <p>&copy; Информация о сайте</p>
+</footer>
+</html>

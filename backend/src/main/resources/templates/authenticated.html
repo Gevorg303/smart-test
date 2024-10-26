@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authenticated Page</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico">
+</head>
+<body>
+<h1>Authenticated Page</h1>
+<p id="message"></p>
+
+<script>
+    // Проверка наличия токена в localStorage
+    const token = localStorage.getItem('jwtToken');
+
+    if (!token) {
+        alert('No token found, redirecting to login page');
+        window.location.href = 'index.html'; // Переход на страницу входа
+    } else {
+        console.log('Token found:', token);
+
+        // Пример запроса с использованием токена для аутентификации
+        fetch('/api/protected-endpoint', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to authenticate');
+            }
+        })
+        .then(data => {
+            document.getElementById('message').innerText = 'Protected data: ' + JSON.stringify(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Authentication failed, redirecting to login page');
+            window.location.href = 'index.html'; // Переход на страницу входа
+        });
+    }
+</script>
+<script src="/js/security.js"></script>
+</body>
+</html>
