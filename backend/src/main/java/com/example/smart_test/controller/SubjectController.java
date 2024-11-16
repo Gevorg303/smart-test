@@ -49,6 +49,7 @@ public class SubjectController {
         return subjectService.getSubjectById(id);
     }
 
+
     @GetMapping("/class={idClass}/teacher={idTeacher}")
     public List<SubjectDto> getSubjectByClassAndTeacher(@PathVariable Long idClass, @PathVariable Long idTeacher) {
         return subjectService.getSubjectByClassAndTeacher(idClass, idTeacher);
