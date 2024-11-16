@@ -6,18 +6,24 @@ const Layout = () => {
             <nav>
                 <ul>
                     <li>
-                        <Link to="/">Home</Link>
+                        <Link to="/">Логотип</Link>
                     </li>
                     <li>
-                        <Link to="/blogs">Blogs</Link>
+                        <Link to="/blogs">Предметы</Link>
                     </li>
                     <li>
-                        <Link to="/contact">Contact</Link>
+                        <Link to="/registration">Зарегистрировать пользователя</Link>
+                    </li>
+                    <li>
+                        <Link to="/info">Справка</Link>
+                    </li>
+                    <li>
+                        <Link to="/contact">Личный кабинет</Link>
                     </li>
                 </ul>
             </nav>
 
-            <Outlet />
+            <Outlet/>
         </>
     )
 };

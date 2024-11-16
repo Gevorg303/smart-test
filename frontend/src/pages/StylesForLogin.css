@@ -1,0 +1,212 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000; 
+    background: url(fon2.svg);
+    background-repeat: cover;
+    background-size: 170%;
+}
+
+h1 {
+    margin-bottom: 3%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh; /* Изменено на 90vh, чтобы форма находилась чуть выше середины экрана */
+    overflow: hidden; /* Убирает вертикальную прокрутку */
+}
+
+.w-8 {
+    width: 1.5rem;
+}
+
+.h-8 {
+    height: 1.5rem;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 16px;
+}
+
+.fill {
+    flex-grow: 1;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: white;
+}
+
+.reg-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    text-decoration: none; /* Убираем подчеркивание ссылки */
+    width: 30%; /* Задаем ширину кнопки */
+    font-size: 1em;
+    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
+    text-align: center; /* Центрируем текст */
+}
+
+.login-box {
+    background-color: #f5f5f5; /*светло-серый цвет*/
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    max-height: 250px;
+    height: 100%;
+    margin-bottom: 1%;
+    border-radius: 50px;
+    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
+}
+
+input {
+    width: 95%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.container .fgf button {
+
+    background-color: #1C7ECC;
+    color: #fff;
+    border: 0px solid #000;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 20%;
+    margin-top: 2%;
+    box-shadow: none;
+}
+
+.container button {
+    background-color: #1C7ECC;
+    color: #fff;
+    border: 0px solid #000;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 30%;
+    height: 5%;
+    border-radius: 15px;
+    font-size: 1em;
+    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
+}
+
+.container button:hover {
+    background-color: #10568E;
+}
+
+footer {
+    background-color: #333; /*темно-серый цвет*/
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.notification {
+    display: none;
+    background-color: #f2f2f2;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+    bottom: 30px;
+    left: 50%;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+    color: #333;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Стили зеленой полоски */
+.header-bar {
+    background-color: #a9cf55;
+    color: white;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-logo {
+    max-height: 40px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Убирает вертикальную прокрутку */
+    font-family: Arial, sans-serif;
+}
+
+.login-box {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-box h1 {
+    margin-bottom: 20px;
+}
+
+.login-box input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-box button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #555;
+}
+
+#errorlabel {
+    color: red;
+    margin-top: 10px;
+}

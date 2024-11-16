@@ -7,17 +7,6 @@ import './StyleForAccount.css';
 const Contact = () => {
     return (
         <div>
-            <nav className="d-flex justify-content-between p-3">
-                <div className="flex-row">
-                    <img className="w-8 h-8" src="/images/в.png" alt="Логотип" />
-                    <a href="main" className="mx-2">Предметы</a>
-                    <a href="registration" id="adduserbutton" className="mx-2">Зарегистрировать пользователя</a>
-                    <a href="#Справка" className="mx-2">Справка</a>
-                    <div className="fill"> </div>
-
-                    <a href="account" className="mx-2">Личный кабинет</a>
-                </div>
-            </nav>
 
             <h1 className="text-center my-4">Личные данные</h1>
 
