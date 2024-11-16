@@ -1,7 +1,9 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,9 @@ import java.util.List;
 public class TestController {
     @Autowired
     private TestServiceInterface testService;
+
+    @Autowired
+    private TaskServiceInterface taskService;
 
     @PostMapping("/add")
     public TestDto addTest(@RequestBody TestDto testDto) {
@@ -29,9 +34,27 @@ public class TestController {
         return testService.getAllTestDto();
     }
 
-    /*Вывод информации про конкретную тему*/
+    /**
+    Вывод информации про конкретный тест
+    */
     @PostMapping("/get")
     public TestDto getTestById(@RequestBody TestDto testDto) {
         return testService.getTestById(testDto.getId());
+    }
+
+    /**
+    Выводит список заданий в тесте
+    */
+    @PostMapping("/get-tasks-test")
+    public List<TaskDto> findTasksTheTest(@RequestBody TestDto dto) {
+        return taskService.findTasksTheTest(dto);
+    }
+
+    /**
+     Выводит список доступных заданий для добавления в тест
+     */
+    @PostMapping("/get-available-tasks")
+    public List<TaskDto> displayTheAvailableTasks(@RequestBody TestDto dto){
+        return taskService.displayTheAvailableTasks(dto);
     }
 }

@@ -2,19 +2,31 @@ package com.example.smart_test.service.api;
 
 
 import com.example.smart_test.dto.TaskDto;
+import com.example.smart_test.dto.TestDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 public interface TaskServiceInterface {
-    public TaskDto addTaskDto(TaskDto dto);
+    TaskDto addTaskDto(TaskDto dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteTaskDto(TaskDto dto);
+    void deleteTaskDto(TaskDto dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<TaskDto> getAllTasks();
+    List<TaskDto> getAllTasks();
 
-    //List<TaskDto> getFindTask();
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    List<TaskDto> findTasksTheTest(TestDto dto);
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    List<TaskDto> displayTheAvailableTasks(TestDto dto);
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    void addTaskToTest(Long testId, Long taskId);
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    TaskDto getTaskById(Long id);
 }
