@@ -1,4 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
+import logo from '../logo.ico';
 
 const Layout = () => {
     return (
@@ -6,7 +7,9 @@ const Layout = () => {
             <nav>
                 <ul>
                     <li>
-                        <Link to="/">Логотип</Link>
+                        <Link to="/">
+                            <img src={logo} alt="Логотип" style={{width: '20px', height: '20px'}}/>
+                        </Link>
                     </li>
                     <li>
                         <Link to="/blogs">Предметы</Link>
@@ -25,7 +28,7 @@ const Layout = () => {
 
             <Outlet/>
         </>
-    )
+    );
 };
 
 export default Layout;
