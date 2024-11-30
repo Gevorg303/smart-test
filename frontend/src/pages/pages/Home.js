@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './StylesForMain.css'; // Ваши стили
-import './main.css'; // Ваши стили
-import './main_modal.css'; // Ваши стили
+import '../css/StylesForMain.css'; // Ваши стили
+import '../css/main.css'; // Ваши стили
+import '../css/main_modal.css'; // Ваши стили
 
 const App = () => {
     const [itemName, setItemName] = useState('');

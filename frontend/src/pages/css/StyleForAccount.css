@@ -2,9 +2,12 @@ body {
     font-family: Arial, sans-serif;
     background-color: #000; 
     
-    background: url(fon2.svg);
+    background: url(../fon2.svg);
     background-repeat: cover;
     background-size: 170%;
+}
+.photo {
+    margin-right: 20px;
 }
 
 .container {

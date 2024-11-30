@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/Layout";
-import Home from "./pages/Home";
-import Blogs from "./pages/Blogs";
-import Contact from "./pages/Contact";
+import Layout from "./pages/pages/Layout";
+import Home from "./pages/pages/Home";
+import Blogs from "./pages/pages/Blogs";
+import Contact from "./pages/pages/Contact";
 import NoPage from "./pages/NoPage";
 
 export default function App() {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './styles.css'; // Убедитесь, что файл стилей доступен
+import '../css/styles.css'; // Убедитесь, что файл стилей доступен
 
 const TeacherRegistration = () => {
     const [formData, setFormData] = useState({

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './StyleForRegistration.css'; // Убедитесь, что файл стилей доступен
-import './registration_modal.css'; // Убедитесь, что файл стилей доступен
+import '../css/StyleForRegistration.css'; // Убедитесь, что файл стилей доступен
+import '../css/registration_modal.css'; // Убедитесь, что файл стилей доступен
 
 const RegistrationPage = () => {
     const [formData, setFormData] = useState({
