@@ -6,6 +6,7 @@ import Blogs from "./pages/pages/Blogs";
 import Contact from "./pages/pages/Contact";
 import NoPage from "./pages/NoPage";
 import RegistrationPage from "./pages/pages/registration";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
     return (
