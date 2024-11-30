@@ -52,7 +52,9 @@ const App = () => {
                     ))
                 )}
             </div>
-            <button id="openModal" className="edit-button" onClick={() => setModalOpen(true)}>Добавить / Удалить предмет</button>
+            <div className="button-container">
+                <button id="openModal" className="edit-button" onClick={() => setModalOpen(true)}>Добавить / Удалить предмет</button>
+            </div>
 
             {isModalOpen && (
                 <div id="myModal" className="modal" style={{ display: 'flex' }} onClick={handleModalClick}>
