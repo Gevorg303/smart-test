@@ -12,9 +12,6 @@ const Layout = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/blogs">Предметы</Link>
-                    </li>
-                    <li>
                         <Link to="/registration">Зарегистрировать пользователя</Link>
                     </li>
                     <li>

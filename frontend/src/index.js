@@ -5,6 +5,7 @@ import Home from "./pages/pages/Home";
 import Blogs from "./pages/pages/Blogs";
 import Contact from "./pages/pages/Contact";
 import NoPage from "./pages/NoPage";
+import RegistrationPage from "./pages/pages/registration";
 
 export default function App() {
     return (
@@ -12,7 +13,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="blogs" element={<Blogs />} />
+                    <Route path="registration" element={<RegistrationPage />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="*" element={<NoPage />} />
                 </Route>
