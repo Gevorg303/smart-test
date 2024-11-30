@@ -9,6 +9,7 @@ const App = () => {
     const [errorItemName, setErrorItemName] = useState('');
     const [errorItemDescription, setErrorItemDescription] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
+    const [subjects, setSubjects] = useState([]); // Состояние для хранения предметов
 
     const validate = (value, setError) => {
         if (value.trim() === '') {
@@ -22,8 +23,16 @@ const App = () => {
 
     const handleConfirm = () => {
         if (validate(itemName, setErrorItemName) && validate(itemDescription, setErrorItemDescription)) {
-
             console.log('Данные подтверждены:', { itemName, itemDescription });
+            setSubjects([...subjects, { name: itemName, description: itemDescription }]); // Добавляем предмет в список
+            setItemName('');
+            setItemDescription('');
+            setModalOpen(false);
+        }
+    };
+
+    const handleModalClick = (e) => {
+        if (e.target.id === 'myModal') {
             setModalOpen(false);
         }
     };
@@ -31,12 +40,23 @@ const App = () => {
     return (
         <div>
             <h1 id="welcome"></h1>
-            <div className="container" id="subjects-container"></div>
+            <div className="container" id="subjects-container">
+                {subjects.length === 0 ? (
+                    <p>Предметы отсутствуют</p>
+                ) : (
+                    subjects.map((subject, index) => (
+                        <div key={index} className="subject-item">
+                            <h3>{subject.name}</h3>
+                            <p>{subject.description}</p>
+                        </div>
+                    ))
+                )}
+            </div>
             <button id="openModal" className="edit-button" onClick={() => setModalOpen(true)}>Добавить / Удалить предмет</button>
 
             {isModalOpen && (
-                <div id="myModal" className="modal">
-                    <div className="modal-content">
+                <div id="myModal" className="modal" style={{ display: 'flex' }} onClick={handleModalClick}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <h2>Выберите действие и введите данные:</h2>
                         <label>
                             <input type="radio" name="action" value="add" defaultChecked /> Добавить предмет
