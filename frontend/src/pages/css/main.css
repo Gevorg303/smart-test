@@ -77,7 +77,7 @@ body {
 }
 
 .edit-button {
-    background-color: green;
+    background-color: green !important;
     color: white;
     border: none;
     border-radius: 5px;
@@ -88,7 +88,7 @@ body {
 }
 
 .edit-button:hover {
-    background-color: darkgreen; /* изменение цвета при наведении */
+    background-color: darkgreen !important; /* изменение цвета при наведении */
 }
 
 .subject-item {
