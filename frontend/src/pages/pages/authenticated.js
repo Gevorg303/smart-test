@@ -15,7 +15,7 @@ const AuthenticatedPage = () => {
       console.log('Token found:', token);
 
 
-      fetch('/api/protected-endpoint', {
+      fetch('localhost:8000/api/protected-endpoint', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`

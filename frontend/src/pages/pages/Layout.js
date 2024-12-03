@@ -7,7 +7,7 @@ const Layout = () => {
             <nav>
                 <ul>
                     <li>
-                        <Link to="/">
+                        <Link to="/home">
                             <img src={logo} alt="Логотип" style={{width: '20px', height: '20px'}}/>
                         </Link>
                     </li>

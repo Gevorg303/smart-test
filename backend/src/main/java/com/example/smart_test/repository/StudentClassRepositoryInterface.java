@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface StudentClassRepositoryInterface extends JpaRepository<StudentClass, Long> {
 
-    @Query(value = "SELECT класс.идентификатор_класс, номер_класса, буквенное_обозначение, идентификатор_образовательное_уч FROM учитель_класс inner join класс on класс.идентификатор_класс = учитель_класс.идентификатор_класс WHERE учитель_класс.идентификатор_пользователя = :id",
+    @Query(value = "SELECT класс.идентификатор_класс, номер_класса, буквенное_обозначение, идентификатор_образовательное_уч FROM пользователь_класс inner join класс on класс.идентификатор_класс = пользователь_класс.идентификатор_класс WHERE пользователь_класс.идентификатор_пользователя = :id",
             nativeQuery = true)
     List<StudentClass> findByTeacherId(Long id);
 
