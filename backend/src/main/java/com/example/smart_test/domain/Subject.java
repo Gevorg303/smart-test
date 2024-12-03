@@ -20,6 +20,6 @@ public class Subject {
     @Column(name = "описание_предмета")
     private String description;
     @ManyToOne
-    @JoinColumn(name = "идентификатор_учитель_класс")
+    @JoinColumn(name = "идентификатор_пользователь_класс")
     private TeacherClass teacherClass;
 }

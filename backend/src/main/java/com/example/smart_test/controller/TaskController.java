@@ -1,7 +1,6 @@
 package com.example.smart_test.controller;
 
 import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,14 @@ public class TaskController {
     @PutMapping("/add-task-to-test")
     public void addTaskToTest(@RequestParam Long testId, @RequestParam Long taskId){
         taskService.addTaskToTest(testId, taskId);
+    }
+
+    /**
+     * Удаление задания из теста /task/remove-task-from-test?taskId=7
+     * */
+    @PutMapping("/remove-task-from-test")
+    public void removeTaskFromTest (@RequestParam Long taskId){
+        taskService.removeTaskFromTest(taskId);
     }
 
 //    @GetMapping("/find-test")

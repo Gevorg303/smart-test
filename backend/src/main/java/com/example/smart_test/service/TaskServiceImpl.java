@@ -112,6 +112,19 @@ public class TaskServiceImpl implements TaskServiceInterface {
         }
     }
 
+    @Override
+    public void removeTaskFromTest(Long taskId) {
+        try {
+            Task task = taskMapperInterface.toEntity(getTaskById(taskId));
+            task.setTest(null);
+            taskRepositoryInterface.save(task);
+        } catch (Exception e) {
+            log.error(
+                    "Не удалость удалить задание из теста: e.getMessage(), e)"
+            );
+        }
+    }
+
     public void addTaskTheTest() {
 
     }
@@ -141,7 +154,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TaskDto getTaskById(Long id) {
         try {
             Task task = taskRepositoryInterface.findById(id)
