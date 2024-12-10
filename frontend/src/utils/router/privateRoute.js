@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const privateRoute  = () => {
-
-    return(
+const PrivateRoute = () => {
+    return (
         <div>
 
         </div>
     );
-}
+};
 
-export default privateRoute;
+export default PrivateRoute;
