@@ -184,9 +184,15 @@ input {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
     text-align: center;
+    max-height: 28em;
 }
+
+.login-box.error {
+    height: 1000px; /* Высота при наличии ошибки */
+}
+
 
 .login-box h1 {
     margin-bottom: 20px;
@@ -200,6 +206,17 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+
+
+/* Стили для меток */
+.custom-label {
+    display: flex;
+    justify-content: left;
+}
+
+
+
 
 .login-box button {
     background-color: #4CAF50;
@@ -221,4 +238,11 @@ input {
 #errorlabel {
     color: red;
     margin-top: 10px;
+}
+
+.logo {
+    display: block;
+    margin: 0 auto 20px; /* Отступ снизу для отделения логотипа от формы */
+    max-width: 20%; /* Ограничивает ширину логотипа */
+    height: auto; /* Сохраняет пропорции изображения */
 }

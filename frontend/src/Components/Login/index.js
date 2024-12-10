@@ -60,18 +60,25 @@ class LoginPage extends React.Component {
         return (
             <div className="container">
                 <div className="login-box">
+                    <img src="/Logo_1.jpg" alt="Logo" className="logo"/>
                     <Form id="loginForm" onSubmit={this.handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Control type="text" name="username" id="username" placeholder="Логин" required/>
-                            <Form.Control type="password" name="password" id="password" placeholder="Пароль" required/>
-                            <Form.Text  id="errorlabel">
-
+                        <Form.Group className="mb-3" controlId="formBasicErrors">
+                            <Form.Text id="errorlabel">
+                                Ошибка!
                             </Form.Text>
-
                         </Form.Group>
-                        <Button  type="submit" >
-                            Войти
-                        </Button>
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label className="custom-label">Логин</Form.Label>
+                                <Form.Control type="text" name="username" id="username" placeholder="Логин" required/>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicPassword">
+                                <Form.Label className="custom-label">Пароль</Form.Label>
+                                <Form.Control type="password" name="password" id="password" placeholder="Пароль"
+                                              required/>
+                            </Form.Group>
+                            <Button type="submit">
+                                Войти
+                            </Button>
                     </Form>
                 </div>
             </div>
