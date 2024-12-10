@@ -1,23 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Navigate } from "react-router-dom";
 
-class SubjectCard extends React.Component {
-    constructor(props) {
-        super(props);
-        this.subjectId = {value: ''};
-        this.subjectName = {value: ''};
-        this.subjectDescription = {value: ''};
+const SubjectCard = (props) => {
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
 
-    render() {
-        return (
-            <div className="card">
+    const handleClick = (e) => {
+        e.preventDefault();
+        console.log(`You clicked ${props.id}`);
+    };
 
-            </div>
-        );
-    }
-}
+    return (
+        <div id={props.id} className="card" onClick={handleClick}>
+            <h2>{props.name}</h2>
+            <p>{props.description}</p>
+        </div>
+    );
+};
 
 export default SubjectCard;
+
