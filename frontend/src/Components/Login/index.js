@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Navigate } from "react-router-dom";
-import '../css/StylesForLogin.css';
-import HomePage from "./Home";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import "./styles.css"
+
 
 
 
@@ -57,14 +58,23 @@ class LoginPage extends React.Component {
 
     render() {
         return (
-            <form id="loginForm" onSubmit={this.handleSubmit}>
-                <div>
-                    <input type="text" name="username" id="username" placeholder="Логин" required/>
-                    <input type="password" name="password" id="password" placeholder="Пароль" required/>
-                    <h4 id="errorlabel"></h4>
-                    <input type="submit" value="Войти"/>
+            <div className="container">
+                <div className="login-box">
+                    <Form id="loginForm" onSubmit={this.handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Control type="text" name="username" id="username" placeholder="Логин" required/>
+                            <Form.Control type="password" name="password" id="password" placeholder="Пароль" required/>
+                            <Form.Text  id="errorlabel">
+
+                            </Form.Text>
+
+                        </Form.Group>
+                        <Button  type="submit" >
+                            Войти
+                        </Button>
+                    </Form>
                 </div>
-            </form>
+            </div>
         );
     }
 }

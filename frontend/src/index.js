@@ -1,12 +1,8 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/pages/Layout";
-import Home from "./pages/pages/Home"; // Если Home не используется, можно убрать
-import Blogs from "./pages/pages/Blogs"; // Если Blogs не используется, можно убрать
-import Contact from "./pages/pages/Contact";
-import NoPage from "./pages/NoPage";
-import RegistrationPage from "./pages/pages/registration";
-import LoginPage from "./pages/pages/login";
+import HomePage from "./Components/Home";
+import LoginPage from "./Components/Login";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
     return (
@@ -14,14 +10,9 @@ export default function App() {
             <Routes>
                 {/* Стартовая страница без Layout */}
                 <Route path="/" element={<LoginPage />} />
-
                 {/* Остальные страницы с Layout */}
-                <Route path="/*" element={<Layout />}>
-                    <Route path="home" element={<Home />} />
-                    <Route path="registration" element={<RegistrationPage />} />
-                    <Route path="contact" element={<Contact />} />
-                    <Route path="blogs" element={<Blogs />} /> {/* Пример для других страниц */}
-                    <Route path="*" element={<NoPage />} />
+                <Route path="/*" /*element={<Layout />}*/>
+                    <Route path="home" element={<HomePage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
