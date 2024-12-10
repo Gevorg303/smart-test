@@ -107,8 +107,9 @@ input {
     box-shadow: none;
 }
 
-.container button {
-    background-color: #1C7ECC;
+/*.container button {
+    /*background-color: #1C7ECC;
+    background-color: #4CAF50;
     color: #fff;
     border: 0px solid #000;
     padding: 10px 20px;
@@ -122,8 +123,9 @@ input {
 }
 
 .container button:hover {
-    background-color: #10568E;
-}
+    /*background-color: #10568E;
+    background-color: #45a049;
+}*/
 
 /*footer {
     background-color: #333; /*темно-серый цвет*/
@@ -200,16 +202,20 @@ input {
 }
 
 .login-box button {
+    background-color: #4CAF50;
+    color: #fff;
     padding: 10px 20px;
-    background-color: #333;
-    color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    width: 30%;
+    height: 5%;
+    border-radius: 15px;
+    font-size: 1em;
+    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
 }
 
 .login-box button:hover {
-    background-color: #555;
+    background-color: #388E3C;
 }
 
 #errorlabel {
