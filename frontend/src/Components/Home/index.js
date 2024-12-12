@@ -6,7 +6,7 @@ import "../Home/styles.css"
 
 const HomePage = () => {
 
-    var welcomeText ="";
+    //var welcomeText ="";
 
     useEffect( () => {
         async function fetchUser() {
@@ -19,9 +19,9 @@ const HomePage = () => {
                    // throw new Error('Ошибка сети');
                 }
                 const user = await response.json();
-                //  const welcome = document.getElementById('welcome');
+                  const welcome = document.getElementById('welcome');
                 console.log(user);
-                /*   welcome.innerHTML*/ welcomeText = "Здравствуйте, "+user.name + " ("+user.role.role + ")";
+                   welcome.innerHTML = "Здравствуйте, "+user.name + " ("+user.role.role + ")";
                 /* subjects.forEach(subject => {
                      const card = createSubjectCard(subject);
                      container.appendChild(card);
@@ -37,7 +37,7 @@ const HomePage = () => {
 
     return (
         <div>
-           <WelcomeComponent text={welcomeText}/>
+           <WelcomeComponent />
             <div className="container" id="subjects-container">
                 <SubjectCard name='Subject1' id='1'/>
                 <SubjectCard name='Subject2' id='2' description='description'/>
