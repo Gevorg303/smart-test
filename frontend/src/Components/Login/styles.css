@@ -16,7 +16,7 @@ h1 {
     margin-bottom: 3%;
 }
 
-.container {
+.container-login {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -93,7 +93,7 @@ input {
     border-radius: 10px;
 }
 
-.container .fgf button {
+.container-login .fgf button {
 
     background-color: #1C7ECC;
     color: #fff;

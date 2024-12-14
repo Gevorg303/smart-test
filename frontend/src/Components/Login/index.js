@@ -58,7 +58,7 @@ class LoginPage extends React.Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container-login">
                 <div className="login-box">
                     <img src="/Logo_1.jpg" alt="Logo" className="logo"/>
                     <Form id="loginForm" onSubmit={this.handleSubmit}>
