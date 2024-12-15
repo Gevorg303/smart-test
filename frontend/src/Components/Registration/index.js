@@ -117,10 +117,6 @@ class RegistrationPage extends React.Component {
                                 <option value="11">11</option>
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formPassword">
-                            <Form.Label className="custom-label">Пароль</Form.Label>
-                            <Form.Control type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder="Пароль" required/>
-                        </Form.Group>
                         <Button type="submit">
                             Зарегистрироваться
                         </Button>
