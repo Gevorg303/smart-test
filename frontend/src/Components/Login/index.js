@@ -63,7 +63,7 @@ class LoginPage extends React.Component {
                     <img src="/Logo_1.jpg" alt="Logo" className="logo"/>
                     <Form id="loginForm" onSubmit={this.handleSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicErrors">
-                            <Form.Text id="errorlabel">
+                            <Form.Text id="errorlabel" className="error-text">
                                 Ошибка!
                             </Form.Text>
                         </Form.Group>

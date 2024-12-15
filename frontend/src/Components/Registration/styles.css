@@ -1,0 +1,79 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    background: url(../../pages/fon2.svg);
+    background-size: 170%;
+    overflow-y: auto; /* Добавляем вертикальный скролл для всей страницы */
+}
+
+.container-registration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Изменяем на flex-start, чтобы форма была сверху */
+    min-height: 100vh; /* Минимальная высота контейнера равна высоте экрана */
+    padding-top: 5em;
+    padding-bottom: 5em;
+    background-color: transparent;
+}
+
+.registration-box {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
+}
+
+.registration-box h2 {
+    margin-bottom: 20px;
+}
+
+.registration-box input, .registration-box select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.custom-label {
+    display: flex;
+    justify-content: left;
+}
+
+.registration-box button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    height: 5%;
+    border-radius: 15px;
+    font-size: 1em;
+    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
+}
+
+.registration-box button:hover {
+    background-color: #388E3C;
+}
+
+#errorlabel {
+    color: red;
+    margin-top: 10px;
+}
+
+.error-text {
+    font-size: 1.1em; /* Увеличиваем шрифт */
+    font-weight: bold; /* Делаем текст жирным (по желанию) */
+}

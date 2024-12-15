@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./Components/Home";
 import LoginPage from "./Components/Login";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import WelcomeComponent from "./Components/WelcomeComponent";
+import RegistrationPage from "./Components/Registration";
 
 export default function App() {
     return (
@@ -13,6 +15,7 @@ export default function App() {
                 {/* Остальные страницы с Layout */}
                 <Route path="/*" /*element={<Layout />}*/>
                     <Route path="home" element={<HomePage />} />
+                    <Route path="register" element={<RegistrationPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
