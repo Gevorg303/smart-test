@@ -1,12 +1,14 @@
 import React from 'react';
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SubjectCard = (props) => {
 
+    let navigate = useNavigate();
 
     const handleClick = (e) => {
         e.preventDefault();
         console.log(`You clicked ${props.id}`);
+        navigate(`/theme/${props.id}`);
     };
 
     return (

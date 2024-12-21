@@ -6,7 +6,8 @@ import Navbar from "../Navbar"; // Импортируем компонент Nav
 
 const HomePage = () => {
     const containerRef = useRef(null);
-
+    let welcometext = "";
+    let subjects = [];
     useEffect(() => {
         async function fetchUser() {
             try {
@@ -18,13 +19,8 @@ const HomePage = () => {
                     // throw new Error('Ошибка сети');
                 }
                 const user = await response.json();
-                const welcome = document.getElementById('welcome');
                 console.log(user);
-                welcome.innerHTML = "Здравствуйте, " + user.name + " (" + user.role.role + ")";
-                /* subjects.forEach(subject => {
-                     const card = createSubjectCard(subject);
-                     container.appendChild(card);
-                 });*/
+                welcometext = "Здравствуйте, " + user.name + " (" + user.role.role + ")";
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -58,9 +54,10 @@ const HomePage = () => {
     return (
         <div className="home-page">
             <Navbar />
-            <WelcomeComponent />
+            <WelcomeComponent text={welcometext} />
             <div className="container-wrapper">
                 <div className="container" id="subjects-container" ref={containerRef}>
+                    {}
                     <SubjectCard name='Химия' id='1' />
                     <SubjectCard name='Алгебра' id='2' description='description' />
                     <SubjectCard name='Русский язык' id='3' description='labore et dolore magna aliqua.'/>

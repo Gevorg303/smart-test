@@ -1,7 +1,14 @@
 import React from 'react';
 import {Button,Table} from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 const StartTestPage = () => {
+    let navigate = useNavigate();
+    function StartTest()
+    {
+        //
+        navigate("/test");
+    }
     return (
         <div className="container">
             <h1>Название теста</h1>
@@ -33,7 +40,7 @@ const StartTestPage = () => {
                 </tr>
             </Table>
 
-            <Button>Начать попытку</Button>
+            <Button onClick={()=>{StartTest()}}>Начать попытку</Button>
         </div>
     );
 };

@@ -7,6 +7,7 @@ import StartTestPage from "./Components/StartTestPage";
 import TestPage from "./Components/TestPage";
 import RegistrationPage from "./Components/Registration";
 import ViewTestResultsPage from "./Components/ViewOneTestResultPage";
+import ThemePage from "./Components/ThemePage";
 
 export default function App() {
     return (
@@ -21,6 +22,7 @@ export default function App() {
                     <Route path="test" element={<TestPage/> } />
                     <Route path="register" element={<RegistrationPage/> } />
                     <Route path="testresult" element={<ViewTestResultsPage/> } />
+                    <Route path="theme" element={<ThemePage/> } />
                 </Route>
             </Routes>
         </BrowserRouter>

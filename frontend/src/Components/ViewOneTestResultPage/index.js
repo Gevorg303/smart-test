@@ -1,8 +1,16 @@
 import React from 'react';
 import {Table,Button} from 'react-bootstrap';
 import Question from "../Question";
+import { useNavigate } from "react-router-dom";
 
 const ViewTestResultsPage = (props) => {
+
+    let navigate = useNavigate();
+    function ViewResultsEnd()
+    {
+        //
+        navigate("/theme");
+    }
     return (
         <div>
             <h1>Тренажер по теме "Гипотенуза"</h1>
@@ -23,7 +31,7 @@ const ViewTestResultsPage = (props) => {
                 <Question id="1" view="true"></Question>
                 <Question id="2" view="true"></Question>
                 <Question id="3" view="true"></Question>
-                <Button>Закончить обзор</Button>
+                <Button onClick={()=>ViewResultsEnd()}>Закончить обзор</Button>
             </div>
         </div>
 );

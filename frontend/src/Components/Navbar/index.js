@@ -7,29 +7,29 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-logo">
-                <a href="/">
+                <a href="/home">
                     <img src="../../images/logo192.png" alt="Logo"/>
                 </a>
             </div>
             <ul className="navbar-links">
                 <li className="navbar-item">
-                <a href="/subjects" className="navbar-link">Предметы</a>
+                <a href="/home" className="navbar-link">Предметы</a>
                 </li>
                 <li className="navbar-item">
                     <a href="/register" className="navbar-link">Зарегистрировать пользователя</a>
                 </li>
                 <li className="navbar-item">
-                    <a href="/help" className="navbar-link">Справка</a>
+                    <a  className="navbar-link">Справка</a>
                 </li>
             </ul>
             <ul className="navbar-links right">
                 <li className="navbar-item">
-                    <a href="/notifications" className="navbar-link">
+                    <a  className="navbar-link">
                         <i className="bi bi-bell"></i>
                     </a>
                 </li>
                 <li className="navbar-item">
-                    <a href="/messages" className="navbar-link">
+                    <a  className="navbar-link">
                         <i className="bi bi-messenger"></i>
                     </a>
                 </li>

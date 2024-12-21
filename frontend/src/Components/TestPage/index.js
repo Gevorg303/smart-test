@@ -1,15 +1,17 @@
 import { React,useEffect, useState } from 'react';
 import Question from "../Question";
 import {Button, Pagination} from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 const TestPage = () => {
 
+    let navigate = useNavigate();
     const [active, setActive] = useState(0);
     let count = 4; // количество вопросов
     let questions = []; //заполняем массив с вопросами из теста
     for (let number = 0; number < count; number++) {
         questions.push(
-            <Question id={number+1} description={number+1+" description"}/>
+            <Question id={number+1} description={number+1+" description"}  />
         );
     }
     let paginationItems =[] //заполняем массив с кнопками для пагинации
@@ -23,9 +25,9 @@ const TestPage = () => {
     function TestEnd()
     {
         //
-
-        console.log("TestEnd");
+        navigate("/testresult");
     }
+
     useEffect( () => {
 
     });
