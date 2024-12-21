@@ -20,9 +20,9 @@ const ViewTestResultsPage = (props) => {
                     </tr>
                     </tbody>
                 </Table>
-                <Question id="1"></Question>
-                <Question id="2"></Question>
-                <Question id="3"></Question>
+                <Question id="1" view="true"></Question>
+                <Question id="2" view="true"></Question>
+                <Question id="3" view="true"></Question>
                 <Button>Закончить обзор</Button>
             </div>
         </div>
