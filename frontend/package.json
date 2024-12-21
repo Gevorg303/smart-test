@@ -38,8 +38,6 @@
   },
   "devDependencies": {
     "react-router-dom": "^6.28.0",
-    "react-scripts": "^5.0.1",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.7.2"
+    "react-scripts": "^5.0.1"
   }
 }

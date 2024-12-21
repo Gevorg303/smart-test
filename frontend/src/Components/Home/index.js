@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SubjectCard from "../SubjectCard";
 import WelcomeComponent from "../WelcomeComponent";
-import "../Home/styles.css"
-
+import "../Home/styles.css";
 
 const HomePage = () => {
+    const containerRef = useRef(null);
 
-    //var welcomeText ="";
-
-    useEffect( () => {
+    useEffect(() => {
         async function fetchUser() {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response = await fetch('http://localhost:8080/users/current',{
+                const response = await fetch('http://localhost:8080/users/current', {
                     credentials: "include",
                 });
                 if (!response.ok) {
-                   // throw new Error('Ошибка сети');
+                    // throw new Error('Ошибка сети');
                 }
                 const user = await response.json();
-                  const welcome = document.getElementById('welcome');
+                const welcome = document.getElementById('welcome');
                 console.log(user);
-                   welcome.innerHTML = "Здравствуйте, "+user.name + " ("+user.role.role + ")";
+                welcome.innerHTML = "Здравствуйте, " + user.name + " (" + user.role.role + ")";
                 /* subjects.forEach(subject => {
                      const card = createSubjectCard(subject);
                      container.appendChild(card);
@@ -31,22 +29,46 @@ const HomePage = () => {
             }
         }
         fetchUser();
+    }, []);
 
-    });
+    useEffect(() => {
+        const container = containerRef.current;
+        const cards = container.querySelectorAll('.card');
+        let maxWidth = 0;
+        let maxHeight = 0;
 
+        cards.forEach(card => {
+            const width = card.offsetWidth;
+            const height = card.offsetHeight;
+            if (width > maxWidth) {
+                maxWidth = width;
+            }
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+
+        cards.forEach(card => {
+            card.style.width = `${maxWidth}px`;
+            card.style.height = `${maxHeight}px`;
+        });
+    }, []);
 
     return (
-        <div>
-           <WelcomeComponent />
-            <div className="container" id="subjects-container">
-                <SubjectCard name='Subject1' id='1'/>
-                <SubjectCard name='Subject2' id='2' description='description'/>
-                <SubjectCard name='Subject3' id='3'/>
-            </div>
-            <div className="button-container">
-                <button id="openModal" className="edit-button" >Добавить / Удалить предмет</button>
+        <div className="home-page">
+            <WelcomeComponent />
+
+            <div className="container" id="subjects-container" ref={containerRef}>
+                <SubjectCard name='Химия' id='1' />
+                <SubjectCard name='Алгебра' id='2' description='description' />
+                <SubjectCard name='Русский язык' id='3' description='labore et dolore magna aliqua.'/>
+                <SubjectCard name='Геометрия' id='4' />
+                <SubjectCard name='География' id='5' />
             </div>
 
+            <div className="button-container">
+                <button id="openModal" className="edit-button">Добавить / Удалить предмет</button>
+            </div>
         </div>
     );
 };
