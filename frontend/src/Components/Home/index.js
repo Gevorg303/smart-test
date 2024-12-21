@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import SubjectCard from "../SubjectCard";
 import WelcomeComponent from "../WelcomeComponent";
 import "../Home/styles.css";
+import Navbar from "../Navbar"; // Импортируем компонент Navbar
 
 const HomePage = () => {
     const containerRef = useRef(null);
@@ -56,18 +57,19 @@ const HomePage = () => {
 
     return (
         <div className="home-page">
+            <Navbar />
             <WelcomeComponent />
-
-            <div className="container" id="subjects-container" ref={containerRef}>
-                <SubjectCard name='Химия' id='1' />
-                <SubjectCard name='Алгебра' id='2' description='description' />
-                <SubjectCard name='Русский язык' id='3' description='labore et dolore magna aliqua.'/>
-                <SubjectCard name='Геометрия' id='4' />
-                <SubjectCard name='География' id='5' />
-            </div>
-
-            <div className="button-container">
-                <button id="openModal" className="edit-button">Добавить / Удалить предмет</button>
+            <div className="container-wrapper">
+                <div className="container" id="subjects-container" ref={containerRef}>
+                    <SubjectCard name='Химия' id='1' />
+                    <SubjectCard name='Алгебра' id='2' description='description' />
+                    <SubjectCard name='Русский язык' id='3' description='labore et dolore magna aliqua.'/>
+                    <SubjectCard name='Геометрия' id='4' />
+                    <SubjectCard name='География' id='5' />
+                </div>
+                <div className="button-container">
+                    <button id="openModal" className="edit-button">Добавить / Удалить предмет</button>
+                </div>
             </div>
         </div>
     );
