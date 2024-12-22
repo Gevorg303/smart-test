@@ -11,6 +11,9 @@ public class ResponseVerificationController {
     @Autowired
     private ResponseVerificationServiceInterface responseVerificationService;
 
+    /**
+     Проверка веденного ответа, необходимо передать само задание и введеный ответ /verification/response?response=5
+     * */
     @PostMapping("/response")
     public boolean checkingResponse(@RequestBody TaskDto taskDto, @RequestParam String response) {
         return responseVerificationService.checkingResponse(taskDto, response);
