@@ -9,7 +9,8 @@ import welcomeComponent from "../WelcomeComponent";
 
     const HomePage = () => {
     const containerRef = useRef(null);
-    let welcometext = "";
+    const [welcometext, setwelcometext] = useState("");
+  //  let welcometext = "";
     let subjects = [];
     useEffect(() => {
         async function fetchUser() {
@@ -23,7 +24,8 @@ import welcomeComponent from "../WelcomeComponent";
                 }
                 const user = await response.json();
                 console.log(user);
-                welcometext = "Здравствуйте, " + user.name + " (" + user.role.role + ")";
+                setwelcometext("Здравствуйте, " + user.name + " (" + user.role.role + ")");
+              //  console.log(welcometext);
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);

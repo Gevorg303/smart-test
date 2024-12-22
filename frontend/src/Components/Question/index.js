@@ -1,12 +1,18 @@
 import { React,useEffect, useState } from 'react';
 import {Form, Button} from 'react-bootstrap';
 
-const Question = ({id, description, answer, view, onClick}) => {
-    const [answerState, setAnswer] = useState("");
+const Question = ({id, description, view, answers, setAnswers}) => {
+    const [answer, setAnswer] = useState(answers[id] || "");
 
     useEffect( () => {
-        console.log(answerState)
+        console.log(answer)
     });
+
+    const onClick =(id,answer)=>{
+        const array = [...answers]
+        array[id] = answer;
+        setAnswers(array)
+    }
 
     return (
         <div>
@@ -15,8 +21,9 @@ const Question = ({id, description, answer, view, onClick}) => {
                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
                 ex ea commodo consequat. </h3>
             <Form >
-                {view ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ): (<Form.Control type="text" placeholder="Ответ" value={answerState}  required  />)}
-                {view ? (<></> ): (<Button display={view ? "none" : ""} >Ответить</Button>)}
+                {view ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ):
+                    (<Form.Control type="text" placeholder="Ответ" value={answer} onChange={(e)=>{setAnswer(e.target.value)}}  required  />)}
+                {view ? (<></> ): (<Button onClick={() => onClick(id,answer)} display={view ? "none" : ""} >Ответить</Button>)}
             </Form>
         </div>
     );

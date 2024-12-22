@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 
-const WelcomeComponent = () => {
-    const [text, setText] = useState("");
+const WelcomeComponent = (props) => {
+    //const [text, setText] = useState("");
     return (
         <h1 id="welcome">
-            {text}
+            {props.text}
         </h1>
     );
 };

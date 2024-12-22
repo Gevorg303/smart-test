@@ -7,17 +7,19 @@ const TestPage = () => {
 
     let navigate = useNavigate();
     const [active, setActive] = useState(0);
+    const [answers, setAnswers] = useState([]);
+   // const [questions, setQuestions] = useState([].map((item,index)=>{<Question />}));
     let count = 4; // количество вопросов
     let questions = []; //заполняем массив с вопросами из теста
     for (let number = 0; number < count; number++) {
         questions.push(
-            <Question id={number+1} description={number+1+" description"}  />
+            <Question key={number} id={number+1} description={number+1+" description"} answers={answers} setAnswers={setAnswers} />
         );
     }
     let paginationItems =[] //заполняем массив с кнопками для пагинации
     for (let number = 0; number < count; number++) {
         paginationItems.push(
-            <Pagination.Item key={number} active={number === active} onClick={() => setActive(number) }>
+            <Pagination.Item key={number} active={number === active}>
                 {number+1}
             </Pagination.Item>
         );
@@ -25,7 +27,8 @@ const TestPage = () => {
     function TestEnd()
     {
         //
-        navigate("/testresult");
+        console.log(answers)
+       // navigate("/testresult");
     }
 
     return (
