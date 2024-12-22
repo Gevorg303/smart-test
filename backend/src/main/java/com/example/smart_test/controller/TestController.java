@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/test")
@@ -29,6 +30,10 @@ public class TestController {
         testService.deleteTestDto(testDto);
     }
 
+
+    /**
+    Выводит список всех тестов
+     */
     @GetMapping("/all")
     public List<TestDto> getAllTest() {
         return testService.getAllTestDto();
@@ -54,7 +59,7 @@ public class TestController {
      Выводит список доступных заданий для добавления в тест
      */
     @PostMapping("/get-available-tasks")
-    public List<TaskDto> displayTheAvailableTasks(@RequestBody TestDto dto){
+    public Set<TaskDto> displayTheAvailableTasks(@RequestBody TestDto dto){
         return taskService.displayTheAvailableTasks(dto);
     }
 }

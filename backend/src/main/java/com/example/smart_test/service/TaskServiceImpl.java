@@ -3,12 +3,14 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.Test;
-import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TaskRepositoryInterface;
+import com.example.smart_test.service.api.IndicatorServiceInterface;
+import com.example.smart_test.service.api.TaskOfIndicatorServiceInterface;
 import com.example.smart_test.service.api.TaskServiceInterface;
+import com.example.smart_test.service.api.ThemeServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +19,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class TaskServiceImpl implements TaskServiceInterface {
+    @Autowired
+    private IndicatorServiceInterface indicatorService;
+    @Autowired
+    private TaskOfIndicatorServiceInterface taskOfIndicatorService;
     @Autowired
     private TaskRepositoryInterface taskRepositoryInterface;
     @Autowired
@@ -59,12 +62,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<TaskDto> getAllTasks() {
-        try {
-            List<Task> tasks = taskRepositoryInterface.findAll();
-            return getDtoList(tasks);
-        } catch (Exception e) {
-            throw new RuntimeException("Ошибка при получении всех тестов: " + e.getMessage(), e);
-        }
+        return printAllTasks();
     }
 
     @Override
@@ -91,9 +89,26 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<TaskDto> displayTheAvailableTasks(TestDto dto) {
-        List<Task> tasks = taskRepositoryInterface.findTasksByTestId(dto.getId());
-        return getDtoList(tasks);
+    public Set<TaskDto> displayTheAvailableTasks(TestDto dto) {
+        Set<TaskDto> availableTasks = new HashSet<>();
+        for (TaskDto taskDto : printAllTasks()) {
+            for (TaskOfIndicatorDto taskOfIndicatorDto : taskOfIndicatorService.getAllTaskOfIndicators()) {
+                if (Objects.equals(taskDto.getId(), taskOfIndicatorDto.getTask().getId())) {
+                    for (IndicatorDto indicatorDto : indicatorService.getAllIndicators()) {
+                        if (Objects.equals(taskOfIndicatorDto.getIndicator().getId(), indicatorDto.getId())) {
+                            for (TestDto testDto : testServiceImpl.getAllTestDto()) {
+                                if (Objects.equals(testDto.getId(), dto.getId())
+                                        && taskDto.getTest() == null
+                                        && Objects.equals(indicatorDto.getTheme().getId(), testDto.getTheme().getId())) {
+                                    availableTasks.add(taskDto);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return availableTasks;
     }
 
     @Override
@@ -107,8 +122,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
         } catch (Exception e) {
             log.error(
                     "Не удалость добавить задание:" + taskId +
-                    " в тест: " + testId +
-                    "Причина: " + e.getMessage(), e);
+                            " в тест: " + testId +
+                            "Причина: " + e.getMessage(), e);
         }
     }
 
@@ -125,9 +140,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
         }
     }
 
-    public void addTaskTheTest() {
-
-    }
 
     private List<TaskDto> getDtoList(List<Task> taskList) {
         return taskList.stream()
@@ -161,6 +173,15 @@ public class TaskServiceImpl implements TaskServiceInterface {
             return taskMapperInterface.toDto(task);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при получении задания: " + e.getMessage(), e);
+        }
+    }
+
+    private List<TaskDto> printAllTasks() {
+        try {
+            List<Task> tasks = taskRepositoryInterface.findAll();
+            return getDtoList(tasks);
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при получении списка всех задач: " + e.getMessage(), e);
         }
     }
 }
