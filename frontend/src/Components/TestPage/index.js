@@ -28,11 +28,6 @@ const TestPage = () => {
         navigate("/testresult");
     }
 
-    useEffect( () => {
-
-    });
-
-
     return (
         <div>
             <h1>Контрольный тест</h1>

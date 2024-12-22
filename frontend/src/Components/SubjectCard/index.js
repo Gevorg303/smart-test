@@ -8,7 +8,8 @@ const SubjectCard = (props) => {
     const handleClick = (e) => {
         e.preventDefault();
         console.log(`You clicked ${props.id}`);
-        navigate(`/theme/${props.id}`);
+       // navigate(`/theme/${props.id}`);
+        navigate("/theme");
     };
 
     return (

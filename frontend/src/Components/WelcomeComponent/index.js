@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-const WelcomeComponent = (props) => {
+const WelcomeComponent = () => {
+    const [text, setText] = useState("");
     return (
         <h1 id="welcome">
-            {props.text}
+            {text}
         </h1>
     );
 };

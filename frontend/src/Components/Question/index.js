@@ -1,7 +1,7 @@
 import { React,useEffect, useState } from 'react';
 import {Form, Button} from 'react-bootstrap';
 
-const Question = ({id, description, answer, view,onClick}) => {
+const Question = ({id, description, answer, view, onClick}) => {
     const [answerState, setAnswer] = useState("");
 
     useEffect( () => {
@@ -15,8 +15,8 @@ const Question = ({id, description, answer, view,onClick}) => {
                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
                 ex ea commodo consequat. </h3>
             <Form >
-                {view === "true" ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ): (<Form.Control type="text" placeholder="Ответ" value={answerState}  onChange={(e)=>{setAnswer(e.currentTarget.value)}} required  />)}
-                {view === "true" ? (<></> ): (<Button display={view === "true" ? "none" : ""} >Ответить</Button>)}
+                {view ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ): (<Form.Control type="text" placeholder="Ответ" value={answerState}  required  />)}
+                {view ? (<></> ): (<Button display={view ? "none" : ""} >Ответить</Button>)}
             </Form>
         </div>
     );
