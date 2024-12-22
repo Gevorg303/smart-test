@@ -2,9 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import SubjectCard from "../SubjectCard";
 import WelcomeComponent from "../WelcomeComponent";
 import "../Home/styles.css";
-import Navbar from "../Navbar"; // Импортируем компонент Navbar
+import Navbar from "../Navbar";
+import {Button} from 'react-bootstrap';
+import welcomeComponent from "../WelcomeComponent";
 
-const HomePage = () => {
+
+    const HomePage = () => {
     const containerRef = useRef(null);
     let welcometext = "";
     let subjects = [];
@@ -21,6 +24,7 @@ const HomePage = () => {
                 const user = await response.json();
                 console.log(user);
                 welcometext = "Здравствуйте, " + user.name + " (" + user.role.role + ")";
+
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -65,7 +69,7 @@ const HomePage = () => {
                     <SubjectCard name='География' id='5' />
                 </div>
                 <div className="button-container">
-                    <button id="openModal" className="edit-button">Добавить / Удалить предмет</button>
+                    <Button id="openModal" className="edit-button">Добавить / Удалить предмет</Button>
                 </div>
             </div>
         </div>
