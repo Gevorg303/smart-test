@@ -11,10 +11,13 @@ const ThemePage = () => {
         );
     }
     return (
-        <div>
-          <h1>{subjectName}</h1>
-            {tehemes}
-        </div>
+        <>
+            <Navbar/>
+            <div>
+                <h1>{subjectName}</h1>
+                {tehemes}
+            </div>
+        </>
     );
 };
 

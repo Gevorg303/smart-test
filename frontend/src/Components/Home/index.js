@@ -56,23 +56,25 @@ import welcomeComponent from "../WelcomeComponent";
     }, []);
 
     return (
-        <div className="home-page">
+        <>
             <Navbar />
-            <WelcomeComponent text={welcometext} />
-            <div className="container-wrapper">
-                <div className="container" id="subjects-container" ref={containerRef}>
-                    {}
-                    <SubjectCard name='Химия' id='1' />
-                    <SubjectCard name='Алгебра' id='2' description='description' />
-                    <SubjectCard name='Русский язык' id='3' description='labore et dolore magna aliqua.'/>
-                    <SubjectCard name='Геометрия' id='4' />
-                    <SubjectCard name='География' id='5' />
-                </div>
-                <div className="button-container">
-                    <Button id="openModal" className="edit-button">Добавить / Удалить предмет</Button>
+            <div className="home-page">
+                <WelcomeComponent text={welcometext} />
+                <div className="container-wrapper">
+                    <div className="container" id="subjects-container" ref={containerRef}>
+                        {}
+                        <SubjectCard name='Химия' id='1' />
+                        <SubjectCard name='Алгебра' id='2' description='description' />
+                        <SubjectCard name='Русский язык' id='3' description='labore et dolore magna aliqua.'/>
+                        <SubjectCard name='Геометрия' id='4' />
+                        <SubjectCard name='География' id='5' />
+                    </div>
+                    <div className="button-container">
+                        <Button id="openModal" className="edit-button">Добавить / Удалить предмет</Button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
