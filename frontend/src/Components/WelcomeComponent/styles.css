@@ -1,0 +1,11 @@
+#welcome {
+    color: white; /* Белый текст */
+    text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000; /* Черная обводка */
+    font-size: 2em; /* Размер текста */
+    margin-top: 10px; /* Уменьшаем отступ сверху */
+    margin-bottom: 10px; /* Уменьшаем отступ снизу */
+}

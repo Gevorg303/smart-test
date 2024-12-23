@@ -24,13 +24,13 @@ h1 {
 .flex-row {
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 4px; /* Уменьшаем отступы */
 }
 
 .flex-row a {
-    padding-top: 12px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-top: 6px; /* Уменьшаем паддинги */
+    padding-left: 5px; /* Уменьшаем паддинги */
+    padding-right: 5px; /* Уменьшаем паддинги */
 }
 
 .fill {
@@ -48,7 +48,7 @@ a, a:visited {
 }
 
 .fa {
-    margin-left: 5px;
+    margin-left: 2.5px; /* Уменьшаем отступы */
 }
 
 .fa-user::before {
@@ -82,9 +82,10 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: calc(100vh - 100px); /* Уменьшаем высоту контента, чтобы подвал был ближе */
     text-align: center;
-    padding-top: 0; /* Убираем отступ сверху для контента */
+    padding-top: 10px; /* Уменьшаем отступ сверху для контента */
+    margin-bottom: 10px; /* Уменьшаем отступ снизу для контента */
 }
 
 .content-wrapper {
@@ -100,27 +101,23 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px; /* Устанавливаем отступ между контейнером и кнопкой */
+    gap: 10px; /* Уменьшаем отступ между контейнером и кнопкой */
 }
 
 .container-home {
     display: flex;
     justify-content: center;
-    gap: 16px;
+    gap: 8px; /* Уменьшаем отступы */
     width: 800px;
     flex-wrap: wrap;
     position: relative;
     background: #f0f0f0;
-    margin-top: 1%;
+    margin-top: 0.5%; /* Уменьшаем отступ сверху */
     border-radius: 15px; /* Скругление углов */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Тень */
-    padding: 20px; /* Добавляем внутренние отступы */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшаем тень */
+    padding: 10px; /* Уменьшаем внутренние отступы */
 }
 
 .button-container {
     margin-top: 0; /* Убираем отступ сверху для кнопки */
-}
-.welcome {
-    color: white; /* Белый текст */
-
 }

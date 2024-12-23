@@ -18,7 +18,7 @@ const Footer = () => {
                         <ul className="list-unstyled">
                             <li>
                                 <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
-                                    ВКонтакте
+                                     ВКонтакте
                                 </a>
                             </li>
                             <li>
