@@ -1,0 +1,54 @@
+.footer {
+    background-color: #333; /* Темно-серый фон */
+    color: #fff; /* Белый текст */
+    padding: 20px 0;
+}
+
+.footer-section {
+    margin-bottom: 20px;
+}
+
+.footer-section h5 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer-section p {
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #fff; /* Белый текст */
+    text-decoration: none;
+}
+
+.footer-section ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer-section ul li i {
+    margin-right: 5px;
+    color: #fff; /* Белый текст */
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}

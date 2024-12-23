@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import Navbar from "../Navbar";
 import Theme from "../Theme";
+import Footer from "../Footer";
+
 
 const ThemePage = () => {
     const [subjectName,setSubjectName] = useState("Название предмета");
@@ -72,6 +74,7 @@ const ThemePage = () => {
                 <h1>{subjectName}</h1>
                 {themes}
             </div>
+            <Footer/>
         </>
     );
 };

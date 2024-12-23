@@ -3,6 +3,7 @@ import SubjectCard from "../SubjectCard";
 import WelcomeComponent from "../WelcomeComponent";
 import "../Home/styles.css";
 import Navbar from "../Navbar";
+import Footer from "../Footer";
 import {Button} from 'react-bootstrap';
 
 
@@ -81,14 +82,13 @@ import {Button} from 'react-bootstrap';
             <div className="home-page">
                 <WelcomeComponent text={welcometext} />
                 <div className="container-wrapper">
-                    <div className="container" id="subjects-container" ref={containerRef}>
+                    <div className="container-home" id="subjects-container" ref={containerRef}>
                         {subjects}
                     </div>
-                    {/*  <div className="button-container">
-                        <Button id="openModal" className="edit-button">Добавить / Удалить предмет</Button>
-                    </div>*/}
+
                 </div>
             </div>
+            <Footer />
         </>
     );
 };

@@ -1,0 +1,28 @@
+.card {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    margin: 20px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    transition: box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+    background-color: #f5f5f5;
+}
+
+.card-body {
+    padding: 10px;
+    flex-grow: 1;
+}

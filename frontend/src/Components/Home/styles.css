@@ -12,54 +12,6 @@ h1 {
     color: white;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
-/*
-nav ul li.right {
-    float: right;
-}
-
-nav {
-    text-align: left;
-}
-
-nav {
-    background-color: #333;
-    color: white;
-    text-align: center;
-}
-
-nav ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-
-nav ul li {
-    display: inline-block;
-}
-
-nav ul li a {
-    display: block;
-    padding: 10px 20px;
-    text-decoration: none;
-    color: white;
-}
-
-nav ul li a:hover {
-    background-color: #555;
-}
-
-nav ul li img {
-    width: 50px;
-    height: auto;
-}
-
-nav ul li.right a {
-    display: inline-block;
-    margin-right: 10px;
-}*/
 
 .w-8 {
     width: 3rem;
@@ -103,16 +55,6 @@ a, a:visited {
     content: "\f007";
 }
 
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -129,27 +71,6 @@ footer {
     .product-card {
         width: 100%;
     }
-}
-
-.product-card {
-    position: relative;
-    padding: 20px;
-    margin: 15px;
-    width: 300px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.product-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
-    z-index: -1;
 }
 
 h1 {
@@ -182,7 +103,7 @@ h1 {
     gap: 20px; /* Устанавливаем отступ между контейнером и кнопкой */
 }
 
-.container {
+.container-home{
     display: flex;
     justify-content: center;
     gap: 16px;
@@ -191,38 +112,9 @@ h1 {
     position: relative;
     background: #f0f0f0;
     margin-top: 1%;
-
 }
 
 .button-container {
     margin-top: 0; /* Убираем отступ сверху для кнопки */
 }
 
-.card {
-    border: 1px solid #ddd;
-    background-color: #fff;
-    margin: 20px;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    transition: box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.card-header {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 5px;
-    background-color: #f5f5f5;
-}
-
-.card-body {
-    padding: 10px;
-    flex-grow: 1;
-}
