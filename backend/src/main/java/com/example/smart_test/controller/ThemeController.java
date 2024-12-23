@@ -27,9 +27,12 @@ public class ThemeController {
     public List<ThemeDto> getAllTheme() {
         return themeService.getAllTheme();
     }
-
     @GetMapping("/getbysubject")
     public List<ThemeDto> getAllThemesBySubjectId(@CookieValue("sub") Long id) {
+        return themeService.getThemeBySubjectId(id);
+    }
+    @GetMapping("/getbysubject:{id}")//сервер не может прочитать куки созданные на фронте
+    public List<ThemeDto> getAllThemesBySubjectIdNoCookie(/*@CookieValue("sub")*/@PathVariable Long id) {  
         return themeService.getThemeBySubjectId(id);
     }
 
