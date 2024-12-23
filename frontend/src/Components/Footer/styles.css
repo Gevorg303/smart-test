@@ -1,21 +1,22 @@
 .footer {
     background-color: #333; /* Темно-серый фон */
     color: #fff; /* Белый текст */
-    padding: 5px 0; /* Уменьшаем паддинги */
-    margin-top: 10px; /* Уменьшаем отступ сверху */
+    padding: 10px 0; /* Уменьшаем паддинги */
+    width: 100%; /* Ширина на всю страницу */
+    margin-top: auto; /* Подвал будет внизу страницы */
 }
 
 .footer-section {
-    margin-bottom: 5px; /* Уменьшаем отступы между секциями */
+    margin-bottom: 10px; /* Уменьшаем отступы между секциями */
 }
 
 .footer-section h5 {
     font-weight: bold;
-    margin-bottom: 2.5px; /* Уменьшаем отступы */
+    margin-bottom: 5px; /* Уменьшаем отступы */
 }
 
 .footer-section p {
-    margin-bottom: 2.5px; /* Уменьшаем отступы */
+    margin-bottom: 5px; /* Уменьшаем отступы */
 }
 
 .footer-section ul {
@@ -24,7 +25,7 @@
 }
 
 .footer-section ul li {
-    margin-bottom: 2.5px; /* Уменьшаем отступы */
+    margin-bottom: 5px; /* Уменьшаем отступы */
 }
 
 .footer-section ul li a {

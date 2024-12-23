@@ -3,7 +3,8 @@ import { Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import avatarImage from '../../images/аватар.jpg'; // Исправленный путь к изображению
 import './styles.css';
-import Navbar from "../Navbar"; // Импортируем файл стилей
+import Navbar from "../Navbar";
+import Footer from "../Footer"; // Импортируем файл стилей
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -14,27 +15,30 @@ const ProfilePage = () => {
     };
 
     return (
-        <>
-            <Navbar/>
-        <Container className="profile-container">
-            <div className="profile-section">
-                <img src={avatarImage} alt="Портрет" className="profile-image"/>
-                <div className="profile-info">
-                    <h5>Информация о пользователе</h5>
-                    <p><strong>Имя:</strong> Вася</p>
-                    <p><strong>Фамилия:</strong> Пупкин</p>
-                    <p><strong>Отчество:</strong> Олегович</p>
-                    <p><strong>Имя пользователя:</strong> vasya</p>
-                    <p><strong>Статус:</strong> Ученик</p>
-                    <p><strong>Класс:</strong> 7б</p>
-                    <p><strong>Электронная почта:</strong> vasya@example.com</p>
-                </div>
+        <div className="page-container">
+            <Navbar />
+            <div className="content-wrapper">
+                <Container className="profile-container">
+                    <div className="profile-section">
+                        <img src={avatarImage} alt="Портрет" className="profile-image" />
+                        <div className="profile-info">
+                            <h5>Информация о пользователе</h5>
+                            <p><strong>Имя:</strong> Вася</p>
+                            <p><strong>Фамилия:</strong> Пупкин</p>
+                            <p><strong>Отчество:</strong> Олегович</p>
+                            <p><strong>Имя пользователя:</strong> vasya</p>
+                            <p><strong>Статус:</strong> Ученик</p>
+                            <p><strong>Класс:</strong> 7б</p>
+                            <p><strong>Электронная почта:</strong> vasya@example.com</p>
+                        </div>
+                    </div>
+                    <div className="profile-buttons">
+                        <Button variant="danger" className="logout-button" onClick={handleLogout}>Выйти из аккаунта</Button>
+                    </div>
+                </Container>
             </div>
-            <div className="profile-buttons">
-                <Button variant="danger" className="logout-button" onClick={handleLogout}>Выйти из аккаунта</Button>
-            </div>
-        </Container>
-        </>
+            <Footer />
+        </div>
     );
 };
 
