@@ -103,7 +103,7 @@ h1 {
     gap: 20px; /* Устанавливаем отступ между контейнером и кнопкой */
 }
 
-.container-home{
+.container-home {
     display: flex;
     justify-content: center;
     gap: 16px;
@@ -112,9 +112,15 @@ h1 {
     position: relative;
     background: #f0f0f0;
     margin-top: 1%;
+    border-radius: 15px; /* Скругление углов */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Тень */
+    padding: 20px; /* Добавляем внутренние отступы */
 }
 
 .button-container {
     margin-top: 0; /* Убираем отступ сверху для кнопки */
 }
+.welcome {
+    color: white; /* Белый текст */
 
+}

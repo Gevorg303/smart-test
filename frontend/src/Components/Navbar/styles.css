@@ -13,11 +13,12 @@
     padding: 0 20px; /* Добавляем паддинги по бокам */
 }
 
-.navbar-logo a {
+.navbar-logo {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
+    margin-right: 20px; /* Добавляем отступ справа от логотипа */
 }
 
 .navbar-logo img {
@@ -34,11 +35,7 @@
 }
 
 .navbar-links.right {
-    margin-left: auto;
-}
-
-.navbar-item {
-    display: inline-block;
+    margin-left: auto; /* Перемещаем элементы вправо */
 }
 
 .navbar-link {
@@ -55,4 +52,10 @@
 .navbar-link i {
     font-size: 20px;
     color: white;
+}
+
+.justify-content-between {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }

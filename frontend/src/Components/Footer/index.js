@@ -16,8 +16,16 @@ const Footer = () => {
                     <Col md={4} className="footer-section">
                         <h5>Социальные сети</h5>
                         <ul className="list-unstyled">
-                            <li><a href="#"><i className=""></i> ВКонтакте</a></li>
-                            <li><a href="#"><i className=""></i> Telegram</a></li>
+                            <li>
+                                <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
+                                    ВКонтакте
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
+                                    Telegram
+                                </a>
+                            </li>
                         </ul>
                     </Col>
                     <Col md={4} className="footer-section">

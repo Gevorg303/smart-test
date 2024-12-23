@@ -71,7 +71,9 @@ const HomePage = () => {
         <>
             <Navbar />
             <div className="home-page">
-                <WelcomeComponent text={welcometext} />
+                <div className="welcome">
+                <WelcomeComponent text={welcometext}/>
+                </div>
                 <div className="container-wrapper">
                     <div className="container-home" id="subjects-container" ref={containerRef}>
                         {subjects}

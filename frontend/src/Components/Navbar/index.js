@@ -7,7 +7,7 @@ import logo from '../../images/Logo_1.jpg'; // Импортируем изобр
 const Navbar = () => {
     return (
         <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="custom-navbar">
-            <Container>
+            <Container fluid>
                 <BootstrapNavbar.Brand href="/home" className="navbar-logo">
                     <img
                         src={logo} // Используем импортированное изображение
@@ -18,8 +18,8 @@ const Navbar = () => {
                     />
                 </BootstrapNavbar.Brand>
                 <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
-                <BootstrapNavbar.Collapse id="basic-navbar-nav">
-                    <Nav className="navbar-links me-auto">
+                <BootstrapNavbar.Collapse id="basic-navbar-nav" className="justify-content-between">
+                    <Nav className="navbar-links">
                         <Nav.Link href="/home" className="navbar-link">Предметы</Nav.Link>
                         <Nav.Link href="/register" className="navbar-link">Зарегистрировать пользователя</Nav.Link>
                         <Nav.Link className="navbar-link">Справка</Nav.Link>
