@@ -4,14 +4,13 @@ import WelcomeComponent from "../WelcomeComponent";
 import "../Home/styles.css";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-
-
-    const HomePage = () => {
+const HomePage = () => {
     const containerRef = useRef(null);
     const [welcometext, setwelcometext] = useState("");
     const [subjects, setSubjects] = useState([]);
+
     useEffect(() => {
         async function fetchUser() {
             try {
@@ -21,31 +20,23 @@ import {Button} from 'react-bootstrap';
                     credentials: "include",
                 });
                 if (!response.ok) {
-                    // throw new Error('Ошибка сети');
+                    throw new Error('Ошибка сети');
                 }
                 const user = await response.json();
                 console.log(user);
                 setwelcometext("Здравствуйте, " + user.name + " (" + user.role.role + ")");
-                const response2 = await fetch('http://localhost:8080/subject/'+user.login);
+                const response2 = await fetch('http://localhost:8080/subject/' + user.login);
                 if (!response2.ok) {
                     throw new Error('Ошибка вывода предметов учителя');
                 }
                 const subjectsJson = await response2.json();
-                let count = 0;
-                const array =[]
+                const array = [];
                 subjectsJson.forEach(subject => {
-                    // console.log(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address)
-                    // select.append(new Option(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address,subject.id))
-                  //  const array = [...subjects]
                     array.push(
-                        <SubjectCard key={count++} id={subject.id} name={subject.subjectName} description={subject.description} />
-                    )
-                 //   setSubjects(array);
+                        <SubjectCard key={subject.id} id={subject.id} name={subject.subjectName} description={subject.description} />
+                    );
                 });
-                setSubjects(
-                    array
-                )
-
+                setSubjects(array);
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -74,7 +65,7 @@ import {Button} from 'react-bootstrap';
             card.style.width = `${maxWidth}px`;
             card.style.height = `${maxHeight}px`;
         });
-    }, []);
+    }, [subjects]);
 
     return (
         <>
@@ -85,7 +76,6 @@ import {Button} from 'react-bootstrap';
                     <div className="container-home" id="subjects-container" ref={containerRef}>
                         {subjects}
                     </div>
-
                 </div>
             </div>
             <Footer />
