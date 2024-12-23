@@ -5,7 +5,6 @@ body, html {
     background-color: #f0f8ff; /* Светло-голубой фон для всей страницы */
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Убираем вертикальную прокрутку */
 }
 
 .page-container {
@@ -20,7 +19,7 @@ body, html {
     justify-content: center;
     flex: 1; /* Занимает всю доступную высоту */
     padding: 50px 0; /* Уменьшаем отступы сверху и снизу */
-    margin-top: 120px; /* Уменьшаем отступ сверху на одну пятую для разделения с Navbar */
+    margin-top: 111px; /* Уменьшаем отступ сверху на одну пятую для разделения с Navbar */
     margin-bottom: 110px; /* Уменьшаем отступ снизу на одну пятую для разделения с Footer */
 }
 

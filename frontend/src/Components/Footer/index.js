@@ -23,7 +23,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
-                                    Telegram
+                                   Telegram
                                 </a>
                             </li>
                         </ul>
