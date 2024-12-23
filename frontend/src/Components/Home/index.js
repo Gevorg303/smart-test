@@ -4,18 +4,18 @@ import WelcomeComponent from "../WelcomeComponent";
 import "../Home/styles.css";
 import Navbar from "../Navbar";
 import {Button} from 'react-bootstrap';
-import welcomeComponent from "../WelcomeComponent";
+
 
 
     const HomePage = () => {
     const containerRef = useRef(null);
     const [welcometext, setwelcometext] = useState("");
     const [subjects, setSubjects] = useState([]);
-    //let subjects = [];
     useEffect(() => {
         async function fetchUser() {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 const response = await fetch('http://localhost:8080/users/current', {
                     credentials: "include",
                 });
@@ -29,10 +29,10 @@ import welcomeComponent from "../WelcomeComponent";
                 if (!response2.ok) {
                     throw new Error('Ошибка вывода предметов учителя');
                 }
-                const classes = await response2.json();
+                const subjectsJson = await response2.json();
                 let count = 0;
                 const array =[]
-                classes.forEach(subject => {
+                subjectsJson.forEach(subject => {
                     // console.log(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address)
                     // select.append(new Option(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address,subject.id))
                   //  const array = [...subjects]

@@ -31,7 +31,7 @@ const ThemePage = () => {
         async function fetchThemes() {
             try {
                 const subid = getCookie("sub");
-                const response = await fetch(`http://localhost:8080/theme/getbysubject`);
+                const response = await fetch(`http://localhost:8080/theme/getbysubject:${subid}`);
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
