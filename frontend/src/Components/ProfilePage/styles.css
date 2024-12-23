@@ -5,6 +5,7 @@ body, html {
     background-color: #f0f8ff; /* Светло-голубой фон для всей страницы */
     display: flex;
     flex-direction: column;
+    overflow: auto; /* Включаем вертикальную прокрутку */
 }
 
 .page-container {
@@ -18,9 +19,9 @@ body, html {
     flex-direction: column;
     justify-content: center;
     flex: 1; /* Занимает всю доступную высоту */
-    padding: 50px 0; /* Уменьшаем отступы сверху и снизу */
-    margin-top: 111px; /* Уменьшаем отступ сверху на одну пятую для разделения с Navbar */
-    margin-bottom: 110px; /* Уменьшаем отступ снизу на одну пятую для разделения с Footer */
+    padding: 5.1% 0; /* Уменьшаем отступы сверху и снизу */
+    margin-top: 10vh; /* Уменьшаем отступ сверху на одну пятую для разделения с Navbar */
+    margin-bottom: 7vh; /* Уменьшаем отступ снизу на одну пятую для разделения с Footer */
 }
 
 .profile-container {
@@ -28,11 +29,11 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80%; /* Увеличенная ширина */
-    max-width: 800px; /* Максимальная ширина */
-    padding: 20px;
+    width: 60%; /* Увеличенная ширина */
+    max-width: 45%; /* Максимальная ширина */
+    padding: 2%;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,31 +41,31 @@ body, html {
     display: flex;
     align-items: flex-start;
     width: 100%;
-    padding: 15px; /* Уменьшаем паддинги */
+    padding: 1.5%; /* Уменьшаем паддинги */
     border-radius: 10px;
 }
 
 .profile-image {
-    width: 150px; /* Уменьшаем размер */
-    height: 180px; /* Уменьшаем размер */
+    width: 15%; /* Уменьшаем размер */
+    height: auto; /* Уменьшаем размер */
     object-fit: cover;
     border-radius: 10px;
-    margin-right: 20px; /* Уменьшаем отступ */
+    margin-right: 2%; /* Уменьшаем отступ */
 }
 
 .profile-info {
     text-align: left;
     width: 100%;
-    font-size: 16px; /* Уменьшаем размер текста */
+    font-size: 1.6vh; /* Уменьшаем размер текста */
 }
 
 .profile-info h5 {
-    margin-bottom: 20px; /* Увеличиваем отступ */
-    font-size: 20px; /* Уменьшаем размер текста */
+    margin-bottom: 2%; /* Увеличиваем отступ */
+    font-size: 2vh; /* Уменьшаем размер текста */
 }
 
 .profile-info p {
-    margin: 15px 0; /* Увеличиваем отступы */
+    margin: 1.5% 0; /* Увеличиваем отступы */
 }
 
 .profile-buttons {
@@ -72,16 +73,16 @@ body, html {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-top: 20px; /* Уменьшаем отступ */
+    margin-top: 2%; /* Уменьшаем отступ */
 }
 
 .profile-buttons button {
     width: 100%;
-    margin: 10px 0; /* Уменьшаем отступы */
-    font-size: 14px; /* Уменьшаем размер текста */
-    padding: 8px; /* Уменьшаем паддинги */
+    margin: 1% 0; /* Уменьшаем отступы */
+    font-size: 1.4vh; /* Уменьшаем размер текста */
+    padding: 0.8vh; /* Уменьшаем паддинги */
 }
 
 .logout-button {
-    margin-top: 10px; /* Уменьшаем отступ */
+    margin-top: 1%; /* Уменьшаем отступ */
 }
