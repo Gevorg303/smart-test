@@ -47,6 +47,11 @@ public class TestController {
         return testService.getTestById(testDto.getId());
     }
 
+    @GetMapping("/id:{id}")
+    public TestDto getTestByIdNoCookie(@PathVariable Long id) {
+        return testService.getTestById(id);
+    }
+
     /**
     Выводит список заданий в тесте
     */
