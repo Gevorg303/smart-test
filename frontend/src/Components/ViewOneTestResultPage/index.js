@@ -28,9 +28,9 @@ const ViewTestResultsPage = (props) => {
                     </tr>
                     </tbody>
                 </Table>
-                <Question id="1" view ></Question>
-                <Question id="2" view ></Question>
-                <Question id="3" view ></Question>
+                <Question id="1" view answers={[]} setAnswers={[]}></Question>
+                <Question id="2" view answers={[]} setAnswers={[]}></Question>
+                <Question id="3" view answers={[]} setAnswers={[]}></Question>
                 <Button onClick={()=>ViewResultsEnd()}>Закончить обзор</Button>
             </div>
         </div>

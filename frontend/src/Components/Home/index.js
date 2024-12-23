@@ -10,8 +10,8 @@ import welcomeComponent from "../WelcomeComponent";
     const HomePage = () => {
     const containerRef = useRef(null);
     const [welcometext, setwelcometext] = useState("");
-  //  let welcometext = "";
-    let subjects = [];
+    const [subjects, setSubjects] = useState([]);
+    //let subjects = [];
     useEffect(() => {
         async function fetchUser() {
             try {
@@ -25,7 +25,25 @@ import welcomeComponent from "../WelcomeComponent";
                 const user = await response.json();
                 console.log(user);
                 setwelcometext("Здравствуйте, " + user.name + " (" + user.role.role + ")");
-              //  console.log(welcometext);
+                const response2 = await fetch('http://localhost:8080/subject/'+user.login);
+                if (!response2.ok) {
+                    throw new Error('Ошибка вывода предметов учителя');
+                }
+                const classes = await response2.json();
+                let count = 0;
+                const array =[]
+                classes.forEach(subject => {
+                    // console.log(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address)
+                    // select.append(new Option(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address,subject.id))
+                  //  const array = [...subjects]
+                    array.push(
+                        <SubjectCard key={count++} id={subject.id} name={subject.subjectName} description={subject.description} />
+                    )
+                 //   setSubjects(array);
+                });
+                setSubjects(
+                    array
+                )
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -64,16 +82,11 @@ import welcomeComponent from "../WelcomeComponent";
                 <WelcomeComponent text={welcometext} />
                 <div className="container-wrapper">
                     <div className="container" id="subjects-container" ref={containerRef}>
-                        {}
-                        <SubjectCard name='Химия' id='1' />
-                        <SubjectCard name='Алгебра' id='2' description='description' />
-                        <SubjectCard name='Русский язык' id='3' description='labore et dolore magna aliqua.'/>
-                        <SubjectCard name='Геометрия' id='4' />
-                        <SubjectCard name='География' id='5' />
+                        {subjects}
                     </div>
-                    <div className="button-container">
+                    {/*  <div className="button-container">
                         <Button id="openModal" className="edit-button">Добавить / Удалить предмет</Button>
-                    </div>
+                    </div>*/}
                 </div>
             </div>
         </>

@@ -9,6 +9,7 @@ const SubjectCard = (props) => {
         e.preventDefault();
         console.log(`You clicked ${props.id}`);
        // navigate(`/theme/${props.id}`);
+        document.cookie = "sub="+props.id+"; path=/;";
         navigate("/theme");
     };
 

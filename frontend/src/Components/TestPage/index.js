@@ -27,8 +27,8 @@ const TestPage = () => {
     function TestEnd()
     {
         //
-        console.log(answers)
-       // navigate("/testresult");
+        //console.log(answers)
+        navigate("/testresult");
     }
 
     return (
