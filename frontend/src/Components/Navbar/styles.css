@@ -1,17 +1,16 @@
-.navbar {
+.custom-navbar {
     background-color: #333;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
- /*   padding: 10px 20px;*/
-    width: 100%; /* Растягиваем на всю ширину */
-    position: fixed; /* Прикрепляем к верху страницы */
+    width: 100%;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Убедитесь, что Navbar находится поверх других элементов */
-  /*  margin-top: -27.5%; /* Убираем внешние отступы */
-    box-sizing: border-box; /* Учитываем паддинги и бордеры в размерах */
+    z-index: 1000;
+    box-sizing: border-box;
+    padding: 0 20px; /* Добавляем паддинги по бокам */
 }
 
 .navbar-logo a {
@@ -35,7 +34,7 @@
 }
 
 .navbar-links.right {
-    margin-left: auto; /* Перемещаем элементы вправо */
+    margin-left: auto;
 }
 
 .navbar-item {
@@ -53,7 +52,7 @@
     background-color: #555;
 }
 
-.fas {
+.navbar-link i {
     font-size: 20px;
     color: white;
 }
