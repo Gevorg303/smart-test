@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.Test;
 import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,5 +55,16 @@ public class TestServiceImpl implements TestServiceInterface {
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при получении теста: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public List<TestDto> outputTestsByIDTheme(ThemeDto themeDto) {
+        List<TestDto> testDtoList = new ArrayList<>();
+        for (TestDto testDto : getAllTestDto()) {
+            if (testDto.getTheme().getId().equals(themeDto.getId())) {
+                testDtoList.add(testDto);
+            }
+        }
+        return testDtoList;
     }
 }

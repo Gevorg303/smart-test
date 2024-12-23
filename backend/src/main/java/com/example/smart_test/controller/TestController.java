@@ -67,4 +67,12 @@ public class TestController {
     public Set<TaskDto> displayTheAvailableTasks(@RequestBody TestDto dto){
         return taskService.displayTheAvailableTasks(dto);
     }
+
+    /**
+     Выводит список тестов по конкретной теме
+     * */
+    @PostMapping("/get-test-id-theme")
+    public List<TestDto> outputTestsByIDTheme(@RequestBody ThemeDto themeDto){
+        return testService.outputTestsByIDTheme(themeDto);
+    }
 }
