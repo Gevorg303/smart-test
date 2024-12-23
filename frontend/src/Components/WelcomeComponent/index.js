@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
+import './styles.css';
 
 const WelcomeComponent = (props) => {
-    //const [text, setText] = useState("");
     return (
         <h1 id="welcome">
             {props.text}
@@ -9,4 +9,4 @@ const WelcomeComponent = (props) => {
     );
 };
 
-export default WelcomeComponent ;
+export default WelcomeComponent;

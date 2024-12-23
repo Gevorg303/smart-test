@@ -18,12 +18,12 @@ const Footer = () => {
                         <ul className="list-unstyled">
                             <li>
                                 <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
-                                    ВКонтакте
+                                    <i className="bi bi-vk"></i> ВКонтакте
                                 </a>
                             </li>
                             <li>
                                 <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
-                                    Telegram
+                                    <i className="bi bi-telegram"></i> Telegram
                                 </a>
                             </li>
                         </ul>

@@ -1,20 +1,21 @@
 .footer {
     background-color: #333; /* Темно-серый фон */
     color: #fff; /* Белый текст */
-    padding: 20px 0;
+    padding: 5px 0; /* Уменьшаем паддинги */
+    margin-top: 10px; /* Уменьшаем отступ сверху */
 }
 
 .footer-section {
-    margin-bottom: 20px;
+    margin-bottom: 5px; /* Уменьшаем отступы между секциями */
 }
 
 .footer-section h5 {
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 2.5px; /* Уменьшаем отступы */
 }
 
 .footer-section p {
-    margin-bottom: 10px;
+    margin-bottom: 2.5px; /* Уменьшаем отступы */
 }
 
 .footer-section ul {
@@ -23,7 +24,7 @@
 }
 
 .footer-section ul li {
-    margin-bottom: 10px;
+    margin-bottom: 2.5px; /* Уменьшаем отступы */
 }
 
 .footer-section ul li a {
@@ -32,7 +33,7 @@
 }
 
 .footer-section ul li a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .footer-section ul li i {
@@ -50,5 +51,10 @@
 }
 
 .mt-3 {
-    margin-top: 1rem;
+    margin-top: 0.5rem; /* Уменьшаем отступ сверху */
+}
+
+.disabled-link {
+    cursor: default; /* Убираем курсор указателя */
+    pointer-events: none; /* Отключаем все события мыши */
 }
