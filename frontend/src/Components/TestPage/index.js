@@ -20,9 +20,36 @@ const TestPage = () => {
     let paginationItems =[] //заполняем массив с кнопками для пагинации
 
 
-    function TestEnd()
+    async function TestEnd()
     {
+       // sessionStorage.setItem("1",JSON.stringify(answers))
+     //   let array =JSON.parse(`${sessionStorage.getItem("1")}`)
+        let sendData = [];
+        questions.map((item,index)=>{
+            var obj ={};
+            obj['task'] = {
+                "id": item.id
+            };
+            obj['response'] = answers[index] || ""
+            sendData.push(obj)
+        })
+        //console.log(sendData);
 
+       try {
+           const response = await fetch('http://localhost:8080/verification/result-test', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json;charset=UTF-8'
+               },
+               body: JSON.stringify(sendData)
+           });
+            const test = await response.json();
+            console.log(test)
+           sessionStorage.setItem("testResult",JSON.stringify(test))
+
+        } catch (error) {
+            console.error('Ошибка получения данных:', error);
+        }
         navigate("/testresult");
     }
 

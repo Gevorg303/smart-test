@@ -1,7 +1,7 @@
 import { React,useEffect, useState } from 'react';
 import {Form, Button} from 'react-bootstrap';
 
-const Question = ({id,name, description, view, answers, setAnswers}) => {
+const Question = ({id, qStatus ,name, description, view, answers, setAnswers}) => {
     const [currentAnswers, setCurrentAnswers] = useState(answers);
 
     //console.log("answer " + answer);
@@ -20,7 +20,7 @@ const Question = ({id,name, description, view, answers, setAnswers}) => {
 
     return (
         <div>
-            <h2>{name} </h2>
+            <h2>{name} ({view?qStatus?"True":"False":"" })</h2>
             <h3>{description}</h3>
             <Form>
                 {view ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ):
