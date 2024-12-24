@@ -1,5 +1,6 @@
 package com.example.smart_test.service;
 
+import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
@@ -9,8 +10,8 @@ import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ResponseVerificationServiceImpl implements ResponseVerificationServiceInterface {
@@ -19,39 +20,30 @@ public class ResponseVerificationServiceImpl implements ResponseVerificationServ
     @Autowired
     private TaskServiceInterface taskServiceInterface;
 
-    private int countCorrectTasks = 0;
-
     @Override
-    public boolean checkingResponse(TaskDto taskDto, String response) {
+    public List<ResponseForTask> checkingResponse(List<ResponseForTask> responseForTaskList) {
         List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getAllResponseOptions();
-        TaskDto dto = taskServiceInterface.getTaskById(taskDto.getId());
-        for (ResponseOptionDto responseOptionDto : responseOptionDtoList) {
-            if (dto != null
-                    && Objects.equals(dto.getId(), responseOptionDto.getTask().getId())
-                    && Objects.equals(responseOptionDto.getResponse(), response)) {
-                countCorrectTasks++;
-                return true;
-            }
-        }
-        return false;
-    }
 
-    @Override
-    public String calculateTestResult(TestDto testDto){
-        int countTasksTest = 0;
-        for (TaskDto taskDto : taskServiceInterface.getAllTasks()) {
-            if (testDto.getId().equals(taskDto.getTest().getId())) {
-                countTasksTest++;
-            }
-        }
-        double percentage = (double) countCorrectTasks / countTasksTest * 100;
-        countCorrectTasks = 0;
-        if (percentage >= 60) {
-            return "Тест пройден успешно!\nВаш результат " + percentage + "%";
-        } else {
-            return "Вы не прошли тест!" +
-                    "\n Ваш результат: " + percentage + "%" +
-                    "\n Порого 60%";
-        }
+        Map<Long, TaskDto> taskCache = responseForTaskList.stream()
+                .map(ResponseForTask::getTask)
+                .map(task -> taskServiceInterface.getTaskById(task.getId()))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(TaskDto::getId, dto -> dto));
+
+        return responseForTaskList.stream()
+                .map(responseForTask -> {
+                    TaskDto taskDto = taskCache.get(responseForTask.getTask().getId());
+                    boolean isCorrect = taskDto != null && responseOptionDtoList.stream().anyMatch(option ->
+                            Objects.equals(taskDto.getId(), option.getTask().getId()) &&
+                                    Objects.equals(option.getQuestion(), responseForTask.getResponse())
+                    );
+
+                    return new ResponseForTask(
+                            taskDto,
+                            responseForTask.getResponse(),
+                            isCorrect
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }

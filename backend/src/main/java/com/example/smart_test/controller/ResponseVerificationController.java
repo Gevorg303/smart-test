@@ -1,10 +1,14 @@
 package com.example.smart_test.controller;
 
-import com.example.smart_test.dto.TaskDto;
+import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.service.api.ResponseVerificationServiceInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/verification")
@@ -13,18 +17,14 @@ public class ResponseVerificationController {
     private ResponseVerificationServiceInterface responseVerificationService;
 
     /**
-     Проверка веденного ответа, необходимо передать само задание и введеный ответ /verification/response?response=5
+     Выводит обект содержащий задание, веденый пользователем ответ, статус (верно/неверно)
      */
-    @PostMapping("/response")
-    public boolean checkingResponse(@RequestBody TaskDto taskDto, @RequestParam String response) {
-        return responseVerificationService.checkingResponse(taskDto, response);
-    }
-
-    /**
-     Выведет резьтат прохождения теста
-     */
-    @PostMapping("/calculate-test-result")
-    public String calculateTestResult(@RequestBody TestDto testDto) {
-        return responseVerificationService.calculateTestResult(testDto);
+    @PostMapping("/result-test")
+    public ResponseEntity<List<ResponseForTask>> checkingResponse(@RequestBody @Valid List<ResponseForTask> responseForTaskList) {
+        List<ResponseForTask> result = responseVerificationService.checkingResponse(responseForTaskList);
+        if (result.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(result);
     }
 }
