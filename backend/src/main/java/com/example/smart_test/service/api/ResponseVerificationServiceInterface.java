@@ -1,10 +1,12 @@
 package com.example.smart_test.service.api;
 
-import com.example.smart_test.dto.TaskDto;
+import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.dto.TestDto;
 
-public interface ResponseVerificationServiceInterface {
-    boolean checkingResponse(TaskDto taskDto, String response);
+import java.util.List;
 
-    String calculateTestResult(TestDto testDto);
+public interface ResponseVerificationServiceInterface {
+    List<ResponseForTask> checkingResponse(List<ResponseForTask> responseForTaskList);
+
+    double calculateTestResult(TestDto testDto);
 }
