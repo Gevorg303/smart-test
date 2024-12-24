@@ -35,7 +35,7 @@ public class ResponseVerificationServiceImpl implements ResponseVerificationServ
                     TaskDto taskDto = taskCache.get(responseForTask.getTask().getId());
                     boolean isCorrect = taskDto != null && responseOptionDtoList.stream().anyMatch(option ->
                             Objects.equals(taskDto.getId(), option.getTask().getId()) &&
-                                    Objects.equals(option.getQuestion(), responseForTask.getResponse())
+                                    Objects.equals(option.getResponse(), responseForTask.getResponse())
                     );
 
                     return new ResponseForTask(
