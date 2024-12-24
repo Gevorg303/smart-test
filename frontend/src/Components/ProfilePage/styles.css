@@ -20,8 +20,8 @@ body, html {
     justify-content: center;
     flex: 1; /* Занимает всю доступную высоту */
     padding: 5.1% 0; /* Уменьшаем отступы сверху и снизу */
-    margin-top: 10vh; /* Уменьшаем отступ сверху на одну пятую для разделения с Navbar */
-    margin-bottom: 7vh; /* Уменьшаем отступ снизу на одну пятую для разделения с Footer */
+    margin-top: 5vh; /* Уменьшаем отступ сверху на одну пятую для разделения с Navbar */
+    margin-bottom: 5vh; /* Уменьшаем отступ снизу на одну пятую для разделения с Footer */
 }
 
 .profile-container {
@@ -29,7 +29,7 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 60%; /* Увеличенная ширина */
+    width: 100%; /* Увеличенная ширина */
     max-width: 45%; /* Максимальная ширина */
     padding: 2%;
     background-color: white;
