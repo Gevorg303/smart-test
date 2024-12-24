@@ -27,12 +27,4 @@ public class ResponseVerificationController {
         }
         return ResponseEntity.ok(result);
     }
-
-    /**
-     Выведет процент решенных задач
-     */
-    @PostMapping("/calculate-test-result")
-    public double calculateTestResult(@RequestBody TestDto testDto) {
-        return responseVerificationService.calculateTestResult(testDto);
-    }
 }
