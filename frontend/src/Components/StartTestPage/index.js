@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {Button} from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import ResultTable from "../ResultTable";
-import SubjectCard from "../SubjectCard";
+import Footer from "../Footer";
+import Navbar from "../Navbar";
+import './styles.css'; // Импорт CSS файла
 
 const StartTestPage = () => {
-
-    const [testName,setTestName] = useState("Тема: Тип теста");
-    const [testDescription,setTestDescription] = useState("Описание теста");
-    const [testTryCount,setTestTryCount] = useState(2);
-    const [testDateStart,setTestDateStart] = useState("пятница, 15 декабря 2000, 00:00");
-    const [testDateEnd,setTestDateEnd] = useState("четверг, 25 декабря 2000, 11:00");
-    const [testTime,setTestTime] = useState("30 мин.");
+    const [testName, setTestName] = useState("Тема: Тип теста");
+    const [testDescription, setTestDescription] = useState("Описание теста");
+    const [testTryCount, setTestTryCount] = useState(2);
+    const [testDateStart, setTestDateStart] = useState("пятница, 15 декабря 2000, 00:00");
+    const [testDateEnd, setTestDateEnd] = useState("четверг, 25 декабря 2000, 11:00");
+    const [testTime, setTestTime] = useState("30 мин.");
 
     useEffect(() => {
         function getCookie(name) {
@@ -23,42 +23,50 @@ const StartTestPage = () => {
         async function fetchTest() {
             try {
                 const testid = getCookie("test");
-                const response = await fetch('http://localhost:8080/test/id:'+testid);
+                const response = await fetch('http://localhost:8080/test/id:' + testid);
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
                 const test = await response.json();
-                console.log(test)
+                console.log(test);
                 setTestName(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
-                setTestDescription(test.description|| "Описание отсутсвует");
+                setTestDescription(test.description || "Описание отсутствует");
                 setTestDateStart(test.openingDateAndTime);
                 setTestDateEnd(test.closingDateAndTime);
                 setTestTime(test.passageTime || "неограничено");
-
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
 
-    fetchTest();
+        fetchTest();
     }, []);
 
     let navigate = useNavigate();
-    function StartTest()
-    {
-        //
+    function StartTest() {
         navigate("/test");
     }
-    return (
-        <div className="container">
-            <h1>{testName}</h1>
-            <h4>{testDescription}</h4>
-            <h4>Ограничение по времени: {testTime}</h4>
-            <h4 hidden={!testDateStart}>Открыто с: {testDateStart}</h4>
-            <h4 hidden={!testDateEnd}>Закрывается: {testDateEnd}</h4>
-            {/* <ResultTable tryCount={2} />*/}
 
-            <Button onClick={()=>{StartTest()}}>Начать попытку</Button>
+    return (
+        <div className="page-container">
+            <Navbar />
+            <div className="content-wrapper">
+                <h1 className="test-name">{testName}</h1>
+                <div className="test-container">
+                    <div className="info-card">
+                        <h4>{testDescription}</h4>
+                        <h4>Ограничение по времени: {testTime}</h4>
+                        <h4 hidden={!testDateStart}>Открыто с: {testDateStart}</h4>
+                        <h4 hidden={!testDateEnd}>Закрывается: {testDateEnd}</h4>
+                        <div className="button-container">
+                            <Button onClick={StartTest} className="start-test-button">
+                                Начать попытку
+                            </Button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <Footer/>
         </div>
     );
 };
