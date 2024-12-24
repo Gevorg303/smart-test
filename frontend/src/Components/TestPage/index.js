@@ -1,7 +1,7 @@
 import { React,useEffect, useState } from 'react';
 import Question from "../Question";
-import {Button, Pagination} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
+import {Pagination,Button} from 'react-bootstrap';
 
 const TestPage = () => {
 
@@ -9,21 +9,20 @@ const TestPage = () => {
     const [active, setActive] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [questions, setQuestions] = useState([]/*.map((item,index)=>{<Question />})*/);
-   // const [paginationItems, setPaginationItems] = useState([]);
-    let count = 4; // количество вопросов
-  //  let questions = []; //заполняем массив с вопросами из теста
-  /*  for (let number = 0; number < count; number++) {
-        questions.push(
-            <Question key={number} id={number+1} description={number+1+" description"} answers={answers} setAnswers={setAnswers} />
-        );
-    }*/
+    // const [paginationItems, setPaginationItems] = useState([]);
+    // let count = 4; // количество вопросов
+    //  let questions = []; //заполняем массив с вопросами из теста
+    /*  for (let number = 0; number < count; number++) {
+          questions.push(
+              <Question key={number} id={number+1} description={number+1+" description"} answers={answers} setAnswers={setAnswers} />
+          );
+      }*/
     let paginationItems =[] //заполняем массив с кнопками для пагинации
 
 
     function TestEnd()
     {
-        //
-        //console.log(answers)
+
         navigate("/testresult");
     }
 
@@ -55,27 +54,10 @@ const TestPage = () => {
                     throw new Error("Ошибка получения вопросов");
                 }
                 const questionsJson = await response2.json();
-                console.log(questionsJson)
-                setAnswers(new Array(questionsJson.length).fill(" "));
-                const array = [];
-                let count = 0
-                questionsJson.forEach(question => {
-                    array.push(
-                        <Question key={count} id={count} name={question.taskName} description={question.taskText} answers={answers} setAnswers={setAnswers} />
-                    );
-                 //   count++;
+                setQuestions(questionsJson)
 
-                });
-                console.log("answer" + answers);
-                setQuestions(array);
+                    console.log(questionsJson)
 
-              /*  for (let number = 0; number < array.length; number++) {
-                    paginationItems.push(
-                        <Pagination.Item key={number} active={number === active}>
-                            {number+1}
-                        </Pagination.Item>
-                    );
-                }*/
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -84,11 +66,12 @@ const TestPage = () => {
 
         fetchTest();
     }, []);
-
+    console.log(answers)
     return (
         <div>
             <h1>Контрольный тест</h1>
-            {questions[active]}
+            {/*{questions[active]}*/}
+            <Question id={active} name={questions[active]?.taskName || ""} description={questions[active]?.taskText || ""} answers={answers} setAnswers={setAnswers} />
             <Pagination>
                 <Pagination.Prev hidden={active === 0} onClick={() => { if(active != 0)setActive(active - 1 )}}/>
                 {/*paginationItems*/}
@@ -102,4 +85,4 @@ const TestPage = () => {
     );
 };
 
-export default TestPage;
+export default TestPage
