@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from "../Navbar";
 import Theme from "../Theme";
 import Footer from "../Footer";
-
+import './styles.css'; // Импортируйте стили
 
 const ThemePage = () => {
-    const [subjectName,setSubjectName] = useState("Название предмета");
-    const [themes,setThemes] = useState([]);
+    const [subjectName, setSubjectName] = useState("Название предмета");
+    const [themes, setThemes] = useState([]);
 
     useEffect(() => {
         function getCookie(name) {
@@ -18,7 +18,7 @@ const ThemePage = () => {
         async function fetchSubjectName() {
             try {
                 const subid = getCookie("sub");
-                const response = await fetch('http://localhost:8080/subject/id:'+subid);
+                const response = await fetch('http://localhost:8080/subject/id:' + subid);
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
@@ -40,19 +40,15 @@ const ThemePage = () => {
                 const themes = await response.json();
                 console.log(themes)
                 let count = 0;
-                const array =[]
+                const array = []
                 themes.forEach(subject => {
-                    // console.log(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address)
-                    // select.append(new Option(subject.numberOfInstitution +" "+ subject.letterDesignation +" "+ subject.educationalInstitution.nameOfTheInstitution + " "+ subject.educationalInstitution.address,subject.id))
-                    //  const array = [...subjects]
                     array.push(
-                        <Theme key={count++} id={subject.id} themeName={subject.themeName}  />
+                        <div key={count++} className="theme-container">
+                            <Theme id={subject.id} themeName={subject.themeName} />
+                        </div>
                     )
-                    //   setSubjects(array);
                 });
-                setThemes(
-                    array
-                )
+                setThemes(array)
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -62,21 +58,20 @@ const ThemePage = () => {
         fetchThemes()
     }, []);
 
-   /* for (let number = 1; number <= 3; number++) {
-        tehemes.push(
-            <Theme themeName={"Тема " + number}/>
-        );
-    }*/
     return (
-        <>
-            <Navbar/>
-            <div>
-                <h1>{subjectName}</h1>
-                {themes}
+        <div className="page-container">
+            <Navbar />
+            <div className="content">
+                <div className="Name">
+                    <h1>{subjectName}</h1>
+                </div>
+                    <div className="themes-container">
+                        {themes}
+                    </div>
+                </div>
+                <Footer/>
             </div>
-            <Footer/>
-        </>
-    );
-};
+            );
+            };
 
-export default ThemePage;
+            export default ThemePage;

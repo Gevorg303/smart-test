@@ -1,16 +1,17 @@
-import React, {useState,useEffect} from 'react';
-import {Button} from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
+import './styles.css'; // Импортируйте стили
 
 const Theme = (props) => {
-
-
-    const handleClick = (e,id) => {
-        e.preventDefault();
-        document.cookie = "test="+id+"; path=/;";
-        navigate("/start-test")
-    };
     const [tests, setTests] = useState([]);
+    let navigate = useNavigate();
+
+    const handleClick = (e, id) => {
+        e.preventDefault();
+        document.cookie = "test=" + id + "; path=/;";
+        navigate("/start-test");
+    };
 
     useEffect(() => {
         async function fetchTests() {
@@ -21,7 +22,6 @@ const Theme = (props) => {
                     throw new Error('Ошибка сети');
                 }
                 const theme = await response.json();
-                //console.log(theme)
                 const response2 = await fetch('http://localhost:8080/test/get-test-id-theme', {
                     method: 'POST',
                     headers: {
@@ -33,13 +33,17 @@ const Theme = (props) => {
                     throw new Error("Ошибка получения вопросов");
                 }
                 const testsjson = await response2.json();
-               // console.log(testsjson)
-                const array =[]
+                const array = [];
                 testsjson.forEach(test => {
                     array.push(
-                        <Button key={test.id} onClick={(e,id)=> {
-                            handleClick(e,test.id)}}>{test.typeTest.nameOfTestType}</Button>
-                    )
+                        <Button
+                            key={test.id}
+                            className="test-button"
+                            onClick={(e) => handleClick(e, test.id)}
+                        >
+                            {test.typeTest.nameOfTestType}
+                        </Button>
+                    );
                 });
                 setTests(array);
 
@@ -47,16 +51,15 @@ const Theme = (props) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
-        fetchTests()
-    }, []);
+        fetchTests();
+    }, [props.id, navigate]);
 
-    let navigate = useNavigate();
     return (
         <div>
             <h2>{props.themeName}</h2>
-            <h3>id: {props.id}</h3>
-            {tests}
-
+            <div className="buttons-container">
+                {tests}
+            </div>
         </div>
     );
 };
