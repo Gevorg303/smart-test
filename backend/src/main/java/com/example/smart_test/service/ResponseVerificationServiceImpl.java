@@ -20,8 +20,6 @@ public class ResponseVerificationServiceImpl implements ResponseVerificationServ
     @Autowired
     private TaskServiceInterface taskServiceInterface;
 
-    private int countCorrectTasks = 0;
-
     @Override
     public List<ResponseForTask> checkingResponse(List<ResponseForTask> responseForTaskList) {
         List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getAllResponseOptions();
@@ -47,18 +45,5 @@ public class ResponseVerificationServiceImpl implements ResponseVerificationServ
                     );
                 })
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public double calculateTestResult(TestDto testDto){
-        int countTasksTest = 0;
-        for (TaskDto taskDto : taskServiceInterface.getAllTasks()) {
-            if (testDto.getId().equals(taskDto.getTest().getId())) {
-                countTasksTest++;
-            }
-        }
-        double percentage = (double) countCorrectTasks / countTasksTest * 100;
-        countCorrectTasks = 0;
-        return percentage;
     }
 }

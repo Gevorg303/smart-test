@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface ResponseVerificationServiceInterface {
     List<ResponseForTask> checkingResponse(List<ResponseForTask> responseForTaskList);
-
-    double calculateTestResult(TestDto testDto);
 }
