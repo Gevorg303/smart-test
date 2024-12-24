@@ -1,29 +1,31 @@
 import { React,useEffect, useState } from 'react';
 import {Form, Button} from 'react-bootstrap';
 
-const Question = ({id, description, view, answers, setAnswers}) => {
-    const [answer, setAnswer] = useState(answers[id] || "");
+const Question = ({id,name, description, view, answers, setAnswers}) => {
+    const [currentAnswers, setCurrentAnswers] = useState(answers);
 
-    useEffect( () => {
-        console.log(answer)
-    });
-
+    //console.log("answer " + answer);
     const onClick =(id,answer)=>{
         const array = [...answers]
+
         array[id] = answer;
         setAnswers(array)
+
+    }
+    const handleInputChange =(id,answer)=>{
+        const array = [...currentAnswers]
+        array[id] = answer;
+        setCurrentAnswers(array)
     }
 
     return (
         <div>
-            <h2>Вопрос {id} </h2>
-            <h3>{description} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. </h3>
-            <Form >
+            <h2>{name} </h2>
+            <h3>{description}</h3>
+            <Form>
                 {view ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ):
-                    (<Form.Control type="text" placeholder="Ответ" value={answer} onChange={(e)=>{setAnswer(e.target.value)}}  required  />)}
-                {view ? (<></> ): (<Button onClick={() => onClick(id,answer)} display={view ? "none" : ""} >Ответить</Button>)}
+                    (<Form.Control type="text" placeholder="Ответ" value={currentAnswers[id] || ""} onChange={(e)=>{handleInputChange(id,e.target.value) /*setAnswer(e.target.value)*/}}  required  />)}
+                {view ? (<></> ): (<Button onClick={() => onClick(id,currentAnswers[id])} display={view ? "none" : ""} >Ответить</Button>)}
             </Form>
         </div>
     );
