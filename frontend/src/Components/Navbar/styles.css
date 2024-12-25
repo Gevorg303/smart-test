@@ -38,8 +38,14 @@
     margin-left: auto;
 }
 
+.navbar-links .navbar-link {
+    color: white !important; /* Изменяем цвет ссылок и добавляем !important */
+    text-decoration: none;
+    padding: 5px 7.5px; /* Уменьшаем паддинги */
+    transition: background-color 0.3s;
+}
+
 .navbar-link {
-    color: white;
     text-decoration: none;
     padding: 5px 7.5px; /* Уменьшаем паддинги */
     transition: background-color 0.3s;

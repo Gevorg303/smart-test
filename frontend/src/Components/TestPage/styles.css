@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-size: cover;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.test-container {
+    background-color: #f0f0f0;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Убедимся, что контейнер занимает всю высоту */
+}
+
+h1 {
+    /*color: #333;*/
+    color: #fff;
+text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    margin-bottom: 1rem;
+    text-align: center; /* Центрируем заголовок */
+}
+
+.pagination {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-item {
+    /*background-color: #4CAF50;
+    color: white;*/
+    --bs-pagination-active-bg: #4CAF50;
+    --bs-pagination-active-border-color: #4CAF50;
+}
+
+.pagination-item:hover {
+    /*background-color: #388E3C;*/
+
+}
+
+.end-button {
+    background-color: #4CAF50; /* Изменяем цвет фона элемента пагинации */
+    color: white; /* Изменяем цвет текста элемента пагинации */
+    --bs-btn-border-color: #4CAF50;
+}
+
+.end-button:hover{
+    background-color: #388E3C;
+    border-color: #388E3C; /* Изменяем цвет границы при наведении */
+}
+
+.button {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+a, a:visited {
+    text-decoration: none;
+     color: #4CAF50 !important;
+}
+
+
+/*color: #fff; /* Белый цвет текста
+text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;*/

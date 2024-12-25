@@ -17,14 +17,14 @@ const Footer = () => {
                         <h5>Социальные сети</h5>
                         <ul className="list-unstyled">
                             <li>
-                                <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
+                                <p href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
                                     ВКонтакте
-                                </a>
+                                </p>
                             </li>
                             <li>
-                                <a href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
+                                <p href="#" onClick={(e) => e.preventDefault()} className="disabled-link">
                                    Telegram
-                                </a>
+                                </p>
                             </li>
                         </ul>
                     </Col>

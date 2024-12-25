@@ -1,52 +1,39 @@
-import { React,useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Question from "../Question";
 import { useNavigate } from "react-router-dom";
-import {Pagination,Button} from 'react-bootstrap';
+import { Pagination, Button } from 'react-bootstrap';
+import './styles.css';
+import Navbar from "../Navbar";
+import Footer from "../Footer";
 
 const TestPage = () => {
-
     let navigate = useNavigate();
     const [active, setActive] = useState(0);
     const [answers, setAnswers] = useState([]);
-    const [questions, setQuestions] = useState([]/*.map((item,index)=>{<Question />})*/);
-    // const [paginationItems, setPaginationItems] = useState([]);
-    // let count = 4; // количество вопросов
-    //  let questions = []; //заполняем массив с вопросами из теста
-    /*  for (let number = 0; number < count; number++) {
-          questions.push(
-              <Question key={number} id={number+1} description={number+1+" description"} answers={answers} setAnswers={setAnswers} />
-          );
-      }*/
-    let paginationItems =[] //заполняем массив с кнопками для пагинации
+    const [questions, setQuestions] = useState([]);
 
-
-    async function TestEnd()
-    {
-       // sessionStorage.setItem("1",JSON.stringify(answers))
-     //   let array =JSON.parse(`${sessionStorage.getItem("1")}`)
+    async function TestEnd() {
         let sendData = [];
-        questions.map((item,index)=>{
-            var obj ={};
+        questions.map((item, index) => {
+            var obj = {};
             obj['task'] = {
                 "id": item.id
             };
             obj['response'] = answers[index] || ""
             sendData.push(obj)
         })
-        //console.log(sendData);
 
-       try {
-           const response = await fetch('http://localhost:8080/verification/result-test', {
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json;charset=UTF-8'
-               },
-               body: JSON.stringify(sendData)
-           });
+        try {
+            const response = await fetch('http://localhost:8080/verification/result-test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify(sendData)
+            });
             const test = await response.json();
             console.log(test)
-           sessionStorage.setItem("testResult",JSON.stringify(test))
-
+            sessionStorage.setItem("testResult", JSON.stringify(test))
         } catch (error) {
             console.error('Ошибка получения данных:', error);
         }
@@ -63,7 +50,7 @@ const TestPage = () => {
         async function fetchTest() {
             try {
                 const testid = getCookie("test");
-                const response = await fetch('http://localhost:8080/test/id:'+testid);
+                const response = await fetch('http://localhost:8080/test/id:' + testid);
                 if (!response.ok) {
                     throw new Error('Ошибка получения теста');
                 }
@@ -82,10 +69,7 @@ const TestPage = () => {
                 }
                 const questionsJson = await response2.json();
                 setQuestions(questionsJson)
-
-                    console.log(questionsJson)
-
-
+                console.log(questionsJson)
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -93,23 +77,34 @@ const TestPage = () => {
 
         fetchTest();
     }, []);
+
     console.log(answers)
     return (
-        <div>
-            <h1>Контрольный тест</h1>
-            {/*{questions[active]}*/}
-            <Question id={active} name={questions[active]?.taskName || ""} description={questions[active]?.taskText || ""} answers={answers} setAnswers={setAnswers} />
-            <Pagination>
-                <Pagination.Prev hidden={active === 0} onClick={() => { if(active != 0)setActive(active - 1 )}}/>
-                {/*paginationItems*/}
-                <Pagination.Item active>
-                    {active+1 + " / " + questions.length}
-                </Pagination.Item>
-                <Pagination.Next hidden={active >= questions.length-1} onClick={() => { if(active < questions.length-1)setActive(active + 1 )}}/>
-            </Pagination>
-            <Button onClick={() =>TestEnd()}>Завершить тест</Button>
+        <div className="page-container">
+            <Navbar />
+            <div className="content-wrapper">
+                <h1>Контрольный тест</h1>
+                <div className="test-container">
+                    <Question id={active} name={questions[active]?.taskName || ""}
+                              description={questions[active]?.taskText || ""} answers={answers}
+                              setAnswers={setAnswers} />
+                <Pagination>
+                    <Pagination.Prev className="pagination-item" hidden={active === 0} onClick={() => {
+                        if (active !== 0) setActive(active - 1)
+                    }} />
+                    <Pagination.Item active className="pagination-item">
+                        {active + 1 + " / " + questions.length}
+                    </Pagination.Item>
+                    <Pagination.Next className="pagination-item" hidden={active >= questions.length - 1} onClick={() => {
+                        if (active < questions.length - 1) setActive(active + 1)
+                    }} />
+                </Pagination>
+                <Button className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
+                </div>
+            </div>
+            <Footer />
         </div>
     );
 };
 
-export default TestPage
+export default TestPage;
