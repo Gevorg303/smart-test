@@ -20,7 +20,7 @@ const Question = ({id, qStatus ,name, description, view, answers, setAnswers}) =
 
     return (
         <div>
-            <h2>{name} ({view?qStatus?"True":"False":"" })</h2>
+            <h2>{name} {view?qStatus?"(True)":"(False)":"" }</h2>
             <h3>{description}</h3>
             <Form>
                 {view ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ):
