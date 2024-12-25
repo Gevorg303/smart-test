@@ -23,7 +23,7 @@ const Question = ({id, qStatus ,name, description, view, answers, setAnswers}) =
             <h2>{name} {view?qStatus?"(True)":"(False)":"" }</h2>
             <h3>{description}</h3>
             <Form>
-                {view ? (<Form.Control type="text" placeholder="Ответ"  required readOnly  /> ):
+                {view ? (<Form.Control type="text" placeholder="Ответ" value={currentAnswers[id] || ""} onChange={(e)=>{handleInputChange(id,e.target.value) /*setAnswer(e.target.value)*/}}  required readOnly  /> ):
                     (<Form.Control type="text" placeholder="Ответ" value={currentAnswers[id] || ""} onChange={(e)=>{handleInputChange(id,e.target.value) /*setAnswer(e.target.value)*/}}  required  />)}
                 {view ? (<></> ): (<Button onClick={() => onClick(id,currentAnswers[id])} display={view ? "none" : ""} >Ответить</Button>)}
             </Form>
