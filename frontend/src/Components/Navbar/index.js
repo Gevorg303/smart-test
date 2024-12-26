@@ -22,7 +22,7 @@ const Navbar = () => {
                     <Nav className="navbar-links">
                         <Nav.Link href="/home" className="navbar-link">Предметы</Nav.Link>
                         <Nav.Link href="/register" className="navbar-link">Зарегистрировать пользователя</Nav.Link>
-                        <Nav.Link className="navbar-link">Справка</Nav.Link>
+                        <Nav.Link href="/bank" className="navbar-link">Банк заданий</Nav.Link>
                     </Nav>
                     <Nav className="navbar-links right">
                         <Nav.Link className="navbar-link">

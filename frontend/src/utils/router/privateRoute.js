@@ -1,11 +1,21 @@
-import React from 'react';
+import React from 'react'
+import { Outlet, Navigate } from 'react-router-dom'
 
-const PrivateRoute = () => {
+
+
+export default function PrivateRoutes() {
+    function getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+    let  userid = getCookie("jwtToken")
     return (
-        <div>
+        <>
+            {userid ? <Outlet  /> : <Navigate to="/" />};
+        </>
 
-        </div>
-    );
-};
+    )
 
-export default PrivateRoute;
+}

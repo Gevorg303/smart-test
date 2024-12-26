@@ -10,6 +10,7 @@ import ViewTestResultsPage from "./Components/ViewOneTestResultPage";
 import ThemePage from "./Components/ThemePage";
 import ProfilePage from "./Components/ProfilePage";
 import QuestionBankPage from "./Components/QuestionBankPage";
+import PrivateRoutes from "./utils/router/privateRoute";
 
 export default function App() {
     return (
@@ -18,8 +19,8 @@ export default function App() {
                 {/* Стартовая страница без Layout */}
                 <Route path="/" element={<LoginPage />} />
                 {/* Остальные страницы с Layout */}
-                <Route path="/*" /*element={<Layout />}*/>
-                    <Route path="home" element={<HomePage />} />
+                <Route path="/*" exact element={<PrivateRoutes/>}>
+                    <Route path="home" element={ <HomePage /> }/>
                     <Route path="start-test" element={<StartTestPage/> } />
                     <Route path="test" element={<TestPage/> } />
                     <Route path="register" element={<RegistrationPage/> } />
