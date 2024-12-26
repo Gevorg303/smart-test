@@ -34,7 +34,7 @@ body {
 h1 {
     /*color: #333;*/
     color: #fff;
-text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     margin-bottom: 1rem;
     text-align: center; /* Центрируем заголовок */
 }
@@ -45,15 +45,9 @@ text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     justify-content: center;
 }
 
-.pagination-item {
-    /*background-color: #4CAF50;
-    color: white;*/
-    --bs-pagination-active-bg: #4CAF50;
-    --bs-pagination-active-border-color: #4CAF50;
-}
-
-.pagination-item:hover {
-    /*background-color: #388E3C;*/
+.page-link {
+    background-color: #4CAF50 !important;
+    border-color: #388E3C !important;
 
 }
 
@@ -80,9 +74,4 @@ text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 a, a:visited {
     text-decoration: none;
-     color: #4CAF50 !important;
 }
-
-
-/*color: #fff; /* Белый цвет текста
-text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;*/

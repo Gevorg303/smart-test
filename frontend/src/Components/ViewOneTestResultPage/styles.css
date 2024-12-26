@@ -43,3 +43,19 @@
     background-color: #f8d7da; /* Красный фон для неправильных вопросов */
     border-color: #f5c6cb;
 }
+
+.result-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.result-button:hover {
+    background-color: #388E3C;
+}
+
+.result-button:active {
+    background-color: #388E3C !important;
+}
