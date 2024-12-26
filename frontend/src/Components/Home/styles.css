@@ -132,6 +132,12 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height: 150px; /* Устанавливаем фиксированную высоту для карточек */
     box-sizing: border-box; /* Включаем padding и border в общую ширину и высоту */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Добавляем анимацию */
+}
+
+.container-home .card:hover {
+    transform: scale(1.05); /* Увеличиваем карточку при наведении */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Усиливаем тень при наведении */
 }
 
 .button-container {
@@ -142,4 +148,17 @@ h1 {
     margin-bottom: 20px; /* Добавляем отступ снизу для приветственной надписи */
     width: 100%;
     text-align: center;
+}
+
+/* Адаптивные стили для различных экранов */
+@media screen and (max-width: 1200px) {
+    .container-home {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Уменьшаем ширину карточек для средних экранов */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container-home {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Уменьшаем ширину карточек для маленьких экранов */
+    }
 }
