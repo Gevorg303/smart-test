@@ -1,3 +1,4 @@
+/* styles.css */
 .question-container {
     display: flex;
     flex-direction: column;
@@ -44,4 +45,14 @@
 
 .answer-button:hover {
     background-color: #388E3C;
+}
+
+.correct {
+    background-color: #d4edda; /* Зеленый фон для правильных вопросов */
+    border-color: #c3e6cb;
+}
+
+.incorrect {
+    background-color: #f8d7da; /* Красный фон для неправильных вопросов */
+    border-color: #f5c6cb;
 }

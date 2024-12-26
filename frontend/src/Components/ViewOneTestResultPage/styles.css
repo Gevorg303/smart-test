@@ -1,0 +1,45 @@
+
+.result-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: white; /* Белый текст */
+    -webkit-text-stroke: 1px black; /* Черная обводка */
+}
+
+.result-container {
+    margin: 20px;
+    text-align: center; /* Центрирование текста */
+}
+
+.result-table {
+    margin: 20px auto; /* Центрирование таблицы */
+    width: 50%; /* Ширина таблицы 50% */
+}
+
+.result-button {
+    display: block;
+    margin: 20px auto;
+}
+
+.content-container {
+    padding-top: 60px; /* Отступ сверху, равный высоте навбара */
+}
+/* Question.css */
+.question {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.correct {
+    background-color: #d4edda; /* Зеленый фон для правильных вопросов */
+    border-color: #c3e6cb;
+}
+
+.incorrect {
+    background-color: #f8d7da; /* Красный фон для неправильных вопросов */
+    border-color: #f5c6cb;
+}
