@@ -11,7 +11,7 @@ const Footer = () => {
                 <Row>
                     <Col md={4} className="footer-section">
                         <h5>О компании</h5>
-                        <p>Информация о компании, наша миссия и видение.</p>
+                        <p>Мы стремимся к совершенству в каждом проекте.</p>
                     </Col>
                     <Col md={4} className="footer-section">
                         <h5>Социальные сети</h5>
