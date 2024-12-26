@@ -7,17 +7,13 @@ import com.example.smart_test.dto.*;
 import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TaskRepositoryInterface;
-import com.example.smart_test.service.api.IndicatorServiceInterface;
-import com.example.smart_test.service.api.TaskOfIndicatorServiceInterface;
-import com.example.smart_test.service.api.TaskServiceInterface;
-import com.example.smart_test.service.api.ThemeServiceInterface;
+import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +32,13 @@ public class TaskServiceImpl implements TaskServiceInterface {
     @Autowired
     private TestMapperInterface testMapperInterface;
     @Autowired
-    private TestServiceImpl testServiceImpl;
+    private TestServiceInterface testService;
+    @Autowired
+    private UserServiceInterface userService;
+    @Autowired
+    private SubjectUserServiceInterface subjectUserService;
+    @Autowired
+    private ThemeServiceInterface themeService;
 
     @Override
     public TaskDto addTaskDto(TaskDto dto) {
@@ -96,7 +98,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
                 if (Objects.equals(taskDto.getId(), taskOfIndicatorDto.getTask().getId())) {
                     for (IndicatorDto indicatorDto : indicatorService.getAllIndicators()) {
                         if (Objects.equals(taskOfIndicatorDto.getIndicator().getId(), indicatorDto.getId())) {
-                            for (TestDto testDto : testServiceImpl.getAllTestDto()) {
+                            for (TestDto testDto : testService.getAllTestDto()) {
                                 if (Objects.equals(testDto.getId(), dto.getId())
                                         && taskDto.getTest() == null
                                         && Objects.equals(indicatorDto.getTheme().getId(), testDto.getTheme().getId())) {
@@ -112,10 +114,34 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
+    public List<TaskDto> getUserTasks(UserDto dto) {
+        List<TaskDto> taskDtoList = new ArrayList<>();
+        UserDto userDto = userService.getUserByLogin(dto);
+        for (SubjectTeacherDto subjectTeacherDto : subjectUserService.getAllSubjectTeachers()) {
+            if (userDto.getId().equals(subjectTeacherDto.getUser().getId())) {
+                for (ThemeDto themeDto : themeService.getAllTheme()) {
+                    if (themeDto.getSubject() == subjectTeacherDto.getSubject()) {
+                        for (TestDto testDto : testService.getAllTestDto()) {
+                            if (Objects.equals(testDto.getTheme().getId(), themeDto.getId())) {
+                                for (TaskDto taskDto : getAllTasks()) {
+                                    if (taskDto.getTest().getId().equals(testDto.getId())) {
+                                        taskDtoList.add(taskDto);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return taskDtoList;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void addTaskToTest(Long testId, Long taskId) {
         try {
-            Test test = testMapperInterface.toEntity(testServiceImpl.getTestById(testId));
+            Test test = testMapperInterface.toEntity(testService.getTestById(testId));
             Task task = taskMapperInterface.toEntity(getTaskById(taskId));
             task.setTest(test);
             taskRepositoryInterface.save(task);
