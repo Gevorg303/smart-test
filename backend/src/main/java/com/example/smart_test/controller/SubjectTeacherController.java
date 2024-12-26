@@ -1,9 +1,7 @@
 package com.example.smart_test.controller;
 
-import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectTeacherDto;
-import com.example.smart_test.service.api.SubjectServiceInterface;
-import com.example.smart_test.service.api.SubjectTeacherServiceInterface;
+import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +11,7 @@ import java.util.List;
 @RequestMapping("/subject-teacher")
 public class SubjectTeacherController {
     @Autowired
-    private SubjectTeacherServiceInterface subjectService;
+    private SubjectUserServiceInterface subjectService;
 
     @PostMapping("/add")
     public SubjectTeacherDto addSubjectTeacherDto(@RequestBody SubjectTeacherDto subjectDto) {

@@ -3,6 +3,7 @@ package com.example.smart_test.controller;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,14 @@ public class TestController {
     @GetMapping("/id:{id}")
     public TestDto getTestByIdNoCookie(@PathVariable Long id) {
         return testService.getTestById(id);
+    }
+
+    /**
+     Выводит темы конкретного пользователя
+     */
+    @PostMapping("/get-user-tests")
+    public List<TestDto> getUserTests(@RequestBody UserDto userDto) {
+        return testService.getUserTests(userDto);
     }
 
     /**

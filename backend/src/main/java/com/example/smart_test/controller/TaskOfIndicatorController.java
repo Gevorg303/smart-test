@@ -1,8 +1,6 @@
 package com.example.smart_test.controller;
 
-import com.example.smart_test.dto.SubjectTeacherDto;
 import com.example.smart_test.dto.TaskOfIndicatorDto;
-import com.example.smart_test.service.api.SubjectTeacherServiceInterface;
 import com.example.smart_test.service.api.TaskOfIndicatorServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
