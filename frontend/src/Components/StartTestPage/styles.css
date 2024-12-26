@@ -65,3 +65,7 @@ body {
 .start-test-button:hover {
     background-color: #388E3C;
 }
+
+.start-test-button:active {
+    background-color: #388E3C !important;
+}

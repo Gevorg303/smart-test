@@ -65,7 +65,11 @@ text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 
 .end-button:hover{
     background-color: #388E3C;
-    border-color: #388E3C; /* Изменяем цвет границы при наведении */
+    border-color: #388E3C;
+}
+
+.end-button:active {
+    background-color: #388E3C !important;
 }
 
 .button {

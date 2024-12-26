@@ -68,6 +68,10 @@ body {
     background-color: #388E3C;
 }
 
+.registration-box button:active {
+    background-color: #388E3C !important;
+}
+
 #errorlabel {
     color: red;
     margin-top: 10px;

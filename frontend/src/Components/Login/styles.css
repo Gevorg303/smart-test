@@ -184,6 +184,10 @@ body {
     background-color: #388E3C;
 }
 
+.login-box button:active {
+    background-color: #388E3C !important;
+}
+
 #errorlabel {
     color: red;
     margin-top: 10px;
