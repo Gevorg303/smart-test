@@ -35,18 +35,15 @@ const Question = ({ id, qStatus, name, description, view, answers, setAnswers, s
             <div className={`answer-section ${view ? (qStatus ? 'correct' : 'incorrect') : ''}`}>
                 <Form>
                     <Form.Group className="answer-group">
-                        <Form.Label className="answer-label">Ваш ответ:</Form.Label>
-                        {view ? (
-                            <div className="answer-display">{userAnswer}</div>
-                        ) : (
-                            <Form.Control
-                                type="text"
-                                placeholder="Ответ"
-                                value={currentAnswers[id] || ""}
-                                onChange={(e) => handleInputChange(id, e.target.value)}
-                                required
-                            />
-                        )}
+                        <Form.Label className="answer-label">Ответ:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Ответ"
+                            value={view ? userAnswer : (currentAnswers[id] || "")}
+                            onChange={(e) => handleInputChange(id, e.target.value)}
+                            required
+                            readOnly={view}
+                        />
                     </Form.Group>
                     <br />
                     {view ? (
