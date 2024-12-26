@@ -2,6 +2,9 @@ import React, {useState,useEffect} from 'react';
 import {Table,Button} from 'react-bootstrap';
 import Question from "../Question";
 import { useNavigate } from "react-router-dom";
+import './styles.css'; // Импортируем CSS-файл
+import Navbar from '../Navbar'; // Импортируем компонент Navbar
+import Footer from '../Footer'; // Импортируем компонент Footer
 
 const ViewTestResultsPage = (props) => {
 
@@ -53,22 +56,22 @@ const ViewTestResultsPage = (props) => {
 
                 //  console.log(a);
                 //  console.log("rightAnswers: "+ra);
-              /*  const array = [];
-                let count = 0
-                questionsJson.forEach(question => {
-                    array.push(
+                /*  const array = [];
+                  let count = 0
+                  questionsJson.forEach(question => {
+                      array.push(
 
-                        <Question view key={count} id={question.id} qStatus={validList[count].status} name={question.taskName} description={question.taskText} answers={answers} setAnswers={setAnswers} />
-                    );
+                          <Question view key={count} id={question.id} qStatus={validList[count].status} name={question.taskName} description={question.taskText} answers={answers} setAnswers={setAnswers} />
+                      );
 
-                    count++;
-                });
-                setQuestions(array);*/
+                      count++;
+                  });
+                  setQuestions(array);*/
                 setQuestions(questionsJson)
                 setCountOfQuestions(questionsJson.length)
                 setScore((rightAnswers/ questionsJson.length)*100)
-               // setCountOfQuestions(array.length)
-               // setScore((rightAnswers/ array.length)*100)
+                // setCountOfQuestions(array.length)
+                // setScore((rightAnswers/ array.length)*100)
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -78,8 +81,6 @@ const ViewTestResultsPage = (props) => {
 
     }, []);
 
-
-    // console.log(answers)
     let navigate = useNavigate();
     function ViewResultsEnd()
     {
@@ -87,31 +88,38 @@ const ViewTestResultsPage = (props) => {
         sessionStorage.clear()
         navigate("/theme");
     }
+
     return (
         <div>
-            <h1>{text}</h1>
-            <div>
-                <h2>Ваш результат:</h2>
-                <Table>
-                    <tbody>
-                    <tr>
-                        <td>Всего вопросов:</td>
-                        <td>{countOfQuestions}</td>
-                    </tr>
-                    <tr>
-                        <td>Оценка:</td>
-                        <td> {score} из 100</td>
-                    </tr>
-                    <tr>
-                        <td>Оценка:</td>
-                        <td> { score >= 60? "Зачтено" : "Не зачтено"} </td>
-                    </tr>
-                    </tbody>
-                </Table>
-                {/*questions*/}
-                {questions.map((item,index)=> <Question key={index} qStatus={validList[index].status}  view id={index} name={questions[index]?.taskName || ""} description={questions[index]?.taskText || ""} answers={answers} setAnswers={setAnswers} />)}
-                <Button onClick={()=>ViewResultsEnd()}>Закончить обзор</Button>
+            <Navbar /> {/* Добавляем компонент Navbar */}
+            <div className="content-container"> {/* Добавляем контейнер для контента */}
+                <div className="result-container">
+                    <h1>{text}</h1>
+                    <div>
+                        <h2 className="result-title">Ваш результат:</h2>
+                        <Table className="result-table">
+                            <tbody>
+                            <tr>
+                                <td>Всего вопросов:</td>
+                                <td>{countOfQuestions}</td>
+                            </tr>
+                            <tr>
+                                <td>Баллов:</td>
+                                <td> {score} из 100</td>
+                            </tr>
+                            <tr>
+                                <td>Оценка:</td>
+                                <td> { score >= 60? "Зачтено" : "Не зачтено"} </td>
+                            </tr>
+                            </tbody>
+                        </Table>
+                        {/*questions*/}
+                        {questions.map((item,index)=> <Question key={index} qStatus={validList[index].status}  view id={index} name={questions[index]?.taskName || ""} description={questions[index]?.taskText || ""} answers={answers} setAnswers={setAnswers} />)}
+                        <Button className="result-button" onClick={()=>ViewResultsEnd()}>Закончить обзор</Button>
+                    </div>
+                </div>
             </div>
+            <Footer />
         </div>
     );
 };

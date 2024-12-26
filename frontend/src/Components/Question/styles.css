@@ -1,3 +1,4 @@
+/* styles.css */
 .question-container {
     display: flex;
     flex-direction: column;
@@ -7,21 +8,48 @@
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 50%; /* Уменьшаем ширину контейнера */
+    margin: 20px auto; /* Добавляем отступы между вопросами и центрируем контейнер по горизонтали */
 }
 
 .question-content {
     flex: 1;
 }
 
+.question-title {
+    font-size: 1rem; /* Уменьшаем размер шрифта для текста темы */
+}
+
+.question-text {
+    font-size: 1.5rem; /* Увеличиваем размер шрифта для текста вопроса */
+}
+
 .answer-section {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Перемещаем элементы влево */
+    align-items: center; /* Центрируем элементы */
     margin-top: auto; /* Перемещаем вниз */
     padding: 1rem;
     background-color: white;
     border-top: 1px solid #ddd;
     width: 100%; /* Убедимся, что контейнер занимает всю ширину */
+}
+
+.answer-group {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Центрируем элементы */
+    width: 100%;
+}
+
+.answer-label {
+    margin-right: 10px; /* Отступ между текстом и текстбоксом */
+    font-size: 1rem; /* Размер шрифта для текста "Ваш ответ:" */
+}
+
+.answer-display {
+    margin-left: 10px; /* Отступ между текстом и отображаемым ответом */
+    font-size: 1rem; /* Размер шрифта для отображаемого ответа */
 }
 
 .answer-input {
@@ -44,4 +72,18 @@
 
 .answer-button:hover {
     background-color: #388E3C;
+}
+
+.answer-button:active {
+    background-color: #388E3C !important;
+}
+
+.correct {
+    background-color: #d4edda; /* Зеленый фон для правильных вопросов */
+    border-color: #c3e6cb;
+}
+
+.incorrect {
+    background-color: #f8d7da; /* Красный фон для неправильных вопросов */
+    border-color: #f5c6cb;
 }
