@@ -75,7 +75,6 @@ public class TeacherClassServiceImpl implements TeacherClassServiceInterface {
 
     }
 
-
     private boolean findTeacherClassById(Long id) {
         Optional<TeacherClass> indicator = teacherClassRepositoryInterface.findById(id);
         return indicator.isPresent();

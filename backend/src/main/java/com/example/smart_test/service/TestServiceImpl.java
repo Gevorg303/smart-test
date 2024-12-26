@@ -1,17 +1,17 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.Test;
-import com.example.smart_test.dto.TestDto;
-import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
-import com.example.smart_test.service.api.TestServiceInterface;
+import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +21,12 @@ public class TestServiceImpl implements TestServiceInterface {
     private TestMapperInterface testMapper;
     @Autowired
     private TestRepositoryInterface testRepository;
+    @Autowired
+    private UserServiceInterface userService;
+    @Autowired
+    private SubjectUserServiceInterface subjectUserService;
+    @Autowired
+    private ThemeServiceInterface themeService;
 
     @Override
     public TestDto addTestDto(TestDto testDto) {
@@ -63,6 +69,26 @@ public class TestServiceImpl implements TestServiceInterface {
         for (TestDto testDto : getAllTestDto()) {
             if (testDto.getTheme().getId().equals(themeDto.getId())) {
                 testDtoList.add(testDto);
+            }
+        }
+        return testDtoList;
+    }
+
+    @Override
+    public List<TestDto> getUserTests(UserDto dto) {
+        List<TestDto> testDtoList = new ArrayList<>();
+        UserDto userDto = userService.getUserByLogin(dto);
+        for (SubjectTeacherDto subjectTeacherDto : subjectUserService.getAllSubjectTeachers()) {
+            if (userDto.getId().equals(subjectTeacherDto.getUser().getId())) {
+                for (ThemeDto themeDto : themeService.getAllTheme()) {
+                    if (themeDto.getSubject() == subjectTeacherDto.getSubject()) {
+                        for (TestDto testDto : getAllTestDto()) {
+                            if (Objects.equals(testDto.getTheme().getId(), themeDto.getId())) {
+                                testDtoList.add(testDto);
+                            }
+                        }
+                    }
+                }
             }
         }
         return testDtoList;

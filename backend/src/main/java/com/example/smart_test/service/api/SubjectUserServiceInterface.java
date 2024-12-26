@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface SubjectTeacherServiceInterface {
+public interface SubjectUserServiceInterface {
     SubjectTeacherDto addSubjectTeacherDto(SubjectTeacherDto dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

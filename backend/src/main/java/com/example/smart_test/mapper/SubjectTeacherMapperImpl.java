@@ -2,11 +2,11 @@ package com.example.smart_test.mapper;
 
 import com.example.smart_test.domain.SubjectTeacher;
 import com.example.smart_test.dto.SubjectTeacherDto;
-import com.example.smart_test.mapper.api.SubjectTeacherMapperInterface;
+import com.example.smart_test.mapper.api.SubjectUserMapperInterface;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SubjectTeacherMapperImpl implements SubjectTeacherMapperInterface {
+public class SubjectTeacherMapperImpl implements SubjectUserMapperInterface {
     @Override
     public SubjectTeacherDto toDto(SubjectTeacher entity) {
         SubjectTeacherDto dto = new SubjectTeacherDto();
