@@ -104,7 +104,7 @@ const ViewTestResultsPage = (props) => {
                                 <td>{countOfQuestions}</td>
                             </tr>
                             <tr>
-                                <td>Оценка:</td>
+                                <td>Баллов:</td>
                                 <td> {score} из 100</td>
                             </tr>
                             <tr>
@@ -119,7 +119,7 @@ const ViewTestResultsPage = (props) => {
                     </div>
                 </div>
             </div>
-            <Footer /> {/* Добавляем компонент Footer */}
+            <Footer />
         </div>
     );
 };
