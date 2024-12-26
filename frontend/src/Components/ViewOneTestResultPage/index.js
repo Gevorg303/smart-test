@@ -63,7 +63,7 @@ const ViewTestResultsPage = (props) => {
         // Блокировка кнопки возврата
         const handlePopState = (event) => {
             event.preventDefault();
-            navigate(window.location.pathname);
+            navigate("/home"); // Перенаправление на страницу home
         };
 
         window.history.pushState(null, null, window.location.pathname);
