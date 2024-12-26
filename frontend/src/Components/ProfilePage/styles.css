@@ -86,3 +86,7 @@ body, html {
 .logout-button {
     margin-top: 1%; /* Уменьшаем отступ */
 }
+.welcome
+{
+    margin-top: 3%;
+}

@@ -103,6 +103,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     gap: 10px; /* Уменьшаем отступ между контейнером и кнопкой */
+    margin-bottom: 3%;
 }
 
 .container-home {
@@ -122,16 +123,19 @@ h1 {
 .container-home .card {
     flex: 1 1 calc(33.333% - 16px); /* Ширина карточки с учетом отступов */
     box-sizing: border-box;
-    height: 150px; /* Устанавливаем фиксированную высоту для карточек */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container-home .card:nth-child(3n+1) {
+    margin-left: 0;
+}
+
+.container-home .card:nth-child(3n) {
+    margin-right: 0;
+}
+
+.container-home .card:nth-child(3n+2) {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .button-container {
