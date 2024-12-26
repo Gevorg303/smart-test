@@ -1,6 +1,8 @@
 package com.example.smart_test.controller;
 
 import com.example.smart_test.dto.TaskDto;
+import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,14 @@ public class TaskController {
     @GetMapping("/all")
     public List<TaskDto> getTaskDto() {
         return taskService.getAllTasks();
+    }
+
+    /**
+     Выводит задачи конкретного пользователя
+     */
+    @PostMapping("/get-user-tasks")
+    public List<TaskDto> getUserTasks(@RequestBody UserDto userDto) {
+        return taskService.getUserTasks(userDto);
     }
 
     /**
