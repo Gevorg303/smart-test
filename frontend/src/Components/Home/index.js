@@ -44,35 +44,12 @@ const HomePage = () => {
         fetchUser();
     }, []);
 
-    useEffect(() => {
-        const container = containerRef.current;
-        const cards = container.querySelectorAll('.card');
-        let maxWidth = 0;
-        let maxHeight = 0;
-
-        cards.forEach(card => {
-            const width = card.offsetWidth;
-            const height = card.offsetHeight;
-            if (width > maxWidth) {
-                maxWidth = width;
-            }
-            if (height > maxHeight) {
-                maxHeight = height;
-            }
-        });
-
-        cards.forEach(card => {
-            card.style.width = `${maxWidth}px`;
-            card.style.height = `${maxHeight}px`;
-        });
-    }, [subjects]);
-
     return (
         <>
             <Navbar />
             <div className="home-page">
                 <div className="welcome">
-                    <WelcomeComponent text={welcometext}/>
+                    <WelcomeComponent text={welcometext} />
                 </div>
                 <div className="container-wrapper">
                     <div className="container-home" id="subjects-container" ref={containerRef}>
