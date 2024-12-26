@@ -13,7 +13,7 @@ export default function PrivateRoutes() {
     let  userid = getCookie("jwtToken")
     return (
         <>
-            {userid ? <Outlet  /> : <Navigate to="/" />};
+            {userid ? <Outlet  /> : <Navigate to="/" />}
         </>
 
     )
