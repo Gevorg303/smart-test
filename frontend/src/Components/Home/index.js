@@ -52,7 +52,7 @@ const HomePage = () => {
                     <WelcomeComponent text={welcometext} />
                 </div>
                 <div className="container-wrapper">
-                    <div className="container-home" id="subjects-container" ref={containerRef}>
+                    <div className="container-home" id="subjects-container" ref={containerRef} data-count={subjects.length}>
                         {subjects}
                     </div>
                 </div>
