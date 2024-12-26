@@ -87,7 +87,8 @@ const TestPage = () => {
                 <div className="test-container">
                     <Question id={active} name={questions[active]?.taskName || ""}
                               description={questions[active]?.taskText || ""} answers={answers}
-                              setAnswers={setAnswers} />
+                              setAnswers={setAnswers}
+                               setActive={setActive} qsCount={questions.length} />
                 <Pagination>
                     <Pagination.Prev className="pagination-item" hidden={active === 0} onClick={() => {
                         if (active !== 0) setActive(active - 1)
