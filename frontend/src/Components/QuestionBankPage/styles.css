@@ -11,7 +11,7 @@
     align-items: center;
 }*/
 
-.page-container {
+.page-container-quest {
     background-color: #f0f0f0;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -25,14 +25,14 @@
     margin-left: 10%;
 }
 
-.button-container {
+.button-container-quest {
     display: flex;
     justify-content: center;
     gap: 10px; /* Расстояние между кнопками */
     margin-left: 44%;
 }
 
-.button {
+.button-quest {
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;

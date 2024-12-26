@@ -64,13 +64,13 @@ const QuestionBankPage = () => {
             <Navbar/>
             <br/><br/><br/>
             <h1>{isTests ? "Тесты" : "Вопросы"}</h1>
-            <div className="page-container">
+            <div className="page-container-quest">
 
-                <div className="button-container">
-                    <Button className="button" onClick={() => {
+                <div className="button-container-quest">
+                    <Button className="button-quest" onClick={() => {
                         setIsTests(true)
                     }}>Тесты</Button>
-                    <Button className="button" onClick={() => {
+                    <Button className="button-quest" onClick={() => {
                         setIsTests(false)
                     }}>Вопросы</Button>
                 </div>
