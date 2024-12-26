@@ -82,7 +82,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Выравниваем контент по верхнему краю */
     min-height: calc(100vh - 100px); /* Уменьшаем высоту контента, чтобы подвал был ближе */
     text-align: center;
     padding-top: 10px; /* Уменьшаем отступ сверху для контента */
@@ -102,30 +102,44 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 10px; /* Уменьшаем отступ между контейнером и кнопкой */
     margin-bottom: 3%;
 }
 
 .container-home {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    width: 800px;
-    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Используем CSS Grid для автоматического заполнения строк */
+    gap: 16px; /* Увеличиваем отступы между карточками */
+    width: 100%;
+    max-width: 800px; /* Ограничиваем максимальную ширину контейнера */
     background: #f0f0f0;
-    margin-top: 0.5%;
-    border-radius: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 10px;
+    margin-top: 0.5%; /* Уменьшаем отступ сверху */
+    border-radius: 15px; /* Скругление углов */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшаем тень */
+    padding: 10px; /* Уменьшаем внутренние отступы */
+    overflow: hidden; /* Скрываем переполнение */
 }
 
 .container-home .card {
-    flex: 1 1 calc(33.333% - 16px);
-    box-sizing: border-box;
-    margin: 8px; /* Ensure consistent margin for all cards */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 150px; /* Устанавливаем фиксированную высоту для карточек */
+    box-sizing: border-box; /* Включаем padding и border в общую ширину и высоту */
 }
 
 .button-container {
-    margin-top: 0;
+    margin-top: 0; /* Убираем отступ сверху для кнопки */
+}
+
+.welcome {
+    margin-bottom: 20px; /* Добавляем отступ снизу для приветственной надписи */
+    width: 100%;
+    text-align: center;
 }
