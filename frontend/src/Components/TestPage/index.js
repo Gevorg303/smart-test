@@ -50,6 +50,10 @@ const TestPage = () => {
         async function fetchTest() {
             try {
                 const testid = getCookie("test");
+                if(!testid)
+                {
+                    navigate(-1,{replace:true})
+                }
                 const response = await fetch('http://localhost:8080/test/id:' + testid);
                 if (!response.ok) {
                     throw new Error('Ошибка получения теста');

@@ -8,7 +8,7 @@ import Footer from '../Footer'; // Импортируем компонент Foo
 
 const ViewTestResultsPage = (props) => {
     const [questions, setQuestions] = useState([]);
-    const validList = JSON.parse(`${sessionStorage.getItem("testResult")}`);
+    const validList = JSON.parse(`${sessionStorage.getItem("testResult")}`)||[];
     const [answers, setAnswers] = useState(validList.map((item, index) => item.response));
     let ra = 0;
     for (let number = 0; number < validList.length; number++) {
@@ -33,6 +33,10 @@ const ViewTestResultsPage = (props) => {
         async function fetchTest() {
             try {
                 const testid = getCookie("test");
+                if(validList.length===0)
+                {
+                    navigate(-1,{replace:true})
+                }
                 const response = await fetch('http://localhost:8080/test/id:' + testid);
                 if (!response.ok) {
                     throw new Error('Ошибка получения теста');

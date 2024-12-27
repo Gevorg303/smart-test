@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Navbar from "../Navbar";
 import Theme from "../Theme";
 import Footer from "../Footer";
+import { useNavigate } from "react-router-dom";
 import './styles.css'; // Импортируйте стили
 
 const ThemePage = () => {
     const [subjectName, setSubjectName] = useState("Название предмета");
     const [themes, setThemes] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         function getCookie(name) {
@@ -18,6 +20,10 @@ const ThemePage = () => {
         async function fetchSubjectName() {
             try {
                 const subid = getCookie("sub");
+                if(!subid)
+                {
+                    navigate(-1,{replace:true})
+                }
                 const response = await fetch('http://localhost:8080/subject/id:' + subid);
                 if (!response.ok) {
                     throw new Error('Ошибка сети');

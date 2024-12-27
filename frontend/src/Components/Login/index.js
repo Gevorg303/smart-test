@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 
@@ -15,6 +16,7 @@ class LoginPage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
 
 
 
@@ -44,7 +46,7 @@ class LoginPage extends React.Component {
                const token = await response.text();
                console.log('Received token:', token);
                document.cookie = "jwtToken="+token+"; path=/;"
-               window.location.href = '/home'; // Перенаправление на другую страницу
+               window.location.replace("/home") ; // Перенаправление на другую страницу
            } else {
                const errorText = await response.text();
                console.error('Login failed:', errorText);
@@ -64,7 +66,7 @@ class LoginPage extends React.Component {
                     <Form id="loginForm" onSubmit={this.handleSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicErrors">
                             <Form.Text id="errorlabel" className="error-text">
-                                Ошибка!
+
                             </Form.Text>
                         </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicEmail">

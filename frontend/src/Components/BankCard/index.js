@@ -35,9 +35,10 @@ const BankCard = ({id,obj,isTest}) => {
     }, []);
     return (
         <div className="card">
-            {isTest?
-            <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>:
-            <h2>{obj.taskName}</h2>}
+            {!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>}
+            {isTest ?
+                <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>:
+                <h2>{obj.taskName}</h2>}
             {isTest ?
                 <p>{obj.description}</p> :
                 <p>{obj.taskText}</p>}
