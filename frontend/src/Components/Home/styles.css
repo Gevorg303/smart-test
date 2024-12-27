@@ -104,13 +104,16 @@ h1 {
     align-items: center;
     gap: 10px; /* Уменьшаем отступ между контейнером и кнопкой */
     margin-bottom: 3%;
+    width: 100%;
+    max-width: 1600px;
 }
 
 .container-home {
     display: grid;
+    grid-template-columns: 1fr; /* Одна колонка */
     gap: 16px; /* Увеличиваем отступы между карточками */
     width: 100%;
-    max-width: 800px; /* Ограничиваем максимальную ширину контейнера */
+    max-width: 1200px; /* Ограничиваем максимальную ширину контейнера */
     background: #f0f0f0;
     margin-top: 0.5%; /* Уменьшаем отступ сверху */
     border-radius: 15px; /* Скругление углов */
@@ -144,61 +147,8 @@ h1 {
 }
 
 .welcome {
+    padding-top: 30px;
     margin-bottom: 20px; /* Добавляем отступ снизу для приветственной надписи */
     width: 100%;
     text-align: center;
-}
-
-/* Адаптивные стили для различных экранов */
-@media screen and (max-width: 1200px) {
-    .container-home {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Уменьшаем ширину карточек для средних экранов */
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .container-home {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Уменьшаем ширину карточек для маленьких экранов */
-    }
-}
-
-/* Стили для различных количеств предметов */
-.container-home[data-count="1"] {
-    grid-template-columns: 1fr;
-}
-
-.container-home[data-count="2"] {
-    grid-template-columns: 1fr 1fr;
-}
-
-.container-home[data-count="3"],
-.container-home[data-count="6"],
-.container-home[data-count="9"] {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.container-home[data-count="4"],
-.container-home[data-count="8"] {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.container-home[data-count="4"] .card:nth-child(4) {
-    grid-column: 2 / span 1;
-}
-
-.container-home[data-count="8"] .card:nth-child(8) {
-    grid-column: 2 / span 1;
-}
-
-.container-home[data-count="5"],
-.container-home[data-count="7"] {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.container-home[data-count="5"] .card:nth-child(4),
-.container-home[data-count="5"] .card:nth-child(5),
-.container-home[data-count="7"] .card:nth-child(6),
-.container-home[data-count="7"] .card:nth-child(7) {
-    grid-column: span 2;
-    justify-self: center;
 }

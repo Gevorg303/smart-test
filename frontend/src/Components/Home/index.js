@@ -14,8 +14,8 @@ const HomePage = () => {
     useEffect(() => {
         async function fetchUser() {
             try {
-                document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 const response = await fetch('http://localhost:8080/users/current', {
                     credentials: "include",
                 });
