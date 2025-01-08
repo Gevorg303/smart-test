@@ -126,26 +126,31 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
     @Override
     public List<TaskDto> getUserTasks(UserDto dto) {
-        List<TaskDto> taskDtoList = new ArrayList<>();
         UserDto userDto = userService.getUserByLogin(dto);
-        for (SubjectTeacherDto subjectTeacherDto : subjectUserService.getAllSubjectTeachers()) {
-            if (userDto.getId().equals(subjectTeacherDto.getUser().getId())) {
-                for (ThemeDto themeDto : themeService.getAllTheme()) {
-                    if (themeDto.getSubject() == subjectTeacherDto.getSubject()) {
-                        for (TestDto testDto : testService.getAllTestDto()) {
-                            if (Objects.equals(testDto.getTheme().getId(), themeDto.getId())) {
-                                for (TaskDto taskDto : getAllTasks()) {
-                                    if (taskDto.getTest().getId().equals(testDto.getId())) {
-                                        taskDtoList.add(taskDto);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        if (userDto == null) {
+            throw new IllegalArgumentException("User not found");
         }
-        return taskDtoList;
+
+        List<SubjectTeacherDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
+                .stream()
+                .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
+                .toList();
+
+        List<ThemeDto> themes = themeService.getAllTheme();
+        List<TestDto> tests = testService.getAllTestDto();
+        List<TaskDto> allTasks = getAllTasks();
+
+        return subjectTeachers.stream()
+                .flatMap(subjectTeacher -> themes.stream()
+                        .filter(theme -> theme.getSubject() != null && theme.getSubject().equals(subjectTeacher.getSubject()))
+                        .flatMap(theme -> tests.stream()
+                                .filter(test -> test.getTheme() != null && test.getTheme().getId().equals(theme.getId()))
+                                .flatMap(test -> allTasks.stream()
+                                        .filter(task -> task.getTest() != null && task.getTest().getId().equals(test.getId()))
+                                )
+                        )
+                )
+                .toList();
     }
 
     @Override
