@@ -1,6 +1,5 @@
 package com.example.smart_test.service;
 
-
 import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.Test;
 import com.example.smart_test.dto.*;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -92,24 +92,35 @@ public class TaskServiceImpl implements TaskServiceInterface {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Set<TaskDto> displayTheAvailableTasks(TestDto dto) {
+        TestDto fullTestDto = testService.getTestById(dto.getId());
+        if (fullTestDto == null) {
+            throw new IllegalArgumentException("TestDto with id " + dto.getId() + " not found");
+        }
+
         Set<TaskDto> availableTasks = new HashSet<>();
+
+        Map<Long, TaskOfIndicatorDto> taskOfIndicatorMap = taskOfIndicatorService.getAllTaskOfIndicators()
+                .stream()
+                .collect(Collectors.toMap(taskOfIndicator -> taskOfIndicator.getTask().getId(), Function.identity()));
+
+        Map<Long, IndicatorDto> indicatorMap = indicatorService.getAllIndicators()
+                .stream()
+                .collect(Collectors.toMap(IndicatorDto::getId, Function.identity()));
+
         for (TaskDto taskDto : printAllTasks()) {
-            for (TaskOfIndicatorDto taskOfIndicatorDto : taskOfIndicatorService.getAllTaskOfIndicators()) {
-                if (Objects.equals(taskDto.getId(), taskOfIndicatorDto.getTask().getId())) {
-                    for (IndicatorDto indicatorDto : indicatorService.getAllIndicators()) {
-                        if (Objects.equals(taskOfIndicatorDto.getIndicator().getId(), indicatorDto.getId())) {
-                            for (TestDto testDto : testService.getAllTestDto()) {
-                                if (Objects.equals(testDto.getId(), dto.getId())
-                                        && taskDto.getTest() == null
-                                        && Objects.equals(indicatorDto.getTheme().getId(), testDto.getTheme().getId())) {
-                                    availableTasks.add(taskDto);
-                                }
-                            }
-                        }
+            TaskOfIndicatorDto taskOfIndicator = taskOfIndicatorMap.get(taskDto.getId());
+
+            if (taskOfIndicator != null) {
+                IndicatorDto indicator = indicatorMap.get(taskOfIndicator.getIndicator().getId());
+
+                if (indicator != null && Objects.equals(indicator.getTheme().getId(), fullTestDto.getTheme().getId())) {
+                    if (taskDto.getTest() == null) {
+                        availableTasks.add(taskDto);
                     }
                 }
             }
         }
+
         return availableTasks;
     }
 
@@ -165,7 +176,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
             );
         }
     }
-
 
     private List<TaskDto> getDtoList(List<Task> taskList) {
         return taskList.stream()
