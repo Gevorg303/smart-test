@@ -76,21 +76,26 @@ public class TestServiceImpl implements TestServiceInterface {
 
     @Override
     public List<TestDto> getUserTests(UserDto dto) {
-        List<TestDto> testDtoList = new ArrayList<>();
         UserDto userDto = userService.getUserByLogin(dto);
-        for (SubjectTeacherDto subjectTeacherDto : subjectUserService.getAllSubjectTeachers()) {
-            if (userDto.getId().equals(subjectTeacherDto.getUser().getId())) {
-                for (ThemeDto themeDto : themeService.getAllTheme()) {
-                    if (themeDto.getSubject() == subjectTeacherDto.getSubject()) {
-                        for (TestDto testDto : getAllTestDto()) {
-                            if (Objects.equals(testDto.getTheme().getId(), themeDto.getId())) {
-                                testDtoList.add(testDto);
-                            }
-                        }
-                    }
-                }
-            }
+        if (userDto == null) {
+            throw new IllegalArgumentException("User not found");
         }
-        return testDtoList;
+
+        List<SubjectTeacherDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
+                .stream()
+                .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
+                .toList();
+
+        List<ThemeDto> themes = themeService.getAllTheme();
+        List<TestDto> tests = getAllTestDto();
+
+        return subjectTeachers.stream()
+                .flatMap(subjectTeacher -> themes.stream()
+                        .filter(theme -> theme.getSubject() != null && theme.getSubject().equals(subjectTeacher.getSubject()))
+                        .flatMap(theme -> tests.stream()
+                                .filter(test -> test.getTheme() != null && test.getTheme().getId().equals(theme.getId()))
+                        )
+                )
+                .toList();
     }
 }
