@@ -1,9 +1,8 @@
 package com.example.smart_test.service;
 
-import com.example.smart_test.response.ResponseForTask;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.service.api.ResponseOptionServiceInterface;
 import com.example.smart_test.service.api.ResponseVerificationServiceInterface;
 import com.example.smart_test.service.api.TaskServiceInterface;
@@ -21,29 +20,30 @@ public class ResponseVerificationServiceImpl implements ResponseVerificationServ
     private TaskServiceInterface taskServiceInterface;
 
     @Override
-    public List<ResponseForTask> checkingResponse(List<ResponseForTask> responseForTaskList) {
-        List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getAllResponseOptions();
-
-        Map<Long, TaskDto> taskCache = responseForTaskList.stream()
-                .map(ResponseForTask::getTask)
-                .map(task -> taskServiceInterface.getTaskById(task.getId()))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(TaskDto::getId, dto -> dto));
-
-        return responseForTaskList.stream()
-                .map(responseForTask -> {
-                    TaskDto taskDto = taskCache.get(responseForTask.getTask().getId());
-                    boolean isCorrect = taskDto != null && responseOptionDtoList.stream().anyMatch(option ->
-                            Objects.equals(taskDto.getId(), option.getTask().getId()) &&
-                                    Objects.equals(option.getResponse(), responseForTask.getResponse())
-                    );
-
-                    return new ResponseForTask(
-                            taskDto,
-                            responseForTask.getResponse(),
-                            isCorrect
-                    );
-                })
-                .collect(Collectors.toList());
+    public List<RequestForTask> checkingResponse(List<RequestForTask> responseForTaskList) {
+//        List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getAllResponseOptions();
+//
+//        Map<Long, TaskDto> taskCache = responseForTaskList.stream()
+//                .map(RequestForTask::getTask)
+//                .map(task -> taskServiceInterface.getTaskById(task.getId()))
+//                .filter(Objects::nonNull)
+//                .collect(Collectors.toMap(TaskDto::getId, dto -> dto));
+//
+//        return responseForTaskList.stream()
+//                .map(responseForTask -> {
+//                    TaskDto taskDto = taskCache.get(responseForTask.getTask().getId());
+//                    boolean isCorrect = taskDto != null && responseOptionDtoList.stream().anyMatch(option ->
+//                            Objects.equals(taskDto.getId(), option.getTask().getId()) &&
+//                                    Objects.equals(option.getResponse(), responseForTask.getResponse())
+//                    );
+//
+//                    return new RequestForTask(
+//                            taskDto,
+//                            responseForTask.getResponse(),
+//                            isCorrect
+//                    );
+//                })
+//                .collect(Collectors.toList());
+        return null;
     }
 }
