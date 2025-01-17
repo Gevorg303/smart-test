@@ -12,7 +12,6 @@ public class TaskMapperImpl implements TaskMapperInterface {
         TaskDto dto = new TaskDto();
         dto.setId(entity.getId());
         dto.setTest(entity.getTest());
-        dto.setTaskName(entity.getTaskName());
         dto.setTypeTask(entity.getTypeTask());
         dto.setAssessmentTask(entity.getAssessmentTask());
         dto.setExplanation(entity.getExplanation());
@@ -25,7 +24,6 @@ public class TaskMapperImpl implements TaskMapperInterface {
         Task entity = new Task();
         entity.setId(dto.getId());
         entity.setTest(dto.getTest());
-        entity.setTaskName(dto.getTaskName());
         entity.setTypeTask(dto.getTypeTask());
         entity.setAssessmentTask(dto.getAssessmentTask());
         entity.setExplanation(dto.getExplanation());

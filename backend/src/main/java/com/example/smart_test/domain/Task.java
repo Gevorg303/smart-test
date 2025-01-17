@@ -21,8 +21,6 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "идентификатор_тип_задания")
     private TypeTask typeTask;
-    @Column(name = "название_задания")
-    private String taskName;
     @Column(name = "оценка_за_задание")
     private int assessmentTask;
     @Column(name = "пояснение")

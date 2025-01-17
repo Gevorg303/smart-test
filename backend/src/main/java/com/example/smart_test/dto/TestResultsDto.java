@@ -10,8 +10,5 @@ import lombok.Data;
 public class TestResultsDto {
     private Long id;
     private Task task;
-    private Indicator indicator;
-    private Test test;
-    private User user;
     private boolean resultOfTheIndicator;
 }

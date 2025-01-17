@@ -12,9 +12,6 @@ public class TestResultsMapperImpl implements TestResultsMapperInterface {
         TestResultsDto dto = new TestResultsDto();
         dto.setId(entity.getId());
         dto.setTask(entity.getTask());
-        dto.setIndicator(entity.getIndicator());
-        dto.setTest(entity.getTest());
-        dto.setUser(entity.getUser());
         dto.setResultOfTheIndicator(entity.isResultOfTheIndicator());
         return dto;
     }
@@ -24,9 +21,6 @@ public class TestResultsMapperImpl implements TestResultsMapperInterface {
         TestResults entity = new TestResults();
         entity.setId(dto.getId());
         entity.setTask(dto.getTask());
-        entity.setIndicator(dto.getIndicator());
-        entity.setTest(dto.getTest());
-        entity.setUser(dto.getUser());
         entity.setResultOfTheIndicator(dto.isResultOfTheIndicator());
         return entity;
     }
