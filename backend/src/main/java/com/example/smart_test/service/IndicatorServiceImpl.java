@@ -2,7 +2,9 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.Indicator;
+import com.example.smart_test.domain.Theme;
 import com.example.smart_test.dto.IndicatorDto;
+import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.mapper.api.IndicatorMapperInterface;
 import com.example.smart_test.repository.IndicatorRepositoryInterface;
 import com.example.smart_test.service.api.IndicatorServiceInterface;
@@ -56,6 +58,19 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при получении всех индикаторов: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<IndicatorDto> getIndicatorsByTheme(Theme theme) {
+        try {
+            List<Indicator> indicators = indicatorRepositoryInterface.findByTheme(theme);
+            return indicators.stream()
+                    .map(indicatorMapperInterface::toDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при получении индикаторов по теме: " + e.getMessage(), e);
         }
     }
 

@@ -1,17 +1,22 @@
 package com.example.smart_test.service.api;
 
+import com.example.smart_test.domain.Theme;
 import com.example.smart_test.dto.IndicatorDto;
+import com.example.smart_test.dto.ThemeDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface IndicatorServiceInterface {
-    public IndicatorDto addIndicatorDto(IndicatorDto dto);
+    IndicatorDto addIndicatorDto(IndicatorDto dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteIndicatorDto(IndicatorDto dto);
+    void deleteIndicatorDto(IndicatorDto dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<IndicatorDto> getAllIndicators();
+    List<IndicatorDto> getAllIndicators();
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    List<IndicatorDto> getIndicatorsByTheme(Theme theme);
 }

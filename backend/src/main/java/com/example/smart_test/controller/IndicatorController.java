@@ -1,6 +1,8 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.Theme;
 import com.example.smart_test.dto.IndicatorDto;
+import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.service.api.IndicatorServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,4 +30,11 @@ public class IndicatorController {
         return indicatorService.getAllIndicators();
     }
 
+    /**
+    Выводит список индикаторов по конкретной теме
+    */
+    @PostMapping("/indicator-by-theme")
+    public List<IndicatorDto> getIndicatorsByTheme(@RequestBody Theme theme) {
+        return indicatorService.getIndicatorsByTheme(theme);
+    }
 }
