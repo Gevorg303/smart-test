@@ -13,14 +13,14 @@ import java.util.List;
 @RequestMapping("/verification")
 public class ResponseVerificationController {
     @Autowired
-    private RequestVerificationServiceInterface responseVerificationService;
+    private RequestVerificationServiceInterface requestVerificationService;
 
     /**
      Выводит обект содержащий задание, веденый пользователем ответ, статус (верно/неверно)
      */
     @PostMapping("/result-test")
     public ResponseEntity<List<RequestForTask>> checkingResponse(@RequestBody @Valid List<RequestForTask> RequestForTaskList) {
-        List<RequestForTask> result = responseVerificationService.checkingResponse(RequestForTaskList);
+        List<RequestForTask> result = requestVerificationService.checkingResponse(RequestForTaskList);
         if (result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
