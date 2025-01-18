@@ -17,9 +17,6 @@ public class ResponseOption {
     private Long id;
     @Column(name = "вопрос")
     private String question;
-    @ManyToOne
-    @JoinColumn(name = "идентификатор_задание")
-    private Task task;
     @Column(name = "ответ")
     private String response;
     @Column(name = "оценка_за_ответ")

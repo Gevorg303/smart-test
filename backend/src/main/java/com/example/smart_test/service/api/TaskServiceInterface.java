@@ -1,6 +1,9 @@
 package com.example.smart_test.service.api;
 
 
+import com.example.smart_test.domain.Indicator;
+import com.example.smart_test.domain.ResponseOption;
+import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.UserDto;
@@ -11,7 +14,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface TaskServiceInterface {
-    TaskDto addTaskDto(TaskDto dto);
+    @Transactional
+    TaskDto addTask(Task task, List<ResponseOption> responseOption, Indicator indicator);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void deleteTaskDto(TaskDto dto);

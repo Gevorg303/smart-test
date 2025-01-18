@@ -11,7 +11,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "идентификатор_роли")
     private Long id;
-
     @Column(name = "название_роли")
     private String role;
 }

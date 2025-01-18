@@ -26,14 +26,14 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     private ResponseOptionMapperInterface responseOptionMapperInterface;
 
     @Override
-    public ResponseOptionDto addResponseOptionDto(ResponseOptionDto dto) {
+    @Transactional
+    public ResponseOption addResponseOption(ResponseOption responseOption) {
         try {
-            ResponseOption responseOption = responseOptionMapperInterface.toEntity(dto);
             responseOption = responseOptionRepositoryInterface.save(responseOption);
-            return responseOptionMapperInterface.toDTO(responseOption);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при добавлении варианта ответа: " + e.getMessage(), e);
         }
+        return responseOption;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

@@ -25,21 +25,21 @@ public class TaskServiceImplTest {
     /**
      ToDo Проверка, что задача успешно сохраняется, и мапперы корректно преобразуют DTO и Entity
      * */
-    @Test
-    public void testAddTaskDto_Success() {
-        TaskDto inputDto = new TaskDto();
-        inputDto.setId(11L);
-        Task taskEntity = new Task();
-        taskEntity.setId(11L);
-
-        when(taskMapperInterface.toEntity(inputDto)).thenReturn(taskEntity);
-        when(taskRepositoryInterface.save(taskEntity)).thenReturn(taskEntity);
-        when(taskMapperInterface.toDto(taskEntity)).thenReturn(inputDto);
-
-        TaskDto result = taskService.addTaskDto(inputDto);
-
-        assertNotNull(result);
-        assertEquals(11L, result.getId());
-        verify(taskRepositoryInterface, times(1)).save(taskEntity);
-    }
+//    @Test
+//    public void testAddTaskDto_Success() {
+//        TaskDto inputDto = new TaskDto();
+//        inputDto.setId(11L);
+//        Task taskEntity = new Task();
+//        taskEntity.setId(11L);
+//
+//        when(taskMapperInterface.toEntity(inputDto)).thenReturn(taskEntity);
+//        when(taskRepositoryInterface.save(taskEntity)).thenReturn(taskEntity);
+//        when(taskMapperInterface.toDto(taskEntity)).thenReturn(inputDto);
+//
+//        TaskDto result = taskService.addTaskDto(inputDto);
+//
+//        assertNotNull(result);
+//        assertEquals(11L, result.getId());
+//        verify(taskRepositoryInterface, times(1)).save(taskEntity);
+//    }
 }

@@ -1,7 +1,6 @@
 package com.example.smart_test.service;
 
-import com.example.smart_test.domain.Task;
-import com.example.smart_test.domain.Test;
+import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestMapperInterface;
@@ -39,14 +38,20 @@ public class TaskServiceImpl implements TaskServiceInterface {
     private SubjectUserServiceInterface subjectUserService;
     @Autowired
     private ThemeServiceInterface themeService;
+    @Autowired
+    private ResponseOptionForTaskServiceInterface responseOptionForTaskService;
 
     @Override
-    public TaskDto addTaskDto(TaskDto dto) {
+    @Transactional
+    public TaskDto addTask(Task task, List<ResponseOption> responseOption, Indicator indicator) {
         try {
-            Task task = taskMapperInterface.toEntity(dto);
             task = taskRepositoryInterface.save(task);
+            taskOfIndicatorService.addTaskOfIndicator(task, indicator);
+            for (ResponseOption response : responseOption) {
+                responseOptionForTaskService.addResponseOptionForTask(task, response);
+            }
             return taskMapperInterface.toDto(task);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("Ошибка при создании задачи: " + e.getMessage(), e);
         }
     }

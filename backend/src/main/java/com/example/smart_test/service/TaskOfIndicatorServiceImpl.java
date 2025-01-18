@@ -1,6 +1,8 @@
 package com.example.smart_test.service;
 
 
+import com.example.smart_test.domain.Indicator;
+import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.TaskOfIndicator;
 import com.example.smart_test.dto.TaskOfIndicatorDto;
 import com.example.smart_test.mapper.api.TaskOfIndicatorMapperInterface;
@@ -26,11 +28,11 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
     private TaskOfIndicatorMapperInterface taskOfIndicatorMapperInterface;
 
     @Override
-    public TaskOfIndicatorDto addTaskOfIndicatorDto(TaskOfIndicatorDto dto) {
+    @Transactional
+    public void addTaskOfIndicator(Task task, Indicator indicator) {
         try {
-            TaskOfIndicator taskOfIndicator = taskOfIndicatorMapperInterface.toEntity(dto);
-            taskOfIndicator = taskOfIndicatorRepositoryInterface.save(taskOfIndicator);
-            return taskOfIndicatorMapperInterface.toDto(taskOfIndicator);
+            TaskOfIndicator taskOfIndicator = taskOfIndicatorRepositoryInterface.save(new TaskOfIndicator(task, indicator));
+            taskOfIndicatorMapperInterface.toDto(taskOfIndicator);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при добавлении индикатора: " + e.getMessage(), e);
         }

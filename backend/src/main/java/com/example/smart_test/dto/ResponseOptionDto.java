@@ -7,7 +7,6 @@ import lombok.Data;
 public class ResponseOptionDto {
     private Long id;
     private String question;
-    private Task task;
     private String response;
     private String evaluationResponse;
 }

@@ -13,10 +13,10 @@ public class TaskOfIndicatorController {
     @Autowired
     private TaskOfIndicatorServiceInterface taskOfIndicatorService;
 
-    @PostMapping("/add")
-    public TaskOfIndicatorDto addTaskOfIndicatorDto(@RequestBody TaskOfIndicatorDto taskOfIndicatorDto) {
-        return taskOfIndicatorService.addTaskOfIndicatorDto(taskOfIndicatorDto);
-    }
+//    @PostMapping("/add")
+//    public TaskOfIndicatorDto addTaskOfIndicatorDto(@RequestBody TaskOfIndicatorDto taskOfIndicatorDto) {
+//        return taskOfIndicatorService.addTaskOfIndicatorDto(taskOfIndicatorDto);
+//    }
 
     @DeleteMapping("/delete")
     public void deleteTaskOfIndicatorDto(@RequestBody TaskOfIndicatorDto taskOfIndicatorDto) {

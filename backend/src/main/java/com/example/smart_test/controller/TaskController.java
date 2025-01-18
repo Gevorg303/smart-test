@@ -3,6 +3,7 @@ package com.example.smart_test.controller;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.AddTaskRequest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,16 @@ public class TaskController {
     @Autowired
     private TaskServiceInterface taskService;
 
+    /**
+     * Обрабатывает POST-запрос для добавления новой задачи.
+     *
+     * @param request Объединенный JSON-объект, содержащий данные задачи, варианта ответа и индикатора.
+     * @return DTO объект задачи, который был создан и сохранен в базе данных.
+     * @throws RuntimeException если произошла ошибка при добавлении задачи.
+     */
     @PostMapping("/add")
-    public TaskDto addTaskDto(@RequestBody TaskDto taskDto) {
-        return taskService.addTaskDto(taskDto);
+    public TaskDto addTask(@RequestBody AddTaskRequest request) {
+        return taskService.addTask(request.getTask(), request.getResponseOption(), request.getIndicator());
     }
 
     @DeleteMapping("/delete")

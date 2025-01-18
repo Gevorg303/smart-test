@@ -13,10 +13,10 @@ public class ResponseOptionController {
     @Autowired
     private ResponseOptionServiceInterface responseOptionService;
 
-    @PostMapping("/add")
-    public ResponseOptionDto addResponseOption(@RequestBody ResponseOptionDto responseOptionDto) {
-        return responseOptionService.addResponseOptionDto(responseOptionDto);
-    }
+//    @PostMapping("/add")
+//    public ResponseOptionDto addResponseOption(@RequestBody ResponseOptionDto responseOptionDto) {
+//        return responseOptionService.addResponseOptionDto(responseOptionDto);
+//    }
 
     @DeleteMapping("/delete")
     public void deleteResponseOption(@RequestBody ResponseOptionDto responseOptionDto) {

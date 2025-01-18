@@ -21,4 +21,9 @@ public class TaskOfIndicator {
     @ManyToOne
     @JoinColumn(name = "идентификатор_индикатор")
     private Indicator indicator;
+
+    public TaskOfIndicator(Task task, Indicator indicator) {
+        this.task = task;
+        this.indicator = indicator;
+    }
 }
