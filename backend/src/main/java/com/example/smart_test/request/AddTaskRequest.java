@@ -11,9 +11,9 @@ import java.util.List;
 public class AddTaskRequest {
     private Task task;
     private List<ResponseOption> responseOption;
-    private Indicator indicator;
+    private List<Indicator> indicator;
 
-    public AddTaskRequest(Task task, List<ResponseOption> responseOption, Indicator indicator) {
+    public AddTaskRequest(Task task, List<ResponseOption> responseOption, List<Indicator> indicator) {
         this.task = task;
         this.responseOption = responseOption;
         this.indicator = indicator;

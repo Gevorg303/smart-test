@@ -43,10 +43,12 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
     @Override
     @Transactional
-    public TaskDto addTask(Task task, List<ResponseOption> responseOption, Indicator indicator) {
+    public TaskDto addTask(Task task, List<ResponseOption> responseOption, List<Indicator> indicator) {
         try {
             task = taskRepositoryInterface.save(task);
-            taskOfIndicatorService.addTaskOfIndicator(task, indicator);
+            for (Indicator indicator1 : indicator) {
+                taskOfIndicatorService.addTaskOfIndicator(task, indicator1);
+            }
             for (ResponseOption response : responseOption) {
                 responseOptionForTaskService.addResponseOptionForTask(task, response);
             }

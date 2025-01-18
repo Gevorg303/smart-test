@@ -15,7 +15,7 @@ import java.util.Set;
 
 public interface TaskServiceInterface {
     @Transactional
-    TaskDto addTask(Task task, List<ResponseOption> responseOption, Indicator indicator);
+    TaskDto addTask(Task task, List<ResponseOption> responseOption, List<Indicator> indicator);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void deleteTaskDto(TaskDto dto);
