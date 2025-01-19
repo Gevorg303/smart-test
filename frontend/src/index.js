@@ -11,23 +11,26 @@ import ThemePage from "./Components/ThemePage";
 import ProfilePage from "./Components/ProfilePage";
 import QuestionBankPage from "./Components/QuestionBankPage";
 import PrivateRoutes from "./utils/router/privateRoute";
+import Navbar from "./Components/Navbar"; // Импортируйте ваш компонент Navbar
 
 export default function App() {
     return (
         <BrowserRouter>
+            <Navbar /> {/* Добавьте Navbar здесь */}
             <Routes>
                 {/* Стартовая страница без Layout */}
                 <Route path="/" element={<LoginPage />} />
                 {/* Остальные страницы с Layout */}
                 <Route path="/*" exact element={<PrivateRoutes/>}>
-                    <Route path="home" element={ <HomePage /> }/>
-                    <Route path="start-test" element={<StartTestPage/> } />
-                    <Route path="test" element={<TestPage/> } />
-                    <Route path="register" element={<RegistrationPage/> } />
-                    <Route path="testresult" element={<ViewTestResultsPage/> } />
-                    <Route path="theme" element={<ThemePage/> } />
-                    <Route path="profile" element={<ProfilePage/> } />
-                    <Route path="bank" element={<QuestionBankPage/>} />
+                    <Route path="home" element={<HomePage />} />
+                    <Route path="start-test" element={<StartTestPage />} />
+                    <Route path="test" element={<TestPage />} />
+                    <Route path="register/single" element={<RegistrationPage />} />
+                    <Route path="register/multiple" element={<RegistrationPage />} />
+                    <Route path="testresult" element={<ViewTestResultsPage />} />
+                    <Route path="theme" element={<ThemePage />} />
+                    <Route path="profile" element={<ProfilePage />} />
+                    <Route path="bank" element={<QuestionBankPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

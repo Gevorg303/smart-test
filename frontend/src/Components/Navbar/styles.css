@@ -65,3 +65,29 @@
     justify-content: space-between;
     width: 100%;
 }
+
+/* Пользовательские стили для выпадающего меню при наведении */
+.dropdown:hover > .dropdown-menu {
+    display: block;
+    background-color: #333;
+}
+
+.dropdown-menu {
+    margin-top: 0;
+    display: none; /* Скрываем выпадающее меню по умолчанию */
+    background-color: #333; /* Соответствуем цвету фона навбара */
+    border: none; /* Убираем стандартную границу */
+    padding: 0; /* Убираем стандартный отступ */
+}
+
+.dropdown-menu .dropdown-item {
+    color: white !important; /* Соответствуем цвету ссылок навбара */
+    background-color: #333;
+    padding: 5px 7.5px; /* Соответствуем отступам ссылок навбара */
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: white; /* Соответствуем цвету фона ссылок навбара при наведении */
+    color: #333 !important;
+}

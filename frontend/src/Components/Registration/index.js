@@ -1,131 +1,88 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import "./styles.css";
-import Navbar from "../Navbar";
+import { Container, Form, Button } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles.css'; // Убедитесь, что путь к вашему CSS файлу правильный
 
-class RegistrationPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            role: '',
-            surname: '',
-            name: '',
-            patronymic: '',
-            email: '',
-            educationLevel: '',
-            classNumber: '',
-            password: '',
-            errorMessage: ''
-        };
+const RegistrationPage = () => {
+    const location = useLocation();
+    const selectedOption = location.pathname.includes('multiple') ? 'multiple' : 'single';
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    return (
+        <Container className="container-registration">
+            <div className="registration-box">
+                <h2>Регистрация пользователей</h2>
 
-    handleChange(event) {
-        const { name, value } = event.target;
-        this.setState({ [name]: value });
-    }
-
-    async handleSubmit(event) {
-        event.preventDefault();
-
-        const { role, surname, name, patronymic, email, educationLevel, classNumber, password } = this.state;
-        let errorLabel = document.getElementById('errorlabel');
-
-        console.log('Sending request with:', JSON.stringify({ role, surname, name, patronymic, email, educationLevel, classNumber, password }));
-        errorLabel.innerHTML = "";
-        try {
-            const response = await fetch('http://localhost:8080/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify({ role, surname, name, patronymic, email, educationLevel, classNumber, password })
-            });
-
-            if (response.ok) {
-                const token = await response.text();
-                console.log('Received token:', token);
-                document.cookie = "jwtToken=" + token + "; path=/;";
-                window.location.href = '/home'; // Перенаправление на другую страницу
-            } else {
-                const errorText = await response.text();
-                console.error('Registration failed:', errorText);
-                errorLabel.innerHTML = "Ошибка регистрации";
-            }
-        } catch (error) {
-            console.error('Error during fetch:', error);
-        }
-    }
-
-    render() {
-        return (
-            <div className="container-registration">
-                <div className="registration-box">
-                    <h2>Регистрация</h2>
-                    <Form id="registrationForm" onSubmit={this.handleSubmit}>
-                        <Form.Group className="mb-3" controlId="formBasicErrors">
-                            <Form.Text id="errorlabel" className="error-text">
-                                Ошибка!
-                            </Form.Text>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formRole">
-                            <Form.Label className="custom-label">Роль</Form.Label>
-                            <Form.Control as="select" name="role" value={this.state.role} onChange={this.handleChange}  required>
-                                <option value="admin">Админ</option>
-                                <option value="teacher">Учитель</option>
-                                <option value="student">Ученик</option>
-                            </Form.Control>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formSurname">
+                {selectedOption === 'single' && (
+                    <Form className="mt-4">
+                        <Form.Group controlId="formLastName">
                             <Form.Label className="custom-label">Фамилия</Form.Label>
-                            <Form.Control type="text" name="surname" value={this.state.surname} onChange={this.handleChange} placeholder="Фамилия" required/>
+                            <Form.Control type="text" placeholder="Введите фамилию" />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formName">
+
+                        <Form.Group controlId="formFirstName">
                             <Form.Label className="custom-label">Имя</Form.Label>
-                            <Form.Control type="text" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Имя" required/>
+                            <Form.Control type="text" placeholder="Введите имя" />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formPatronymic">
+
+                        <Form.Group controlId="formMiddleName">
                             <Form.Label className="custom-label">Отчество</Form.Label>
-                            <Form.Control type="text" name="patronymic" value={this.state.patronymic} onChange={this.handleChange} placeholder="Отчество" required/>
+                            <Form.Control type="text" placeholder="Введите отчество" />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formEmail">
-                            <Form.Label className="custom-label">Email</Form.Label>
-                            <Form.Control type="email" name="email" value={this.state.email} onChange={this.handleChange} placeholder="Email" required/>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formEducationLevel">
+
+                        <Form.Group controlId="formEducation">
                             <Form.Label className="custom-label">Место обучения</Form.Label>
-                            <Form.Control as="select" name="educationLevel" value={this.state.educationLevel} onChange={this.handleChange} required>
-                                <option value="school">Школа</option>
-                                <option value="university">Университет</option>
+                            <Form.Control as="select">
+                                <option>Выберите место обучения</option>
+                                <option>Школа №1</option>
+                                <option>Школа №2</option>
+                                <option>Школа №3</option>
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formClassNumber">
-                            <Form.Label className="custom-label">Класс</Form.Label>
-                            <Form.Control as="select" name="classNumber" value={this.state.classNumber} onChange={this.handleChange} required>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                            </Form.Control>
+
+                        <Form.Group controlId="formEmail">
+                            <Form.Label className="custom-label">Эл. почта</Form.Label>
+                            <Form.Control type="email" placeholder="Введите эл. почту" />
                         </Form.Group>
-                        <Button type="submit">
+
+                        <Button variant="primary" type="submit">
                             Зарегистрироваться
                         </Button>
                     </Form>
-                </div>
+                )}
+
+                {selectedOption === 'multiple' && (
+                    <Form className="mt-4">
+                        <Form.Group controlId="formEducation">
+                            <Form.Label className="custom-label">Место обучения</Form.Label>
+                            <Form.Control as="select">
+                                <option>Выберите место обучения</option>
+                                <option>Школа №1</option>
+                                <option>Школа №2</option>
+                                <option>Школа №3</option>
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId="formFile">
+                            <Form.Label className="custom-label">Прикрепить файл</Form.Label>
+                            <Form.Control type="file" />
+                        </Form.Group>
+
+                        <Button variant="primary" type="submit">
+                            Зарегистрировать
+                        </Button>
+                        <Button variant="secondary" className="ml-2">
+                            Выгрузить шаблон
+                        </Button>
+                    </Form>
+                )}
+
+                <Button variant="link" className="mt-3">
+                    Справка
+                </Button>
             </div>
-        );
-    }
-}
+        </Container>
+    );
+};
 
 export default RegistrationPage;
