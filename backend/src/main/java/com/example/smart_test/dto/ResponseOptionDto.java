@@ -9,4 +9,5 @@ public class ResponseOptionDto {
     private String question;
     private String response;
     private String evaluationResponse;
+    private Task task;
 }

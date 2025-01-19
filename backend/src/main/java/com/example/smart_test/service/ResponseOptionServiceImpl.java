@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.ResponseOption;
+import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.mapper.api.ResponseOptionMapperInterface;
 import com.example.smart_test.repository.ResponseOptionRepositoryInterface;
@@ -27,8 +28,9 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
 
     @Override
     @Transactional
-    public ResponseOption addResponseOption(ResponseOption responseOption) {
+    public ResponseOption addResponseOption(Task task, ResponseOption responseOption) {
         try {
+            responseOption.setTask(task);
             responseOption = responseOptionRepositoryInterface.save(responseOption);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при добавлении варианта ответа: " + e.getMessage(), e);

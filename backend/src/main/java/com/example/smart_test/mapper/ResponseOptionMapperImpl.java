@@ -14,6 +14,7 @@ public class ResponseOptionMapperImpl implements ResponseOptionMapperInterface {
         dto.setQuestion(entity.getQuestion());
         dto.setResponse(entity.getResponse());
         dto.setEvaluationResponse(entity.getEvaluationResponse());
+        dto.setTask(entity.getTask());
         return dto;
     }
 
@@ -24,6 +25,7 @@ public class ResponseOptionMapperImpl implements ResponseOptionMapperInterface {
         entity.setQuestion(dto.getQuestion());
         entity.setResponse(dto.getResponse());
         entity.setEvaluationResponse(dto.getEvaluationResponse());
+        entity.setTask(dto.getTask());
         return entity;
     }
 }

@@ -39,7 +39,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
     @Autowired
     private ThemeServiceInterface themeService;
     @Autowired
-    private ResponseOptionForTaskServiceInterface responseOptionForTaskService;
+    private ResponseOptionServiceInterface responseOptionService;
 
     @Override
     @Transactional
@@ -50,7 +50,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
                 taskOfIndicatorService.addTaskOfIndicator(task, indicator1);
             }
             for (ResponseOption response : responseOption) {
-                responseOptionForTaskService.addResponseOptionForTask(task, response);
+                responseOptionService.addResponseOption(task, response);
             }
             return taskMapperInterface.toDto(task);
         } catch (RuntimeException e) {

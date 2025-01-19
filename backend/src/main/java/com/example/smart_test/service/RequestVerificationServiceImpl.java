@@ -1,11 +1,10 @@
 package com.example.smart_test.service;
 
-import com.example.smart_test.domain.ResponseOptionForTask;
-import com.example.smart_test.request.RequestForTask;
+import com.example.smart_test.domain.ResponseOption;
 import com.example.smart_test.dto.ResponseOptionDto;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.service.api.RequestVerificationServiceInterface;
-import com.example.smart_test.service.api.ResponseOptionForTaskServiceInterface;
 import com.example.smart_test.service.api.ResponseOptionServiceInterface;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,30 +19,28 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
     private ResponseOptionServiceInterface responseOptionServiceInterface;
     @Autowired
     private TaskServiceInterface taskServiceInterface;
-    @Autowired
-    private ResponseOptionForTaskServiceInterface responseOptionForTaskService;
 
     @Override
-    public List<RequestForTask> checkingResponse(List<RequestForTask> requestForTaskList) {
-        List<ResponseOptionForTask> responseOptionForTaskList = responseOptionForTaskService.getAllResponseOptionsForTask();
+    public List<RequestForTask> checkingResponse(List<RequestForTask> RequestForTaskList) {
+        List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getAllResponseOptions();
 
-        Map<Long, TaskDto> taskCache = requestForTaskList.stream()
+        Map<Long, TaskDto> taskCache = RequestForTaskList.stream()
                 .map(RequestForTask::getTask)
                 .map(task -> taskServiceInterface.getTaskById(task.getId()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toMap(TaskDto::getId, dto -> dto));
 
-        return requestForTaskList.stream()
-                .map(requestForTask -> {
-                    TaskDto taskDto = taskCache.get(requestForTask.getTask().getId());
-                    boolean isCorrect = taskDto != null && responseOptionForTaskList.stream().anyMatch(option ->
+        return RequestForTaskList.stream()
+                .map(RequestForTask -> {
+                    TaskDto taskDto = taskCache.get(RequestForTask.getTask().getId());
+                    boolean isCorrect = taskDto != null && responseOptionDtoList.stream().anyMatch(option ->
                             Objects.equals(taskDto.getId(), option.getTask().getId()) &&
-                                    Objects.equals(option.getResponseOption().getResponse(), requestForTask.getResponse())
+                                    Objects.equals(option.getResponse(), RequestForTask.getResponse())
                     );
 
                     return new RequestForTask(
                             taskDto,
-                            requestForTask.getResponse(),
+                            RequestForTask.getResponse(),
                             isCorrect
                     );
                 })
