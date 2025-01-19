@@ -39,6 +39,17 @@ const RegistrationPage = () => {
                         <Form.Group controlId="formClass">
                             <Form.Control as="select" placeholder="Класс">
                                 <option value="">Выберите класс</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
                             </Form.Control>
                         </Form.Group>
 
@@ -57,6 +68,9 @@ const RegistrationPage = () => {
                         <Form.Group controlId="formEducation">
                             <Form.Control as="select" placeholder="Место обучения">
                                 <option value="">Выберите место обучения</option>
+                                <option>Школа №1</option>
+                                <option>Школа №2</option>
+                                <option>Школа №3</option>
                             </Form.Control>
                         </Form.Group>
 
