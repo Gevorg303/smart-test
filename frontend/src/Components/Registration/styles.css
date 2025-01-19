@@ -30,7 +30,6 @@ body {
     text-align: center;
     width: 100%;
     max-width: 600px;
-    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
 }
 
 .registration-box h2 {
@@ -52,8 +51,8 @@ body {
 }
 
 .registration-box button {
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: #aacf51;
+    color: #000; /* Изменяем цвет текста на черный */
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -61,15 +60,15 @@ body {
     height: 5%;
     border-radius: 15px;
     font-size: 1em;
-    box-shadow: 0px 0px 25px 10px rgba(34, 60, 80, 0.3);
+    box-shadow: none !important;
 }
 
 .registration-box button:hover {
-    background-color: #388E3C;
+    background-color: #99c242;
 }
 
 .registration-box button:active {
-    background-color: #388E3C !important;
+    background-color: #99c242 !important;
 }
 
 #errorlabel {
@@ -80,4 +79,65 @@ body {
 .error-text {
     font-size: 1.1em; /* Увеличиваем шрифт */
     font-weight: bold; /* Делаем текст жирным (по желанию) */
+}
+
+.custom-button {
+    background-color: #aacf51;
+    color: #000; /* Изменяем цвет текста на черный */
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    height: 5%;
+    border-radius: 15px;
+    font-size: 1em;
+    box-shadow: none !important;
+}
+
+.custom-button:hover {
+    background-color: #99c242;
+}
+
+.custom-button:active {
+    background-color: #99c242 !important;
+}
+
+.full-width-button {
+    width: 100%;
+    max-width: 600px;
+}
+
+.template-button {
+    background-color: #cfbd55;
+    color: #000; /* Изменяем цвет текста на черный */
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    height: 5%;
+    border-radius: 15px;
+    font-size: 1em;
+    box-shadow: none !important;
+}
+
+.template-button:hover {
+    background-color: #bdaa4a;
+}
+
+.template-button:active {
+    background-color: #bdaa4a !important;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left-button {
+    margin-right: auto;
+}
+
+.right-button {
+    margin-left: auto;
 }

@@ -11,42 +11,43 @@ const RegistrationPage = () => {
     return (
         <Container className="container-registration">
             <div className="registration-box">
-                <h2>Регистрация пользователей</h2>
+                <h2>{selectedOption === 'single' ? 'Регистрация' : 'Регистрация нескольких учеников'}</h2>
 
                 {selectedOption === 'single' && (
                     <Form className="mt-4">
                         <Form.Group controlId="formLastName">
-                            <Form.Label className="custom-label">Фамилия</Form.Label>
-                            <Form.Control type="text" placeholder="Введите фамилию" />
+                            <Form.Control type="text" placeholder="Фамилия" />
                         </Form.Group>
 
                         <Form.Group controlId="formFirstName">
-                            <Form.Label className="custom-label">Имя</Form.Label>
-                            <Form.Control type="text" placeholder="Введите имя" />
+                            <Form.Control type="text" placeholder="Имя" />
                         </Form.Group>
 
                         <Form.Group controlId="formMiddleName">
-                            <Form.Label className="custom-label">Отчество</Form.Label>
-                            <Form.Control type="text" placeholder="Введите отчество" />
+                            <Form.Control type="text" placeholder="Отчество" />
                         </Form.Group>
 
                         <Form.Group controlId="formEducation">
-                            <Form.Label className="custom-label">Место обучения</Form.Label>
-                            <Form.Control as="select">
-                                <option>Выберите место обучения</option>
+                            <Form.Control as="select" placeholder="Место обучения">
+                                <option value="">Выберите место обучения</option>
                                 <option>Школа №1</option>
                                 <option>Школа №2</option>
                                 <option>Школа №3</option>
                             </Form.Control>
                         </Form.Group>
 
-                        <Form.Group controlId="formEmail">
-                            <Form.Label className="custom-label">Эл. почта</Form.Label>
-                            <Form.Control type="email" placeholder="Введите эл. почту" />
+                        <Form.Group controlId="formClass">
+                            <Form.Control as="select" placeholder="Класс">
+                                <option value="">Выберите класс</option>
+                            </Form.Control>
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
-                            Зарегистрироваться
+                        <Form.Group controlId="formEmail">
+                            <Form.Control type="email" placeholder="Эл. почта" />
+                        </Form.Group>
+
+                        <Button type="submit" className="custom-button">
+                            Зарегистрировать
                         </Button>
                     </Form>
                 )}
@@ -54,33 +55,29 @@ const RegistrationPage = () => {
                 {selectedOption === 'multiple' && (
                     <Form className="mt-4">
                         <Form.Group controlId="formEducation">
-                            <Form.Label className="custom-label">Место обучения</Form.Label>
-                            <Form.Control as="select">
-                                <option>Выберите место обучения</option>
-                                <option>Школа №1</option>
-                                <option>Школа №2</option>
-                                <option>Школа №3</option>
+                            <Form.Control as="select" placeholder="Место обучения">
+                                <option value="">Выберите место обучения</option>
                             </Form.Control>
                         </Form.Group>
 
                         <Form.Group controlId="formFile">
-                            <Form.Label className="custom-label">Прикрепить файл</Form.Label>
-                            <Form.Control type="file" />
+                            <Form.Control type="file" placeholder="Прикрепить файл" />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
-                            Зарегистрировать
-                        </Button>
-                        <Button variant="secondary" className="ml-2">
-                            Выгрузить шаблон
-                        </Button>
+                        <div className="button-container">
+                            <Button type="submit" className="custom-button left-button">
+                                Зарегистрировать
+                            </Button>
+                            <Button className="template-button right-button">
+                                Выгрузить шаблон
+                            </Button>
+                        </div>
                     </Form>
                 )}
-
-                <Button variant="link" className="mt-3">
-                    Справка
-                </Button>
             </div>
+            <Button className="mt-3 custom-button full-width-button">
+                Справка
+            </Button>
         </Container>
     );
 };
