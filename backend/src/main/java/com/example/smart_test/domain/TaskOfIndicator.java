@@ -26,4 +26,8 @@ public class TaskOfIndicator {
         this.task = task;
         this.indicator = indicator;
     }
+
+    public TaskOfIndicator(Task task) {
+        this.task = task;
+    }
 }

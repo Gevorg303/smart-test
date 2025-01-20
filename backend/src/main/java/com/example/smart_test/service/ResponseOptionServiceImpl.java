@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,13 +39,13 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
         return responseOption;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteResponseOptionDto(ResponseOptionDto dto) {
-        if (responseOptionRepositoryInterface.findById(dto.getId()).isPresent()) {
-            ResponseOption responseOption = responseOptionMapperInterface.toEntity(dto);
+    @Override
+    @Transactional
+    public void deleteResponseOption(ResponseOption responseOption) {
+        if (responseOptionRepositoryInterface.findById(responseOption.getId()).isPresent()) {
             responseOptionRepositoryInterface.delete(responseOption);
         } else {
-            log.error("вариант ответа с идентификатором " + dto.getId() + " не существует");
+            log.error("вариант ответа с идентификатором " + responseOption.getId() + " не найден");
         }
     }
 
@@ -52,8 +53,8 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<ResponseOptionDto> getAllResponseOptions() {
         try {
-            List<ResponseOption> indicators = responseOptionRepositoryInterface.findAll();
-            return indicators.stream()
+            List<ResponseOption> responses = responseOptionRepositoryInterface.findAll();
+            return responses.stream()
                     .map(responseOptionMapperInterface::toDTO)
                     .collect(Collectors.toList());
         } catch (Exception e) {
@@ -64,5 +65,18 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     private boolean findResponseOptionById(Long id) {
         Optional<ResponseOption> indicator = responseOptionRepositoryInterface.findById(id);
         return indicator.isPresent();
+    }
+
+    @Override
+    @Transactional
+    public List<ResponseOption> findAllResponseOptionsByTaskId(Task task) {
+        List<ResponseOption> responses = responseOptionRepositoryInterface.findAll();
+        List<ResponseOption> responseOptionList = new ArrayList<>();
+        for (ResponseOption responseOption : responses) {
+            if (responseOption.getTask().getId().equals(task.getId())) {
+                responseOptionList.add(responseOption);
+            }
+        }
+        return responseOptionList;
     }
 }

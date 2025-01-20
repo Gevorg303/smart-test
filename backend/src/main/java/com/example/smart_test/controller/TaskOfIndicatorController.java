@@ -1,5 +1,6 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.TaskOfIndicator;
 import com.example.smart_test.dto.TaskOfIndicatorDto;
 import com.example.smart_test.service.api.TaskOfIndicatorServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class TaskOfIndicatorController {
 //    }
 
     @DeleteMapping("/delete")
-    public void deleteTaskOfIndicatorDto(@RequestBody TaskOfIndicatorDto taskOfIndicatorDto) {
-        taskOfIndicatorService.deleteTaskOfIndicatorDto(taskOfIndicatorDto);
+    public void deleteTaskOfIndicatorDto(@RequestBody TaskOfIndicator taskOfIndicator) {
+        taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
     }
 
     @GetMapping("/all")

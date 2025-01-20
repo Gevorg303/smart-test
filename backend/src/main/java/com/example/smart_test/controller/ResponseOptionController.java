@@ -1,5 +1,6 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.ResponseOption;
 import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.service.api.ResponseOptionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class ResponseOptionController {
 //    }
 
     @DeleteMapping("/delete")
-    public void deleteResponseOption(@RequestBody ResponseOptionDto responseOptionDto) {
-        responseOptionService.deleteResponseOptionDto(responseOptionDto);
+    public void deleteResponseOption(@RequestBody ResponseOption responseOption) {
+        responseOptionService.deleteResponseOption(responseOption);
     }
 
     @GetMapping("/all")

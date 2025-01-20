@@ -13,8 +13,11 @@ public interface ResponseOptionServiceInterface {
     ResponseOption addResponseOption(Task task, ResponseOption dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    void deleteResponseOptionDto(ResponseOptionDto dto);
+    void deleteResponseOption(ResponseOption responseOption);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<ResponseOptionDto> getAllResponseOptions();
+
+    @Transactional
+    List<ResponseOption> findAllResponseOptionsByTaskId(Task task);
 }

@@ -17,8 +17,8 @@ public interface TaskServiceInterface {
     @Transactional
     TaskDto addTask(Task task, List<ResponseOption> responseOption, List<Indicator> indicator);
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    void deleteTaskDto(TaskDto dto);
+    @Transactional
+    void deleteTask(Task task);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<TaskDto> getAllTasks();

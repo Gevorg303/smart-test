@@ -1,5 +1,6 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.UserDto;
@@ -28,9 +29,12 @@ public class TaskController {
         return taskService.addTask(request.getTask(), request.getResponseOption(), request.getIndicator());
     }
 
+    /**
+     * Метод для удаления задания
+     */
     @DeleteMapping("/delete")
-    public void deleteTaskDto(@RequestBody TaskDto taskDto) {
-        taskService.deleteTaskDto(taskDto);
+    public void deleteTask(@RequestBody Task task) {
+        taskService.deleteTask(task);
     }
 
     @GetMapping("/all")

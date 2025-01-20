@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,17 +35,17 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
             TaskOfIndicator taskOfIndicator = taskOfIndicatorRepositoryInterface.save(new TaskOfIndicator(task, indicator));
             taskOfIndicatorMapperInterface.toDto(taskOfIndicator);
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при добавлении индикатора: " + e.getMessage(), e);
+            throw new RuntimeException("Ошибка при добавлении связи задание с индикатором: " + e.getMessage(), e);
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteTaskOfIndicatorDto(TaskOfIndicatorDto dto) {
-        if (findTaskOfIndicatorById(dto.getId())) {
-            TaskOfIndicator taskOfIndicator = taskOfIndicatorMapperInterface.toEntity(dto);
+    @Override
+    @Transactional
+    public void deleteTaskOfIndicator(TaskOfIndicator taskOfIndicator) {
+        if (findTaskOfIndicatorById(taskOfIndicator.getId())) {
             taskOfIndicatorRepositoryInterface.delete(taskOfIndicator);
         } else {
-            log.error("Индикатор с идентификатором " + dto.getId() + " не существует");
+            log.error("Связь задание с индикатором " + taskOfIndicator.getId() + " не найден");
         }
     }
 
@@ -57,12 +58,24 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
                     .map(taskOfIndicatorMapperInterface::toDto)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при получении всех индикаторов: " + e.getMessage(), e);
+            throw new RuntimeException("Ошибка при получении всех связей Задание с индикатором: " + e.getMessage(), e);
         }
     }
 
     private boolean findTaskOfIndicatorById(Long id) {
         Optional<TaskOfIndicator> taskOfIndicator = taskOfIndicatorRepositoryInterface.findById(id);
         return taskOfIndicator.isPresent();
+    }
+
+    @Override
+    @Transactional
+    public List<TaskOfIndicator> findTaskOfIndicatorByIdTask(Task task) {
+        List<TaskOfIndicator> taskOfIndicatorList = new ArrayList<>();
+        for (TaskOfIndicator taskOfIndicator : taskOfIndicatorRepositoryInterface.findAll()) {
+            if (taskOfIndicator.getTask().getId().equals(task.getId())) {
+                taskOfIndicatorList.add(taskOfIndicator);
+            }
+        }
+        return taskOfIndicatorList;
     }
 }

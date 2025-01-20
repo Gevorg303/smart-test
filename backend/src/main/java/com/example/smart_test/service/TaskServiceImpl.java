@@ -58,13 +58,21 @@ public class TaskServiceImpl implements TaskServiceInterface {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteTaskDto(TaskDto dto) {
-        if (findTaskById(dto.getId())) {
-            Task task = taskMapperInterface.toEntity(dto);
+    @Override
+    @Transactional
+    public void deleteTask(Task task) {
+        if (findTaskById(task.getId())) {
+            List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdTask(task);
+            for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
+                taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
+            }
+            List<ResponseOption> responseOptionList = responseOptionService.findAllResponseOptionsByTaskId(task);
+            for (ResponseOption responseOption : responseOptionList) {
+                responseOptionService.deleteResponseOption(responseOption);
+            }
             taskRepositoryInterface.delete(task);
         } else {
-            log.error("Задача с идентификатором " + dto.getId() + " не существует");
+            log.error("Задача с идентификатором " + task.getId() + " не найдена");
         }
     }
 
