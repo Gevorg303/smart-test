@@ -5,7 +5,7 @@ import com.example.smart_test.domain.User;
 import lombok.Data;
 
 @Data
-public class TeacherEducationalInstitutionDto {
+public class UserEducationalInstitutionDto {
     private Long id;
     private User user;
     private EducationalInstitution educationalInstitution;

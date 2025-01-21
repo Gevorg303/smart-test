@@ -1,11 +1,11 @@
 package com.example.smart_test.repository;
 
 
-import com.example.smart_test.domain.SubjectTeacher;
+import com.example.smart_test.domain.SubjectUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SubjectTeacherRepositoryInterface extends JpaRepository<SubjectTeacher, Long> {
+public interface SubjectUserRepositoryInterface extends JpaRepository<SubjectUser, Long> {
 
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeacherEducationalInstitution {
+public class UserEducationalInstitution {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "идентификатор_пользователь_образ")
@@ -23,4 +23,9 @@ public class TeacherEducationalInstitution {
     @ManyToOne
     @JoinColumn(name = "идентификатор_образовательное_уч")
     private EducationalInstitution educationalInstitution;
+
+    public UserEducationalInstitution(User user, EducationalInstitution educationalInstitution) {
+        this.user = user;
+        this.educationalInstitution = educationalInstitution;
+    }
 }

@@ -21,5 +21,5 @@ public class Subject {
     private String description;
     @ManyToOne
     @JoinColumn(name = "идентификатор_пользователь_класс")
-    private TeacherClass teacherClass;
+    private UserClass teacherClass;
 }

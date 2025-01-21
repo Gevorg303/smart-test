@@ -6,21 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "пользователь_класс")
+@Table(name = "пользователь_предмет")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeacherClass {
+public class SubjectUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "идентификатор_пользователь_класс")
+    @Column(name = "идентификатор_пользователь_предм")
     private Long id;
-
     @ManyToOne
-    @JoinColumn(name = "идентификатор_класс")
-    private StudentClass studentClass;
-
+    @JoinColumn(name = "идентификатор_предмет")
+    private Subject subject;
     @ManyToOne
     @JoinColumn(name = "идентификатор_пользователя")
     private User user;
 }
+

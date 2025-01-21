@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,7 +80,7 @@ public class TestServiceImpl implements TestServiceInterface {
             throw new IllegalArgumentException("User not found");
         }
 
-        List<SubjectTeacherDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
+        List<SubjectUserDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
                 .stream()
                 .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
                 .toList();

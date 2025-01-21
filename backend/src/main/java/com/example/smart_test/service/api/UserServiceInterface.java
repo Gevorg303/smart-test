@@ -2,13 +2,15 @@ package com.example.smart_test.service.api;
 
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.UserRequest;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
 
 public interface UserServiceInterface {
+
     @Transactional
-    UserDto addUser(UserDto userDto);
+    void addUser(List<UserRequest> userRequestList);
 
     @Transactional
     void deleteUser(UserDto userDto);
@@ -19,5 +21,6 @@ public interface UserServiceInterface {
     @Transactional
     UserDto getUserByLogin(UserDto userDto);
 
+    @Transactional
     User getUserByLogin(String login);
 }

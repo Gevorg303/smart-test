@@ -1,9 +1,7 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.StudentClass;
-import com.example.smart_test.domain.TeacherClass;
 import com.example.smart_test.dto.StudentClassDto;
-import com.example.smart_test.dto.TeacherClassDto;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.repository.StudentClassRepositoryInterface;
 import com.example.smart_test.service.api.StudentClassServiceInterface;
@@ -27,7 +25,7 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
     private StudentClassRepositoryInterface studentClassRepository;
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public StudentClassDto addStudentClassDto(StudentClassDto dto) {
         try {
             StudentClass studentClass = studentClassMapper.toEntity(dto);

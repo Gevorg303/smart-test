@@ -1,12 +1,12 @@
 package com.example.smart_test.dto;
 
-import com.example.smart_test.domain.Subject;
+import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.User;
 import lombok.Data;
 
 @Data
-public class SubjectTeacherDto {
+public class UserClassDto {
     private Long id;
-    private Subject subject;
+    private StudentClass studentClass;
     private User user;
 }

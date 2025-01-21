@@ -3,6 +3,7 @@ package com.example.smart_test.controller;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
+import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.security.JWTUtils;
 import com.example.smart_test.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,8 @@ public class UserController {
     private JWTUtils jwtUtils;
 
     @PostMapping("/add")
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-        try {
-            UserDto createdUser = userService.addUser(userDto);
-            return ResponseEntity.ok(createdUser);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public void addUser(@RequestBody List<UserRequest> userRequestList) {
+        userService.addUser(userRequestList);
     }
 
     @DeleteMapping("/delete")

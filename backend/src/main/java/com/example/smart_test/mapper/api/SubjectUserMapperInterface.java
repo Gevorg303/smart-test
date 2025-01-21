@@ -1,11 +1,11 @@
 package com.example.smart_test.mapper.api;
 
-import com.example.smart_test.domain.SubjectTeacher;
-import com.example.smart_test.dto.SubjectTeacherDto;
+import com.example.smart_test.domain.SubjectUser;
+import com.example.smart_test.dto.SubjectUserDto;
 
 public interface SubjectUserMapperInterface {
 
-    public SubjectTeacherDto toDto(SubjectTeacher entity);
+    public SubjectUserDto toDto(SubjectUser entity);
 
-    public SubjectTeacher toEntity(SubjectTeacherDto dto);
+    public SubjectUser toEntity(SubjectUserDto dto);
 }

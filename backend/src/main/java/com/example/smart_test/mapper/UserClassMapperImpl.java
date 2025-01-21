@@ -1,15 +1,15 @@
 package com.example.smart_test.mapper;
 
-import com.example.smart_test.domain.TeacherClass;
-import com.example.smart_test.dto.TeacherClassDto;
+import com.example.smart_test.domain.UserClass;
+import com.example.smart_test.dto.UserClassDto;
 import com.example.smart_test.mapper.api.TeacherClassMapperInterface;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TeacherClassMapperImpl implements TeacherClassMapperInterface {
+public class UserClassMapperImpl implements TeacherClassMapperInterface {
     @Override
-    public TeacherClassDto toDto(TeacherClass entity) {
-        TeacherClassDto dto = new TeacherClassDto();
+    public UserClassDto toDto(UserClass entity) {
+        UserClassDto dto = new UserClassDto();
         dto.setId(entity.getId());
         dto.setUser(entity.getUser());
         dto.setStudentClass(entity.getStudentClass());
@@ -17,8 +17,8 @@ public class TeacherClassMapperImpl implements TeacherClassMapperInterface {
     }
 
     @Override
-    public TeacherClass toEntity(TeacherClassDto dto) {
-        TeacherClass entity = new TeacherClass();
+    public UserClass toEntity(UserClassDto dto) {
+        UserClass entity = new UserClass();
         entity.setId(dto.getId());
         entity.setUser(dto.getUser());
         entity.setStudentClass(dto.getStudentClass());

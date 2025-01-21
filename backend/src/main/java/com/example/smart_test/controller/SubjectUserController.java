@@ -1,6 +1,6 @@
 package com.example.smart_test.controller;
 
-import com.example.smart_test.dto.SubjectTeacherDto;
+import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,22 +9,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/subject-teacher")
-public class SubjectTeacherController {
+public class SubjectUserController {
     @Autowired
     private SubjectUserServiceInterface subjectService;
 
     @PostMapping("/add")
-    public SubjectTeacherDto addSubjectTeacherDto(@RequestBody SubjectTeacherDto subjectDto) {
+    public SubjectUserDto addSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
         return subjectService.addSubjectTeacherDto(subjectDto);
     }
 
     @DeleteMapping("/delete")
-    public void deleteSubjectTeacherDto(@RequestBody SubjectTeacherDto subjectDto) {
+    public void deleteSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
         subjectService.deleteSubjectTeacherDto(subjectDto);
     }
 
     @GetMapping("/all")
-    public List<SubjectTeacherDto> getSubjectTeacherDto() {
+    public List<SubjectUserDto> getSubjectTeacherDto() {
         return subjectService.getAllSubjectTeachers();
     }
 }

@@ -2,8 +2,6 @@ package com.example.smart_test.controller;
 
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.dto.SubjectDto;
-import com.example.smart_test.dto.SubjectTeacherDto;
-import com.example.smart_test.repository.SubjectRepositoryInterface;
 import com.example.smart_test.service.api.SubjectServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface StudentClassServiceInterface {
+    @Transactional
     StudentClassDto addStudentClassDto(StudentClassDto dto);
 
     void deleteStudentClassDto(StudentClassDto dto);
@@ -15,5 +16,5 @@ public interface StudentClassServiceInterface {
     List<StudentClassDto> getAllStudentClass();
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<StudentClassDto> getStudentClassByTeacherId(Long id);
+    List<StudentClassDto> getStudentClassByTeacherId(Long id);
 }

@@ -146,7 +146,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
             throw new IllegalArgumentException("User not found");
         }
 
-        List<SubjectTeacherDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
+        List<SubjectUserDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
                 .stream()
                 .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
                 .toList();
