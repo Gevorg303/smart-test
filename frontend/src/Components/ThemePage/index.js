@@ -50,7 +50,8 @@ const ThemePage = () => {
                 themes.forEach(subject => {
                     array.push(
                         <div key={count++} className="theme-container">
-                            <Theme id={subject.id} themeName={subject.themeName} />
+                            <h3>Доступные Вам темы:</h3>
+                            <Theme id={subject.id} themeName={subject.themeName}/>
                         </div>
                     )
                 });
@@ -71,9 +72,7 @@ const ThemePage = () => {
                 <div className="Name">
                     <h1>{subjectName}</h1>
                 </div>
-                    <div className="themes-container">
                         {themes}
-                    </div>
                 </div>
                 <Footer/>
             </div>

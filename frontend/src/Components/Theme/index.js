@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import './styles.css'; // Импортируйте стили
+import { Accordion } from 'react-bootstrap';
 
 const Theme = (props) => {
     const [tests, setTests] = useState([]);
@@ -55,11 +56,17 @@ const Theme = (props) => {
     }, [props.id, navigate]);
 
     return (
-        <div>
-            <h2>{props.themeName}</h2>
-            <div className="buttons-container">
-                {tests}
-            </div>
+        <div className="accordion">
+            <Accordion defaultActiveKey="0">
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header><h2>{props.themeName}</h2></Accordion.Header>
+                    <Accordion.Body>
+                        <div className="buttons-container">
+                            {tests}
+                        </div>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
         </div>
     );
 };
