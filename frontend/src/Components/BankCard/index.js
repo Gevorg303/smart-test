@@ -4,6 +4,28 @@ import { Form, Button } from 'react-bootstrap';
 const BankCard = ({id,obj,isTest}) => {
     const [questions, setQuestions] = useState([]);
 
+
+    const handleSubmit = async (event) => {
+       // event.preventDefault();
+        try {
+            console.log("удалить задание: "+id);
+            const response = await fetch('http://localhost:8080/task/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({id:id}
+                )
+            });
+            if (!response.ok) {
+                throw new Error("Ошибка удаления задания");
+            }
+        } catch (error) {
+            console.error('Ошибка удаления данных:', error);
+        }
+        window.location.reload();
+    }
+
     useEffect(() => {
         async function fetchQuestions() {
             if(isTest) {
@@ -18,7 +40,7 @@ const BankCard = ({id,obj,isTest}) => {
                         body: JSON.stringify(obj)
                     });
                     if (!response.ok) {
-                        throw new Error('Ошибка получения теста');
+                        throw new Error('Ошибка получения вопросов из теста');
                     }
                     const questions = await response.json();
                     console.log( questions)
@@ -35,14 +57,18 @@ const BankCard = ({id,obj,isTest}) => {
     }, []);
     return (
         <div className="card">
-            {!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>}
+            <Button variant="success"> Редактировать </Button>
+            <Button variant="danger" onClick={()=>( handleSubmit() )}> Удалить </Button>
+            {/*!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>*/}
+            {isTest ? <p>Тест №{obj.id}</p>:<></>}
             {isTest ?
-                <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>:
-                <h2>{obj.taskName}</h2>}
+                <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>
+                :
+                <h2>Задача №{obj.id}</h2>}
             {isTest ?
                 <p>{obj.description}</p> :
                 <p>{obj.taskText}</p>}
-            {isTest?questions.map((item, index)=><BankCard id={index} obj={item} isTest={false} />):<></>}
+            {/*isTest?questions.map((item, index)=><BankCard key={index} id={index} obj={item} isTest={false} />):<></>*/}
         </div>
     );
 };
