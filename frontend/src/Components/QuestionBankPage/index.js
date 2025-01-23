@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import BankCard from "../BankCard";
 import "./styles.css";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import { useNavigate } from "react-router-dom";
+import CreateQuestionPage from "../CreateQuestionPage";
+
 
 const QuestionBankPage = () => {
     const [isTests, setIsTests] = useState(true);
     const [tests, setTests] = useState([]);
     const [questions, setQuestions] = useState([]);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchTests() {
@@ -74,9 +81,28 @@ const QuestionBankPage = () => {
                         setIsTests(false)
                     }}>Вопросы</Button>
                 </div>
-                {isTests ? tests.map((item, index) => <BankCard key={index} id={index} obj={item}
+                <Button variant="success" className="" onClick={() => {
+                    setShowCreateModal(true)
+                }}>Создать</Button>
+
+                <Modal
+                    show={showCreateModal||showDeleteModal}
+                    onHide={() => {setShowCreateModal(false); setShowDeleteModal(false)}}
+                    dialogClassName="modal-90w"
+                    size="xl"
+                    aria-labelledby="example-custom-modal-styling-title"
+                >
+                    <Modal.Header closeButton>
+                    </Modal.Header>
+                    <Modal.Body>
+
+                        {showCreateModal?(!isTests? <CreateQuestionPage/>:<>create test</>):<>delete</>}
+
+                    </Modal.Body>
+                </Modal>
+                {isTests ? tests.map((item, index) => <BankCard key={index} id={item.id} obj={item}
                                                                 isTest={isTests}/>) : questions.map((item, index) =>
-                    <BankCard key={index} id={index} obj={item} isTest={isTests}/>)}
+                    <BankCard key={index} id={item.id} obj={item} isTest={isTests}/>)}
             </div>
             <Footer/>
         </div>
