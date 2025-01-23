@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     private void linkUserToStudentClass(UserRequest userRequest, User newUser) {
-        if (userRequest.getStudentClass().getId() != null) {
+        if (userRequest.getStudentClass() != null && userRequest.getStudentClass().getId() != null) {
             StudentClass studentClass = studentClassRepository.findById(userRequest.getStudentClass().getId())
                     .orElseThrow(() -> new RuntimeException("Класс не найден"));
             userClassService.addUserClass(new UserClass(studentClass, newUser));
