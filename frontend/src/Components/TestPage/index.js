@@ -88,7 +88,7 @@ const TestPage = () => {
             <Navbar />
             <div className="content-wrapper">
                 <h1>Контрольный тест</h1>
-                <div className="test-container">
+
                     <Question id={active} name={questions[active]?.taskName || ""}
                               description={questions[active]?.taskText || ""} answers={answers}
                               setAnswers={setAnswers}
@@ -105,7 +105,7 @@ const TestPage = () => {
                     }} />
                 </Pagination>
                 <Button className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
-                </div>
+
             </div>
             <Footer />
         </div>
