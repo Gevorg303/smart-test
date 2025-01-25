@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,6 +7,26 @@ import './styles.css'; // Убедитесь, что путь к вашему CS
 const RegistrationPage = () => {
     const location = useLocation();
     const selectedOption = location.pathname.includes('multiple') ? 'multiple' : 'single';
+    const [educationalInstitutions, setEducationalInstitutions] = useState([]);
+
+    useEffect(() => {
+        async function fetchEducationalInstitutions() {
+            try {
+                const response = await fetch('http://localhost:8080/educational-institutions/all');
+                if (!response.ok) {
+                    throw new Error('Ошибка получения данных об учебных заведениях');
+                }
+                const text = await response.text(); // Получите текст ответа для диагностики
+                console.log('Ответ сервера:', text); // Лог ответа сервера
+                const data = JSON.parse(text); // Парсинг JSON
+                setEducationalInstitutions(data);
+            } catch (error) {
+                console.error('Ошибка получения данных об учебных заведениях:', error);
+            }
+        }
+        fetchEducationalInstitutions();
+    }, []);
+
 
     return (
         <Container className="container-registration">
@@ -30,9 +50,9 @@ const RegistrationPage = () => {
                         <Form.Group controlId="formEducation">
                             <Form.Control as="select" placeholder="Место обучения">
                                 <option value="">Выберите место обучения</option>
-                                <option>Школа №1</option>
-                                <option>Школа №2</option>
-                                <option>Школа №3</option>
+                                {educationalInstitutions.map(institution => (
+                                    <option key={institution.id} value={institution.id}>{institution.nameOfTheInstitution}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
 
@@ -68,9 +88,9 @@ const RegistrationPage = () => {
                         <Form.Group controlId="formEducation">
                             <Form.Control as="select" placeholder="Место обучения">
                                 <option value="">Выберите место обучения</option>
-                                <option>Школа №1</option>
-                                <option>Школа №2</option>
-                                <option>Школа №3</option>
+                                {educationalInstitutions.map(institution => (
+                                    <option key={institution.id} value={institution.id}>{institution.nameOfTheInstitution}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
 
