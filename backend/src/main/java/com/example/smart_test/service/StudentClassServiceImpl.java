@@ -1,9 +1,12 @@
 package com.example.smart_test.service;
 
+import com.example.smart_test.domain.EducationalInstitution;
 import com.example.smart_test.domain.StudentClass;
+import com.example.smart_test.dto.EducationalInstitutionDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.repository.StudentClassRepositoryInterface;
+import com.example.smart_test.service.api.EducationalInstitutionServiceInterface;
 import com.example.smart_test.service.api.StudentClassServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -23,6 +25,24 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
     private StudentClassMapperInterface studentClassMapper;
     @Autowired
     private StudentClassRepositoryInterface studentClassRepository;
+    @Autowired
+    private EducationalInstitutionServiceInterface educationalInstitutionService;
+
+    @Transactional
+    @Override
+    public List<StudentClass> findClassByEducationalInstitution(EducationalInstitutionDto educationalInstitutionDto) {
+        EducationalInstitution educationalInstitution = educationalInstitutionService.getEducationalInstitutionsById(educationalInstitutionDto);
+        List<StudentClass> studentClassList = new ArrayList<>();
+        if (educationalInstitution != null) {
+            List<StudentClass> studentClasses = getAllStudentClass();
+            for (StudentClass studentClass : studentClasses) {
+                if (studentClass.getEducationalInstitution().getId().equals(educationalInstitution.getId())) {
+                    studentClassList.add(studentClass);
+                }
+            }
+        }
+        return studentClassList;
+    }
 
     @Override
     @Transactional
@@ -47,21 +67,16 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
         }
     }
 
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<StudentClassDto> getAllStudentClass() {
+    private List<StudentClass> getAllStudentClass() {
         try {
-            List<StudentClass> institutions = studentClassRepository.findAll();
-            return institutions.stream()
-                    .map(studentClassMapper::toDTO)
-                    .collect(Collectors.toList());
+            return studentClassRepository.findAll();
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при получении всех классов: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public List<StudentClassDto> getStudentClassByTeacherId(Long id) {
+    public List<StudentClassDto> getStudentClassByUserId(Long id) {
         try {
             List<StudentClass> subjects = studentClassRepository.findByTeacherId(id);
             List<StudentClassDto> subjectDto = new ArrayList<>();

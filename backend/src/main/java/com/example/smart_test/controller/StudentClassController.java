@@ -1,5 +1,7 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.StudentClass;
+import com.example.smart_test.dto.EducationalInstitutionDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.service.api.StudentClassServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,16 @@ public class StudentClassController {
         serviceInterface.deleteStudentClassDto(dto);
     }
 
-    @GetMapping("/all")
-    public List<StudentClassDto> getAllStudentClass() {
-        return serviceInterface.getAllStudentClass();
+    /**
+     * Метод для получения классов в конкретной школе
+     * */
+    @GetMapping("/find-class-by-educational-institution")
+    public List<StudentClass> findClassByEducationalInstitution(@RequestBody EducationalInstitutionDto educationalInstitution) {
+        return serviceInterface.findClassByEducationalInstitution(educationalInstitution);
     }
 
     @GetMapping("/teacherid={id}")
     public List<StudentClassDto> getAllStudentClassByTeacherId(@PathVariable Long id) {
-        return serviceInterface.getStudentClassByTeacherId(id);
+        return serviceInterface.getStudentClassByUserId(id);
     }
 }

@@ -59,6 +59,16 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public EducationalInstitution getEducationalInstitutionsById(EducationalInstitutionDto educationalInstitutionDto) {
+        try {
+            return educationalInstitutionRepository.findById(educationalInstitutionDto.getId()).orElse(null);
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при получении образовательного учреждения: " + e.getMessage(), e);
+        }
+    }
+
     private boolean findEducationalInstitutionById(Long id) {
         Optional<EducationalInstitution> educationalInstitution = educationalInstitutionRepository.findById(id);
         return educationalInstitution.isPresent();

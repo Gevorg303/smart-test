@@ -1,5 +1,6 @@
 package com.example.smart_test.service.api;
 
+import com.example.smart_test.domain.EducationalInstitution;
 import com.example.smart_test.dto.EducationalInstitutionDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,4 +15,7 @@ public interface EducationalInstitutionServiceInterface {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<EducationalInstitutionDto> getAllEducationalInstitutions();
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    EducationalInstitution getEducationalInstitutionsById(EducationalInstitutionDto educationalInstitutionDto);
 }
