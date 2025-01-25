@@ -152,21 +152,30 @@ public class TaskServiceImpl implements TaskServiceInterface {
                 .toList();
 
         List<ThemeDto> themes = themeService.getAllTheme();
-        List<TestDto> tests = testService.getAllTestDto();
+        List<IndicatorDto> indicatorDtoList = indicatorService.getAllIndicators();
         List<TaskDto> allTasks = getAllTasks();
+        List<TaskOfIndicatorDto> taskOfIndicatorDtoList = taskOfIndicatorService.getAllTaskOfIndicators();
 
-        return subjectTeachers.stream()
+        Set<TaskDto> uniqueTasks = new HashSet<>();
+
+        subjectTeachers.stream()
                 .flatMap(subjectTeacher -> themes.stream()
-                        .filter(theme -> theme.getSubject() != null && theme.getSubject().equals(subjectTeacher.getSubject()))
-                        .flatMap(theme -> tests.stream()
-                                .filter(test -> test.getTheme() != null && test.getTheme().getId().equals(theme.getId()))
-                                .flatMap(test -> allTasks.stream()
-                                        .filter(task -> task.getTest() != null && task.getTest().getId().equals(test.getId()))
+                        .filter(theme -> theme.getSubject() != null && theme.getSubject().getId().equals(subjectTeacher.getSubject().getId()))
+                        .flatMap(theme -> indicatorDtoList.stream()
+                                .filter(indicator -> indicator.getTheme() != null && indicator.getTheme().getId().equals(theme.getId()))
+                                .flatMap(indicator -> taskOfIndicatorDtoList.stream()
+                                        .filter(taskOfIndicator -> taskOfIndicator.getIndicator() != null && taskOfIndicator.getIndicator().getId().equals(indicator.getId()))
+                                        .flatMap(taskOfIndicator -> allTasks.stream()
+                                                .filter(task -> task.getId().equals(taskOfIndicator.getTask().getId()))
+                                        )
                                 )
                         )
                 )
-                .toList();
+                .forEach(uniqueTasks::add);
+
+        return new ArrayList<>(uniqueTasks);
     }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
