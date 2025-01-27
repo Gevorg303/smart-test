@@ -1,5 +1,6 @@
 package com.example.smart_test.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.dto.EducationalInstitutionDto;
 import com.example.smart_test.dto.StudentClassDto;
@@ -28,7 +29,7 @@ public class StudentClassController {
     /**
      * Метод для получения классов в конкретной школе
      * */
-    @GetMapping("/find-class-by-educational-institution")
+    @PostMapping("/find-class-by-educational-institution")
     public List<StudentClass> findClassByEducationalInstitution(@RequestBody EducationalInstitutionDto educationalInstitution) {
         return serviceInterface.findClassByEducationalInstitution(educationalInstitution);
     }
