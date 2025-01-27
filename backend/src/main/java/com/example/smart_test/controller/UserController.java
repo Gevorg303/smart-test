@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000") // Укажите ваш frontend URL
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
@@ -37,6 +37,7 @@ public class UserController {
 
     @GetMapping("/all")
     public List<UserDto> getAllUsers() {
+        System.out.println("Received request to get all users");
         return userService.getAllUsers();
     }
 
@@ -45,11 +46,6 @@ public class UserController {
         return userService.getUserByLogin(userDto);
     }
 
-    /*  @GetMapping("/current")
-      public UserDto getCurrentUser() {
-          User currentUser = userService.getCurrentUser();
-          return userMapper.toDTO(currentUser);
-      }*/
     @GetMapping("/current")
     public UserDto getCurrentUser(@CookieValue("jwtToken") String token) {
         var jwt = jwtUtils.decodeToken(token);
@@ -58,3 +54,4 @@ public class UserController {
         return userMapper.toDTO(currentUser);
     }
 }
+

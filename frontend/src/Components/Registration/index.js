@@ -29,20 +29,6 @@ const RegistrationPage = () => {
             }
         }
 
-        async function fetchUsers() {
-            try {
-                const response = await fetch('http://localhost:8080/users');
-                if (!response.ok) {
-                    throw new Error('Ошибка получения данных о пользователях');
-                }
-                const data = await response.json();
-                console.log('Все пользователи:', data); // Логирование полученных данных
-                setUsers(data);
-            } catch (error) {
-                console.error('Ошибка получения данных о пользователях:', error);
-            }
-        }
-
         fetchEducationalInstitutions();
         fetchUsers();
     }, []);
@@ -111,7 +97,7 @@ const RegistrationPage = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:8080/users');
+            const response = await fetch('http://localhost:8080/users/all');
             if (!response.ok) {
                 throw new Error('Ошибка получения данных о пользователях');
             }
