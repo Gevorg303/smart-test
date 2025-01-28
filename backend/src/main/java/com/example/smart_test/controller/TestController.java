@@ -1,9 +1,11 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.TestRequest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +33,8 @@ public class TestController {
         testService.deleteTestDto(testDto);
     }
 
-
     /**
-    Выводит список всех тестов
+     * Выводит список всех тестов
      */
     @GetMapping("/all")
     public List<TestDto> getAllTest() {
@@ -41,8 +42,8 @@ public class TestController {
     }
 
     /**
-    Вывод информации про конкретный тест
-    */
+     * Вывод информации про конкретный тест
+     */
     @PostMapping("/get")
     public TestDto getTestById(@RequestBody TestDto testDto) {
         return testService.getTestById(testDto.getId());
@@ -54,7 +55,7 @@ public class TestController {
     }
 
     /**
-     Выводит темы конкретного пользователя
+     * Выводит темы конкретного пользователя
      */
     @PostMapping("/get-user-tests")
     public List<TestDto> getUserTests(@RequestBody UserDto userDto) {
@@ -62,26 +63,26 @@ public class TestController {
     }
 
     /**
-    Выводит список заданий в тесте
-    */
+     * Выводит список заданий в тесте
+     */
     @PostMapping("/get-tasks-test")
     public List<TaskDto> findTasksTheTest(@RequestBody TestDto dto) {
         return taskService.findTasksTheTest(dto);
     }
 
     /**
-     Выводит список доступных заданий для добавления в тест
+     * Выводит список доступных заданий для добавления в тест, необходимо на вход id темы теста
      */
     @PostMapping("/get-available-tasks")
-    public Set<TaskDto> displayTheAvailableTasks(@RequestBody TestDto dto){
+    public Set<TaskDto> displayTheAvailableTasks(@RequestBody ThemeDto dto) {
         return taskService.displayTheAvailableTasks(dto);
     }
 
     /**
-     Выводит список тестов по конкретной теме
-     * */
+     * Выводит список тестов по конкретной теме
+     */
     @PostMapping("/get-test-id-theme")
-    public List<TestDto> outputTestsByIDTheme(@RequestBody ThemeDto themeDto){
+    public List<TestDto> outputTestsByIDTheme(@RequestBody ThemeDto themeDto) {
         return testService.outputTestsByIDTheme(themeDto);
     }
 }
