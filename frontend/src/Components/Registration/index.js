@@ -72,13 +72,36 @@ const RegistrationPage = () => {
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
+        // Проверка заполненности всех полей
+        if (!data.lastName || !data.firstName || !data.middleName || !data.education || !data.class || !data.email) {
+            console.error('Все поля должны быть заполнены');
+            return;
+        }
+
+        // Добавление educationalInstitution в данные
+        const educationalInstitution = educationalInstitutions.find(inst => inst.id === parseInt(data.education));
+        if (!educationalInstitution) {
+            console.error('Учебное заведение не найдено');
+            return;
+        }
+        data.educationalInstitution = educationalInstitution;
+
+        // Логирование данных перед отправкой
+        console.log('Данные для отправки:', data);
+
+        // Дополнительная проверка данных
+        if (!isValidEmail(data.email)) {
+            console.error('Некорректный формат электронной почты');
+            return;
+        }
+
         try {
-            const response = await fetch('http://localhost:8080/register', {
+            const response = await fetch('http://localhost:8080/users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify([data]), // Оберните данные в массив, так как сервер ожидает список
             });
 
             if (response.ok) {
@@ -88,12 +111,20 @@ const RegistrationPage = () => {
                 // Обновление списка пользователей
                 fetchUsers();
             } else {
-                console.error('Ошибка регистрации пользователя');
+                const errorText = await response.text(); // Получите текст ответа для диагностики
+                console.error('Ошибка регистрации пользователя:', errorText);
             }
         } catch (error) {
             console.error('Ошибка регистрации пользователя:', error);
         }
     };
+
+// Функция для проверки корректности email
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
 
     const fetchUsers = async () => {
         try {
@@ -201,7 +232,18 @@ const RegistrationPage = () => {
                 )}
 
                 {registrationSuccess && (
-                    <Toast onClose={() => setRegistrationSuccess(false)} show={registrationSuccess} delay={3000} autohide>
+                    <Toast
+                        onClose={() => setRegistrationSuccess(false)}
+                        show={registrationSuccess}
+                        delay={3000}
+                        autohide
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: 1000,
+                        }}
+                    >
                         <Toast.Header>
                             <strong className="mr-auto">Успешно</strong>
                         </Toast.Header>
