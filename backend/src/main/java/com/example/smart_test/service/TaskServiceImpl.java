@@ -104,12 +104,13 @@ public class TaskServiceImpl implements TaskServiceInterface {
         return null;
     }
 
-    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Set<TaskDto> displayTheAvailableTasks(TestDto dto) {
-        TestDto fullTestDto = testService.getTestById(dto.getId());
-        if (fullTestDto == null) {
-            throw new IllegalArgumentException("TestDto with id " + dto.getId() + " not found");
+    @Override
+    public Set<TaskDto> displayTheAvailableTasks(ThemeDto theme) {
+        ThemeDto themeDto = themeService.getThemeById(theme.getId());
+        //TestDto fullTestDto = testService.getTestById(dto.getId());
+        if (themeDto == null) {
+            throw new IllegalArgumentException("Theme with id " + theme.getId() + " not found");
         }
 
         Set<TaskDto> availableTasks = new HashSet<>();
@@ -128,7 +129,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
             if (taskOfIndicator != null) {
                 IndicatorDto indicator = indicatorMap.get(taskOfIndicator.getIndicator().getId());
 
-                if (indicator != null && Objects.equals(indicator.getTheme().getId(), fullTestDto.getTheme().getId())) {
+                if (indicator != null && Objects.equals(indicator.getTheme().getId(), themeDto.getId())) {
                     if (taskDto.getTest() == null) {
                         availableTasks.add(taskDto);
                     }
@@ -178,7 +179,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void addTaskToTest(Long testId, Long taskId) {
         try {
             Test test = testMapperInterface.toEntity(testService.getTestById(testId));

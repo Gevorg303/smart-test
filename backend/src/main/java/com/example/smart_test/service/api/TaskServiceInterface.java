@@ -6,6 +6,7 @@ import com.example.smart_test.domain.ResponseOption;
 import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public interface TaskServiceInterface {
     List<TaskDto> findTasksTheTest(TestDto dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    Set<TaskDto> displayTheAvailableTasks(TestDto dto);
+    Set<TaskDto> displayTheAvailableTasks(ThemeDto theme);
 
     List<TaskDto> getUserTasks(UserDto dto);
 
