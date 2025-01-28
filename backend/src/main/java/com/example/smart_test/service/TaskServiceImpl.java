@@ -117,7 +117,11 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
         Map<Long, TaskOfIndicatorDto> taskOfIndicatorMap = taskOfIndicatorService.getAllTaskOfIndicators()
                 .stream()
-                .collect(Collectors.toMap(taskOfIndicator -> taskOfIndicator.getTask().getId(), Function.identity()));
+                .collect(Collectors.toMap(
+                        taskOfIndicator -> taskOfIndicator.getTask().getId(),
+                        Function.identity(),
+                        (existing, replacement) -> existing
+                ));
 
         Map<Long, IndicatorDto> indicatorMap = indicatorService.getAllIndicators()
                 .stream()
