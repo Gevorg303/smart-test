@@ -57,7 +57,7 @@ const Theme = (props) => {
 
     return (
         <div className="accordion">
-            <Accordion defaultActiveKey="0">
+            <Accordion defaultActiveKey="1">
                 <Accordion.Item eventKey="0">
                     <Accordion.Header><h2>{props.themeName}</h2></Accordion.Header>
                     <Accordion.Body>

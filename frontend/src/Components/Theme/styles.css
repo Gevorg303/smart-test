@@ -49,6 +49,16 @@
     color: #000000;
     border: 1px solid #000000;
 }
+
+
+.test-button:hover {
+    background-color: #99c242;
+    border-color: #000000;
+    color: #000000;
+}
+
+
+
 .test-button:active {
     color: #000000 !important;
     background-color: #ffffff !important;
