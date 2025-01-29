@@ -1,0 +1,19 @@
+.result-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.result-container {
+    margin: 20px;
+}
+
+.result-table {
+    margin: 20px 0;
+}
+
+.result-button {
+    display: block;
+    margin: 20px auto;
+}

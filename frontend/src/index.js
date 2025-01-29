@@ -12,7 +12,8 @@ import ThemePage from './Components/ThemePage';
 import ProfilePage from './Components/ProfilePage';
 import QuestionBankPage from './Components/QuestionBankPage';
 import PrivateRoutes from './utils/router/privateRoute';
-import Layout from './Components/Layout'; // Обновите путь к Layout
+import Layout from './Components/Layout';
+import ResultsPage from "./Components/ResultsPage"; // Обновите путь к Layout
 
 const App = () => {
     return (
@@ -32,6 +33,7 @@ const App = () => {
                         <Route path="theme" element={<ThemePage />} />
                         <Route path="profile" element={<ProfilePage />} />
                         <Route path="bank" element={<QuestionBankPage />} />
+                        <Route path="results" element={<ResultsPage />} />
                     </Route>
                 </Route>
             </Routes>
