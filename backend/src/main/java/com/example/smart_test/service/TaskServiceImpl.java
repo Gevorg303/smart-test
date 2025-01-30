@@ -199,9 +199,10 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
-    public void removeTaskFromTest(Long taskId) {
+    @Transactional
+    public void removeTaskFromTest(TaskDto taskDto) {
         try {
-            Task task = taskMapperInterface.toEntity(getTaskById(taskId));
+            Task task = taskMapperInterface.toEntity(getTaskById(taskDto.getId()));
             task.setTest(null);
             taskRepositoryInterface.save(task);
         } catch (Exception e) {
@@ -236,6 +237,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
+    @Transactional
     public TaskDto getTaskById(Long id) {
         try {
             Task task = taskRepositoryInterface.findById(id)
