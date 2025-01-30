@@ -62,8 +62,8 @@ public class TaskController {
      * Удаление задания из теста /task/remove-task-from-test?taskId=7
      * */
     @PutMapping("/remove-task-from-test")
-    public void removeTaskFromTest (@RequestParam Long taskId){
-        taskService.removeTaskFromTest(taskId);
+    public void removeTaskFromTest (@RequestBody TaskDto taskDto){
+        taskService.removeTaskFromTest(taskDto);
     }
 
 //    @GetMapping("/find-test")

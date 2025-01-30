@@ -38,5 +38,6 @@ public interface TaskServiceInterface {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     TaskDto getTaskById(Long id);
 
-    void removeTaskFromTest(Long taskId);
+    @Transactional
+    void removeTaskFromTest(TaskDto taskDto);
 }
