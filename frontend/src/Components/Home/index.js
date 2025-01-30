@@ -46,7 +46,6 @@ const HomePage = () => {
 
     return (
         <>
-            <Navbar />
             <div className="home-page">
                 <div className="welcome">
                     <WelcomeComponent text={welcometext} />

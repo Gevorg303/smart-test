@@ -1,6 +1,6 @@
 .custom-navbar {
-    background-color: #333;
-    color: white;
+    /*background-color: #333;*/
+    /*color: white;*/
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -12,6 +12,9 @@
     box-sizing: border-box;
     padding: 5px 10px;
     margin-bottom: 3px;
+}
+.bg-dark.fixed-top {
+    background-color: #99c242 !important; ;
 }
 
 .navbar-logo a {
@@ -29,35 +32,48 @@
 .navbar-links {
     list-style: none;
     display: flex;
-    gap: 10px; /* Уменьшаем отступы */
+    gap: 10px;
     margin: 0;
     padding: 0;
 }
 
 .navbar-links.right {
-    margin-left: auto;
+    /*margin-left: auto;*/
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
 }
 
 .navbar-links .navbar-link {
-    color: white !important; /* Изменяем цвет ссылок и добавляем !important */
+    color: #333333 !important; /* Изменен цвет ссылок на белый */
+    /*color: white !important;*/
     text-decoration: none;
-    padding: 5px 7.5px; /* Уменьшаем паддинги */
+    padding: 5px 7.5px;
     transition: background-color 0.3s;
+    background-color: #ffffff; /* Белый фон */
+    border: 1px solid #333333; /* Тонкая темно-синяя граница */
+    font-size: 16px; /* Размер шрифта */
+    border-radius: 5px; /* Скругленные углы */
+    margin: 5px; /* Отступы между кнопками */
 }
 
 .navbar-link {
-    text-decoration: none;
-    padding: 5px 7.5px; /* Уменьшаем паддинги */
+    /*text-decoration: none;*/
+    padding: 5px 7.5px;
     transition: background-color 0.3s;
 }
 
 .navbar-link:hover {
-    background-color: #555;
+    /*background-color: #555;*/
+    /*background-color: #0056b3; /* Изменен цвет фона при наведении на темно-синий */
 }
 
 .navbar-link i {
     font-size: 20px;
-    color: white;
+    /*color: white;*/
+    color: #333333; /* Изменен цвет иконок на белый */
 }
 
 .justify-content-between {
@@ -66,28 +82,33 @@
     width: 100%;
 }
 
-/* Пользовательские стили для выпадающего меню при наведении */
 .dropdown:hover > .dropdown-menu {
     display: block;
-    background-color: #333;
+    /*background-color: #333;*/
+    background-color: #f0f0f0; /* Изменен цвет фона на синий */
 }
 
 .dropdown-menu {
     margin-top: 0;
-    display: none; /* Скрываем выпадающее меню по умолчанию */
-    background-color: #333; /* Соответствуем цвету фона навбара */
-    border: none; /* Убираем стандартную границу */
-    padding: 0; /* Убираем стандартный отступ */
+    display: none;
+    border: none;
+    padding: 0;
+    width: 100%;
 }
 
 .dropdown-menu .dropdown-item {
-    color: white !important; /* Соответствуем цвету ссылок навбара */
-    background-color: #333;
-    padding: 5px 7.5px; /* Соответствуем отступам ссылок навбара */
+    padding: 5px 7.5px;
     transition: background-color 0.3s;
+    color: #333333 !important; /* Изменен цвет текста на белый */
+}
+.nav-link {
+    color: #333333 !important;
+    display: inline !important;
+
+
 }
 
 .dropdown-menu .dropdown-item:hover {
-    background-color: white; /* Соответствуем цвету фона ссылок навбара при наведении */
-    color: #333 !important;
+    background-color: #99c242; /* Изменен цвет фона при наведении на темно-синий */
+    color: #333333 !important; /* Изменен цвет текста при наведении на белый */
 }

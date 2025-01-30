@@ -22,21 +22,26 @@ const Navbar = ({IsTeacher}) => {
             <BootstrapNavbar.Collapse id="basic-navbar-nav" className="justify-content-between">
                 <Nav className="navbar-links">
                     <Nav.Link as={Link} to="/home" className="navbar-link">Предметы</Nav.Link>
-                    <NavDropdown title="Зарегистрировать пользователя" id="register-dropdown"
+                    <NavDropdown title="Банк заданий" id="bank-dropdown"
+                                 className="navbar-link dropdown">
+                        <NavDropdown.Item as={Link} to="/testbank" className="dropdown-item">Тесты</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/taskbank" className="dropdown-item">Задания</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/indicatorbank" className="dropdown-item">Индикаторы</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/themebank" className="dropdown-item">Темы</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/itembank" className="dropdown-item">Предметы</NavDropdown.Item>
+                    </NavDropdown>
+                    <Nav.Link as={Link} to="/results" className="navbar-link">Результаты</Nav.Link>
+                    <NavDropdown title="Регистрация пользователя" id="register-dropdown"
                                  className="navbar-link dropdown">
                         <NavDropdown.Item as={Link} to="/register/single"
                                           className="dropdown-item">Ученик</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/register/multiple" className="dropdown-item">Несколько
                             учеников</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link as={Link} to="/bank" className="navbar-link">Банк заданий</Nav.Link>
                 </Nav>
                 <Nav className="navbar-links right">
                     <Nav.Link className="navbar-link">
-                        <i className="bi bi-bell"></i>
-                    </Nav.Link>
-                    <Nav.Link className="navbar-link">
-                        <i className="bi bi-messenger"></i>
+                        ?
                     </Nav.Link>
                     <Nav.Link as={Link} to="/profile" className="navbar-link">Личный кабинет</Nav.Link>
                 </Nav>
