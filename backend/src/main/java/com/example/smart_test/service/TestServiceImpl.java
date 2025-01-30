@@ -1,5 +1,6 @@
 package com.example.smart_test.service;
 
+import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.Test;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.mapper.api.TestMapperInterface;
@@ -7,7 +8,9 @@ import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +29,33 @@ public class TestServiceImpl implements TestServiceInterface {
     private SubjectUserServiceInterface subjectUserService;
     @Autowired
     private ThemeServiceInterface themeService;
+    @Autowired
+    @Lazy
+    private TaskServiceInterface taskService;
 
     @Override
-    public TestDto addTestDto(TestDto testDto) {
+    @Transactional
+    public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
         Test test = testMapper.toEntity(testDto);
         Test savedTest = testRepository.save(test);
+        if (taskList != null) {
+            for (Task task : taskList) {
+                taskService.addTaskToTest(savedTest.getId(), task.getId());
+            }
+        }
         return testMapper.toDto(savedTest);
     }
 
     @Override
+    @Transactional
     public void deleteTestDto(TestDto testDto) {
+        for (TaskDto taskDto : taskService.getAllTasks()) {
+            if (taskDto.getTest() != null) {
+                if (taskDto.getTest().getId().equals(testDto.getId())) {
+                    taskService.removeTaskFromTest(taskDto);
+                }
+            }
+        }
         testRepository.deleteById(testDto.getId());
     }
 
