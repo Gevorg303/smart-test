@@ -66,7 +66,7 @@ const QuestionBankPage = ({isTests}) => {
 
         fetchTests();
     }, []);
-
+    /* className="page-container-quest"*/
     return (
         <div>
             <Navbar/>

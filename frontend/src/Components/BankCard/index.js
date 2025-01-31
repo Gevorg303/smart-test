@@ -1,5 +1,7 @@
 import React, {useState,useEffect} from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Stack } from 'react-bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import './style.css';
 
 const BankCard = ({id,obj,isTest}) => {
     const [questions, setQuestions] = useState([]);
@@ -73,19 +75,28 @@ const BankCard = ({id,obj,isTest}) => {
         fetchQuestions();
     }, []);
     return (
-        <div className="card">
-            <Button variant="success"> Редактировать </Button>
-            <Button variant="danger" onClick={()=>( handleSubmit() )}> Удалить </Button>
-            {/*!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>*/}
-            {isTest ? <p>Тест №{obj.id}</p>:<></>}
-            {isTest ?
-                <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>
-                :
-                <h2>Задача №{obj.id}</h2>}
-            {isTest ?
-                <p>{obj.description}</p> :
-                <p>{obj.taskText}</p>}
-            {/*isTest?questions.map((item, index)=><BankCard key={index} id={index} obj={item} isTest={false} />):<></>*/}
+        <div className="bankcard">
+            <Stack direction="horizontal" gap={2}>
+                <Stack direction="vertical" gap={2}>
+                   {/*!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>*/}
+                   {isTest ? <p>Тест №{obj.id}</p>:<></>}
+                   {isTest ?
+                       <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>
+                       :
+                       <h2>Задача №{obj.id}</h2>}
+                   {isTest ?
+                       <p>{obj.description}</p> :
+                       <p>{obj.taskText}</p>}
+                   {/*isTest?questions.map((item, index)=><BankCard key={index} id={index} obj={item} isTest={false} />):<></>*/}
+                </Stack>
+
+                <Stack direction="vertical" gap={2}>
+                    <Button className={"bankbutton"} variant="danger" onClick={() => (handleSubmit())}><i className="bi bi-trash-fill"></i> {/*Удалить*/} </Button>
+                    <Button className={"bankbutton"} variant="warning"> <i class="bi bi-pencil-fill"></i>{/*Редактировать*/}</Button>
+                </Stack>
+            </Stack>
+
+
         </div>
     );
 };
