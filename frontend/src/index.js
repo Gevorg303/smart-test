@@ -32,8 +32,9 @@ const App = () => {
                         <Route path="testresult" element={<ViewTestResultsPage />} />
                         <Route path="theme" element={<ThemePage />} />
                         <Route path="profile" element={<ProfilePage />} />
-                        <Route path="bank" element={<QuestionBankPage />} />
                         <Route path="results" element={<ResultsPage />} />
+                        <Route path="testbank" element={<QuestionBankPage  isTests={true} />} />
+                        <Route path="taskbank" element={<QuestionBankPage  isTests={false}/>} />
                     </Route>
                 </Route>
             </Routes>

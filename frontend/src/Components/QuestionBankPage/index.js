@@ -7,10 +7,11 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 import CreateQuestionPage from "../CreateQuestionPage";
+import CreateTestPage from "../CreateTestPage";
 
 
-const QuestionBankPage = () => {
-    const [isTests, setIsTests] = useState(true);
+const QuestionBankPage = ({isTests}) => {
+  //  const [isTests, setIsTests] = useState(isTest);
     const [tests, setTests] = useState([]);
     const [questions, setQuestions] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -52,7 +53,7 @@ const QuestionBankPage = () => {
                     body: JSON.stringify(user)
                 });
                 if (!response3.ok) {
-                    throw new Error('Ошибка получения теста');
+                    throw new Error('Ошибка получения заданий');
                 }
                 const questions = await response3.json();
                 console.log(questions)
@@ -70,17 +71,10 @@ const QuestionBankPage = () => {
         <div>
             <Navbar/>
             <br/><br/><br/>
-            <h1>{isTests ? "Тесты" : "Вопросы"}</h1>
+            <h1>{isTests ? "Тесты" : "Задания"}</h1>
             <div className="page-container-quest">
 
-                <div className="button-container-quest">
-                    <Button className="button-quest" onClick={() => {
-                        setIsTests(true)
-                    }}>Тесты</Button>
-                    <Button className="button-quest" onClick={() => {
-                        setIsTests(false)
-                    }}>Вопросы</Button>
-                </div>
+
                 <Button variant="success" className="" onClick={() => {
                     setShowCreateModal(true)
                 }}>Создать</Button>
@@ -96,7 +90,7 @@ const QuestionBankPage = () => {
                     </Modal.Header>
                     <Modal.Body>
 
-                        {showCreateModal?(!isTests? <CreateQuestionPage/>:<>create test</>):<>delete</>}
+                        {showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>}
 
                     </Modal.Body>
                 </Modal>

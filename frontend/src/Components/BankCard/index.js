@@ -9,17 +9,34 @@ const BankCard = ({id,obj,isTest}) => {
        // event.preventDefault();
         try {
             console.log("удалить задание: "+id);
-            const response = await fetch('http://localhost:8080/task/delete', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify({id:id}
-                )
-            });
-            if (!response.ok) {
-                throw new Error("Ошибка удаления задания");
+            if(isTest){
+                const response = await fetch('http://localhost:8080/test/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({id:id}
+                    )
+                });
+                if (!response.ok) {
+                    throw new Error("Ошибка удаления задания");
+                }
             }
+            else {
+                const response = await fetch('http://localhost:8080/task/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({id:id}
+                    )
+                });
+                if (!response.ok) {
+                    throw new Error("Ошибка удаления задания");
+                }
+
+            }
+
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
         }

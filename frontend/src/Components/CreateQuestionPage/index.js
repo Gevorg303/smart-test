@@ -14,7 +14,7 @@ const CreateQuestionPage = () => {
 
     const [currentType, setCurrentType] = useState();
    // const [currentSubject, setCurrentSubject] = useState();
-   // const [currentTheme, setCurrentTheme] = useState();
+    const [currentTheme, setCurrentTheme] = useState();
     const [currentIndicators, setIndicators] = useState([]);
     const [currentText, setText] = useState();
     const [currentExplanation, setExplanation] = useState();
@@ -36,7 +36,7 @@ const CreateQuestionPage = () => {
             const type = parseInt(currentType , 10 );
             const indicators=[]; //=  currentIndicators.map((item, index) =>item!=undefined?{id:index}: null)
             for (var i=0; i < currentIndicators.length; i++) {
-                if(currentIndicators[i]!=undefined)
+                if(currentIndicators[i]!=undefined && currentIndicators[i])
                 {
                     indicators.push({id:i})
                 }
@@ -195,9 +195,6 @@ const CreateQuestionPage = () => {
         <div>
             <h1>Создание задания</h1>
             <h3>Выберите предмет и тему задания</h3>
-            {subjects.map((item, index) => {
-                <h2>{item.subjectName}</h2>
-            })}
             <Form  onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
                     <Form.Select
@@ -210,7 +207,8 @@ const CreateQuestionPage = () => {
 
                     </Form.Select>
                 </Form.Group>
-                <ThemeAndIndicatorSelector isTheme={true} targetSubject={targetSubject} indicators={currentIndicators} setIndicators={setIndicators}/>
+                <ThemeAndIndicatorSelector needIndicators={true} targetSubject={targetSubject} indicators={currentIndicators} setIndicators={setIndicators}
+                                            setCurrentTheme={setCurrentTheme}/>
                 <Form.Group className="mb-3">
                     <Form.Select onChange={(e) => {
                         setCurrentType(e.target.value);
