@@ -109,8 +109,9 @@ h1 {
 }
 
 .container-home {
-    display: grid;
-    grid-template-columns: 1fr; /* Одна колонка */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 16px; /* Увеличиваем отступы между карточками */
     width: 100%;
     max-width: 1200px; /* Ограничиваем максимальную ширину контейнера */
@@ -135,6 +136,7 @@ h1 {
     height: 150px; /* Устанавливаем фиксированную высоту для карточек */
     box-sizing: border-box; /* Включаем padding и border в общую ширину и высоту */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Добавляем анимацию */
+    flex: 0 0 calc(33.333% - 64px); /* Ширина элемента с учетом отступов */
 }
 
 .container-home .card:hover {
