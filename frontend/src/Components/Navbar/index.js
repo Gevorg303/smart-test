@@ -3,7 +3,7 @@ import { Navbar as BootstrapNavbar, Nav, Container, NavDropdown } from 'react-bo
 import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles.css';
-import logo from '../../images/Logo_1.jpg'; // Импортируем изображение
+import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
 
 const Navbar = ({IsTeacher}) => {
     return (!IsTeacher?
@@ -11,7 +11,7 @@ const Navbar = ({IsTeacher}) => {
         <Container fluid>
             <BootstrapNavbar.Brand as={Link} to="/home" className="navbar-logo">
                 <img
-                    src={logo} // Используем импортированное изображение
+                    src={Full_logo} // Используем импортированное изображение
                     width="40"
                     height="40"
                     className="d-inline-block align-top"
