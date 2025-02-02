@@ -61,9 +61,11 @@ const RegistrationPage = () => {
             const data = await response.json();
             console.log('Полученные классы:', data); // Логирование полученных данных
             setClasses(data);
+
         } catch (error) {
             console.error('Ошибка получения данных о классах:', error);
         }
+
     };
 
     const handleSubmit = async (event) => {
@@ -95,13 +97,34 @@ const RegistrationPage = () => {
             return;
         }
 
+        // Создание объекта с данными пользователя
+        const userRequest = {
+            user:
+            {
+                surname: data.lastName,
+                name: data.firstName,
+                patronymic: data.middleName,
+                role:{id:3},
+                email: data.email
+
+            },
+            educationalInstitution: data.educationalInstitution,
+            studentClass: {id:parseInt(data.class, 10)}
+        };
+
+        // Создание массива с данными пользователя
+        const userRequestList = [userRequest];
+
+        // Логирование данных перед отправкой на сервер
+        console.log('Данные для отправки на сервер:', userRequestList);
+
         try {
             const response = await fetch('http://localhost:8080/users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify([data]), // Оберните данные в массив, так как сервер ожидает список
+                body: JSON.stringify(userRequestList), // Отправка массива с данными пользователя
             });
 
             if (response.ok) {
@@ -114,10 +137,12 @@ const RegistrationPage = () => {
                 const errorText = await response.text(); // Получите текст ответа для диагностики
                 console.error('Ошибка регистрации пользователя:', errorText);
             }
+
         } catch (error) {
             console.error('Ошибка регистрации пользователя:', error);
         }
     };
+
 
 // Функция для проверки корректности email
     const isValidEmail = (email) => {
@@ -139,6 +164,7 @@ const RegistrationPage = () => {
             console.error('Ошибка получения данных о пользователях:', error);
         }
     };
+
 
     return (
         <Container className="container-registration">
