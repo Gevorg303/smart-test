@@ -100,14 +100,14 @@ const RegistrationPage = () => {
         // Создание объекта с данными пользователя
         const userRequest = {
             user:
-            {
-                surname: data.lastName,
-                name: data.firstName,
-                patronymic: data.middleName,
-                role:{id:3},
-                email: data.email
+                {
+                    surname: data.lastName,
+                    name: data.firstName,
+                    patronymic: data.middleName,
+                    role:{id:3},
+                    email: data.email
 
-            },
+                },
             educationalInstitution: data.educationalInstitution,
             studentClass: {id:parseInt(data.class, 10)}
         };
@@ -143,13 +143,18 @@ const RegistrationPage = () => {
         }
     };
 
+    const handleDownloadTemplate = () => {
+        const link = document.createElement('a');
+        link.href = '/Ученики.xlsx'; // Путь к файлу в папке public
+        link.download = 'Ученики.xlsx';
+        link.click();
+    };
 
-// Функция для проверки корректности email
+    // Функция для проверки корректности email
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
-
 
     const fetchUsers = async () => {
         try {
@@ -164,7 +169,6 @@ const RegistrationPage = () => {
             console.error('Ошибка получения данных о пользователях:', error);
         }
     };
-
 
     return (
         <Container className="container-registration">
@@ -250,7 +254,7 @@ const RegistrationPage = () => {
                             <Button type="submit" className="custom-button left-button">
                                 Зарегистрировать
                             </Button>
-                            <Button className="template-button right-button">
+                            <Button className="template-button right-button" onClick={handleDownloadTemplate}>
                                 Выгрузить шаблон
                             </Button>
                         </div>
