@@ -3,7 +3,7 @@ import { Container, Form, Button, Toast } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles.css'; // Убедитесь, что путь к вашему CSS файлу правильный
+import './styles.css'; // Ensure the path to your CSS file is correct
 
 const RegistrationPage = () => {
     const location = useLocation();
@@ -11,6 +11,7 @@ const RegistrationPage = () => {
     const [educationalInstitutions, setEducationalInstitutions] = useState([]);
     const [selectedInstitution, setSelectedInstitution] = useState(null);
     const [classes, setClasses] = useState([]);
+    const [selectedClass, setSelectedClass] = useState(null);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [users, setUsers] = useState([]);
     const [file, setFile] = useState(null);
@@ -23,9 +24,7 @@ const RegistrationPage = () => {
                 if (!response.ok) {
                     throw new Error('Ошибка получения данных об учебных заведениях');
                 }
-                const text = await response.text(); // Получите текст ответа для диагностики
-                const data = JSON.parse(text); // Парсинг JSON
-                console.log('Полученные учебные заведения:', data); // Логирование полученных данных
+                const data = await response.json();
                 setEducationalInstitutions(data);
             } catch (error) {
                 console.error('Ошибка получения данных об учебных заведениях:', error);
@@ -44,27 +43,22 @@ const RegistrationPage = () => {
 
     const fetchClassesByInstitution = async (institution) => {
         if (!institution) {
-            console.error('Учебное заведение не выбрано');
             return;
         }
 
         try {
-            console.log('Отправляемые данные:', institution); // Логирование отправляемых данных
             const response = await fetch('http://localhost:8080/student-class/find-class-by-educational-institution', {
-                method: 'POST', // Используем POST, так как сервер ожидает данные в теле запроса
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(institution),
             });
             if (!response.ok) {
-                const errorText = await response.text(); // Получите текст ответа для диагностики
-                throw new Error(`Ошибка получения данных о классах: ${errorText}`);
+                throw new Error('Ошибка получения данных о классах');
             }
             const data = await response.json();
-            console.log('Полученные классы:', data); // Логирование полученных данных
             setClasses(data);
-
         } catch (error) {
             console.error('Ошибка получения данных о классах:', error);
         }
@@ -84,50 +78,33 @@ const RegistrationPage = () => {
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        // Логирование данных из формы
-        console.log('Данные из формы:', data);
-
-        // Проверка заполненности всех полей
         if (!data.lastName || !data.firstName || !data.middleName || !data.education || !data.class || !data.email) {
-            console.error('Все поля должны быть заполнены');
             return;
         }
 
-        // Добавление educationalInstitution в данные
         const educationalInstitution = educationalInstitutions.find(inst => inst.id === parseInt(data.education));
         if (!educationalInstitution) {
-            console.error('Учебное заведение не найдено');
             return;
         }
         data.educationalInstitution = educationalInstitution;
 
-        // Логирование данных перед отправкой
-        console.log('Данные для отправки:', data);
-
-        // Дополнительная проверка данных
         if (!isValidEmail(data.email)) {
-            console.error('Некорректный формат электронной почты');
             return;
         }
 
-        // Создание объекта с данными пользователя
         const userRequest = {
             user: {
                 surname: data.lastName,
                 name: data.firstName,
                 patronymic: data.middleName,
-                role: { id: 3 }, // Роль по умолчанию
+                role: { id: 3 },
                 email: data.email
             },
             educationalInstitution: data.educationalInstitution,
             studentClass: { id: parseInt(data.class, 10) }
         };
 
-        // Создание массива с данными пользователя
         const userRequestList = [userRequest];
-
-        // Логирование данных перед отправкой на сервер
-        console.log('Данные для отправки на сервер:', userRequestList);
 
         try {
             const response = await fetch('http://localhost:8080/users/add', {
@@ -135,20 +112,13 @@ const RegistrationPage = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(userRequestList), // Отправка массива с данными пользователя
+                body: JSON.stringify(userRequestList),
             });
 
             if (response.ok) {
                 setRegistrationSuccess(true);
-                // Очистка формы после успешной регистрации
                 form.reset();
-                // Обновление списка пользователей
                 await fetchUsers();
-                // Логирование всех пользователей
-                console.log('Все пользователи после регистрации:', users);
-            } else {
-                const errorText = await response.text(); // Получите текст ответа для диагностики
-                console.error('Ошибка регистрации пользователя:', errorText);
             }
         } catch (error) {
             console.error('Ошибка регистрации пользователя:', error);
@@ -157,7 +127,6 @@ const RegistrationPage = () => {
 
     const handleMultipleRegistration = async () => {
         if (!file) {
-            console.error('Файл не выбран');
             return;
         }
 
@@ -169,14 +138,10 @@ const RegistrationPage = () => {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-            // Логирование данных из файла
-            console.log('Данные из файла:', jsonData);
-
             const userRequests = jsonData.slice(1).map(row => {
-                const [lastName, firstName, middleName, email, className] = row;
+                const [lastName, firstName, middleName, email] = row;
                 const educationalInstitution = educationalInstitutions.find(inst => inst.nameOfTheInstitution === selectedInstitution.nameOfTheInstitution);
                 if (!educationalInstitution) {
-                    console.error('Учебное заведение не найдено');
                     return null;
                 }
 
@@ -185,16 +150,13 @@ const RegistrationPage = () => {
                         surname: lastName,
                         name: firstName,
                         patronymic: middleName,
-                        role: { id: 3 }, // Роль по умолчанию
+                        role: { id: 3 },
                         email: email
                     },
                     educationalInstitution: educationalInstitution,
-                    studentClass: { id: parseInt(className, 10) }
+                    studentClass: { id: parseInt(selectedClass, 10) }
                 };
             }).filter(user => user !== null);
-
-            // Логирование данных перед отправкой на сервер
-            console.log('Данные для отправки на сервер:', userRequests);
 
             try {
                 const response = await fetch('http://localhost:8080/users/add', {
@@ -202,18 +164,12 @@ const RegistrationPage = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(userRequests), // Отправка массива с данными пользователя
+                    body: JSON.stringify(userRequests),
                 });
 
                 if (response.ok) {
                     setRegistrationSuccess(true);
-                    // Обновление списка пользователей
                     await fetchUsers();
-                    // Логирование всех пользователей
-                    console.log('Все пользователи после регистрации:', users);
-                } else {
-                    const errorText = await response.text(); // Получите текст ответа для диагностики
-                    console.error('Ошибка регистрации пользователей:', errorText);
                 }
             } catch (error) {
                 console.error('Ошибка регистрации пользователей:', error);
@@ -224,7 +180,7 @@ const RegistrationPage = () => {
 
     const handleDownloadTemplate = () => {
         const link = document.createElement('a');
-        link.href = '/Ученики.xlsx'; // Путь к файлу в папке public
+        link.href = '/Ученики.xlsx';
         link.download = 'Ученики.xlsx';
         link.click();
     };
@@ -235,7 +191,6 @@ const RegistrationPage = () => {
         setFileName(file.name);
     };
 
-    // Функция для проверки корректности email
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
@@ -248,7 +203,7 @@ const RegistrationPage = () => {
                 throw new Error('Ошибка получения данных о пользователях');
             }
             const data = await response.json();
-            console.log('Все пользователи:', data); // Логирование полученных данных
+            console.log('Все пользователи:', data);
             setUsers(data);
         } catch (error) {
             console.error('Ошибка получения данных о пользователях:', error);
@@ -281,7 +236,6 @@ const RegistrationPage = () => {
                                 placeholder="Место обучения"
                                 onChange={(e) => {
                                     const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
-                                    console.log('Выбранное учебное заведение:', institution); // Логирование выбранного учебного заведения
                                     setSelectedInstitution(institution);
                                 }}
                             >
@@ -320,13 +274,29 @@ const RegistrationPage = () => {
                                 placeholder="Место обучения"
                                 onChange={(e) => {
                                     const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
-                                    console.log('Выбранное учебное заведение:', institution); // Логирование выбранного учебного заведения
                                     setSelectedInstitution(institution);
                                 }}
                             >
                                 <option value="">Выберите место обучения</option>
                                 {educationalInstitutions.map(institution => (
                                     <option key={institution.id} value={institution.id}>{institution.nameOfTheInstitution}</option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId="formClass">
+                            <Form.Control
+                                as="select"
+                                name="class"
+                                placeholder="Класс"
+                                onChange={(e) => {
+                                    const selectedClassId = parseInt(e.target.value);
+                                    setSelectedClass(selectedClassId);
+                                }}
+                            >
+                                <option value="">Выберите класс</option>
+                                {classes.map(cls => (
+                                    <option key={cls.id} value={cls.id}>{cls.numberOfInstitution} {cls.letterDesignation}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
