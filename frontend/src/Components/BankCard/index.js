@@ -2,16 +2,19 @@ import React, {useState,useEffect} from 'react';
 import { Form, Button, Stack } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './style.css';
+import DisplayTestCard from "../DisplayTestCard";
+import DisplayTaskCard from "../DisplayTaskCard";
+import DisplaySubjectCard from "../DisplaySubjectCard";
 
-const BankCard = ({id,obj,isTest}) => {
-    const [questions, setQuestions] = useState([]);
-
+const BankCard = ({id,objectItem,type}) => {
+   // const [questions, setQuestions] = useState([]);
+    const [item, setItem] = useState();
 
     const handleSubmit = async (event) => {
        // event.preventDefault();
         try {
             console.log("удалить задание: "+id);
-            if(isTest){
+            if(type == "test"){
                 const response = await fetch('http://localhost:8080/test/delete', {
                     method: 'DELETE',
                     headers: {
@@ -24,7 +27,7 @@ const BankCard = ({id,obj,isTest}) => {
                     throw new Error("Ошибка удаления задания");
                 }
             }
-            else {
+            if(type == "task") {
                 const response = await fetch('http://localhost:8080/task/delete', {
                     method: 'DELETE',
                     headers: {
@@ -47,7 +50,14 @@ const BankCard = ({id,obj,isTest}) => {
 
     useEffect(() => {
         async function fetchQuestions() {
-            if(isTest) {
+            console.log(objectItem)
+           /* if(type=="test"){
+                setItem(<DisplayTestCard objectItem={objectItem}/>);
+            }
+            if(type=="task"){
+                setItem(<DisplayTaskCard objectItem={objectItem}/>);
+            }*/
+           /* if(isTest) {
                 try {
 
 
@@ -69,7 +79,7 @@ const BankCard = ({id,obj,isTest}) => {
                 } catch (error) {
                     console.error('Ошибка получения данных:', error);
                 }
-            }
+            }*/
         }
 
         fetchQuestions();
@@ -78,15 +88,27 @@ const BankCard = ({id,obj,isTest}) => {
         <div className="bankcard">
             <Stack direction="horizontal" gap={2}>
                 <Stack direction="vertical" gap={2}>
+                    {type=="test"?
+                        <DisplayTestCard objectItem={objectItem}/>:<></>}
+                    {type=="task"?
+                        <DisplayTaskCard objectItem={objectItem}/>:<></>}
+                    {type=="subject"?
+                        <DisplaySubjectCard objectItem={objectItem}/>:<></>}
                    {/*!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>*/}
-                   {isTest ? <p>Тест №{obj.id}</p>:<></>}
-                   {isTest ?
+
+
+
+                    {/*type=="test" ? <p>Тест №{obj.id}</p>:<></>*/}
+                   {/*type=="test" ?
                        <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>
                        :
-                       <h2>Задача №{obj.id}</h2>}
-                   {isTest ?
+                       <h2>Задача №{obj.id}</h2>*/}
+                   {/*type=="test" ?
                        <p>{obj.description}</p> :
-                       <p>{obj.taskText}</p>}
+                       <p>{obj.taskText}</p>*/}
+
+
+
                    {/*isTest?questions.map((item, index)=><BankCard key={index} id={index} obj={item} isTest={false} />):<></>*/}
                 </Stack>
 

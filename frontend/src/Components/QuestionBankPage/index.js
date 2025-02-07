@@ -94,9 +94,9 @@ const QuestionBankPage = ({isTests}) => {
 
                     </Modal.Body>
                 </Modal>
-                {isTests ? tests.map((item, index) => <BankCard key={index} id={item.id} obj={item}
-                                                                isTest={isTests}/>) : questions.map((item, index) =>
-                    <BankCard key={index} id={item.id} obj={item} isTest={isTests}/>)}
+                {isTests ? tests.map((item, index) => <BankCard key={index} id={item.id} objectItem={item}
+                                                                type={"test"}/>) : questions.map((item, index) =>
+                    <BankCard key={index} id={item.id} objectItem={item} type={"task"}/>)}
             </div>
             <Footer/>
         </div>

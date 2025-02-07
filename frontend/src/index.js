@@ -13,7 +13,8 @@ import ProfilePage from './Components/ProfilePage';
 import QuestionBankPage from './Components/QuestionBankPage';
 import PrivateRoutes from './utils/router/privateRoute';
 import Layout from './Components/Layout';
-import ResultsPage from "./Components/ResultsPage"; // Обновите путь к Layout
+import ResultsPage from "./Components/ResultsPage";
+import SubjectBankPage from "./Components/SubjectBankPage"; // Обновите путь к Layout
 
 const App = () => {
     return (
@@ -35,6 +36,7 @@ const App = () => {
                         <Route path="results" element={<ResultsPage />} />
                         <Route path="testbank" element={<QuestionBankPage  isTests={true} />} />
                         <Route path="taskbank" element={<QuestionBankPage  isTests={false}/>} />
+                        <Route path="itembank" element={<SubjectBankPage/>} />
                     </Route>
                 </Route>
             </Routes>
