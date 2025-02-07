@@ -18,6 +18,8 @@ const ViewTestResultsPage = (props) => {
     const [text, setText] = useState("");
     const [score, setScore] = useState(0);
     const [countOfQuestions, setCountOfQuestions] = useState(0);
+    const [currentPassingScore, setCurrentPassingScore] = useState(60);
+
     console.log(answers);
 
     const navigate = useNavigate();
@@ -43,6 +45,7 @@ const ViewTestResultsPage = (props) => {
                 }
                 const test = await response.json();
                 setText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
+                //setCurrentPassingScore(test.passingScore); // проходной балл теста
                 const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
                     method: 'POST',
                     headers: {
@@ -103,7 +106,7 @@ const ViewTestResultsPage = (props) => {
                             </tr>
                             <tr>
                                 <td>Оценка:</td>
-                                <td> {score >= 60 ? "Зачтено" : "Не зачтено"}</td>
+                                <td> {score >= 60/*currentPassingScore*/ ? "Зачтено" : "Не зачтено"}</td>
                             </tr>
                             </tbody>
                         </Table>

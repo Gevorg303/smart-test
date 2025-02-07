@@ -6,12 +6,12 @@ import Navbar from "../Navbar";
 import './styles.css'; // Импорт CSS файла
 
 const StartTestPage = () => {
-    const [testName, setTestName] = useState("Тема: Тип теста");
-    const [testDescription, setTestDescription] = useState("Описание теста");
-    const [testTryCount, setTestTryCount] = useState(2);
-    const [testDateStart, setTestDateStart] = useState("пятница, 15 декабря 2000, 00:00");
-    const [testDateEnd, setTestDateEnd] = useState("четверг, 25 декабря 2000, 11:00");
-    const [testTime, setTestTime] = useState("30 мин.");
+    const [testName, setTestName] = useState("");
+    const [testDescription, setTestDescription] = useState("");
+    const [testTryCount, setTestTryCount] = useState(0);
+    const [testDateStart, setTestDateStart] = useState("");
+    const [testDateEnd, setTestDateEnd] = useState("");
+    const [testTime, setTestTime] = useState("");
 
     useEffect(() => {
         function getCookie(name) {
@@ -48,6 +48,7 @@ const StartTestPage = () => {
 
     let navigate = useNavigate();
     function StartTest() {
+
         navigate("/test");
     }
 

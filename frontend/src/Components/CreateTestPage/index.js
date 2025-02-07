@@ -20,6 +20,7 @@ const CreateTestPage = () => {
     const [currentTasks , setCurrentTasks] = useState([]);
     const [countOfTry, setCountOfTry] = useState(1);
     const [currentTheme, setCurrentTheme] = useState(-1);
+    const [currentPassingScore, setCurrentPassingScore] = useState(60); // прохоной балл
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -72,6 +73,7 @@ const CreateTestPage = () => {
                             openingDateAndTime : timeStart,
                             passageTime : passingTime+":00",
                             testPassword : currentPassword,
+                           // passingScore: currentPassingScore,
                             theme:{
                                 id: theme
                             },
@@ -190,6 +192,26 @@ const CreateTestPage = () => {
                         else if (re.test(e.target.value)) {
                                 setCountOfTry(parseInt(e.target.value));
                                 console.log(parseInt(e.target.value))
+                        }
+
+                    }}/>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Проходной балл %</Form.Label>
+                    <Form.Control value={currentPassingScore} onChange={(e) => {
+                        const re = /^[0-9\b]+$/;
+                        if(e.target.value === '' || e.target.value === '0') {
+                            setCurrentPassingScore(1);
+                        }
+                        else if (re.test(e.target.value)) {
+                            if(parseInt(e.target.value) > 100){
+                                setCurrentPassingScore(100);
+                            }
+                            else
+                            {
+                                setCurrentPassingScore(parseInt(e.target.value));
+                                console.log(parseInt(e.target.value))
+                            }
                         }
 
                     }}/>
