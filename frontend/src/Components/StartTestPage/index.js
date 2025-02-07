@@ -48,8 +48,18 @@ const StartTestPage = () => {
 
     let navigate = useNavigate();
     function StartTest() {
-
-        navigate("/test");
+       console.log(testDateStart);
+       if(Date.parse(testDateStart)<=Date.now()){
+           if(Date.parse(testDateEnd) >= Date.now()){
+               navigate("/test");
+           }
+           else{
+               console.log("Тест больше не доступен для прохождения!")
+           }
+       }
+       else {
+            console.log("Тест еще не начался!")
+       }
     }
 
     return (
