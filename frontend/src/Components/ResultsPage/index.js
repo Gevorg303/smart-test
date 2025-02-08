@@ -30,7 +30,6 @@ const ResultsPage = ({ userId }) => {
 
     return (
         <div className="page-container">
-            <Navbar IsTeacher={true}/>
 
             <div className="result-container">
                 <h1 className="result-title">Итоги</h1>

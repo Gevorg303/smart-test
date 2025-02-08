@@ -6,7 +6,7 @@ import './styles.css';
 import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
 
 const Navbar = ({IsTeacher}) => {
-    return (!IsTeacher?
+    return (IsTeacher?
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="custom-navbar">
         <Container fluid>
             <BootstrapNavbar.Brand as={Link} to="/home" className="navbar-logo">
@@ -49,8 +49,31 @@ const Navbar = ({IsTeacher}) => {
         </Container>
     </BootstrapNavbar>
         :
-<BootstrapNavbar>
-
+<BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="custom-navbar">
+    <Container fluid>
+        <BootstrapNavbar.Brand as={Link} to="/home" className="navbar-logo">
+            <img
+                src={Full_logo} // Используем импортированное изображение
+                width="40"
+                height="40"
+                className="d-inline-block align-top"
+                alt="Logo"
+            />
+        </BootstrapNavbar.Brand>
+        <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav"/>
+        <BootstrapNavbar.Collapse id="basic-navbar-nav" className="justify-content-between">
+            <Nav className="navbar-links">
+                <Nav.Link as={Link} to="/home" className="navbar-link">Предметы</Nav.Link>
+                <Nav.Link as={Link} to="/results" className="navbar-link">Итоги</Nav.Link>
+            </Nav>
+            <Nav className="navbar-links right">
+                <Nav.Link className="navbar-link">
+                    ?
+                </Nav.Link>
+                <Nav.Link as={Link} to="/profile" className="navbar-link">Личный кабинет</Nav.Link>
+            </Nav>
+        </BootstrapNavbar.Collapse>
+    </Container>
 </BootstrapNavbar>
 );
 };
