@@ -14,7 +14,6 @@ import QuestionBankPage from './Components/QuestionBankPage';
 import PrivateRoutes from './utils/router/privateRoute';
 import Layout from './Components/Layout';
 import ResultsPage from "./Components/ResultsPage";
-import SubjectBankPage from "./Components/SubjectBankPage"; // Обновите путь к Layout
 
 const App = () => {
     return (
