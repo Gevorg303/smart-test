@@ -34,9 +34,9 @@ const App = () => {
                         <Route path="theme" element={<ThemePage />} />
                         <Route path="profile" element={<ProfilePage />} />
                         <Route path="results" element={<ResultsPage />} />
-                        <Route path="testbank" element={<QuestionBankPage  isTests={true} />} />
-                        <Route path="taskbank" element={<QuestionBankPage  isTests={false}/>} />
-                        <Route path="itembank" element={<SubjectBankPage/>} />
+                        <Route path="testbank" element={<QuestionBankPage  type={"test"} />} />
+                        <Route path="taskbank" element={<QuestionBankPage  type={"task"}/>} />
+                        <Route path="itembank" element={<QuestionBankPage  type={"subject"}/>} />
                     </Route>
                 </Route>
             </Routes>

@@ -10,10 +10,11 @@ import CreateQuestionPage from "../CreateQuestionPage";
 import CreateTestPage from "../CreateTestPage";
 
 
-const QuestionBankPage = ({isTests}) => {
+const QuestionBankPage = ({type}) => {
   //  const [isTests, setIsTests] = useState(isTest);
-    const [tests, setTests] = useState([]);
-    const [questions, setQuestions] = useState([]);
+    const [bankItems, setBankItems] = useState([]);
+    const [title, setTitle] = useState();
+    const [createModal, setCreateModal] = useState();
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const navigate = useNavigate();
@@ -31,33 +32,62 @@ const QuestionBankPage = ({isTests}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/test/get-user-tests', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify(user)
-                });
-                if (!response2.ok) {
-                    throw new Error('Ошибка получения теста');
-                }
-                const tests = await response2.json();
-                console.log(tests)
-                setTests(tests)
+                if(type === "test") {// заполнение тестов из бд
 
-                const response3 = await fetch('http://localhost:8080/task/get-user-tasks', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify(user)
-                });
-                if (!response3.ok) {
-                    throw new Error('Ошибка получения заданий');
+                    setTitle("Банк тестов");// задать заголовок на странице
+                    setCreateModal(<CreateTestPage/>); // задать модальное окно для создания на странице
+
+                    const response2 = await fetch('http://localhost:8080/test/get-user-tests', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(user)
+                    });
+                    if (!response2.ok) {
+                        throw new Error('Ошибка получения теста');
+                    }
+                    const tests = await response2.json();
+                    console.log(tests)
+                    setBankItems(tests)
                 }
-                const questions = await response3.json();
-                console.log(questions)
-                setQuestions(questions)
+                if(type === "task") {// заполнение заданий из бд
+
+                    setTitle("Банк заданий"); // задать заголовок на странице
+                    setCreateModal(<CreateQuestionPage/>);// задать модальное окно для создания на странице
+
+                    const response3 = await fetch('http://localhost:8080/task/get-user-tasks', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(user)
+                    });
+                    if (!response3.ok) {
+                        throw new Error('Ошибка получения заданий');
+                    }
+                    const questions = await response3.json();
+                    console.log(questions)
+                    setBankItems(questions)
+                }
+
+                if(type === "subject") { // заполнение предметов из бд
+
+                    setTitle("Банк предметов"); // задать заголовок на странице
+
+                    const response4 = await fetch('http://localhost:8080/subject/'+user.login, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    });
+                    if (!response4.ok) {
+                        throw new Error('Ошибка получения предметов');
+                    }
+                    const subjects = await response4.json();
+                    console.log(subjects)
+                    setBankItems(subjects)
+                }
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -65,13 +95,13 @@ const QuestionBankPage = ({isTests}) => {
         }
 
         fetchTests();
-    }, []);
+    }, [type]);
     /* className="page-container-quest"*/
     return (
         <div>
-            <Navbar/>
+
             <br/><br/><br/>
-            <h1>{isTests ? "Тесты" : "Задания"}</h1>
+            <h1>{/*isTests ? "Тесты" : "Задания"*/title}</h1>
             <div className="page-container-quest">
 
 
@@ -90,13 +120,14 @@ const QuestionBankPage = ({isTests}) => {
                     </Modal.Header>
                     <Modal.Body>
 
-                        {showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>}
+                        {createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
 
                     </Modal.Body>
                 </Modal>
-                {isTests ? tests.map((item, index) => <BankCard key={index} id={item.id} objectItem={item}
-                                                                type={"test"}/>) : questions.map((item, index) =>
-                    <BankCard key={index} id={item.id} objectItem={item} type={"task"}/>)}
+
+                {bankItems.map((item, index) => <BankCard key={index} id={item.id} objectItem={item} type={type}/>)}
+
+
             </div>
             <Footer/>
         </div>

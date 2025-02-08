@@ -10,11 +10,12 @@ const BankCard = ({id,objectItem,type}) => {
    // const [questions, setQuestions] = useState([]);
     const [item, setItem] = useState();
 
+
     const handleSubmit = async (event) => {
        // event.preventDefault();
         try {
             console.log("удалить задание: "+id);
-            if(type == "test"){
+            if(type === "test"){
                 const response = await fetch('http://localhost:8080/test/delete', {
                     method: 'DELETE',
                     headers: {
@@ -27,7 +28,7 @@ const BankCard = ({id,objectItem,type}) => {
                     throw new Error("Ошибка удаления задания");
                 }
             }
-            if(type == "task") {
+            if(type === "task") {
                 const response = await fetch('http://localhost:8080/task/delete', {
                     method: 'DELETE',
                     headers: {
@@ -51,6 +52,12 @@ const BankCard = ({id,objectItem,type}) => {
     useEffect(() => {
         async function fetchQuestions() {
             console.log(objectItem)
+            if(type==="test")
+                setItem(<DisplayTestCard objectItem={objectItem}/>)
+            if(type==="task")
+                setItem( <DisplayTaskCard objectItem={objectItem}/>)
+            if(type==="subject")
+                setItem( <DisplaySubjectCard objectItem={objectItem}/>)
            /* if(type=="test"){
                 setItem(<DisplayTestCard objectItem={objectItem}/>);
             }
@@ -83,17 +90,12 @@ const BankCard = ({id,objectItem,type}) => {
         }
 
         fetchQuestions();
-    }, []);
+    }, [objectItem]);
     return (
         <div className="bankcard">
             <Stack direction="horizontal" gap={2}>
                 <Stack direction="vertical" gap={2}>
-                    {type=="test"?
-                        <DisplayTestCard objectItem={objectItem}/>:<></>}
-                    {type=="task"?
-                        <DisplayTaskCard objectItem={objectItem}/>:<></>}
-                    {type=="subject"?
-                        <DisplaySubjectCard objectItem={objectItem}/>:<></>}
+                    {item}
                    {/*!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>*/}
 
 
@@ -114,7 +116,7 @@ const BankCard = ({id,objectItem,type}) => {
 
                 <Stack direction="vertical" gap={2}>
                     <Button className={"bankbutton"} variant="danger" onClick={() => (handleSubmit())}><i className="bi bi-trash-fill"></i> {/*Удалить*/} </Button>
-                    <Button className={"bankbutton"} variant="warning"> <i class="bi bi-pencil-fill"></i>{/*Редактировать*/}</Button>
+                    <Button className={"bankbutton"} variant="warning"> <i className="bi bi-pencil-fill"></i>{/*Редактировать*/}</Button>
                 </Stack>
             </Stack>
 
