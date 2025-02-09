@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TestResults {
+public class TaskResults {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "идентификатор_результатов_задани")
@@ -21,4 +21,13 @@ public class TestResults {
     private Task task;
     @Column(name = "результат_пройденного_задания")
     private boolean resultOfTheIndicator;
+    @ManyToOne
+    @JoinColumn(name = "идентификатор_попытка_тестирован")
+    private TestingAttempt testingAttempt;
+
+    public TaskResults(Task task, boolean resultOfTheIndicator, TestingAttempt testingAttempt) {
+        this.task = task;
+        this.resultOfTheIndicator = resultOfTheIndicator;
+        this.testingAttempt = testingAttempt;
+    }
 }

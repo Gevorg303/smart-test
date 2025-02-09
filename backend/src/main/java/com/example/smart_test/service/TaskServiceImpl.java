@@ -187,7 +187,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
     public void addTaskToTest(Long testId, Long taskId) {
         try {
             Test test = testMapperInterface.toEntity(testService.getTestById(testId));
-            Task task = taskMapperInterface.toEntity(getTaskById(taskId));
+            Task task = getTaskById(taskId);
             task.setTest(test);
             taskRepositoryInterface.save(task);
         } catch (Exception e) {
@@ -202,7 +202,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
     @Transactional
     public void removeTaskFromTest(TaskDto taskDto) {
         try {
-            Task task = taskMapperInterface.toEntity(getTaskById(taskDto.getId()));
+            Task task = getTaskById(taskDto.getId());
             task.setTest(null);
             taskRepositoryInterface.save(task);
         } catch (Exception e) {
@@ -238,11 +238,10 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
     @Override
     @Transactional
-    public TaskDto getTaskById(Long id) {
+    public Task getTaskById(Long id) {
         try {
-            Task task = taskRepositoryInterface.findById(id)
+            return taskRepositoryInterface.findById(id)
                     .orElseThrow(() -> new RuntimeException("Задание не найдено"));
-            return taskMapperInterface.toDto(task);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при получении задания: " + e.getMessage(), e);
         }

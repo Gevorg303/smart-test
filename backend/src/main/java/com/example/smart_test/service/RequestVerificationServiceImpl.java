@@ -1,6 +1,7 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.ResponseOption;
+import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.dto.TaskDto;
@@ -24,22 +25,22 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
     public List<RequestForTask> checkingResponse(List<RequestForTask> RequestForTaskList) {
         List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getAllResponseOptions();
 
-        Map<Long, TaskDto> taskCache = RequestForTaskList.stream()
+        Map<Long, Task> taskCache = RequestForTaskList.stream()
                 .map(RequestForTask::getTask)
                 .map(task -> taskServiceInterface.getTaskById(task.getId()))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toMap(TaskDto::getId, dto -> dto));
+                .collect(Collectors.toMap(Task::getId, dto -> dto));
 
         return RequestForTaskList.stream()
                 .map(RequestForTask -> {
-                    TaskDto taskDto = taskCache.get(RequestForTask.getTask().getId());
-                    boolean isCorrect = taskDto != null && responseOptionDtoList.stream().anyMatch(option ->
-                            Objects.equals(taskDto.getId(), option.getTask().getId()) &&
+                    Task task = taskCache.get(RequestForTask.getTask().getId());
+                    boolean isCorrect = task != null && responseOptionDtoList.stream().anyMatch(option ->
+                            Objects.equals(task.getId(), option.getTask().getId()) &&
                                     Objects.equals(option.getResponse(), RequestForTask.getResponse())
                     );
 
                     return new RequestForTask(
-                            taskDto,
+                            task,
                             RequestForTask.getResponse(),
                             isCorrect
                     );
