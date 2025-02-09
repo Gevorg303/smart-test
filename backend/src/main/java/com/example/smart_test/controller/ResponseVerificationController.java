@@ -19,8 +19,8 @@ public class ResponseVerificationController {
      Выводит обект содержащий задание, веденый пользователем ответ, статус (верно/неверно)
      */
     @PostMapping("/result-test")
-    public ResponseEntity<List<RequestForTask>> checkingResponse(@RequestBody @Valid List<RequestForTask> RequestForTaskList) {
-        List<RequestForTask> result = requestVerificationService.checkingResponse(RequestForTaskList);
+    public ResponseEntity<List<RequestForTask>> checkingResponse(@RequestBody @Valid List<RequestForTask> requestForTaskList) {
+        List<RequestForTask> result = requestVerificationService.checkingResponse(requestForTaskList);
         if (result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

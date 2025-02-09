@@ -21,23 +21,26 @@ public class TestingAttempt {
     private Long id;
 
     @NotNull
-    @Column(name = "\"дата_и_время_начала_попытки\"", nullable = false)
+    @Column(name = "дата_и_время_начала_попытки", nullable = false)
     private Instant startDateTime;
 
     @NotNull
-    @Column(name = "\"длительность_прохождения_попытки\"", nullable = false)
+    @Column(name = "длительность_прохождения_попытки", nullable = false)
     private LocalTime attemptDuration;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "\"идентификатор_тест\"", nullable = false)
+    @JoinColumn(name = "идентификатор_тест", nullable = false)
     private Test test;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "\"идентификатор_пользователь\"")
+    @JoinColumn(name = "идентификатор_пользователь")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "\"идентификатор_результат_задания\"")
-    private TestResults taskResult;
+    public TestingAttempt(Instant startDateTime, LocalTime attemptDuration, Test test, User user) {
+        this.startDateTime = startDateTime;
+        this.attemptDuration = attemptDuration;
+        this.test = test;
+        this.user = user;
+    }
 }

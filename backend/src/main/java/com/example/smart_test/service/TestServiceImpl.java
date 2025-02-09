@@ -1,14 +1,16 @@
 package com.example.smart_test.service;
 
-import com.example.smart_test.domain.Task;
-import com.example.smart_test.domain.Test;
+import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
+import com.example.smart_test.request.EndTestingRequest;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,13 @@ public class TestServiceImpl implements TestServiceInterface {
     @Autowired
     @Lazy
     private TaskServiceInterface taskService;
+    @Lazy
+    @Autowired
+    private RequestVerificationServiceInterface requestVerificationService;
+    @Autowired
+    private TaskResultsServiceInterface taskResultsService;
+    @Autowired
+    private TestingAttemptServiceInterface testingAttemptService;
 
     @Override
     @Transactional
@@ -116,5 +125,24 @@ public class TestServiceImpl implements TestServiceInterface {
                         )
                 )
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<RequestForTask> endTesting(EndTestingRequest endTestingRequest) {
+        TestingAttempt testingAttempt = testingAttemptService.addTestingAttempt(
+                new TestingAttempt(
+                        endTestingRequest.getStartDateTime(),
+                        endTestingRequest.getAttemptDuration(),
+                        endTestingRequest.getTest(),
+                        endTestingRequest.getUser()
+                )
+        );
+        List<RequestForTask> forTaskList = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
+        for (RequestForTask requestForTask : forTaskList) {
+            taskResultsService.addTaskResults(requestForTask.getTask(), requestForTask.isStatus(), testingAttempt);
+        }
+
+        return forTaskList;
     }
 }

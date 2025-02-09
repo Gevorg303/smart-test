@@ -4,6 +4,10 @@ import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.EndTestingRequest;
+import com.example.smart_test.request.RequestForTask;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -20,4 +24,6 @@ public interface TestServiceInterface {
     List<TestDto> outputTestsByIDTheme(ThemeDto themeDto);
 
     List<TestDto> getUserTests(UserDto userDto);
+
+    List<RequestForTask> endTesting(EndTestingRequest endTestingRequest);
 }

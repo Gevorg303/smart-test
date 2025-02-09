@@ -1,10 +1,10 @@
 package com.example.smart_test.mapper.api;
 
-import com.example.smart_test.domain.TestResults;
+import com.example.smart_test.domain.TaskResults;
 import com.example.smart_test.dto.TestResultsDto;
 
 public interface TestResultsMapperInterface {
-    public TestResultsDto toDto(TestResults entity);
+    public TestResultsDto toDto(TaskResults entity);
 
-    public TestResults toEntity(TestResultsDto dto);
+    public TaskResults toEntity(TestResultsDto dto);
 }

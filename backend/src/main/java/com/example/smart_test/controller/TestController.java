@@ -5,6 +5,8 @@ import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.EndTestingRequest;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.request.TestRequest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
@@ -85,4 +87,13 @@ public class TestController {
     public List<TestDto> outputTestsByIDTheme(@RequestBody ThemeDto themeDto) {
         return testService.outputTestsByIDTheme(themeDto);
     }
+
+    /**
+     * завершение тестирования
+     */
+    @PostMapping("/end-testing")
+    public List<RequestForTask> endTesting(@RequestBody EndTestingRequest endTestingRequest){
+        return testService.endTesting(endTestingRequest);
+    }
+
 }
