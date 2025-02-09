@@ -5,12 +5,14 @@ import { Pagination, Button } from 'react-bootstrap';
 import './styles.css';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import TestTimer from "../TestTimer";
 
 const TestPage = () => {
     let navigate = useNavigate();
     const [active, setActive] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [questions, setQuestions] = useState([]);
+    const [startTimer, setStartTimer] = useState(false);
 
     async function TestEnd() {
         let sendData = [];
@@ -60,6 +62,7 @@ const TestPage = () => {
                 }
                 const test = await response.json();
                 console.log(test)
+                console.log(Date(test.passageTime).toString());
 
                 const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
                     method: 'POST',
@@ -85,10 +88,9 @@ const TestPage = () => {
     console.log(answers)
     return (
         <div className="page-container">
-            <Navbar />
             <div className="content-wrapper">
                 <h1>Контрольный тест</h1>
-
+                <TestTimer durationMin={1} durationSec={30} functionOnEnd={TestEnd} start={startTimer}/>
                     <Question id={active} name={questions[active]?.taskName || ""}
                               description={questions[active]?.taskText || ""} answers={answers}
                               setAnswers={setAnswers}
