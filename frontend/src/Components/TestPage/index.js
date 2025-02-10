@@ -12,7 +12,9 @@ const TestPage = () => {
     const [active, setActive] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [questions, setQuestions] = useState([]);
-    const [startTimer, setStartTimer] = useState(false);
+
+    const [timer, setTimer] = useState();
+
 
     async function TestEnd() {
         let sendData = [];
@@ -62,7 +64,9 @@ const TestPage = () => {
                 }
                 const test = await response.json();
                 console.log(test)
-                console.log(Date(test.passageTime).toString());
+                const passTime = test.passageTime.split(':');
+                console.log(passTime);
+                setTimer(<TestTimer durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])} functionOnEnd={TestEnd} start={true}/>)
 
                 const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
                     method: 'POST',
@@ -90,7 +94,7 @@ const TestPage = () => {
         <div className="page-container">
             <div className="content-wrapper">
                 <h1>Контрольный тест</h1>
-                <TestTimer durationMin={1} durationSec={30} functionOnEnd={TestEnd} start={startTimer}/>
+                {timer}
                     <Question id={active} name={questions[active]?.taskName || ""}
                               description={questions[active]?.taskText || ""} answers={answers}
                               setAnswers={setAnswers}

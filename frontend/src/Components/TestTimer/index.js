@@ -15,8 +15,8 @@ const TestTimer = ({durationMin,durationSec,start,functionOnEnd}) => {
     }, [time,start]);
     function TimeString(){
         let sec = time % 60;
-        let min = (Math.floor(parseInt(time)/60)).toString() ;
-        return  min + ":"+sec
+        let min = Math.floor(parseInt(time)/60) ;
+        return  (min < 10?"0"+min:min) + ":"+(sec<10?"0"+sec:sec);
     }
     return (
         <>
