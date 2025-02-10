@@ -16,6 +16,9 @@ const RegistrationPage = () => {
     const [users, setUsers] = useState([]);
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showErrorToast, setShowErrorToast] = useState(false);
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     useEffect(() => {
         async function fetchEducationalInstitutions() {
@@ -38,6 +41,9 @@ const RegistrationPage = () => {
     useEffect(() => {
         if (selectedInstitution) {
             fetchClassesByInstitution(selectedInstitution);
+        } else {
+            setClasses([]);
+            setSelectedClass(null);
         }
     }, [selectedInstitution]);
 
@@ -66,6 +72,9 @@ const RegistrationPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setErrorMessage('');
+        setShowErrorToast(false);
+        setShowSuccessToast(false);
         if (selectedOption === 'single') {
             await handleSingleRegistration(event);
         } else if (selectedOption === 'multiple' && file) {
@@ -78,19 +87,40 @@ const RegistrationPage = () => {
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        if (!data.lastName || !data.firstName || !data.middleName || !data.education || !data.class || !data.email) {
+        const errors = [];
+
+        if (!data.lastName) {
+            errors.push('Фамилия');
+        }
+        if (!data.firstName) {
+            errors.push('Имя');
+        }
+        if (!data.middleName) {
+            errors.push('Отчество');
+        }
+        if (!data.education) {
+            errors.push('Место обучения');
+        }
+        if (!data.class) {
+            errors.push('Класс');
+        }
+        if (!data.email || !isValidEmail(data.email)) {
+            errors.push('Эл. почта');
+        }
+
+        if (errors.length > 0) {
+            setErrorMessage(`Заполнено некорректно: ${errors.join(', ')}`);
+            setShowErrorToast(true);
             return;
         }
 
         const educationalInstitution = educationalInstitutions.find(inst => inst.id === parseInt(data.education));
         if (!educationalInstitution) {
+            setErrorMessage('Место обучения не найдено');
+            setShowErrorToast(true);
             return;
         }
         data.educationalInstitution = educationalInstitution;
-
-        if (!isValidEmail(data.email)) {
-            return;
-        }
 
         const userRequest = {
             user: {
@@ -106,6 +136,14 @@ const RegistrationPage = () => {
 
         const userRequestList = [userRequest];
 
+        // Check if the email is already registered
+        const isEmailRegistered = users.some(user => user.email === data.email);
+        if (isEmailRegistered) {
+            setErrorMessage('Пользователь с такой почтой уже зарегистрирован');
+            setShowErrorToast(true);
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:8080/users/add', {
                 method: 'POST',
@@ -116,8 +154,9 @@ const RegistrationPage = () => {
             });
 
             if (response.ok) {
-                setRegistrationSuccess(true);
+                setShowSuccessToast(true);
                 form.reset();
+                setSelectedClass(null); // Clear selected class
                 await fetchUsers();
             }
         } catch (error) {
@@ -127,6 +166,8 @@ const RegistrationPage = () => {
 
     const handleMultipleRegistration = async () => {
         if (!file) {
+            setErrorMessage('Файл не выбран');
+            setShowErrorToast(true);
             return;
         }
 
@@ -145,6 +186,34 @@ const RegistrationPage = () => {
                     return null;
                 }
 
+                const errors = [];
+                if (!lastName) {
+                    errors.push('Фамилия');
+                }
+                if (!firstName) {
+                    errors.push('Имя');
+                }
+                if (!middleName) {
+                    errors.push('Отчество');
+                }
+                if (!email || !isValidEmail(email)) {
+                    errors.push('Эл. почта');
+                }
+
+                if (errors.length > 0) {
+                    setErrorMessage(`Заполнено некорректно: ${errors.join(', ')}`);
+                    setShowErrorToast(true);
+                    return null;
+                }
+
+                // Check if the email is already registered
+                const isEmailRegistered = users.some(user => user.email === email);
+                if (isEmailRegistered) {
+                    setErrorMessage(`Пользователь с почтой ${email} уже зарегистрирован`);
+                    setShowErrorToast(true);
+                    return null;
+                }
+
                 return {
                     user: {
                         surname: lastName,
@@ -158,6 +227,12 @@ const RegistrationPage = () => {
                 };
             }).filter(user => user !== null);
 
+            if (userRequests.length === 0) {
+                setErrorMessage('Все строки в файле заполнены некорректно');
+                setShowErrorToast(true);
+                return;
+            }
+
             try {
                 const response = await fetch('http://localhost:8080/users/add', {
                     method: 'POST',
@@ -168,7 +243,8 @@ const RegistrationPage = () => {
                 });
 
                 if (response.ok) {
-                    setRegistrationSuccess(true);
+                    setShowSuccessToast(true);
+                    setSelectedClass(null); // Clear selected class
                     await fetchUsers();
                 }
             } catch (error) {
@@ -237,6 +313,7 @@ const RegistrationPage = () => {
                                 onChange={(e) => {
                                     const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
                                     setSelectedInstitution(institution);
+                                    setSelectedClass(null); // Clear selected class
                                 }}
                             >
                                 <option value="">Выберите место обучения</option>
@@ -247,7 +324,7 @@ const RegistrationPage = () => {
                         </Form.Group>
 
                         <Form.Group controlId="formClass">
-                            <Form.Control as="select" name="class" placeholder="Класс">
+                            <Form.Control as="select" name="class" placeholder="Класс" value={selectedClass || ''} onChange={(e) => setSelectedClass(e.target.value)}>
                                 <option value="">Выберите класс</option>
                                 {classes.map(cls => (
                                     <option key={cls.id} value={cls.id}>{cls.numberOfInstitution} {cls.letterDesignation}</option>
@@ -275,6 +352,7 @@ const RegistrationPage = () => {
                                 onChange={(e) => {
                                     const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
                                     setSelectedInstitution(institution);
+                                    setSelectedClass(null); // Clear selected class
                                 }}
                             >
                                 <option value="">Выберите место обучения</option>
@@ -289,10 +367,8 @@ const RegistrationPage = () => {
                                 as="select"
                                 name="class"
                                 placeholder="Класс"
-                                onChange={(e) => {
-                                    const selectedClassId = parseInt(e.target.value);
-                                    setSelectedClass(selectedClassId);
-                                }}
+                                value={selectedClass || ''}
+                                onChange={(e) => setSelectedClass(e.target.value)}
                             >
                                 <option value="">Выберите класс</option>
                                 {classes.map(cls => (
@@ -317,23 +393,49 @@ const RegistrationPage = () => {
                     </Form>
                 )}
 
-                {registrationSuccess && (
+                {showSuccessToast && (
                     <Toast
-                        onClose={() => setRegistrationSuccess(false)}
-                        show={registrationSuccess}
-                        delay={3000}
-                        autohide
+                        onClose={() => setShowSuccessToast(false)}
+                        show={showSuccessToast}
                         style={{
                             position: 'fixed',
                             bottom: '20px',
                             right: '20px',
                             zIndex: 1000,
+                            backgroundColor: 'green',
+                            color: 'white'
                         }}
                     >
-                        <Toast.Header>
+                        <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Успешно</strong>
+                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
+                                &times;
+                            </Button>
                         </Toast.Header>
                         <Toast.Body>Вы успешно зарегистрировали пользователя</Toast.Body>
+                    </Toast>
+                )}
+
+                {showErrorToast && (
+                    <Toast
+                        onClose={() => setShowErrorToast(false)}
+                        show={showErrorToast}
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: 1000,
+                            backgroundColor: 'red',
+                            color: 'white'
+                        }}
+                    >
+                        <Toast.Header closeButton={false}>
+                            <strong className="mr-auto">Ошибка</strong>
+                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
+                                &times;
+                            </Button>
+                        </Toast.Header>
+                        <Toast.Body>{errorMessage}</Toast.Body>
                     </Toast>
                 )}
             </div>
