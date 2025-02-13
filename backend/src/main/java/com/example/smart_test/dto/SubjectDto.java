@@ -8,5 +8,4 @@ public class SubjectDto {
     private Long id;
     private String subjectName;
     private String description;
-    private UserClass teacherClass;
 }
