@@ -13,18 +13,18 @@ public class SubjectUserController {
     @Autowired
     private SubjectUserServiceInterface subjectService;
 
-    @PostMapping("/add")
-    public SubjectUserDto addSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
-        return subjectService.addSubjectTeacherDto(subjectDto);
-    }
-
-    @DeleteMapping("/delete")
-    public void deleteSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
-        subjectService.deleteSubjectTeacherDto(subjectDto);
-    }
-
-    @GetMapping("/all")
-    public List<SubjectUserDto> getSubjectTeacherDto() {
-        return subjectService.getAllSubjectTeachers();
-    }
+//    @PostMapping("/add")
+//    public SubjectUserDto addSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
+//        return subjectService.addSubjectTeacherDto(subjectDto);
+//    }
+//
+//    @DeleteMapping("/delete")
+//    public void deleteSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
+//        subjectService.deleteSubjectUserDto(subjectDto);
+//    }
+//
+//    @GetMapping("/all")
+//    public List<SubjectUserDto> getSubjectTeacherDto() {
+//        return subjectService.getAllSubjectTeachers();
+//    }
 }

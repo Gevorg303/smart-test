@@ -2,8 +2,11 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.SubjectUser;
+import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.mapper.api.SubjectUserMapperInterface;
+import com.example.smart_test.repository.SubjectRepositoryInterface;
 import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,8 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     private SubjectUserRepositoryInterface subjectUserRepositoryInterface;
     @Autowired
     private SubjectUserMapperInterface subjectUserMapperInterface;
+    @Autowired
+    private SubjectRepositoryInterface subjectRepository;
 
     @Override
     public SubjectUserDto addSubjectTeacherDto(SubjectUserDto dto) {
@@ -32,18 +37,13 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
             subjectTeacher = subjectUserRepositoryInterface.save(subjectTeacher);
             return subjectUserMapperInterface.toDto(subjectTeacher);
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при добавлении индикатора: " + e.getMessage(), e);
+            throw new RuntimeException("Ошибка при добавлении связи 'Полльзователь_предмет': " + e.getMessage(), e);
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteSubjectTeacherDto(SubjectUserDto dto) {
-        if (findSubjectTeacherById(dto.getId())) {
-            SubjectUser subjectTeacher = subjectUserMapperInterface.toEntity(dto);
-            subjectUserRepositoryInterface.delete(subjectTeacher);
-        } else {
-            log.error("Индикатор с идентификатором " + dto.getId() + " не существует");
-        }
+    public void deleteSubjectUserDto(SubjectDto dto) {
+        subjectUserRepositoryInterface.deleteBySubjectId(dto.getId());
     }
 
     @Override
@@ -55,11 +55,17 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
                     .map(subjectUserMapperInterface::toDto)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при получении всех индикаторов: " + e.getMessage(), e);
+            throw new RuntimeException("Ошибка при получении всех связей 'Полльзователь_предмет': " + e.getMessage(), e);
         }
     }
 
-    private boolean findSubjectTeacherById(Long id) {
+    @Transactional
+    @Override
+    public List<SubjectUser> findByUserId(User user){
+        return subjectUserRepositoryInterface.findByUserId(user.getId());
+    }
+
+    private boolean findSubjectUserById(Long id) {
         Optional<SubjectUser> subjectTeacher = subjectUserRepositoryInterface.findById(id);
         return subjectTeacher.isPresent();
     }

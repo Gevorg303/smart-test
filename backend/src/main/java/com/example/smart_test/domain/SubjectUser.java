@@ -21,5 +21,10 @@ public class SubjectUser {
     @ManyToOne
     @JoinColumn(name = "идентификатор_пользователя")
     private User user;
+
+    public SubjectUser(Subject subject, User user) {
+        this.subject = subject;
+        this.user = user;
+    }
 }
 

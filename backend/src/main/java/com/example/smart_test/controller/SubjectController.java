@@ -1,7 +1,10 @@
 package com.example.smart_test.controller;
 
 import com.example.smart_test.domain.Theme;
+import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
+import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.AddSubjectRequest;
 import com.example.smart_test.service.api.SubjectServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +20,8 @@ public class SubjectController {
     private SubjectServiceInterface subjectService;
 
     @PostMapping("/add")
-    public SubjectDto addSubjectDto(@RequestBody SubjectDto subjectDto) {
-        return subjectService.addSubjectDto(subjectDto);
+    public SubjectDto addSubjectDto(@RequestBody AddSubjectRequest addSubjectRequest) {
+        return subjectService.addSubjectDto(addSubjectRequest);
     }
 
     @DeleteMapping("/delete")
@@ -32,20 +35,23 @@ public class SubjectController {
     }
 
     /*Вывод информации про конкретный предмет*/
-    @PostMapping("/get")
-    public SubjectDto getSubjectById(@RequestBody SubjectDto subjectDto) {
-        return subjectService.getSubjectById(subjectDto.getId());
+//    @PostMapping("/get")
+//    public SubjectDto getSubjectById(@RequestBody SubjectDto subjectDto) {
+//        return subjectService.getSubjectById(subjectDto.getId());
+//    }
+
+    /**
+     Вывод предметов конкретного пользователя
+     */
+    @PostMapping("/print-user-subject")
+    public List<SubjectDto> getSubjectTeacherDto(@RequestBody User user) {
+        return subjectService.getSubjectByUser(user);
     }
 
-    @GetMapping("/{login}")
-    public List<SubjectDto> getSubjectTeacherDto(@PathVariable String login) {
-        return subjectService.getSubjectByLogin(login);
-    }
-
-    @GetMapping("/id:{id}")
-    public SubjectDto getSubjectTeacherDto(@PathVariable Long id) {
-        return subjectService.getSubjectById(id);
-    }
+//    @GetMapping("/id:{id}")
+//    public SubjectDto getSubjectTeacherDto(@PathVariable Long id) {
+//        return subjectService.getSubjectById(id);
+//    }
 
     @GetMapping("/class={idClass}/teacher={idTeacher}")
     public List<SubjectDto> getSubjectByClassAndTeacher(@PathVariable Long idClass, @PathVariable Long idTeacher) {

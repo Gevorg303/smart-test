@@ -13,7 +13,6 @@ public class SubjectMapperImpl implements SubjectMapperInterface {
         dto.setId(entity.getId());
         dto.setSubjectName(entity.getSubjectName());
         dto.setDescription(entity.getDescription());
-        dto.setTeacherClass(entity.getTeacherClass());
         return dto;
     }
 
@@ -23,7 +22,6 @@ public class SubjectMapperImpl implements SubjectMapperInterface {
         entity.setId(dto.getId());
         entity.setSubjectName(dto.getSubjectName());
         entity.setDescription(dto.getDescription());
-        entity.setTeacherClass(dto.getTeacherClass());
         return entity;
     }
 }
