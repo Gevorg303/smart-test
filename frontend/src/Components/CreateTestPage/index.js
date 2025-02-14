@@ -155,6 +155,26 @@ const CreateTestPage = ({editItem}) => {
                 console.log(taskJson)
                 setTasks(taskJson)
 
+                if(editItem!=null){
+                    const response5 = await fetch('http://localhost:8080/test/get-tasks-test', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                                id: editItem.id,
+                            }
+                        )
+                    });
+                    if (!response5.ok) {
+                        throw new Error('Ошибка получения заданий из теста');
+                    }
+
+                    const tasksFromTestJson = await response5.json();
+                    console.log(tasksFromTestJson)
+                    console.log(tasks.concat(tasksFromTestJson))
+                    setTasks(tasks.concat(tasksFromTestJson))
+                }
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -162,8 +182,10 @@ const CreateTestPage = ({editItem}) => {
         }
         if(editItem!=null){ //выполняется если предается предмет который нужно изменить
             console.log(editItem);
+            setTargetSubject(editItem.theme.subject.id)
+            setCurrentTheme(editItem.theme.id);
             setCurrentType(editItem.typeTest.id);
-            setCurrentPassword(editItem.password?editItem.password:"")
+            setCurrentPassword(editItem.testPassword?editItem.testPassword:"")
             setCurrentDescription(editItem.description?editItem.description:"")
             let passTime = editItem.passageTime?editItem.passageTime:"";
             setPassingTime(passTime.substring(0,passTime.length-3));
@@ -196,14 +218,14 @@ const CreateTestPage = ({editItem}) => {
                     <Form.Select
                         onChange={(e) => {
                             setTargetSubject(e.target.value);
-                        }}>
+                        }} value={targetSubject}>
                         <option value={-1}>Выберите предмет</option>
                         {subjects.map((item, index) => <option key={item.id}
                                                                value={item.id}> {item.subjectName/* + " " + item.teacherClass.studentClass.numberOfInstitution + item.teacherClass.studentClass.letterDesignation*/}  </option>)}
 
                     </Form.Select>
                 </Form.Group>
-                <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject} setCurrentTheme={setCurrentTheme}/>
+                <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject} currentTheme={currentTheme} setCurrentTheme={setCurrentTheme}/>
                 <Form.Group className="mb-3">
                     <Form.Select value={currentType} onChange={(e) => {
                         setCurrentType(e.target.value);

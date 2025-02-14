@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import IndicatorSelector from "../IndicatorSelector";
 
-const ThemeAndIndicatorSelector = ({targetSubject, needIndicators, indicators,setIndicators,setCurrentTheme}) => {
+const ThemeAndIndicatorSelector = ({targetSubject, needIndicators, indicators,setIndicators,currentTheme,setCurrentTheme}) => {
     const [themes, setThemes] = useState([]);
     const [selected, setSelected] = useState();
 
@@ -38,7 +38,7 @@ const ThemeAndIndicatorSelector = ({targetSubject, needIndicators, indicators,se
     return (
         <>
             <Form.Group  className="mb-3" >
-                 <Form.Select
+                 <Form.Select value={currentTheme}
                     onChange={(e) => {setSelected(e.target.value);setCurrentTheme(e.target.value);}}>
                      <option value={-1}>Выберите тему</option>
                     {themes.map((item, index)=><option key={item.id} value={item.id} > {item.themeName}  </option>)}
