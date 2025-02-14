@@ -25,7 +25,13 @@ const HomePage = () => {
                 const user = await response.json();
                 console.log(user);
                 setwelcometext("Здравствуйте, " + user.name + " (" + user.role.role + ")");
-                const response2 = await fetch('http://localhost:8080/subject/' + user.login);
+                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(user)
+                });
                 if (!response2.ok) {
                     throw new Error('Ошибка вывода предметов учителя');
                 }
