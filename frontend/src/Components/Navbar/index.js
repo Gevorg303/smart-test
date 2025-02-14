@@ -6,7 +6,7 @@ import './styles.css';
 import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
 
 const Navbar = ({IsTeacher}) => {
-    return (IsTeacher?
+    return (!IsTeacher?
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="custom-navbar">
         <Container fluid>
             <BootstrapNavbar.Brand as={Link} to="/home" className="navbar-logo">

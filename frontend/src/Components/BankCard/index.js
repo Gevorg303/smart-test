@@ -6,12 +6,12 @@ import DisplayTestCard from "../DisplayTestCard";
 import DisplayTaskCard from "../DisplayTaskCard";
 import DisplaySubjectCard from "../DisplaySubjectCard";
 
-const BankCard = ({id,objectItem,type}) => {
+const BankCard = ({id,objectItem,type, setEditItem}) => {
    // const [questions, setQuestions] = useState([]);
     const [item, setItem] = useState();
 
 
-    const handleSubmit = async (event) => {
+    const handleDelete = async (event) => {
        // event.preventDefault();
         try {
             console.log("удалить задание: "+id);
@@ -42,11 +42,36 @@ const BankCard = ({id,objectItem,type}) => {
                 }
 
             }
+            if(type === "subject") {
+                const response = await fetch('http://localhost:8080/subject/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({id:id}
+                    )
+                });
+                if (!response.ok) {
+                    throw new Error("Ошибка удаления предмета");
+                }
+
+            }
 
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
         }
         window.location.reload();
+    }
+    const handleEdit = async (event) => {
+        // event.preventDefault();
+        try {
+            console.log("редактировать: "+id+" ("+type+")");
+            setEditItem(objectItem)
+
+        } catch (error) {
+            console.error('Ошибка удаления данных:', error);
+        }
+
     }
 
     useEffect(() => {
@@ -115,8 +140,8 @@ const BankCard = ({id,objectItem,type}) => {
                 </Stack>
 
                 <Stack direction="vertical" gap={2}>
-                    <Button className={"bankbutton"} variant="danger" onClick={() => (handleSubmit())}><i className="bi bi-trash-fill"></i> {/*Удалить*/} </Button>
-                    <Button className={"bankbutton"} variant="warning"> <i className="bi bi-pencil-fill"></i>{/*Редактировать*/}</Button>
+                    <Button className={"bankbutton"} variant="danger" onClick={() => (handleDelete())}><i className="bi bi-trash-fill"></i> {/*Удалить*/} </Button>
+                    <Button className={"bankbutton"} variant="warning" onClick={() => (handleEdit())}> <i className="bi bi-pencil-fill"></i>{/*Редактировать*/}</Button>
                 </Stack>
             </Stack>
 

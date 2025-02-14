@@ -3,7 +3,7 @@ import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import TaskForTestSelector from "../TaskForTestSelector";
 
-const CreateTestPage = () => {
+const CreateTestPage = ({editItem}) => {
     const [subjects, setSubjects] = useState([]);
     const [tasks, setTasks] = useState([]);
     const [targetSubject, setTargetSubject] = useState(0);
@@ -34,7 +34,7 @@ const CreateTestPage = () => {
                 }
             }
 
-          /*  console.log(
+           /* console.log(
                 {
                     test: {
                         closingDateAndTime : timeEnd,
@@ -153,8 +153,21 @@ const CreateTestPage = () => {
                 console.error('Ошибка получения данных:', error);
             }
         }
+        if(editItem!=null){
+            console.log(editItem);
+            setCurrentType(editItem.typeTest.id);
+            setCurrentPassword(editItem.password?editItem.password:"")
+            setCurrentDescription(editItem.description?editItem.description:"")
+            let passTime = editItem.passageTime?editItem.passageTime:"";
+            setPassingTime(passTime.substring(0,passTime.length-3));
+            setCountOfTry(editItem.numberOfAttemptsToPass);
+            setTimeEnd(editItem.closingDateAndTime?editItem.closingDateAndTime:"");
+            setTimeStart(editItem.openingDateAndTime?editItem.openingDateAndTime:"");
+           // setCurrentPassingScore();
+        }
+
         fetchSubjects();
-    }, [currentTheme]);
+    }, [currentTheme,editItem]);
     return (
         <div>
             <h1>Создание теста</h1>
@@ -173,7 +186,7 @@ const CreateTestPage = () => {
                 </Form.Group>
                 <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject} setCurrentTheme={setCurrentTheme}/>
                 <Form.Group className="mb-3">
-                    <Form.Select onChange={(e) => {
+                    <Form.Select value={currentType} onChange={(e) => {
                         setCurrentType(e.target.value);
                         /*setCurrentAnswers([]);*/
                     }}>
@@ -218,31 +231,31 @@ const CreateTestPage = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Время прохождения теста</Form.Label>
-                    <Form.Control  type="time"  onChange={(e) => {
+                    <Form.Control value={passingTime} type="time"  onChange={(e) => {
                         setPassingTime(e.target.value);
                     }}/>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Дата начала</Form.Label>
-                    <Form.Control type="datetime-local" onChange={(e) => {
+                    <Form.Control value={timeStart} type="datetime-local" onChange={(e) => {
                         setTimeStart(e.target.value);
                     }}/>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Дата окончания</Form.Label>
-                    <Form.Control type="datetime-local" onChange={(e) => {
+                    <Form.Control value={timeEnd} type="datetime-local" onChange={(e) => {
                         setTimeEnd(e.target.value);
                     }}/>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Описание</Form.Label>
-                    <Form.Control  as="textarea" rows={3} onChange={(e) => {
+                    <Form.Control value={currentDescription} as="textarea" rows={3} onChange={(e) => {
                         setCurrentDescription(e.target.value);
                     }}/>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Пароль</Form.Label>
-                    <Form.Control onChange={(e) => {
+                    <Form.Control value={currentPassword} onChange={(e) => {
                         setCurrentPassword(e.target.value);
                     }}/>
                 </Form.Group>

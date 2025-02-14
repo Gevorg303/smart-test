@@ -12,12 +12,19 @@ import CreateTestPage from "../CreateTestPage";
 
 const QuestionBankPage = ({type}) => {
   //  const [isTests, setIsTests] = useState(isTest);
+
+    const [editItem, setEditItem] = useState(null);
     const [bankItems, setBankItems] = useState([]);
     const [title, setTitle] = useState();
     const [createModal, setCreateModal] = useState();
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const navigate = useNavigate();
+
+    function EditFunc(item) {
+        setEditItem(item)
+        setShowEditModal(true)
+    }
 
     useEffect(() => {
         async function fetchTests() {
@@ -35,7 +42,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "test") {// заполнение тестов из бд
 
                     setTitle("Банк тестов");// задать заголовок на странице
-                    setCreateModal(<CreateTestPage/>); // задать модальное окно для создания на странице
+                    setCreateModal(<CreateTestPage editItem={editItem}/>); // задать модальное окно для создания на странице
 
                     const response2 = await fetch('http://localhost:8080/test/get-user-tests', {
                         method: 'POST',
@@ -95,7 +102,7 @@ const QuestionBankPage = ({type}) => {
         }
 
         fetchTests();
-    }, [type]);
+    }, [type,editItem]);
     /* className="page-container-quest"*/
     return (
         <div>
@@ -106,12 +113,13 @@ const QuestionBankPage = ({type}) => {
 
 
                 <Button variant="success" className="" onClick={() => {
+                    setEditItem(null);
                     setShowCreateModal(true)
                 }}>Создать</Button>
 
                 <Modal
-                    show={showCreateModal||showDeleteModal}
-                    onHide={() => {setShowCreateModal(false); setShowDeleteModal(false)}}
+                    show={showCreateModal||showEditModal}
+                    onHide={() => {setShowCreateModal(false); setShowEditModal(false)}}
                     dialogClassName="modal-90w"
                     size="xl"
                     aria-labelledby="example-custom-modal-styling-title"
@@ -125,7 +133,7 @@ const QuestionBankPage = ({type}) => {
                     </Modal.Body>
                 </Modal>
 
-                {bankItems.map((item, index) => <BankCard key={index} id={item.id} objectItem={item} type={type}/>)}
+                {bankItems.map((item, index) => <BankCard key={index} id={item.id} objectItem={item} type={type} setEditItem={EditFunc}/>)}
 
 
             </div>
