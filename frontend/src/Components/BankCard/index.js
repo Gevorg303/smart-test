@@ -5,6 +5,7 @@ import './style.css';
 import DisplayTestCard from "../DisplayTestCard";
 import DisplayTaskCard from "../DisplayTaskCard";
 import DisplaySubjectCard from "../DisplaySubjectCard";
+import DisplayThemeCard from "../DisplayThemeCard";
 
 const BankCard = ({id,objectItem,type, setEditItem}) => {
     // objectItem - объект какого-то типа котоный отображается в карточке
@@ -88,6 +89,8 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
                 setItem( <DisplayTaskCard objectItem={objectItem}/>)
             if(type==="subject")
                 setItem( <DisplaySubjectCard objectItem={objectItem}/>)
+            if(type==="theme")
+                setItem( <DisplayThemeCard objectItem={objectItem}/>)
            /* if(type=="test"){
                 setItem(<DisplayTestCard objectItem={objectItem}/>);
             }

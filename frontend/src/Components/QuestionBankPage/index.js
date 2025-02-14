@@ -97,6 +97,23 @@ const QuestionBankPage = ({type}) => {
                     console.log(subjects)
                     setBankItems(subjects)
                 }
+                if(type === "theme") { // заполнение предметов из бд
+
+                    setTitle("Банк тем"); // задать заголовок на странице
+
+                    const response5 = await fetch('http://localhost:8080/theme/all', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    });
+                    if (!response5.ok) {
+                        throw new Error('Ошибка получения тем');
+                    }
+                    const theme = await response5.json();
+                    console.log(theme)
+                    setBankItems(theme)
+                }
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
