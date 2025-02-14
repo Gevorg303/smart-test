@@ -4,23 +4,24 @@ import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import TaskForTestSelector from "../TaskForTestSelector";
 
 const CreateTestPage = ({editItem}) => {
-    const [subjects, setSubjects] = useState([]);
-    const [tasks, setTasks] = useState([]);
-    const [targetSubject, setTargetSubject] = useState(0);
-    const [types, setTypes] = useState([]);
-    const [show, setShow] = useState(false);
-    const [toastText, setToastText] = useState("");
+    //editItem - изменяемый объект который должен отображаться
+    const [subjects, setSubjects] = useState([]); // предметы
+    const [tasks, setTasks] = useState([]); // задания
+    const [targetSubject, setTargetSubject] = useState(0); // id выбранного предмета
+    const [types, setTypes] = useState([]); // типы тестов
+    const [show, setShow] = useState(false); // отображение тоста
+    const [toastText, setToastText] = useState(""); // текст тоста
 
-    const [currentType, setCurrentType] = useState();
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [currentDescription, setCurrentDescription] = useState("");
-    const [passingTime, setPassingTime] = useState();
-    const [timeStart, setTimeStart] = useState();
-    const [timeEnd, setTimeEnd] = useState();
-    const [currentTasks , setCurrentTasks] = useState([]);
-    const [countOfTry, setCountOfTry] = useState(1);
-    const [currentTheme, setCurrentTheme] = useState(-1);
-    const [currentPassingScore, setCurrentPassingScore] = useState(60); // прохоной балл
+    const [currentType, setCurrentType] = useState(); // введеный тип теста
+    const [currentPassword, setCurrentPassword] = useState(""); // введеный пароль
+    const [currentDescription, setCurrentDescription] = useState(""); // введеное описание
+    const [passingTime, setPassingTime] = useState("00:00"); // введеное время прохождения
+    const [timeStart, setTimeStart] = useState(Date.now()); // введеное время начала теста
+    const [timeEnd, setTimeEnd] = useState(Date.now()); // введеное время конца теста
+    const [currentTasks , setCurrentTasks] = useState([]); // выбранные задания для теста
+    const [countOfTry, setCountOfTry] = useState(1); // количество попыток для теста
+    const [currentTheme, setCurrentTheme] = useState(-1); // id выбранной темы
+    const [currentPassingScore, setCurrentPassingScore] = useState(60); // проходной балл
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -58,7 +59,7 @@ const CreateTestPage = ({editItem}) => {
                 }
 
             );*/
-            const response = await fetch('http://localhost:8080/test/add', {
+            const response = await fetch('http://localhost:8080/test/add', { // добавить тест
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8'
@@ -109,7 +110,13 @@ const CreateTestPage = ({editItem}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch(`http://localhost:8080/subject/${user.login}`);
+                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(user)
+                });
                 if (!response2.ok) {
                     throw new Error('Ошибка получения предметов');
                 }
@@ -153,7 +160,7 @@ const CreateTestPage = ({editItem}) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
-        if(editItem!=null){
+        if(editItem!=null){ //выполняется если предается предмет который нужно изменить
             console.log(editItem);
             setCurrentType(editItem.typeTest.id);
             setCurrentPassword(editItem.password?editItem.password:"")
@@ -164,6 +171,18 @@ const CreateTestPage = ({editItem}) => {
             setTimeEnd(editItem.closingDateAndTime?editItem.closingDateAndTime:"");
             setTimeStart(editItem.openingDateAndTime?editItem.openingDateAndTime:"");
            // setCurrentPassingScore();
+        }
+        else {
+            setCurrentType();
+            setCurrentPassword("");
+            setCurrentDescription("");
+            setPassingTime("00:00");
+            setTimeStart(Date.now());
+            setTimeEnd(Date.now());
+            setCurrentTasks([]);
+            setCountOfTry(1);
+            setCurrentTheme(-1);
+            setCurrentPassingScore(60);
         }
 
         fetchSubjects();
@@ -180,7 +199,7 @@ const CreateTestPage = ({editItem}) => {
                         }}>
                         <option value={-1}>Выберите предмет</option>
                         {subjects.map((item, index) => <option key={item.id}
-                                                               value={item.id}> {item.subjectName + " " + item.teacherClass.studentClass.numberOfInstitution + item.teacherClass.studentClass.letterDesignation}  </option>)}
+                                                               value={item.id}> {item.subjectName/* + " " + item.teacherClass.studentClass.numberOfInstitution + item.teacherClass.studentClass.letterDesignation*/}  </option>)}
 
                     </Form.Select>
                 </Form.Group>

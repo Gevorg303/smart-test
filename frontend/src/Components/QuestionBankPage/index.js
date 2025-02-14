@@ -11,17 +11,18 @@ import CreateTestPage from "../CreateTestPage";
 
 
 const QuestionBankPage = ({type}) => {
+    //type -  тип объектов для банка
   //  const [isTests, setIsTests] = useState(isTest);
 
-    const [editItem, setEditItem] = useState(null);
-    const [bankItems, setBankItems] = useState([]);
-    const [title, setTitle] = useState();
-    const [createModal, setCreateModal] = useState();
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
+    const [editItem, setEditItem] = useState(null); // объект который изменяется
+    const [bankItems, setBankItems] = useState([]); // объекты которые будут отображаться в банке
+    const [title, setTitle] = useState(); // заголовок банка
+    const [createModal, setCreateModal] = useState(); // компонент с модальным окном для создания объекта в банке
+    const [showCreateModal, setShowCreateModal] = useState(false); // переменная отвенчает за отображение модального окна на экране
+    const [showEditModal, setShowEditModal] = useState(false); // переменная для отображение модального окна создания когда происходит редактирование
     const navigate = useNavigate();
 
-    function EditFunc(item) {
+    function EditFunc(item) { //открывает модальное окно для редактирования объекта
         setEditItem(item)
         setShowEditModal(true)
     }
@@ -31,7 +32,7 @@ const QuestionBankPage = ({type}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -44,7 +45,7 @@ const QuestionBankPage = ({type}) => {
                     setTitle("Банк тестов");// задать заголовок на странице
                     setCreateModal(<CreateTestPage editItem={editItem}/>); // задать модальное окно для создания на странице
 
-                    const response2 = await fetch('http://localhost:8080/test/get-user-tests', {
+                    const response2 = await fetch('http://localhost:8080/test/get-user-tests', { // получить тесты пользователя
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -63,7 +64,7 @@ const QuestionBankPage = ({type}) => {
                     setTitle("Банк заданий"); // задать заголовок на странице
                     setCreateModal(<CreateQuestionPage/>);// задать модальное окно для создания на странице
 
-                    const response3 = await fetch('http://localhost:8080/task/get-user-tasks', {
+                    const response3 = await fetch('http://localhost:8080/task/get-user-tasks', { // получить задания пользователя
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -82,11 +83,12 @@ const QuestionBankPage = ({type}) => {
 
                     setTitle("Банк предметов"); // задать заголовок на странице
 
-                    const response4 = await fetch('http://localhost:8080/subject/'+user.login, {
-                        method: 'GET',
+                    const response4 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
-                        }
+                        },
+                        body: JSON.stringify(user)
                     });
                     if (!response4.ok) {
                         throw new Error('Ошибка получения предметов');

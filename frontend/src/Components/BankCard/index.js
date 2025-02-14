@@ -7,8 +7,12 @@ import DisplayTaskCard from "../DisplayTaskCard";
 import DisplaySubjectCard from "../DisplaySubjectCard";
 
 const BankCard = ({id,objectItem,type, setEditItem}) => {
+    // objectItem - объект какого-то типа котоный отображается в карточке
+    // type - тип объекта
+    //setEditItem - функция меняющая текущий изменяемый объект ( передается из компонента question bank page)
+
    // const [questions, setQuestions] = useState([]);
-    const [item, setItem] = useState();
+    const [item, setItem] = useState(); // компонент отображения контента для карточек
 
 
     const handleDelete = async (event) => {
@@ -16,7 +20,7 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
         try {
             console.log("удалить задание: "+id);
             if(type === "test"){
-                const response = await fetch('http://localhost:8080/test/delete', {
+                const response = await fetch('http://localhost:8080/test/delete', { // удалить тест
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -29,7 +33,7 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
                 }
             }
             if(type === "task") {
-                const response = await fetch('http://localhost:8080/task/delete', {
+                const response = await fetch('http://localhost:8080/task/delete', {  // удалить задание
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -43,7 +47,7 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
 
             }
             if(type === "subject") {
-                const response = await fetch('http://localhost:8080/subject/delete', {
+                const response = await fetch('http://localhost:8080/subject/delete', { // удалить предмет
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -66,7 +70,7 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
         // event.preventDefault();
         try {
             console.log("редактировать: "+id+" ("+type+")");
-            setEditItem(objectItem)
+            setEditItem(objectItem)     // изменить изменяемый объект
 
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
@@ -77,6 +81,7 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
     useEffect(() => {
         async function fetchQuestions() {
             console.log(objectItem)
+            //выюор компонента для отображения контента
             if(type==="test")
                 setItem(<DisplayTestCard objectItem={objectItem}/>)
             if(type==="task")

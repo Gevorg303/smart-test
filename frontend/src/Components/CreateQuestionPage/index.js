@@ -165,7 +165,13 @@ const CreateQuestionPage = () => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch(`http://localhost:8080/subject/${user.login}`);
+                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(user)
+                });
                 if (!response2.ok) {
                     throw new Error('Ошибка получения предметов');
                 }
@@ -203,7 +209,7 @@ const CreateQuestionPage = () => {
                         }}>
                         <option value={-1}>Выберите предмет</option>
                         {subjects.map((item, index) => <option key={item.id}
-                                                               value={item.id}> {item.subjectName + " " + item.teacherClass.studentClass.numberOfInstitution + item.teacherClass.studentClass.letterDesignation}  </option>)}
+                                                               value={item.id}> {item.subjectName/* + " " + item.teacherClass.studentClass.numberOfInstitution + item.teacherClass.studentClass.letterDesignation*/}  </option>)}
 
                     </Form.Select>
                 </Form.Group>
