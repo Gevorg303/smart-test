@@ -37,6 +37,7 @@ const App = () => {
                         <Route path="taskbank" element={<QuestionBankPage  type={"task"}/>} />
                         <Route path="itembank" element={<QuestionBankPage  type={"subject"}/>} />
                         <Route path="themebank" element={<QuestionBankPage  type={"theme"}/>} />
+                        <Route path="indicatorbank" element={<QuestionBankPage  type={"indicator"}/>} />
                     </Route>
                 </Route>
             </Routes>

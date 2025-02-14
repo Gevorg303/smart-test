@@ -6,6 +6,7 @@ import DisplayTestCard from "../DisplayTestCard";
 import DisplayTaskCard from "../DisplayTaskCard";
 import DisplaySubjectCard from "../DisplaySubjectCard";
 import DisplayThemeCard from "../DisplayThemeCard";
+import DisplayIndicatorCard from "../DisplayIndicatorCard";
 
 const BankCard = ({id,objectItem,type, setEditItem}) => {
     // objectItem - объект какого-то типа котоный отображается в карточке
@@ -91,6 +92,8 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
                 setItem( <DisplaySubjectCard objectItem={objectItem}/>)
             if(type==="theme")
                 setItem( <DisplayThemeCard objectItem={objectItem}/>)
+            if(type==="indicator")
+                setItem( <DisplayIndicatorCard objectItem={objectItem}/>)
            /* if(type=="test"){
                 setItem(<DisplayTestCard objectItem={objectItem}/>);
             }

@@ -114,6 +114,23 @@ const QuestionBankPage = ({type}) => {
                     console.log(theme)
                     setBankItems(theme)
                 }
+                if(type === "indicator") { // заполнение предметов из бд
+
+                    setTitle("Банк индикаторов"); // задать заголовок на странице
+
+                    const response6 = await fetch('http://localhost:8080/indicator/all', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        }
+                    });
+                    if (!response6.ok) {
+                        throw new Error('Ошибка получения индикаторов');
+                    }
+                    const indicator = await response6.json();
+                    console.log(indicator)
+                    setBankItems(indicator)
+                }
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
