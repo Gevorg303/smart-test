@@ -38,13 +38,11 @@ const CreateIndicatorPage = ({editItem}) => {
                 },
                 body: JSON.stringify(
                     {
-                        indicator: {
-                            name : currentName,
+                            nameOfTheIndicator : currentName,
                             id : null,
                             theme:{
                                 id: theme
                             }
-                        }
                     }
                 )
             });
@@ -91,14 +89,14 @@ const CreateIndicatorPage = ({editItem}) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
-        if(editItem!=null){ //выполняется если предается предмет который нужно изменить
+        /*if(editItem!=null){ //выполняется если предается предмет который нужно изменить
             console.log(editItem);
             setTargetSubject(editItem.theme.subject.id)
             setCurrentTheme(editItem.theme.id);
         }
         else {
             setCurrentTheme(-1);
-        }
+        }*/
 
         fetchSubjects();
     }, [currentTheme,editItem]);

@@ -8,6 +8,7 @@ const CreateSubjectPage = ({editItem}) => {
 
     const [currentName, setCurrentName] = useState(""); // введеное название
     const [currentDescription, setCurrentDescription] = useState(""); // введенное описание
+    const [currentUser, setCurrentUser] = useState(); // user
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -34,9 +35,12 @@ const CreateSubjectPage = ({editItem}) => {
                 body: JSON.stringify(
                     {
                         subject: {
-                            name : currentName,
+                            subjectName : currentName,
                             description : currentDescription,
                             id : null,
+                        },
+                        user: {
+                            id: currentUser.id
                         }
                     }
                 )
@@ -62,7 +66,7 @@ const CreateSubjectPage = ({editItem}) => {
                     throw new Error('Ошибка сети');
                 }
                 const user = await response1.json();
-
+                setCurrentUser(user);
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);

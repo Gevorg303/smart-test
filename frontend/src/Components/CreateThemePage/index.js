@@ -35,9 +35,10 @@ const CreateThemePage = ({editItem}) => {
                 },
                 body: JSON.stringify(
                     {
-                        theme: {
-                            name : currentName,
+                        themeName : currentName,
                             id : null,
+                        subject: {
+                            id: targetSubject
                         }
                     }
                 )
