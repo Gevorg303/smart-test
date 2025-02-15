@@ -158,6 +158,16 @@ const RegistrationPage = () => {
                 form.reset();
                 setSelectedClass(null); // Clear selected class
                 await fetchUsers();
+
+                // Generate and download XLS file
+                const userDetails = [
+                    {
+                        'ФИО': `${data.lastName} ${data.firstName} ${data.middleName}`,
+                        'Логин': data.login,
+                        'Пароль': data.password // Replace with actual password logic
+                    }
+                ];
+                downloadXLS(userDetails, 'UserDetails');
             }
         } catch (error) {
             console.error('Ошибка регистрации пользователя:', error);
@@ -228,7 +238,7 @@ const RegistrationPage = () => {
             }).filter(user => user !== null);
 
             if (userRequests.length === 0) {
-                setErrorMessage('Все строки в файле заполнены некорректно');
+                setErrorMessage('Строки в файле заполнены некорректно, либо пользователь был ранее зарегистрирован');
                 setShowErrorToast(true);
                 return;
             }
@@ -246,6 +256,14 @@ const RegistrationPage = () => {
                     setShowSuccessToast(true);
                     setSelectedClass(null); // Clear selected class
                     await fetchUsers();
+
+                    // Generate and download XLS file
+                    const userDetails = userRequests.map(user => ({
+                        'ФИО': `${user.user.surname} ${user.user.name} ${user.user.patronymic}`,
+                        'Логин': data.user.login,
+                        'Пароль': user.user.password  // Replace with actual password logic
+                    }));
+                    downloadXLS(userDetails, 'UserDetails');
                 }
             } catch (error) {
                 console.error('Ошибка регистрации пользователей:', error);
@@ -284,6 +302,13 @@ const RegistrationPage = () => {
         } catch (error) {
             console.error('Ошибка получения данных о пользователях:', error);
         }
+    };
+
+    const downloadXLS = (data, filename) => {
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Users');
+        XLSX.writeFile(workbook, `${filename}.xlsx`);
     };
 
     return (
