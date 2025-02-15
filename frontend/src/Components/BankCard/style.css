@@ -9,8 +9,11 @@
     transition: box-shadow 0.3s;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: inherit;
+    /*justify-content: space-between;*/
+    justify-content: center;
+    align-items: center;
+    /*width: inherit;*/
+    width: 90%;
 }
 
 .bankcard:hover {
@@ -30,5 +33,15 @@
 }
 
 .bankbutton{
-    width: inherit;
+    /*width: inherit;*/
+    width: 3em;
+    height: 3em;
+    margin: 5px;
+}
+
+.btn-right{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
 }

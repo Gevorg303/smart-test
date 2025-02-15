@@ -19,7 +19,6 @@
     max-width: 1500px; /* Ограничиваем максимальную ширину */
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 10%;
@@ -31,7 +30,19 @@
    /* margin-bottom: 15px;*/
     width: 80%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
 }
+
+
+.button-containers {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
 
 .button-container-quest {
     display: flex;

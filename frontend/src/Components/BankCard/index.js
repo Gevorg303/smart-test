@@ -132,33 +132,34 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
             <Stack direction="horizontal" gap={2}>
                 <Stack direction="vertical" gap={2}>
                     {item}
-                   {/*!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>*/}
-
+                    {/*!isTest ? <p>{obj.test.theme.subject.subjectName} > {obj.test.theme.themeName}</p>:<></>*/}
 
 
                     {/*type=="test" ? <p>Тест №{obj.id}</p>:<></>*/}
-                   {/*type=="test" ?
+                    {/*type=="test" ?
                        <h2>{obj.theme.subject.subjectName} > {obj.theme.themeName}: {obj.typeTest.nameOfTestType}</h2>
                        :
                        <h2>Задача №{obj.id}</h2>*/}
-                   {/*type=="test" ?
+                    {/*type=="test" ?
                        <p>{obj.description}</p> :
                        <p>{obj.taskText}</p>*/}
 
 
-
-                   {/*isTest?questions.map((item, index)=><BankCard key={index} id={index} obj={item} isTest={false} />):<></>*/}
+                    {/*isTest?questions.map((item, index)=><BankCard key={index} id={index} obj={item} isTest={false} />):<></>*/}
                 </Stack>
-
-                <Stack direction="vertical" gap={2}>
-                    <Button className={"bankbutton"} variant="danger" onClick={() => (handleDelete())}><i className="bi bi-trash-fill"></i> {/*Удалить*/} </Button>
-                    <Button className={"bankbutton"} variant="warning" onClick={() => (handleEdit())}> <i className="bi bi-pencil-fill"></i>{/*Редактировать*/}</Button>
-                </Stack>
+                    <Stack direction="vertical" gap={2}>
+                        <div className="btn-right">
+                        <Button className={"bankbutton"} variant="danger" onClick={() => (handleDelete())}><i
+                            className="bi bi-trash-fill"></i> {/*Удалить*/} </Button>
+                        <Button className={"bankbutton"} variant="warning" onClick={() => (handleEdit())}> <i
+                            className="bi bi-pencil-fill"></i>{/*Редактировать*/}</Button>
+                        </div>
+                    </Stack>
             </Stack>
 
 
         </div>
-    );
+);
 };
 
 export default BankCard;

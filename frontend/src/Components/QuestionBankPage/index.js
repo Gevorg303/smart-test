@@ -153,35 +153,39 @@ const QuestionBankPage = ({type}) => {
             <h1>{/*isTests ? "Тесты" : "Задания"*/title}</h1>
             <div className="page-container-quest">
 
+                <div className="button-containers">
+                    <Button variant="success" className="" onClick={() => {
+                        setEditItem(null);
+                        setShowCreateModal(true)
+                    }}>Создать</Button>
+                </div>
+                    <Modal
+                        show={showCreateModal || showEditModal}
+                        onHide={() => {
+                            setShowCreateModal(false);
+                            setShowEditModal(false)
+                        }}
+                        dialogClassName="modal-90w"
+                        size="xl"
+                        aria-labelledby="example-custom-modal-styling-title"
+                    >
+                        <Modal.Header closeButton>
+                        </Modal.Header>
+                        <Modal.Body>
 
-                <Button variant="success" className="" onClick={() => {
-                    setEditItem(null);
-                    setShowCreateModal(true)
-                }}>Создать</Button>
+                            {createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
 
-                <Modal
-                    show={showCreateModal||showEditModal}
-                    onHide={() => {setShowCreateModal(false); setShowEditModal(false)}}
-                    dialogClassName="modal-90w"
-                    size="xl"
-                    aria-labelledby="example-custom-modal-styling-title"
-                >
-                    <Modal.Header closeButton>
-                    </Modal.Header>
-                    <Modal.Body>
+                        </Modal.Body>
+                    </Modal>
 
-                        {createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
-
-                    </Modal.Body>
-                </Modal>
-
-                {bankItems.map((item, index) => <BankCard key={index} id={item.id} objectItem={item} type={type} setEditItem={EditFunc}/>)}
+                    {bankItems.map((item, index) => <BankCard key={index} id={item.id} objectItem={item} type={type}
+                                                              setEditItem={EditFunc}/>)}
 
 
+                </div>
+                <Footer/>
             </div>
-            <Footer/>
-        </div>
-    );
-};
+            );
+            };
 
-export default QuestionBankPage;
+            export default QuestionBankPage;
