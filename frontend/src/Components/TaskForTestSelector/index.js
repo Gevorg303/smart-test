@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 
 const TaskForTestSelector = ({id,task,answers, setAnswers}) => {
 
-    const [currentCheck, setCurrentCheck] = useState(false);
+    const [currentCheck, setCurrentCheck] = useState(answers[id]===undefined?false:true);
 
     const onClick = (id, answer) => {
         const array = [...answers];

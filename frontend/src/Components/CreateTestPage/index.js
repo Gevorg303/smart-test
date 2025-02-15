@@ -137,25 +137,33 @@ const CreateTestPage = ({editItem}) => {
 
                 const intTheme=  parseInt(currentTheme , 10 );
 
-                const response4 = await fetch('http://localhost:8080/test/get-available-tasks', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify({
-                             id: intTheme,
-                        }
-                    )
-                });
-                if (!response4.ok) {
-                    throw new Error('Ошибка получения доступных заданий');
+                let aveliabletaskrfortest = [];
+                if(currentTheme>0){
+                    const response4 = await fetch('http://localhost:8080/test/get-available-tasks', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                                id: intTheme,
+                            }
+                        )
+                    });
+                    if (!response4.ok) {
+                        throw new Error('Ошибка получения доступных заданий');
+                    }
+
+                    const taskJson = await response4.json();
+                    console.log(taskJson)
+                    setTasks(taskJson)
+                    aveliabletaskrfortest = taskJson;
+                }
+                else
+                {
+                    setTasks([])
                 }
 
-                const taskJson = await response4.json();
-                console.log(taskJson)
-                setTasks(taskJson)
-
-                if(editItem!=null){
+                if (editItem != null) {
                     const response5 = await fetch('http://localhost:8080/test/get-tasks-test', {
                         method: 'POST',
                         headers: {
@@ -172,16 +180,21 @@ const CreateTestPage = ({editItem}) => {
 
                     const tasksFromTestJson = await response5.json();
                     console.log(tasksFromTestJson)
-                    console.log(tasks.concat(tasksFromTestJson))
-                    setTasks(tasks.concat(tasksFromTestJson))
+                    console.log(aveliabletaskrfortest.concat(tasksFromTestJson))
+                    setTasks(aveliabletaskrfortest.concat(tasksFromTestJson))
+
+                    const array = [...currentTasks];
+                    tasksFromTestJson.map((item, index)=>{array[item.id] = {id: item.id};})
+                    setCurrentTasks(array);
                 }
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
+        console.log("edit item: "+editItem)
         if(editItem!=null){ //выполняется если предается предмет который нужно изменить
-            console.log(editItem);
+
             setTargetSubject(editItem.theme.subject.id)
             setCurrentTheme(editItem.theme.id);
             setCurrentType(editItem.typeTest.id);
@@ -192,9 +205,12 @@ const CreateTestPage = ({editItem}) => {
             setCountOfTry(editItem.numberOfAttemptsToPass);
             setTimeEnd(editItem.closingDateAndTime?editItem.closingDateAndTime:"");
             setTimeStart(editItem.openingDateAndTime?editItem.openingDateAndTime:"");
+            setCurrentTasks([]);
            // setCurrentPassingScore();
         }
-        else {
+        else if(targetSubject<0){
+            setTasks([])
+            setTargetSubject(-1)
             setCurrentType();
             setCurrentPassword("");
             setCurrentDescription("");
@@ -211,7 +227,7 @@ const CreateTestPage = ({editItem}) => {
     }, [currentTheme,editItem]);
     return (
         <div>
-            <h1>Создание теста</h1>
+            <h1>{editItem?"Редактирование теста":"Создание теста"}</h1>
             <h3>Выберите предмет и тему теста</h3>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
@@ -302,7 +318,7 @@ const CreateTestPage = ({editItem}) => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Задания в тесте:</Form.Label>
-                    {tasks.map((item, index) =>   <TaskForTestSelector id={item.id} task={{id:item.id,taskText:item.taskText} } answers={currentTasks} setAnswers={setCurrentTasks} /> )}
+                    {tasks.map((item, index) =>   <TaskForTestSelector key={item.id} id={item.id} task={{id:item.id,taskText:item.taskText} } answers={currentTasks} setAnswers={setCurrentTasks} /> )}
 
                 </Form.Group>
 

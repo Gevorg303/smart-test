@@ -8,6 +8,9 @@ import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 import CreateQuestionPage from "../CreateQuestionPage";
 import CreateTestPage from "../CreateTestPage";
+import CreateSubjectPage from "../CreateSubjectPage";
+import CreateThemePage from "../CreateThemePage";
+import CreateIndicatorPage from "../CreateIndicatorPage";
 
 
 const QuestionBankPage = ({type}) => {
@@ -82,6 +85,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "subject") { // заполнение предметов из бд
 
                     setTitle("Банк предметов"); // задать заголовок на странице
+                    setCreateModal(<CreateSubjectPage editItem={editItem}/>);
 
                     const response4 = await fetch('http://localhost:8080/subject/print-user-subject', {
                         method: 'POST',
@@ -100,6 +104,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "theme") { // заполнение предметов из бд
 
                     setTitle("Банк тем"); // задать заголовок на странице
+                    setCreateModal(<CreateThemePage editItem={editItem}/>);
 
                     const response5 = await fetch('http://localhost:8080/theme/all', {
                         method: 'GET',
@@ -117,6 +122,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "indicator") { // заполнение предметов из бд
 
                     setTitle("Банк индикаторов"); // задать заголовок на странице
+                    setCreateModal(<CreateIndicatorPage editItem={editItem}/>);
 
                     const response6 = await fetch('http://localhost:8080/indicator/all', {
                         method: 'GET',
