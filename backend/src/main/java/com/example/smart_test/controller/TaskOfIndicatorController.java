@@ -19,13 +19,13 @@ public class TaskOfIndicatorController {
 //        return taskOfIndicatorService.addTaskOfIndicatorDto(taskOfIndicatorDto);
 //    }
 
-    @DeleteMapping("/delete")
-    public void deleteTaskOfIndicatorDto(@RequestBody TaskOfIndicator taskOfIndicator) {
-        taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
-    }
-
-    @GetMapping("/all")
-    public List<TaskOfIndicatorDto> getTaskOfIndicatorDto() {
-        return taskOfIndicatorService.getAllTaskOfIndicators();
-    }
+//    @DeleteMapping("/delete")
+//    public void deleteTaskOfIndicatorDto(@RequestBody TaskOfIndicator taskOfIndicator) {
+//        taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
+//    }
+//
+//    @GetMapping("/all")
+//    public List<TaskOfIndicatorDto> getTaskOfIndicatorDto() {
+//        return taskOfIndicatorService.getAllTaskOfIndicators();
+//    }
 }

@@ -4,10 +4,10 @@ package com.example.smart_test.service.api;
 import com.example.smart_test.domain.Indicator;
 import com.example.smart_test.domain.ResponseOption;
 import com.example.smart_test.domain.Task;
+import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
-import com.example.smart_test.dto.UserDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ public interface TaskServiceInterface {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     Set<TaskDto> displayTheAvailableTasks(ThemeDto theme);
 
-    List<TaskDto> getUserTasks(UserDto dto);
+    List<TaskDto> getUserTasks(User user);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void addTaskToTest(Long testId, Long taskId);

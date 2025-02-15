@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("TypeTest")
+@RequestMapping("type-test")
 public class TypeTestController {
     @Autowired
     private TypeTestServiceInterface typeTestService;

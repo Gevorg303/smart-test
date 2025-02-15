@@ -10,7 +10,6 @@ import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,15 +102,15 @@ public class TestServiceImpl implements TestServiceInterface {
     }
 
     @Override
-    public List<TestDto> getUserTests(UserDto dto) {
-        UserDto userDto = userService.getUserByLogin(dto);
-        if (userDto == null) {
+    @Transactional
+    public List<TestDto> getUserTests(User user) {
+        if (userService.getUserByLogin(user) == null) {
             throw new IllegalArgumentException("User not found");
         }
 
         List<SubjectUserDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
                 .stream()
-                .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
+                .filter(st -> st.getUser() != null && st.getUser().getId().equals(user.getId()))
                 .toList();
 
         List<ThemeDto> themes = themeService.getAllTheme();

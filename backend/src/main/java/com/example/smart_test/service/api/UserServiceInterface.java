@@ -19,7 +19,7 @@ public interface UserServiceInterface {
     List<UserDto> getAllUsers();
 
     @Transactional
-    UserDto getUserByLogin(UserDto userDto);
+    UserDto getUserByLogin(User user);
 
     @Transactional
     User getUserByLogin(String login);

@@ -1,5 +1,8 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.Subject;
+import com.example.smart_test.domain.Theme;
+import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.service.api.ThemeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +30,29 @@ public class ThemeController {
     public List<ThemeDto> getAllTheme() {
         return themeService.getAllTheme();
     }
-    @GetMapping("/getbysubject")
-    public List<ThemeDto> getAllThemesBySubjectId(@CookieValue("sub") Long id) {
-        return themeService.getThemeBySubjectId(id);
+
+    /**
+     * Метод выводит все темы по предмету
+     * */
+    @GetMapping("/find-theme-by-id-subject")
+    public List<Theme> findThemeByIdSubject(@RequestBody Subject subject) {
+        return themeService.findThemeByIdSubject(subject);
     }
     @GetMapping("/getbysubject:{id}")//сервер не может прочитать куки созданные на фронте
-    public List<ThemeDto> getAllThemesBySubjectIdNoCookie(/*@CookieValue("sub")*/@PathVariable Long id) {  
-        return themeService.getThemeBySubjectId(id);
+    public List<Theme> getAllThemesBySubjectIdNoCookie(/*@CookieValue("sub")*/@RequestBody Subject subject) {
+        return themeService.findThemeByIdSubject(subject);
     }
 
     @GetMapping("/id:{id}")
     public ThemeDto getThemById(@PathVariable Long id) {
         return themeService.getThemeById(id);
+    }
+
+    /**
+     * Метод для вывода тем пользователя
+     * */
+    @GetMapping("/get-theme-by-id-user")
+    public List<ThemeDto> getThemeByIdUser(@RequestBody User user){
+        return themeService.getUserThemes(user);
     }
 }

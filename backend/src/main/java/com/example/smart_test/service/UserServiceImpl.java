@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserServiceInterface {
     public void addUser(List<UserRequest> userRequestList) {
         for (UserRequest userRequest : userRequestList) {
             try {
+                List<User> newUserList = new ArrayList<>();
                 validateUserRequest(userRequest);
 
                 User newUser = userRepository.save(prepareUserEntity(userRequest));
@@ -113,8 +115,8 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Override
     @Transactional
-    public UserDto getUserByLogin(UserDto userDto) {
-        User userEntity = userRepository.findById(userDto.getId())
+    public UserDto getUserByLogin(User user) {
+        User userEntity = userRepository.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь с таким логином не найден"));
         return userMapper.toDTO(userEntity);
     }

@@ -3,18 +3,25 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
-import com.example.smart_test.dto.SubjectDto;
+import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.ThemeMapperInterface;
 import com.example.smart_test.repository.ThemeRepositoryInterface;
+import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import com.example.smart_test.service.api.ThemeServiceInterface;
+import com.example.smart_test.service.api.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +31,10 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
     private ThemeRepositoryInterface themeRepository;
     @Autowired
     private ThemeMapperInterface themeMapper;
+    @Autowired
+    private UserServiceInterface userService;
+    @Autowired
+    private SubjectUserServiceInterface subjectUserService;
 
     @Override
     public ThemeDto addThemeDto(ThemeDto dto) {
@@ -42,7 +53,7 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
             Theme theme = themeMapper.toEntity(dto);
             themeRepository.delete(theme);
         } else {
-            log.error("Класс с идентификатором " + dto.getId() + " не существует");
+            log.error("Тема с идентификатором " + dto.getId() + " не существует");
         }
     }
 
@@ -68,25 +79,40 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
     public ThemeDto getThemeById(Long id) {
         try {
             Theme theme = themeRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Предмет не найден"));
+                    .orElseThrow(() -> new RuntimeException("Тема не найдена"));
             return themeMapper.toDTO(theme);
         } catch (Exception e) {
-            throw new RuntimeException("Не удалось получить предмет: " + e.getMessage(), e);
+            throw new RuntimeException("Не удалось получить тему: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public List<ThemeDto> getThemeBySubjectId(Long id) {
-        try {
-            List<Theme> subjects = themeRepository.findBySubjectId(id);
-            List<ThemeDto> subjectDto = new ArrayList<>();
-            for (Theme subject : subjects) {
-                subjectDto.add(themeMapper.toDTO(subject));
-            }
-            return subjectDto;
-        } catch (Exception e) {
-            throw new RuntimeException("Не удалось получить предмет: " + e.getMessage(), e);
+    public List<Theme> findThemeByIdSubject(@NotNull Subject subject) {
+       return themeRepository.findBySubjectId(subject.getId());
+    }
+
+    @Transactional
+    @Override
+    public List<ThemeDto> getUserThemes(User dto) {
+        UserDto userDto = userService.getUserByLogin(dto);
+        if (userDto == null) {
+            throw new IllegalArgumentException("User not found");
         }
 
+        List<SubjectUserDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
+                .stream()
+                .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
+                .toList();
+
+        List<ThemeDto> allThemes = getAllTheme();
+
+        Set<ThemeDto> userThemes = subjectTeachers.stream()
+                .flatMap(subjectTeacher -> allThemes.stream()
+                        .filter(theme -> theme.getSubject() != null && theme.getSubject().getId().equals(subjectTeacher.getSubject().getId()))
+                )
+                .collect(Collectors.toSet());
+
+        return new ArrayList<>(userThemes);
     }
+
 }

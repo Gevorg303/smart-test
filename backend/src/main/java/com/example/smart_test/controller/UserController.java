@@ -43,8 +43,8 @@ public class UserController {
     }
 
     @GetMapping("/{login}")
-    public UserDto getUserByLogin(@RequestBody UserDto userDto) {
-        return userService.getUserByLogin(userDto);
+    public UserDto getUserByLogin(@RequestBody User user) {
+        return userService.getUserByLogin(user);
     }
 
     @GetMapping("/current")

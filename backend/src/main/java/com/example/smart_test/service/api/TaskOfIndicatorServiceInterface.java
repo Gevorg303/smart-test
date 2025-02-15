@@ -21,4 +21,7 @@ public interface TaskOfIndicatorServiceInterface {
 
     @Transactional
     List<TaskOfIndicator> findTaskOfIndicatorByIdTask(Task task);
+
+    @Transactional
+    List<TaskOfIndicator> findTaskOfIndicatorByIdIndicator(Indicator indicator);
 }

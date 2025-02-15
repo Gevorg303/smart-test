@@ -145,7 +145,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
-    public List<TaskDto> getUserTasks(UserDto dto) {
+    public List<TaskDto> getUserTasks(User dto) {
         UserDto userDto = userService.getUserByLogin(dto);
         if (userDto == null) {
             throw new IllegalArgumentException("User not found");

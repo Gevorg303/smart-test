@@ -78,4 +78,10 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
         }
         return taskOfIndicatorList;
     }
+
+    @Transactional
+    @Override
+    public List<TaskOfIndicator> findTaskOfIndicatorByIdIndicator(Indicator indicator){
+        return taskOfIndicatorRepositoryInterface.findByIndicatorId(indicator.getId());
+    }
 }

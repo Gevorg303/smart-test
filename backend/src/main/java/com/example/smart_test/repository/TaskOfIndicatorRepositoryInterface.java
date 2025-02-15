@@ -5,7 +5,9 @@ import com.example.smart_test.domain.TaskOfIndicator;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TaskOfIndicatorRepositoryInterface extends JpaRepository<TaskOfIndicator, Long> {
-
+    List<TaskOfIndicator> findByIndicatorId(Long indicatorId);
 }
