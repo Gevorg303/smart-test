@@ -64,6 +64,20 @@ const CreateThemePage = ({editItem}) => {
                 }
                 const user = await response1.json();
 
+                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(user)
+                });
+                if (!response2.ok) {
+                    throw new Error('Ошибка получения предметов');
+                }
+
+                const subjectsJson = await response2.json();
+                console.log(subjectsJson)
+                setSubjects(subjectsJson)
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
