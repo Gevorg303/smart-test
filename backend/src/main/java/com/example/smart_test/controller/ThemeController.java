@@ -38,8 +38,8 @@ public class ThemeController {
     public List<Theme> findThemeByIdSubject(@RequestBody Subject subject) {
         return themeService.findThemeByIdSubject(subject);
     }
-    @GetMapping("/getbysubject:{id}")//сервер не может прочитать куки созданные на фронте
-    public List<Theme> getAllThemesBySubjectIdNoCookie(/*@CookieValue("sub")*/@RequestBody Subject subject) {
+    @GetMapping("/get-by-subject")
+    public List<Theme> getAllThemesBySubjectIdNoCookie(@RequestBody Subject subject) {
         return themeService.findThemeByIdSubject(subject);
     }
 

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -104,7 +103,8 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
         }
     }
 
-    private Subject findSubjectById(Long id) {
+    @Override
+    public Subject findSubjectById(Long id) {
         return subjectRepository.findById(id).orElse(null);
     }
 

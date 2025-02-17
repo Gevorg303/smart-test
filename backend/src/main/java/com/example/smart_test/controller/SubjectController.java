@@ -1,5 +1,6 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
@@ -48,10 +49,10 @@ public class SubjectController {
         return subjectService.getSubjectByUser(user);
     }
 
-//    @GetMapping("/id:{id}")
-//    public SubjectDto getSubjectTeacherDto(@PathVariable Long id) {
-//        return subjectService.getSubjectById(id);
-//    }
+    @GetMapping("/find-subject-by-id")
+    public Subject getSubjectTeacherDto(@RequestBody Subject subject) {
+        return subjectService.findSubjectById(subject.getId());
+    }
 
     @GetMapping("/class={idClass}/teacher={idTeacher}")
     public List<SubjectDto> getSubjectByClassAndTeacher(@PathVariable Long idClass, @PathVariable Long idTeacher) {

@@ -1,5 +1,6 @@
 package com.example.smart_test.service.api;
 
+import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
@@ -14,6 +15,8 @@ public interface SubjectServiceInterface {
 
     @Transactional
     List<SubjectDto> getSubjectByUser(User user);
+
+    Subject findSubjectById(Long id);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void deleteSubjectDto(SubjectDto dto);
