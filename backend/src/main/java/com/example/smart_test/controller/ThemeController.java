@@ -38,7 +38,7 @@ public class ThemeController {
     public List<Theme> findThemeByIdSubject(@RequestBody Subject subject) {
         return themeService.findThemeByIdSubject(subject);
     }
-    @GetMapping("/get-by-subject")
+    @PostMapping("/get-by-subject")
     public List<Theme> getAllThemesBySubjectIdNoCookie(@RequestBody Subject subject) {
         return themeService.findThemeByIdSubject(subject);
     }

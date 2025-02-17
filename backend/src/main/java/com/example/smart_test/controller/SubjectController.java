@@ -49,7 +49,7 @@ public class SubjectController {
         return subjectService.getSubjectByUser(user);
     }
 
-    @GetMapping("/find-subject-by-id")
+    @PostMapping("/find-subject-by-id")
     public Subject getSubjectTeacherDto(@RequestBody Subject subject) {
         return subjectService.findSubjectById(subject.getId());
     }

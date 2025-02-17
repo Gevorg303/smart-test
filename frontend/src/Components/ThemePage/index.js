@@ -24,7 +24,17 @@ const ThemePage = () => {
                 {
                     navigate(-1,{replace:true})
                 }
-                const response = await fetch('http://localhost:8080/subject/id:' + subid);
+                const response = await fetch('http://localhost:8080/subject/find-subject-by-id',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            id: subid
+                        }
+                    )
+                });
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
@@ -39,7 +49,17 @@ const ThemePage = () => {
         async function fetchThemes() {
             try {
                 const subid = getCookie("sub");
-                const response = await fetch(`http://localhost:8080/theme/getbysubject:${subid}`);
+                const response = await fetch(`http://localhost:8080/theme/get-by-subject`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                           id: subid
+                        }
+                    )
+                });
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
@@ -49,7 +69,7 @@ const ThemePage = () => {
                 const array = []
                 themes.forEach(subject => {
                     array.push(
-                            <Theme id={subject.id} themeName={subject.themeName}/>
+                            <Theme key={subject.id} id={subject.id} themeName={subject.themeName}/>
                     )
                 });
                 setThemes(array)

@@ -13,22 +13,40 @@ const TestPage = () => {
     const [answers, setAnswers] = useState([]);
     const [questions, setQuestions] = useState([]);
 
+    const [test, setTest] = useState();
+    const [user, setUser] = useState();
+    const [attemptDuration, setAttemptDuration] = useState();
+    const [startDateTime, setStartDateTime] = useState();
+
     const [timer, setTimer] = useState();
 
-
     async function TestEnd() {
-        let sendData = [];
+
+        let requestForTaskList =[];
+
         questions.map((item, index) => {
             var obj = {};
             obj['task'] = {
                 "id": item.id
             };
             obj['response'] = answers[index] || ""
-            sendData.push(obj)
+            requestForTaskList.push(obj)
         })
 
+        let sendData = {
+            "startDateTime": startDateTime,
+            "attemptDuration": attemptDuration,
+            "test": {
+                "id": test
+            },
+            "user": {
+                "id": user
+            },
+            "requestForTaskList": requestForTaskList
+        };
+
         try {
-            const response = await fetch('http://localhost:8080/verification/result-test', {
+            const response = await fetch('http://localhost:8080/test/end-testing', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8'
@@ -36,6 +54,7 @@ const TestPage = () => {
                 body: JSON.stringify(sendData)
             });
             const test = await response.json();
+            setTest(test);
             console.log(test)
             sessionStorage.setItem("testResult", JSON.stringify(test))
         } catch (error) {
