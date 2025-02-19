@@ -78,7 +78,7 @@ public class BankFiltersController {
      * Если задания найдены, возвращается HTTP-статус 200 OK с отфильтрованным списком заданий.
      * Если задания отсутствуют, возвращается пустой список.
      */
-    @GetMapping("/tasks")
+    @PostMapping("/tasks")
     public ResponseEntity<List<TaskDto>> getTasksFilter(@RequestBody TaskFilterRequest testFilterRequest) {
         List<TaskDto> sortedTasks = bankFilterService.getTasksFilter(
                 testFilterRequest.getUser(),
@@ -114,7 +114,7 @@ public class BankFiltersController {
      * "subject": { "id": 16 }
      * }
      */
-    @GetMapping("/tests")
+    @PostMapping("/tests")
     public ResponseEntity<List<TestDto>> getTestsFilter(@RequestBody TestFilterRequest request) {
         List<TestDto> sortedTests = bankFilterService.getTestsFilter(request.getTestType(), request.getUser(), request.getSubject());
         return ResponseEntity.ok(sortedTests);
@@ -129,7 +129,7 @@ public class BankFiltersController {
      * 1. Если `subject` не задан, возвращает все индикаторы пользователя.
      * 2. Если `subject` задан, возвращает только индикаторы, относящиеся к указанному предмету.
      */
-    @GetMapping("/indicators")
+    @PostMapping("/indicators")
     public ResponseEntity<List<IndicatorDto>> getIndicatorFilter(@RequestBody IndicatorFilterRequest request) {
         List<IndicatorDto> sortedIndicators = bankFilterService.getIndicatorFilter(request.getUser(), request.getSubject());
         return ResponseEntity.ok(sortedIndicators);
