@@ -4,12 +4,10 @@ import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.request.UserRequest;
+import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.security.JWTUtils;
 import com.example.smart_test.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +26,8 @@ public class UserController {
     private JWTUtils jwtUtils;
 
     @PostMapping("/add")
-    public void addUser(@RequestBody List<UserRequest> userRequestList) {
-        userService.addUser(userRequestList);
+    public List<UserResponse> addUser(@RequestBody List<UserRequest> userRequestList) {
+        return userService.addUser(userRequestList);
     }
 
     @DeleteMapping("/delete")

@@ -6,10 +6,12 @@ import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
 import com.example.smart_test.request.UserRequest;
+import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.service.api.UserClassServiceInterface;
 import com.example.smart_test.service.api.UserEducationalInstitutionServiceInterface;
 import com.example.smart_test.service.api.UserServiceInterface;
 import com.github.javafaker.Faker;
+import com.nimbusds.jose.util.Pair;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,21 +46,36 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Transactional
     @Override
-    public void addUser(List<UserRequest> userRequestList) {
+    public List<UserResponse> addUser(List<UserRequest> userRequestList) {
+        List<UserResponse> registeredUsers = new ArrayList<>();
+
         for (UserRequest userRequest : userRequestList) {
             try {
-                List<User> newUserList = new ArrayList<>();
                 validateUserRequest(userRequest);
 
-                User newUser = userRepository.save(prepareUserEntity(userRequest));
+                Pair<User, String> userWithPassword = prepareUserEntity(userRequest);
+                User newUser = userRepository.save(userWithPassword.getLeft());
+                String rawPassword = userWithPassword.getRight();
 
                 linkUserToEducationalInstitution(userRequest, newUser);
                 linkUserToStudentClass(userRequest, newUser);
+
+                registeredUsers.add(new UserResponse(
+                        newUser.getLogin(),
+                        rawPassword,
+                        newUser.getEmail(),
+                        newUser.getName(),
+                        newUser.getPatronymic(),
+                        newUser.getSurname()));
+
             } catch (RuntimeException e) {
                 throw new RuntimeException("Ошибка при добавлении пользователя: " + e.getMessage(), e);
             }
         }
+
+        return registeredUsers;
     }
+
 
     private void validateUserRequest(UserRequest userRequest) {
         if (userRequest.getEducationalInstitution().getId() == null) {
@@ -69,10 +86,9 @@ public class UserServiceImpl implements UserServiceInterface {
         }
     }
 
-    private User prepareUserEntity(UserRequest userRequest) {
+    private Pair<User, String> prepareUserEntity(UserRequest userRequest) {
         userRequest.getUser().setLogin(generateLogin(userRequest.getUser()));
         String rawPassword = generatePassword();
-        userRequest.getUser().setPassword(rawPassword);
         userRequest.getUser().setPasswordEncoder(passwordEncoder.encode(rawPassword));
 
         User userEntity = userMapper.toEntity(userRequest.getUser());
@@ -81,8 +97,9 @@ public class UserServiceImpl implements UserServiceInterface {
                 .orElseThrow(() -> new RuntimeException("Роль не найдена"));
         userEntity.setRoles(role);
 
-        return userEntity;
+        return Pair.of(userEntity, rawPassword);
     }
+
 
     private void linkUserToEducationalInstitution(UserRequest userRequest, User newUser) {
         EducationalInstitution educationalInstitution = educationalInstitutionRepository.findById(userRequest.getEducationalInstitution().getId())
