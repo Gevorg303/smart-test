@@ -125,7 +125,7 @@ const CreateTestPage = ({editItem}) => {
                 console.log(subjectsJson)
                 setSubjects(subjectsJson)
 
-                const response3 = await fetch('http://localhost:8080/TypeTest/all');
+                const response3 = await fetch('http://localhost:8080/type-test/all');
                 if (!response3.ok) {
                     throw new Error('Ошибка получения типов тестов');
                 }
