@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 
-const CreateIndicatorPage = ({editItem}) => {
+const CreateIndicatorPage = ({editItem, onCreate}) => {
     const [subjects, setSubjects] = useState([]); // предметы
     const [targetSubject, setTargetSubject] = useState(0); // id выбранного предмета
-    const [show, setShow] = useState(false); // отображение тоста
-    const [toastText, setToastText] = useState(""); // текст тоста
+    //const [show, setShow] = useState(false); // отображение тоста
+    //const [toastText, setToastText] = useState(""); // текст тоста
 
     const [currentName, setCurrentName] = useState(""); // введеное название
     const [currentTheme, setCurrentTheme] = useState(-1); // id выбранной темы
@@ -46,11 +46,13 @@ const CreateIndicatorPage = ({editItem}) => {
                     }
                 )
             });
+            let toastText;
             if (!response.ok) {
-                setToastText("Ошибка создания индикатора");
+                toastText = "Ошибка создания индикатора";
                 throw new Error();
             }
-            setToastText("Индикатор успешно создан.");
+            toastText = "Индикатор успешно создан.";
+            onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
         }
@@ -127,35 +129,13 @@ const CreateIndicatorPage = ({editItem}) => {
                     }}/>
                 </Form.Group>
 
-
-
-
                 <Button variant="primary" type="submit" onClick={() => {
-                    setShow(true); /*console.log(currentAnswers)*/
+                    //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     Создать
                 </Button>
 
-
-
             </Form>
-            <ToastContainer
-                className="p-3"
-                position={'middle-center'}
-                style={{zIndex: 1}}
-            >
-                <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
-                    <Toast.Header closeButton={false}>
-                        <img
-                            src="holder.js/20x20?text=%20"
-                            className="rounded me-2"
-                            alt=""
-                        />
-                        <strong className="me-auto">Уведомление:</strong>
-                    </Toast.Header>
-                    <Toast.Body>{toastText}</Toast.Body>
-                </Toast>
-            </ToastContainer>
         </div>
     );
 };

@@ -3,14 +3,14 @@ import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import TaskForTestSelector from "../TaskForTestSelector";
 
-const CreateTestPage = ({editItem}) => {
+const CreateTestPage = ({editItem, onCreate}) => {
     //editItem - изменяемый объект который должен отображаться
     const [subjects, setSubjects] = useState([]); // предметы
     const [tasks, setTasks] = useState([]); // задания
     const [targetSubject, setTargetSubject] = useState(0); // id выбранного предмета
     const [types, setTypes] = useState([]); // типы тестов
-    const [show, setShow] = useState(false); // отображение тоста
-    const [toastText, setToastText] = useState(""); // текст тоста
+    //const [show, setShow] = useState(false); // отображение тоста
+    //const [toastText, setToastText] = useState(""); // текст тоста
 
     const [currentType, setCurrentType] = useState(); // введеный тип теста
     const [currentPassword, setCurrentPassword] = useState(""); // введеный пароль
@@ -86,12 +86,14 @@ const CreateTestPage = ({editItem}) => {
                     }
                 )
             });
+            let toastText;
             if (!response.ok) {
-                setToastText("Ошибка создания теста");
+                toastText = "Ошибка создания теста";
                 setCurrentTasks([]);
                 throw new Error();
             }
-            setToastText("Тест успешно создан.");
+            toastText = "Тест успешно создан.";
+            onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
         }
@@ -323,28 +325,11 @@ const CreateTestPage = ({editItem}) => {
                 </Form.Group>
 
                 <Button variant="primary" type="submit" onClick={() => {
-                    setShow(true); /*console.log(currentAnswers)*/
+                    //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     Создать
                 </Button>
             </Form>
-            <ToastContainer
-                className="p-3"
-                position={'middle-center'}
-                style={{zIndex: 1}}
-            >
-                <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
-                    <Toast.Header closeButton={false}>
-                        <img
-                            src="holder.js/20x20?text=%20"
-                            className="rounded me-2"
-                            alt=""
-                        />
-                        <strong className="me-auto">Уведомление:</strong>
-                    </Toast.Header>
-                    <Toast.Body>{toastText}</Toast.Body>
-                </Toast>
-            </ToastContainer>
         </div>
     );
 };

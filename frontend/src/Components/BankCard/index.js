@@ -48,6 +48,34 @@ const BankCard = ({id,objectItem,type, setEditItem}) => {
                 }
 
             }
+            if(type === "indicator") {
+                const response = await fetch('http://localhost:8080/indicator/delete', {  // удалить индикатор
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({id:id}
+                    )
+                });
+                if (!response.ok) {
+                    throw new Error("Ошибка удаления задания");
+                }
+
+            }
+            if(type === "theme") {
+                const response = await fetch('http://localhost:8080/theme/delete', {  // удалить тему
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({id:id}
+                    )
+                });
+                if (!response.ok) {
+                    throw new Error("Ошибка удаления задания");
+                }
+
+            }
             if(type === "subject") {
                 const response = await fetch('http://localhost:8080/subject/delete', { // удалить предмет
                     method: 'DELETE',

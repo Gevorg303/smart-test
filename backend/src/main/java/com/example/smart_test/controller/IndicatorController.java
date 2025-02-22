@@ -33,7 +33,7 @@ public class IndicatorController {
     /**
     Выводит список индикаторов по конкретной теме
     */
-    @GetMapping("/indicator-by-theme")
+    @PostMapping("/indicator-by-theme")
     public List<IndicatorDto> getIndicatorsByTheme(@RequestBody Theme theme) {
         return indicatorService.getIndicatorsByTheme(theme);
     }
@@ -41,7 +41,7 @@ public class IndicatorController {
     /**
      Выводит список индикаторов пользователя
      */
-    @GetMapping("/indicator-by-user")
+    @PostMapping("/indicator-by-user")
     public List<IndicatorDto> getIndicatorsByIdUser(@RequestBody User user) {
         return indicatorService.getUserIndicators(user);
     }

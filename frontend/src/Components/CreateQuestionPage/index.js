@@ -5,12 +5,12 @@ import FormSelectAnswer from "../FormSelectAnswer";
 
 
 
-const CreateQuestionPage = () => {
+const CreateQuestionPage = ({onCreate}) => {
     const [subjects, setSubjects] = useState([]);
     const [types, setTypes] = useState([]);
     const [targetSubject, setTargetSubject] = useState(0);
-    const [show, setShow] = useState(false);
-    const [toastText, setToastText] = useState("");
+    //const [show, setShow] = useState(false);
+    //const [toastText, setToastText] = useState("");
 
     const [currentType, setCurrentType] = useState();
    // const [currentSubject, setCurrentSubject] = useState();
@@ -80,11 +80,13 @@ const CreateQuestionPage = () => {
                     }
                 )
             });
+            let toastText;
             if (!response.ok) {
-                setToastText("Ошибка создния задания");
+                toastText = "Ошибка создния задания";
                 throw new Error();
             }
-            setToastText("Задание создано");
+            toastText = "Задание создано";
+            onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
         }
@@ -240,27 +242,11 @@ const CreateQuestionPage = () => {
                 <Form.Group className="mb-3">
                     {renderAnswers()}
                 </Form.Group>
-                <Button variant="primary" type="submit"  onClick={()=>{setShow(true); /*console.log(currentAnswers)*/}}>
+                <Button variant="primary" type="submit"  onClick={()=>{/*setShow(true);*//*console.log(currentAnswers)*/}}>
                     Создать
                 </Button>
             </Form>
-            <ToastContainer
-                className="p-3"
-                position={'middle-center'}
-                style={{ zIndex: 1 }}
-            >
-                <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
-                    <Toast.Header closeButton={false}>
-                        <img
-                            src="holder.js/20x20?text=%20"
-                            className="rounded me-2"
-                            alt=""
-                        />
-                        <strong className="me-auto">Уведомление:</strong>
-                    </Toast.Header>
-                    <Toast.Body>{toastText}</Toast.Body>
-                </Toast>
-            </ToastContainer>
+
         </div>
     );
 };

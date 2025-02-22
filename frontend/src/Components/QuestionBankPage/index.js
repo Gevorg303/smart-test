@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import {Form, Button, Toast, ToastContainer} from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import BankCard from "../BankCard";
 import "./styles.css";
@@ -11,6 +11,7 @@ import CreateTestPage from "../CreateTestPage";
 import CreateSubjectPage from "../CreateSubjectPage";
 import CreateThemePage from "../CreateThemePage";
 import CreateIndicatorPage from "../CreateIndicatorPage";
+import Sorting from "../Sorting";
 
 
 const QuestionBankPage = ({type}) => {
@@ -24,11 +25,18 @@ const QuestionBankPage = ({type}) => {
     const [showCreateModal, setShowCreateModal] = useState(false); // переменная отвенчает за отображение модального окна на экране
     const [showEditModal, setShowEditModal] = useState(false); // переменная для отображение модального окна создания когда происходит редактирование
     const navigate = useNavigate();
+    const [showToast, setShowToast] = useState(false); // отображение тоста
+    const [toastText, setToastText] = useState(""); // текст тоста
 
     function EditFunc(item) { //открывает модальное окно для редактирования объекта
         setEditItem(item)
         setShowEditModal(true)
     }
+    const handleCreate = (message) => {
+        setShowCreateModal(false);
+        setShowToast(true);
+        setToastText(message);
+    };
 
     useEffect(() => {
         async function fetchTests() {
@@ -46,7 +54,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "test") {// заполнение тестов из бд
 
                     setTitle("Банк тестов");// задать заголовок на странице
-                    setCreateModal(<CreateTestPage editItem={editItem}/>); // задать модальное окно для создания на странице
+                    setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate}/>); // задать модальное окно для создания на странице
 
                     const response2 = await fetch('http://localhost:8080/test/get-user-tests', { // получить тесты пользователя
                         method: 'POST',
@@ -65,7 +73,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "task") {// заполнение заданий из бд
 
                     setTitle("Банк заданий"); // задать заголовок на странице
-                    setCreateModal(<CreateQuestionPage/>);// задать модальное окно для создания на странице
+                    setCreateModal(<CreateQuestionPage onCreate={handleCreate}/>);// задать модальное окно для создания на странице
 
                     const response3 = await fetch('http://localhost:8080/task/get-user-tasks', { // получить задания пользователя
                         method: 'POST',
@@ -85,7 +93,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "subject") { // заполнение предметов из бд
 
                     setTitle("Банк предметов"); // задать заголовок на странице
-                    setCreateModal(<CreateSubjectPage editItem={editItem}/>);
+                    setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate}/>);
 
                     const response4 = await fetch('http://localhost:8080/subject/print-user-subject', {
                         method: 'POST',
@@ -104,7 +112,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "theme") { // заполнение предметов из бд
 
                     setTitle("Банк тем"); // задать заголовок на странице
-                    setCreateModal(<CreateThemePage editItem={editItem}/>);
+                    setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate}/>);
 
                     const response5 = await fetch('http://localhost:8080/theme/all', {
                         method: 'GET',
@@ -122,7 +130,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "indicator") { // заполнение предметов из бд
 
                     setTitle("Банк индикаторов"); // задать заголовок на странице
-                    setCreateModal(<CreateIndicatorPage editItem={editItem}/>);
+                    setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate}/>);
 
                     const response6 = await fetch('http://localhost:8080/indicator/all', {
                         method: 'GET',
@@ -144,7 +152,7 @@ const QuestionBankPage = ({type}) => {
         }
 
         fetchTests();
-    }, [type,editItem]);
+    }, [type,editItem,toastText]);
     /* className="page-container-quest"*/
     return (
         <div>
@@ -152,9 +160,9 @@ const QuestionBankPage = ({type}) => {
             <br/><br/><br/>
             <h1>{/*isTests ? "Тесты" : "Задания"*/title}</h1>
             <div className="page-container-quest">
-
                 <div className="button-containers">
-                    <Button variant="success" className="" onClick={() => {
+                    <Sorting type={type} setBankItems={setBankItems}/>
+                    <Button variant="success" className="create-button" onClick={() => {
                         setEditItem(null);
                         setShowCreateModal(true)
                     }}>Создать</Button>
@@ -183,6 +191,23 @@ const QuestionBankPage = ({type}) => {
 
 
                 </div>
+            <ToastContainer
+                className="p-3"
+                position={'middle-center'}
+                style={{zIndex: 1}}
+            >
+                <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                    <Toast.Header closeButton={false}>
+                        <img
+                            src="holder.js/20x20?text=%20"
+                            className="rounded me-2"
+                            alt=""
+                        />
+                        <strong className="me-auto">Уведомление:</strong>
+                    </Toast.Header>
+                    <Toast.Body>{toastText}</Toast.Body>
+                </Toast>
+            </ToastContainer>
                 <Footer/>
             </div>
             );

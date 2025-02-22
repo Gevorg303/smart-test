@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 
-const CreateSubjectPage = ({editItem}) => {
+const CreateSubjectPage = ({editItem, onCreate}) => {
 
-    const [show, setShow] = useState(false); // отображение тоста
-    const [toastText, setToastText] = useState(""); // текст тоста
+    //const [show, setShow] = useState(false); // отображение тоста
+    // [toastText, setToastText] = useState(""); // текст тоста
 
     const [currentName, setCurrentName] = useState(""); // введеное название
     const [currentDescription, setCurrentDescription] = useState(""); // введенное описание
@@ -45,11 +45,13 @@ const CreateSubjectPage = ({editItem}) => {
                     }
                 )
             });
+            let toastText;
             if (!response.ok) {
-                setToastText("Ошибка создания предмета");
+                toastText = "Ошибка создания предмета";
                 throw new Error();
             }
-            setToastText("Предмет успешно создан.");
+            toastText = "Предмет успешно создан.";
+            onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
         }
@@ -92,28 +94,12 @@ const CreateSubjectPage = ({editItem}) => {
                     }}/>
                 </Form.Group>
                 <Button variant="primary" type="submit" onClick={() => {
-                    setShow(true); /*console.log(currentAnswers)*/
+                    //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     Создать
                 </Button>
             </Form>
-            <ToastContainer
-                className="p-3"
-                position={'middle-center'}
-                style={{zIndex: 1}}
-            >
-                <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
-                    <Toast.Header closeButton={false}>
-                        <img
-                            src="holder.js/20x20?text=%20"
-                            className="rounded me-2"
-                            alt=""
-                        />
-                        <strong className="me-auto">Уведомление:</strong>
-                    </Toast.Header>
-                    <Toast.Body>{toastText}</Toast.Body>
-                </Toast>
-            </ToastContainer>
+
         </div>
     );
 };
