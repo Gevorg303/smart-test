@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
@@ -12,6 +12,7 @@ const StartTestPage = () => {
     const [testDateStart, setTestDateStart] = useState("");
     const [testDateEnd, setTestDateEnd] = useState("");
     const [testTime, setTestTime] = useState("");
+    const [attempts, setAttempts] = useState([]);
 
     useEffect(() => {
         function getCookie(name) {
@@ -33,11 +34,39 @@ const StartTestPage = () => {
                 }
                 const test = await response.json();
                 console.log(test);
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long',
+                    timezone: 'UTC',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                };
+
                 setTestName(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
                 setTestDescription(test.description || "Описание отсутствует");
-                setTestDateStart(test.openingDateAndTime);
-                setTestDateEnd(test.closingDateAndTime);
+                setTestDateStart(new Date(test.openingDateAndTime).toLocaleString("ru", options) );
+                setTestDateEnd(new Date(test.closingDateAndTime).toLocaleString("ru", options));
                 setTestTime(test.passageTime || "неограничено");
+                setTestTryCount(test.numberOfAttemptsToPass||"неограничено")
+
+                // заполнение попыток
+                setAttempts(
+                    [
+                        <tr>
+                            <td>1</td>
+                            <td>Завершен: среда, 1 января 2025 г. в 00:00</td>
+                            <td>3/5</td>
+                        </tr>,
+                        <tr>
+                            <td>2</td>
+                            <td>Завершен: четверг, 2 января 2025 г. в 02:00</td>
+                            <td>5/5</td>
+                        </tr>
+                    ]
+                )
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -51,6 +80,7 @@ const StartTestPage = () => {
        console.log(testDateStart);
        if(Date.parse(testDateStart)<=Date.now()){
            if(Date.parse(testDateEnd) >= Date.now()){
+               sessionStorage.setItem('startDate', new Date());
                navigate("/test");
            }
            else{
@@ -69,19 +99,34 @@ const StartTestPage = () => {
                 <h1 className="test-name">{testName}</h1>
                 <div className="test-container">
                     <div className="info-card">
-                        <h4>{testDescription}</h4>
-                        <h4>Ограничение по времени: {testTime}</h4>
                         <h4 hidden={!testDateStart}>Открыто с: {testDateStart}</h4>
                         <h4 hidden={!testDateEnd}>Закрывается: {testDateEnd}</h4>
+                        <h4>Описание: {testDescription}</h4>
+                        <h4>Разрешено попыток: {testTryCount}</h4>
+                        <h4>Ограничение по времени: {testTime}</h4>
+                        <h4>Предыдущие результаты</h4>
+                        <Table striped bordered hover>
+                            <thead>
+                            <tr>
+                                <th>Попытка</th>
+                                <th>Состояние</th>
+                                <th>Оценка / 5</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {attempts}
+                            </tbody>
+                        </Table>
+
                         <div className="button-container">
                             <Button onClick={StartTest} className="start-test-button">
                                 Начать попытку
                             </Button>
                         </div>
-                        </div>
                     </div>
                 </div>
-                <Footer/>
+            </div>
+            <Footer/>
         </div>
     );
 };

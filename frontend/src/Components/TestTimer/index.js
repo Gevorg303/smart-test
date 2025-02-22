@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-const TestTimer = ({durationMin,durationSec,start,functionOnEnd}) => {
+const TestTimer = ({durationMin,durationSec,start,functionOnEnd,timeFromStart}) => {
     const [time, setTime] = useState(durationMin*60+durationSec);
+    const [startTime, setStartTime] = useState(durationMin*60+durationSec);
     useEffect(() => {
       if(start) {
           if (time <= 0) {
               functionOnEnd();
           } else {
               setTimeout(() => {
-                  setTime(time - 1)
+                  timeFromStart(startTime - time-1);
+                  setTime(time - 1);
               }, 1000)
           }
       }

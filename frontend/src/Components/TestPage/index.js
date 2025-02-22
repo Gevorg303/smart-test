@@ -9,16 +9,26 @@ import TestTimer from "../TestTimer";
 
 const TestPage = () => {
     let navigate = useNavigate();
+
+   // const startDateTime =  new Date();
     const [active, setActive] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [questions, setQuestions] = useState([]);
+    const [attemptData, setAttemptData] = useState([]);
 
-    const [test, setTest] = useState();
-    const [user, setUser] = useState();
+  //  const [test, setTest] = useState();
+ //   const [user, setUser] = useState();
     const [attemptDuration, setAttemptDuration] = useState();
-    const [startDateTime, setStartDateTime] = useState();
+    const [startDateTime, setStartDateTime] = useState(new Date(sessionStorage.getItem('startDate')));
 
     const [timer, setTimer] = useState();
+
+    function getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
 
     async function TestEnd() {
 
@@ -32,18 +42,32 @@ const TestPage = () => {
             obj['response'] = answers[index] || ""
             requestForTaskList.push(obj)
         })
+        let sec = attemptDuration % 60;
+        let min = Math.floor(parseInt(attemptDuration)/60) ;
+        let hour= Math.floor(parseInt(attemptDuration)/3600) ;
+
+        const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
+            credentials: "include",
+        });
+        if (!response1.ok) {
+            throw new Error('Ошибка сети');
+        }
+        const user = await response1.json();
+
+        let testId = parseInt(getCookie("test"),10);
 
         let sendData = {
-            "startDateTime": startDateTime,
-            "attemptDuration": attemptDuration,
+            "startDateTime": startDateTime.toISOString(),
+            "attemptDuration": (hour < 10?"0"+hour:hour) + ":"+(min < 10?"0"+min:min) + ":"+(sec<10?"0"+sec:sec),
             "test": {
-                "id": test
+                "id": testId
             },
             "user": {
-                "id": user
+                "id": user.id
             },
             "requestForTaskList": requestForTaskList
-        };
+        }
+        console.log(sendData)
 
         try {
             const response = await fetch('http://localhost:8080/test/end-testing', {
@@ -53,13 +77,14 @@ const TestPage = () => {
                 },
                 body: JSON.stringify(sendData)
             });
-            const test = await response.json();
-            setTest(test);
-            console.log(test)
-            sessionStorage.setItem("testResult", JSON.stringify(test))
+            const resJson = await response.json();
+            setAttemptData(resJson);
+            console.log(resJson)
+            sessionStorage.setItem("testResult", JSON.stringify(resJson))
         } catch (error) {
             console.error('Ошибка получения данных:', error);
         }
+
         navigate("/testresult");
     }
 
@@ -85,7 +110,7 @@ const TestPage = () => {
                 console.log(test)
                 const passTime = test.passageTime.split(':');
                 console.log(passTime);
-                setTimer(<TestTimer durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])} functionOnEnd={TestEnd} start={true}/>)
+                setTimer(<TestTimer durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])} functionOnEnd={TestEnd} start={true} timeFromStart={setAttemptDuration}/>)
 
                 const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
                     method: 'POST',
@@ -108,7 +133,7 @@ const TestPage = () => {
         fetchTest();
     }, []);
 
-    console.log(answers)
+    //console.log(answers)
     return (
         <div className="page-container">
             <div className="content-wrapper">
