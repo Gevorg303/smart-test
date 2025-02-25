@@ -27,34 +27,49 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
 
     @Transactional
     @Override
-    public List<TestDto> getTestsFilter(TypeTest typeTest, User user, Subject subject) {
-        List<TestDto> newTestDtoList = new ArrayList<>();
+    public List<TestDto> getTestsFilter(TypeTest typeTest, User user, Subject subject, Theme theme) {
         List<TestDto> testDtoList = testService.getUserTests(user);
+        List<TestDto> filteredList = new ArrayList<>();
 
-        if (typeTest != null && typeTest.getNameOfTestType() != null) {
+        if (typeTest != null && typeTest.getId() != null) {
             for (TestDto testDto : testDtoList) {
-                if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), typeTest.getNameOfTestType())) {
-                    newTestDtoList.add(testDto);
+                if (Objects.equals(testDto.getTypeTest().getId(), typeTest.getId())) {
+                    filteredList.add(testDto);
                 }
             }
         } else {
-            newTestDtoList.addAll(testDtoList);
+            filteredList.addAll(testDtoList);
         }
+
         if (subject != null) {
-            List<TestDto> filteredBySubject = new ArrayList<>();
-            for (TestDto testDto : newTestDtoList) {
-                List<Theme> themeDtoList = themeService.findThemeByIdSubject(subject);
-                for (Theme theme : themeDtoList) {
-                    if (Objects.equals(testDto.getTheme().getId(), theme.getId())) {
-                        filteredBySubject.add(testDto);
-                        break;
+            List<Theme> subjectThemes = themeService.findThemeByIdSubject(subject);
+            List<TestDto> subjectFilteredList = new ArrayList<>();
+
+            for (TestDto testDto : filteredList) {
+                for (Theme subjectTheme : subjectThemes) {
+                    if (Objects.equals(testDto.getTheme().getId(), subjectTheme.getId())) {
+                        subjectFilteredList.add(testDto);
+                        break; // Достаточно одного совпадения по предмету
                     }
                 }
             }
-            newTestDtoList = filteredBySubject;
+            filteredList = subjectFilteredList;
         }
-        return newTestDtoList;
+
+        if (theme != null && theme.getId() != null) {
+            List<TestDto> themeFilteredList = new ArrayList<>();
+
+            for (TestDto testDto : filteredList) {
+                if (Objects.equals(testDto.getTheme().getId(), theme.getId())) {
+                    themeFilteredList.add(testDto);
+                }
+            }
+            filteredList = themeFilteredList;
+        }
+
+        return filteredList;
     }
+
 
     @Override
     @Transactional

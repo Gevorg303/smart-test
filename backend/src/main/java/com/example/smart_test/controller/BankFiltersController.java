@@ -2,6 +2,7 @@ package com.example.smart_test.controller;
 
 import com.example.smart_test.domain.TypeTest;
 import com.example.smart_test.domain.User;
+import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.Subject;
 import com.example.smart_test.dto.IndicatorDto;
 import com.example.smart_test.dto.TaskDto;
@@ -91,32 +92,37 @@ public class BankFiltersController {
 
 
     /**
-     * Получение отсортированных тестов с фильтрацией по типу теста и/или предмету.
-     * В зависимости от того, какие фильтры переданы, результат может включать тесты, отсортированные только по одному фильтру или по обоим.
+     * Получение отсортированных тестов с фильтрацией по типу теста, предмету и/или теме.
+     * В зависимости от того, какие фильтры переданы, результат может включать тесты, отфильтрованные по одному или нескольким критериям.
+     *
      * Логика фильтрации:
      * 1. Если фильтр по типу теста передан, тесты будут отфильтрованы по соответствующему типу.
-     * 2. Если фильтр по предмету передан, тесты будут фильтроваться по теме, соответствующей данному предмету.
-     * 3. Если оба фильтра переданы, то тесты будут отфильтрованы по обоим параметрам.
-     * 4. Если фильтры не указаны, возвращаются все тесты пользователя без фильтрации.
+     * 2. Если фильтр по предмету передан, тесты будут фильтроваться по темам, связанным с данным предметом.
+     * 3. Если фильтр по теме передан, тесты будут дополнительно фильтроваться по конкретной теме.
+     * 4. Если переданы все три фильтра (тип теста, предмет и тема), тесты должны соответствовать всем указанным критериям.
+     * 5. Если фильтры не указаны, возвращаются все тесты пользователя без фильтрации.
      *
      * @param request объект типа {@link TestFilterRequest}, который содержит параметры для фильтрации:
      *                - {@link TypeTest testType}: Тип теста, по которому будет происходить фильтрация.
      *                - {@link User user}: Пользователь, чьи тесты необходимо отфильтровать.
      *                - {@link Subject subject}: Предмет, по которому будет происходить дополнительная фильтрация тестов.
-     * @return {@link ResponseEntity} с HTTP-статусом 200 OK и списком объектов {@link TestDto}, представляющих отсортированные тесты.
-     * В случае успеха возвращается список тестов, отфильтрованных по указанным фильтрам, обернутый в объект {@link ResponseEntity}.
+     *                - {@link Theme theme}: Тема, по которой дополнительно фильтруются тесты.
+     * @return {@link ResponseEntity} с HTTP-статусом 200 OK и списком объектов {@link TestDto}, представляющих отфильтрованные тесты.
+     * В случае успеха возвращается список тестов, отфильтрованных по указанным критериям, обернутый в объект {@link ResponseEntity}.
      * Если тесты не найдены, возвращается пустой список.
+     *
      * Пример запроса:
-     * POST /tests/by-type
+     * POST /tests/by-filters
      * {
-     * "testType": { "nameOfTestType": "Входной контроль" },
-     * "user": { "id": 2 },
-     * "subject": { "id": 16 }
+     *   "testType": { "nameOfTestType": "Входной контроль" },
+     *   "user": { "id": 2 },
+     *   "subject": { "id": 16 },
+     *   "theme": { "id": 5 }
      * }
      */
     @PostMapping("/tests")
     public ResponseEntity<List<TestDto>> getTestsFilter(@RequestBody TestFilterRequest request) {
-        List<TestDto> sortedTests = bankFilterService.getTestsFilter(request.getTestType(), request.getUser(), request.getSubject());
+        List<TestDto> sortedTests = bankFilterService.getTestsFilter(request.getTestType(), request.getUser(), request.getSubject(), request.getTheme());
         return ResponseEntity.ok(sortedTests);
     }
 
