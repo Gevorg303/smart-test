@@ -73,7 +73,7 @@ const QuestionBankPage = ({type}) => {
                 if(type === "task") {// заполнение заданий из бд
 
                     setTitle("Банк заданий"); // задать заголовок на странице
-                    setCreateModal(<CreateQuestionPage onCreate={handleCreate}/>);// задать модальное окно для создания на странице
+                    setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate}/>);// задать модальное окно для создания на странице
 
                     const response3 = await fetch('http://localhost:8080/task/get-user-tasks', { // получить задания пользователя
                         method: 'POST',

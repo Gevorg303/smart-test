@@ -5,7 +5,7 @@ import FormSelectAnswer from "../FormSelectAnswer";
 
 
 
-const CreateQuestionPage = ({onCreate}) => {
+const CreateQuestionPage = ({editItem, onCreate}) => {
     const [subjects, setSubjects] = useState([]);
     const [types, setTypes] = useState([]);
     const [targetSubject, setTargetSubject] = useState(0);
@@ -190,22 +190,50 @@ const CreateQuestionPage = ({onCreate}) => {
                 const typeJson = await response3.json();
                 console.log(typeJson)
                 setTypes(typeJson)
-                setCurrentType(typeJson[0].id);
+              /*  if(editItem == null){
+                    setCurrentType(typeJson[0].id);
+                }*/
 
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
+        if(editItem!=null){ //выполняется если предается предмет который нужно изменить
+            if(editItem.test!=null) {
+                console.log("sub= "+editItem.test.theme.subject.id+"; theme= "+editItem.test.theme.id)
+                setTargetSubject(editItem.test.theme.subject.id);
+                setCurrentTheme(editItem.test.theme.id);
+            }else {
+                setTargetSubject(-1);
+                setCurrentTheme(-1);
+            }
+
+            setCurrentType(editItem.typeTask.id);
+           // setIndicators([]);
+            setText(editItem.taskText);
+            setExplanation(editItem.explanation);
+           // setCurrentAnswers([]);
+        }
+        else {
+            setTargetSubject(-1);
+            setCurrentType(-1);
+            setCurrentTheme(-1);
+            setIndicators([]);
+            setText("");
+            setExplanation("");
+            setCurrentAnswers([]);
+            setCurrentType(-1);
+        }
         fetchSubjects();
-    }, []);
+    }, [editItem]);
     return (
         <div>
-            <h1>Создание задания</h1>
+            <h1>{editItem ? "Редактирование задания" : "Создание задания"}</h1>
             <h3>Выберите предмет и тему задания</h3>
-            <Form  onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                    <Form.Select
+                    <Form.Select value={targetSubject}
                         onChange={(e) => {
                             setTargetSubject(e.target.value);
                         }}>
@@ -215,34 +243,43 @@ const CreateQuestionPage = ({onCreate}) => {
 
                     </Form.Select>
                 </Form.Group>
-                <ThemeAndIndicatorSelector needIndicators={true} targetSubject={targetSubject} indicators={currentIndicators} setIndicators={setIndicators}
-                                            setCurrentTheme={setCurrentTheme}/>
+                <ThemeAndIndicatorSelector needIndicators={true} targetSubject={targetSubject}
+                                           indicators={currentIndicators}
+                                           currentTheme={currentTheme}
+                                           setIndicators={setIndicators}
+                                           setCurrentTheme={setCurrentTheme}/>
                 <Form.Group className="mb-3">
                     <Form.Select onChange={(e) => {
                         setCurrentType(e.target.value);
                         setCurrentAnswers([]);
-                    }}>
+                    }} value={currentType} >
 
-                        {types.map((item, index) => <option key={item.id} value={item.id}> {item.taskTypeName}  </option>)}
+                        {types.map((item, index) => <option key={item.id}
+                                                            value={item.id}> {item.taskTypeName}  </option>)}
 
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Текст задания</Form.Label>
-                    <Form.Control value={currentText} as="textarea" rows={3} onChange={(e) => {setText(e.target.value);}}/>
+                    <Form.Control value={currentText} as="textarea" rows={3} onChange={(e) => {
+                        setText(e.target.value);
+                    }}/>
                 </Form.Group>
                 <Form.Group controlId="formFile" className="mb-3">
                     <Form.Label>Добавить картинку</Form.Label>
-                    <Form.Control type="file" />
+                    <Form.Control type="file"/>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Пояснение</Form.Label>
-                    <Form.Control value={currentExplanation} as="textarea" rows={3} onChange={(e) => {setExplanation(e.target.value);}}/>
+                    <Form.Control value={currentExplanation} as="textarea" rows={3} onChange={(e) => {
+                        setExplanation(e.target.value);
+                    }}/>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     {renderAnswers()}
                 </Form.Group>
-                <Button variant="primary" type="submit"  onClick={()=>{/*setShow(true);*//*console.log(currentAnswers)*/}}>
+                <Button variant="primary" type="submit" onClick={() => {/*setShow(true);*//*console.log(currentAnswers)*/
+                }}>
                     Создать
                 </Button>
             </Form>
