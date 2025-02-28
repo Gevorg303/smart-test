@@ -318,11 +318,17 @@ const CreateTestPage = ({editItem, onCreate}) => {
                         setCurrentPassword(e.target.value);
                     }}/>
                 </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Задания в тесте:</Form.Label>
-                    {tasks.map((item, index) =>   <TaskForTestSelector key={item.id} id={item.id} task={{id:item.id,taskText:item.taskText} } answers={currentTasks} setAnswers={setCurrentTasks} /> )}
+                {
+                    currentType !=2?
+                    <Form.Group className="mb-3">
+                        <Form.Label>Задания в тесте:</Form.Label>
+                        {tasks.map((item, index) =>   <TaskForTestSelector key={item.id} id={item.id} task={{id:item.id,taskText:item.taskText} } answers={currentTasks} setAnswers={setCurrentTasks} /> )}
 
-                </Form.Group>
+                    </Form.Group>
+                    :
+                    <></>
+                }
+
 
                 <Button variant="primary" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
