@@ -86,6 +86,15 @@ const CreateThemePage = ({editItem, onCreate}) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
+        if(editItem!=null){ //выполняется если предается предмет который нужно изменить
+
+            setTargetSubject(editItem.subject.id)
+            setCurrentName(editItem.themeName);
+        }
+        else if(targetSubject<0){
+            setTargetSubject(-1)
+            setCurrentName();
+        }
         fetchSubjects();
     }, [editItem]);
     return (
