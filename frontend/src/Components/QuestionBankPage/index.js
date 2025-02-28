@@ -163,7 +163,6 @@ const QuestionBankPage = ({type}) => {
                 <div className="button-containers">
                     <Sorting type={type} setBankItems={setBankItems}/>
                     <Button variant="success" className="create-button" onClick={() => {
-                        setEditItem(null);
                         setShowCreateModal(true)
                     }}>Создать</Button>
                 </div>
@@ -172,6 +171,7 @@ const QuestionBankPage = ({type}) => {
                         onHide={() => {
                             setShowCreateModal(false);
                             setShowEditModal(false)
+                            setEditItem(null);
                         }}
                         dialogClassName="modal-90w"
                         size="xl"
