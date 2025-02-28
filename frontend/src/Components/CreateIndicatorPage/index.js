@@ -108,7 +108,7 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
     }, [currentTheme,editItem]);
     return (
         <div>
-            <h1>Создание индикатора</h1>
+            <h1>{editItem ? "Редактирование индикатора" : "Создание индикатора"}</h1>
             <h3>Выберите предмет и тему теста</h3>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
@@ -122,8 +122,8 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
 
                     </Form.Select>
                 </Form.Group>
-                <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject} currentTheme={currentTheme} setCurrentTheme={setCurrentTheme}/>
-
+                <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
+                                           currentTheme={currentTheme} setCurrentTheme={setCurrentTheme}/>
 
 
                 <Form.Group className="mb-3">

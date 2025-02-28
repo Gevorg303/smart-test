@@ -89,7 +89,7 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
     }, [editItem]);
     return (
         <div>
-            <h1>Создание предмета</h1>
+            <h1>{editItem ? "Редактирование предмета" : "Создание предмета"}</h1>
             <h3>Введите название и описание предмета</h3>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">

@@ -99,7 +99,7 @@ const CreateThemePage = ({editItem, onCreate}) => {
     }, [editItem]);
     return (
         <div>
-            <h1>Создание темы</h1>
+            <h1>{editItem ? "Редактирование темы" : "Создание темы"}</h1>
             <h3>Выберите предмет и введите название темы</h3>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
