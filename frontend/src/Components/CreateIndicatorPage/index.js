@@ -91,14 +91,18 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
-        /*if(editItem!=null){ //выполняется если предается предмет который нужно изменить
-            console.log(editItem);
-            setTargetSubject(editItem.theme.subject.id)
+        if(editItem!=null){ //выполняется если предается предмет который нужно изменить
+
+            setTargetSubject(editItem.theme.subject.id);
+            setCurrentName(editItem.nameOfTheIndicator);
             setCurrentTheme(editItem.theme.id);
+
         }
         else {
+            setTargetSubject(-1);
             setCurrentTheme(-1);
-        }*/
+            setCurrentName("");
+        }
 
         fetchSubjects();
     }, [currentTheme,editItem]);
