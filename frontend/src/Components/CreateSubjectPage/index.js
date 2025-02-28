@@ -74,6 +74,17 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
+        if(editItem!=null){ //выполняется если предается предмет который нужно изменить
+
+            setCurrentName(editItem.subjectName);
+            setCurrentDescription(editItem.description);
+
+        }
+        else {
+
+            setCurrentName("");
+            setCurrentDescription("");
+        }
         fetchSubjects();
     }, [editItem]);
     return (
