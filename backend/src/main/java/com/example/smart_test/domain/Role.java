@@ -1,5 +1,6 @@
 package com.example.smart_test.domain;
 
+import com.example.smart_test.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,4 +14,8 @@ public class Role {
     private Long id;
     @Column(name = "название_роли")
     private String role;
+
+    public UserRole getRoleType() {
+        return UserRole.values()[(int) (id - 1)];
+    }
 }

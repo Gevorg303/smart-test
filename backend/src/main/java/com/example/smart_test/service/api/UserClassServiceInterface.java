@@ -1,5 +1,7 @@
 package com.example.smart_test.service.api;
 
+import com.example.smart_test.domain.StudentClass;
+import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.UserClass;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserClassDto;
@@ -23,4 +25,7 @@ public interface UserClassServiceInterface {
     UserClassDto getTeacherClassByClassAndTeacher(Long idClass, Long idTeacher);
 
     List<StudentClassDto> findStudentClassByUser(UserDto userDto);
+
+    @Transactional
+    List<User> getUsersByStudentClass(StudentClassDto studentClass);
 }

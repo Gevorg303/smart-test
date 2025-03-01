@@ -1,10 +1,12 @@
 package com.example.smart_test.service;
 
 
+import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
+import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.SubjectUserMapperInterface;
 import com.example.smart_test.repository.SubjectRepositoryInterface;
 import com.example.smart_test.repository.SubjectUserRepositoryInterface;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,7 +31,7 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     @Autowired
     private SubjectUserMapperInterface subjectUserMapperInterface;
     @Autowired
-    private SubjectRepositoryInterface subjectRepository;
+    private SubjectMapperInterface subjectMapper;
 
     @Override
     public SubjectUserDto addSubjectTeacherDto(SubjectUserDto dto) {
@@ -68,5 +71,15 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     private boolean findSubjectUserById(Long id) {
         Optional<SubjectUser> subjectTeacher = subjectUserRepositoryInterface.findById(id);
         return subjectTeacher.isPresent();
+    }
+
+    @Transactional
+    @Override
+    public Set<SubjectDto> getSubjectsByUsers(List<User> users) {
+        List<SubjectUser> subjectUsers = subjectUserRepositoryInterface.findByUserIn(users);
+
+        return subjectUsers.stream()
+                .map(subjectUser -> subjectMapper.toDTO(subjectUser.getSubject()))
+                .collect(Collectors.toSet());
     }
 }

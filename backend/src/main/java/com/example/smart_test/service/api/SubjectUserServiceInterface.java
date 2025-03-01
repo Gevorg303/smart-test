@@ -1,6 +1,7 @@
 package com.example.smart_test.service.api;
 
 
+import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface SubjectUserServiceInterface {
     SubjectUserDto addSubjectTeacherDto(SubjectUserDto dto);
@@ -21,4 +23,7 @@ public interface SubjectUserServiceInterface {
 
     @Transactional
     List<SubjectUser> findByUserId(User user);
+
+    @Transactional
+    Set<SubjectDto> getSubjectsByUsers(List<User> users);
 }

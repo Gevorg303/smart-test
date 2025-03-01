@@ -2,10 +2,12 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.StudentClass;
+import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.UserClass;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserClassDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.enums.UserRole;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.TeacherClassMapperInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
@@ -92,9 +94,17 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
         return studentClassDtos;
     }
 
-
     private boolean findTeacherClassById(Long id) {
         Optional<UserClass> indicator = userClassRepositoryInterface.findById(id);
         return indicator.isPresent();
+    }
+
+    @Transactional
+    @Override
+    public List<User> getUsersByStudentClass(StudentClassDto request) {
+        return userClassRepositoryInterface.findByStudentClass_IdAndUser_Roles_Id(request.getId(), UserRole.STUDENT.getId())
+                .stream()
+                .map(UserClass::getUser)
+                .collect(Collectors.toList());
     }
 }

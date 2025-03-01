@@ -1,9 +1,7 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
-import com.example.smart_test.dto.IndicatorDto;
-import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.service.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,10 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     private TaskServiceInterface taskService;
     @Autowired
     private IndicatorServiceInterface indicatorService;
+    @Autowired
+    private UserClassServiceInterface userClassService;
+    @Autowired
+    private SubjectUserServiceInterface subjectUserService;
 
     @Transactional
     @Override
@@ -138,5 +140,11 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         return userIndicators.stream()
                 .filter(indicatorDto -> Objects.equals(indicatorDto.getTheme().getSubject().getId(), subject.getId()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public Set<SubjectDto> getSubjectFilter(StudentClassDto request) {
+        return subjectUserService.getSubjectsByUsers(userClassService.getUsersByStudentClass(request));
     }
 }

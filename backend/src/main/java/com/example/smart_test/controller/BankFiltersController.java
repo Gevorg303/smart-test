@@ -4,24 +4,23 @@ import com.example.smart_test.domain.TypeTest;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.Subject;
-import com.example.smart_test.dto.IndicatorDto;
-import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.request.IndicatorFilterRequest;
 import com.example.smart_test.request.TaskFilterRequest;
 import com.example.smart_test.request.TestFilterRequest;
-import com.example.smart_test.service.BankFilterServiceImpl;
+import com.example.smart_test.service.api.BankFilterServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/bank-filters")
 public class BankFiltersController {
     @Autowired
-    private BankFilterServiceImpl bankFilterService;
+    private BankFilterServiceInterface bankFilterService;
 
     /**
      * Обработчик запроса для получения списка заданий, отфильтрованных по заданным критериям.
@@ -139,5 +138,11 @@ public class BankFiltersController {
     public ResponseEntity<List<IndicatorDto>> getIndicatorFilter(@RequestBody IndicatorFilterRequest request) {
         List<IndicatorDto> sortedIndicators = bankFilterService.getIndicatorFilter(request.getUser(), request.getSubject());
         return ResponseEntity.ok(sortedIndicators);
+    }
+
+    @PostMapping("/subjects")
+    public ResponseEntity<Set<SubjectDto>> getSubjectFilter(@RequestBody StudentClassDto request){
+        Set<SubjectDto> subjectDto = bankFilterService.getSubjectFilter(request);
+        return ResponseEntity.ok(subjectDto);
     }
 }

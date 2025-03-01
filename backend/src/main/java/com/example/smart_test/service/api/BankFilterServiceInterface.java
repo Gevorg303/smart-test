@@ -1,12 +1,11 @@
 package com.example.smart_test.service.api;
 
 import com.example.smart_test.domain.*;
-import com.example.smart_test.dto.IndicatorDto;
-import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BankFilterServiceInterface {
     @Transactional
@@ -16,4 +15,6 @@ public interface BankFilterServiceInterface {
 
     @Transactional
     List<IndicatorDto> getIndicatorFilter(User user, Subject subject);
+
+    Set<SubjectDto> getSubjectFilter(StudentClassDto request);
 }
