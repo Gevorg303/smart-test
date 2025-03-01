@@ -1,6 +1,7 @@
 package com.example.smart_test.service.api;
 
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
@@ -24,4 +25,6 @@ public interface UserServiceInterface {
 
     @Transactional
     User getUserByLogin(String login);
+
+    List<StudentClassDto> findStudentClassByUser(UserDto userDto);
 }

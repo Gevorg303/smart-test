@@ -1,7 +1,7 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
-import com.example.smart_test.dto.UserClassDto;
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
@@ -166,5 +166,10 @@ public class UserServiceImpl implements UserServiceInterface {
     private String generatePassword() {
         Faker faker = new Faker();
         return faker.internet().password(8, 16, true, true, true);
+    }
+
+    @Override
+    public List<StudentClassDto> findStudentClassByUser(UserDto userDto) {
+        return userClassService.findStudentClassByUser(userDto);
     }
 }

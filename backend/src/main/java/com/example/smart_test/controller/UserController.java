@@ -1,6 +1,7 @@
 package com.example.smart_test.controller;
 
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.request.UserRequest;
@@ -51,5 +52,10 @@ public class UserController {
         var login = jwt.getClaims().get("sub").toString();
         User currentUser = userService.getUserByLogin(login);
         return userMapper.toDTO(currentUser);
+    }
+
+    @PostMapping("/find-student-class-by-user")
+    public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
+        return userService.findStudentClassByUser(userDto);
     }
 }

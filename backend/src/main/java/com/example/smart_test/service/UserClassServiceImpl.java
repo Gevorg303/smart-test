@@ -1,8 +1,12 @@
 package com.example.smart_test.service;
 
 
+import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.UserClass;
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserClassDto;
+import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.TeacherClassMapperInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
 import com.example.smart_test.service.api.UserClassServiceInterface;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +29,8 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     private UserClassRepositoryInterface userClassRepositoryInterface;
     @Autowired
     private TeacherClassMapperInterface userClassMapperInterface;
+    @Autowired
+    private StudentClassMapperInterface studentClassMapperInterface;
 
     @Override
     @Transactional
@@ -70,6 +77,21 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
         }
 
     }
+
+    @Override
+    public List<StudentClassDto> findStudentClassByUser(UserDto userDto) {
+        List<UserClass> userClasses = userClassRepositoryInterface.findByUserId(userDto.getId());
+        List<StudentClassDto> studentClassDtos = new ArrayList<>();
+
+        for (UserClass userClass : userClasses) {
+            StudentClass studentClass = userClass.getStudentClass();
+            StudentClassDto dto = studentClassMapperInterface.toDTO(studentClass);
+            studentClassDtos.add(dto);
+        }
+
+        return studentClassDtos;
+    }
+
 
     private boolean findTeacherClassById(Long id) {
         Optional<UserClass> indicator = userClassRepositoryInterface.findById(id);

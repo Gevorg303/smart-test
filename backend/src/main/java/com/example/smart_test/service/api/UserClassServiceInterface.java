@@ -1,7 +1,9 @@
 package com.example.smart_test.service.api;
 
 import com.example.smart_test.domain.UserClass;
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserClassDto;
+import com.example.smart_test.dto.UserDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,4 +21,6 @@ public interface UserClassServiceInterface {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     UserClassDto getTeacherClassByClassAndTeacher(Long idClass, Long idTeacher);
+
+    List<StudentClassDto> findStudentClassByUser(UserDto userDto);
 }
