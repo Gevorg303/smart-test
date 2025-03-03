@@ -13,6 +13,17 @@ const StartTestPage = () => {
     const [testDateEnd, setTestDateEnd] = useState("");
     const [testTime, setTestTime] = useState("");
     const [attempts, setAttempts] = useState([]);
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long',
+        timezone: 'UTC',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    };
+
 
     useEffect(() => {
         function getCookie(name) {
@@ -34,16 +45,6 @@ const StartTestPage = () => {
                 }
                 const test = await response.json();
                 console.log(test);
-                var options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    weekday: 'long',
-                    timezone: 'UTC',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric'
-                };
 
                 setTestName(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
                 setTestDescription(test.description || "Описание отсутствует");
@@ -78,8 +79,9 @@ const StartTestPage = () => {
     let navigate = useNavigate();
     function StartTest() {
        console.log(testDateStart);
-       if(Date.parse(testDateStart)<=Date.now()){
-           if(Date.parse(testDateEnd) >= Date.now()){
+       const now =Date.now().toLocaleString("ru", options);
+       if(Date.parse(testDateStart)<=now){
+           if(Date.parse(testDateEnd) >= now){
                sessionStorage.setItem('startDate', new Date());
                navigate("/test");
            }
