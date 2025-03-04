@@ -7,7 +7,7 @@ import com.example.smart_test.domain.UserClass;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserClassDto;
 import com.example.smart_test.dto.UserDto;
-import com.example.smart_test.enums.UserRole;
+import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.TeacherClassMapperInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
@@ -102,7 +102,7 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     @Transactional
     @Override
     public List<User> getUsersByStudentClass(StudentClassDto request) {
-        return userClassRepositoryInterface.findByStudentClass_IdAndUser_Roles_Id(request.getId(), UserRole.STUDENT.getId())
+        return userClassRepositoryInterface.findByStudentClass_IdAndUser_Roles_Id(request.getId(), UserRoleEnum.STUDENT.getId())
                 .stream()
                 .map(UserClass::getUser)
                 .collect(Collectors.toList());

@@ -84,4 +84,14 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
     public List<TaskOfIndicator> findTaskOfIndicatorByIdIndicator(Indicator indicator){
         return taskOfIndicatorRepositoryInterface.findByIndicatorId(indicator.getId());
     }
+
+    @Override
+    public List<TaskOfIndicator> findTaskOfIndicatorByTask(Task task) {
+        return taskOfIndicatorRepositoryInterface.findByTask(task);
+    }
+
+    @Override
+    public List<TaskOfIndicator> findTaskOfIndicatorByIndicator(Indicator indicator) {
+        return taskOfIndicatorRepositoryInterface.findByIndicator(indicator);
+    }
 }

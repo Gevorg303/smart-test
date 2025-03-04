@@ -1,6 +1,9 @@
 package com.example.smart_test.service;
 
+import com.example.smart_test.domain.Test;
 import com.example.smart_test.domain.TestingAttempt;
+import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.repository.TestingAttemptRepositoryInterface;
 import com.example.smart_test.service.api.TestingAttemptServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -18,5 +21,10 @@ public class TestingAttemptServiceImpl implements TestingAttemptServiceInterface
     @Transactional
     public TestingAttempt addTestingAttempt(TestingAttempt testingAttempt) {
         return testingAttemptRepository.save(testingAttempt);
+    }
+
+    @Override
+    public TestingAttempt findTestingAttemptByTest(User user, TestDto test) {
+        return testingAttemptRepository.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, test.getId());
     }
 }

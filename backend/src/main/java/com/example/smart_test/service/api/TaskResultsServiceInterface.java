@@ -17,4 +17,6 @@ public interface TaskResultsServiceInterface {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<TestResultsDto> getAllTestResults();
+
+    List<TaskResults> findTaskResultsByTestingAttempt(TestingAttempt testingAttempt);
 }

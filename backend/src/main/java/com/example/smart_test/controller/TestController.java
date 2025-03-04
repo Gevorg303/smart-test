@@ -7,6 +7,7 @@ import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.request.EndTestingRequest;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.request.TestRequest;
+import com.example.smart_test.request.TestSimulatorRequest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,11 +89,18 @@ public class TestController {
     }
 
     /**
-     * завершение тестирования
+     * Завершение тестирования
      */
     @PostMapping("/end-testing")
     public List<RequestForTask> endTesting(@RequestBody EndTestingRequest endTestingRequest){
         return testService.endTesting(endTestingRequest);
     }
 
+    /**
+     * Необходимо вызывать этот метод при нажатии на "Начать тестирование" у ТРЕНАЖЕРА!!!
+     * */
+    @PostMapping("/create-test-simulator")
+    public List<TaskDto> createTestSimulator(@RequestBody TestSimulatorRequest testSimulatorRequest) {
+        return testService.createTestSimulator(testSimulatorRequest);
+    }
 }

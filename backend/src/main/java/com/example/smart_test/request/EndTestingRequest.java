@@ -15,12 +15,14 @@ public class EndTestingRequest {
     private Test test;
     private User user;
     private List<RequestForTask> requestForTaskList;
+    private int numberOfTasks;
 
-    public EndTestingRequest(Instant startDateTime, LocalTime attemptDuration, Test test, User user, List<RequestForTask> requestForTaskList) {
+    public EndTestingRequest(Instant startDateTime, LocalTime attemptDuration, Test test, User user, List<RequestForTask> requestForTaskList, int numberOfTasks) {
         this.startDateTime = startDateTime;
         this.attemptDuration = attemptDuration;
         this.test = test;
         this.user = user;
         this.requestForTaskList = requestForTaskList;
+        this.numberOfTasks = numberOfTasks;
     }
 }

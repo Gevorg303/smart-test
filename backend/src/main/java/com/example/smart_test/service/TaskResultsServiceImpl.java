@@ -60,4 +60,9 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
         }
     }
 
+    @Override
+    public List<TaskResults> findTaskResultsByTestingAttempt(TestingAttempt testingAttempt) {
+        return testResultsRepositoryInterface.findByTestingAttemptAndResultOfTheIndicatorFalse(testingAttempt);
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.example.smart_test.domain;
 
-import com.example.smart_test.enums.UserRole;
+import com.example.smart_test.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class Role {
     @Column(name = "название_роли")
     private String role;
 
-    public UserRole getRoleType() {
-        return UserRole.values()[(int) (id - 1)];
+    public UserRoleEnum getRoleType() {
+        return UserRoleEnum.values()[(int) (id - 1)];
     }
 }

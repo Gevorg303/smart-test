@@ -2,10 +2,12 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
+import com.example.smart_test.enums.TypeTestEnum;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.request.EndTestingRequest;
 import com.example.smart_test.request.RequestForTask;
+import com.example.smart_test.request.TestSimulatorRequest;
 import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,9 +41,10 @@ public class TestServiceImpl implements TestServiceInterface {
     private TaskResultsServiceInterface taskResultsService;
     @Autowired
     private TestingAttemptServiceInterface testingAttemptService;
+    @Autowired
+    private TestGeneratorServiceInterface testGeneratorService;
 
     @Override
-    @Transactional
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
         Test test = testMapper.toEntity(testDto);
         Test savedTest = testRepository.save(test);
@@ -102,7 +104,6 @@ public class TestServiceImpl implements TestServiceInterface {
     }
 
     @Override
-    @Transactional
     public List<TestDto> getUserTests(User user) {
         if (userService.getUserByLogin(user) == null) {
             throw new IllegalArgumentException("User not found");
@@ -141,7 +142,31 @@ public class TestServiceImpl implements TestServiceInterface {
         for (RequestForTask requestForTask : forTaskList) {
             taskResultsService.addTaskResults(requestForTask.getTask(), requestForTask.isStatus(), testingAttempt);
         }
-
         return forTaskList;
+    }
+
+    @Override
+    public List<TaskDto> createTestSimulator(TestSimulatorRequest request) {
+        List<TestDto> testDtoList = getUserTests(request.getUser());
+        Set<Task> taskSet = new HashSet<>();
+        TestDto trainerTest = null;
+
+        for (TestDto testDto : testDtoList) {
+            if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
+                if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.ENTRY_TEST.getId())) {
+                    taskSet = testGeneratorService.generatorTasks(request.getUser(), testDto, 2);
+                }
+                if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.TRAINER.getId())) {
+                    trainerTest = testDto;
+                }
+            }
+        }
+
+        if (trainerTest != null) {
+            List<Task> taskList = new ArrayList<>(taskSet);
+            addTestDto(trainerTest, taskList);
+            return taskService.findTasksTheTest(trainerTest);
+        }
+        return Collections.emptyList();
     }
 }
