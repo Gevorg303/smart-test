@@ -78,20 +78,20 @@ const StartTestPage = () => {
 
     let navigate = useNavigate();
     function StartTest() {
-       console.log(testDateStart);
+     /*  console.log(testDateStart);                                    //проверка отключена!!!
        const now =Date.now().toLocaleString("ru", options);
        if(Date.parse(testDateStart)<=now){
            if(Date.parse(testDateEnd) >= now){
-               sessionStorage.setItem('startDate', new Date());
+               sessionStorage.setItem('startDate', new Date());*/
                navigate("/test");
-           }
+      /*     }
            else{
                console.log("Тест больше не доступен для прохождения!")
            }
        }
        else {
             console.log("Тест еще не начался!")
-       }
+       }*/
     }
 
     return (
