@@ -5,7 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles.css';
 import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
 
-const Navbar = ({IsTeacher}) => {
+const Navbar = ({IsTeacher,setShowHandbook}) => {
     return (!IsTeacher?
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="custom-navbar">
         <Container fluid>
@@ -40,7 +40,7 @@ const Navbar = ({IsTeacher}) => {
                     </NavDropdown>
                 </Nav>
                 <Nav className="navbar-links right">
-                    <Nav.Link className="navbar-link">
+                    <Nav.Link className="navbar-link" onClick={()=>{setShowHandbook(true)}}>
                         ?
                     </Nav.Link>
                     <Nav.Link as={Link} to="/profile" className="navbar-link">Личный кабинет</Nav.Link>

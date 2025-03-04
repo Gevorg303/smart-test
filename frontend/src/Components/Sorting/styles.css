@@ -5,3 +5,14 @@
     justify-content: center; /* Выравнивание элементов по левому краю */
     margin-right: 1em;
 }
+.search-button {
+    color: #333333;
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    width: 15em;
+}
+.search-button:hover {
+    color: #f0f0f0;
+    background-color: #388E3C;
+    border-color: #388E3C;
+}

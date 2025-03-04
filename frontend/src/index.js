@@ -14,6 +14,7 @@ import QuestionBankPage from './Components/QuestionBankPage';
 import PrivateRoutes from './utils/router/privateRoute';
 import Layout from './Components/Layout';
 import ResultsPage from "./Components/ResultsPage";
+import SubjectClassPage from "./Components/SubjectClassPage";
 
 const App = () => {
     return (
@@ -38,6 +39,7 @@ const App = () => {
                         <Route path="itembank" element={<QuestionBankPage  type={"subject"}/>} />
                         <Route path="themebank" element={<QuestionBankPage  type={"theme"}/>} />
                         <Route path="indicatorbank" element={<QuestionBankPage  type={"indicator"}/>} />
+                        <Route path="subjectclass" element={<SubjectClassPage />} />
                     </Route>
                 </Route>
             </Routes>

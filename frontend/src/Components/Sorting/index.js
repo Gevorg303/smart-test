@@ -109,20 +109,14 @@ const Sorting = ({type,setBankItems}) => {
 
             switch (type) {
                 case 'test':
-                    if ( themeId>0 && testTypeId<=0)
-                    {
-                        url = 'http://localhost:8080/test/get-test-id-theme';
-                        requestBody = {id:themeId}
-                    }
-                    else{
-                        url = 'http://localhost:8080/bank-filters/tests';
-                        requestBody = {
-                            user,
-                            subject: subjectId>0 ? { id: subjectId } : null,
-                            //theme: themeId>0 ? { id: themeId } : null,
-                            testType: testTypeId>0 ? { id: testTypeId } : null,
-                        };
-                    }
+
+                    url = 'http://localhost:8080/bank-filters/tests';
+                    requestBody = {
+                        user,
+                        subject: subjectId>0 ? { id: subjectId } : null,
+                        theme: themeId>0 ? { id: themeId } : null,
+                        testType: testTypeId>0 ? { id: testTypeId } : null,
+                    };
                     break;
                 case 'task':
                     url = 'http://localhost:8080/bank-filters/tasks';
@@ -348,7 +342,7 @@ const Sorting = ({type,setBankItems}) => {
                                                     </div>
                                                     </>
                                                     : <></>}
-                                                    <Button variant="primary" onClick={handleSearch}>Поиск</Button>
+                                                    <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
                                                     {mainBlock}
                                                 </>
                                                 );
