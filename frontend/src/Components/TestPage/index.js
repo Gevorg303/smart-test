@@ -43,7 +43,7 @@ const TestPage = () => {
             requestForTaskList.push(obj)
         })
         let sec = attemptDuration % 60;
-        let min = Math.floor(parseInt(attemptDuration)/60) ;
+        let min = Math.floor(parseInt(attemptDuration)/60%60) ;
         let hour= Math.floor(parseInt(attemptDuration)/3600) ;
 
         const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
@@ -110,7 +110,11 @@ const TestPage = () => {
                 console.log(test)
                 const passTime = test.passageTime.split(':');
                 console.log(passTime);
-                setTimer(<TestTimer durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])} functionOnEnd={TestEnd} start={true} timeFromStart={setAttemptDuration}/>)
+
+                if(passTime != null ){
+                    setTimer(<TestTimer durationHour={parseInt(passTime[0])} durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])} functionOnEnd={TestEnd} start={true} timeFromStart={setAttemptDuration}/>)
+                }
+
 
                 const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
                     method: 'POST',

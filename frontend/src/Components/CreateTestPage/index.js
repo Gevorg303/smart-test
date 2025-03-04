@@ -15,7 +15,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
     const [currentType, setCurrentType] = useState(); // введеный тип теста
     const [currentPassword, setCurrentPassword] = useState(""); // введеный пароль
     const [currentDescription, setCurrentDescription] = useState(""); // введеное описание
-    const [passingTime, setPassingTime] = useState("00:00"); // введеное время прохождения
+    const [passingTime, setPassingTime] = useState("00:00:00"); // введеное время прохождения
     const [timeStart, setTimeStart] = useState(Date.now()); // введеное время начала теста
     const [timeEnd, setTimeEnd] = useState(Date.now()); // введеное время конца теста
     const [currentTasks , setCurrentTasks] = useState([]); // выбранные задания для теста
@@ -35,7 +35,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                 }
             }
 
-           /* console.log(
+          /*  console.log(
                 {
                     test: {
                         closingDateAndTime : timeEnd,
@@ -43,7 +43,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                         id : null,
                         numberOfAttemptsToPass : countOfTry,
                         openingDateAndTime : timeStart,
-                        passageTime : passingTime+":00",
+                        passageTime : passingTime,
                         testPassword : currentPassword,
                         theme:{
                             id: theme
@@ -72,7 +72,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                             id : null,
                             numberOfAttemptsToPass : countOfTry,
                             openingDateAndTime : timeStart,
-                            passageTime : passingTime+":00",
+                            passageTime : passingTime,
                             testPassword : currentPassword,
                            // passingScore: currentPassingScore,
                             theme:{
@@ -203,7 +203,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
             setCurrentPassword(editItem.testPassword?editItem.testPassword:"")
             setCurrentDescription(editItem.description?editItem.description:"")
             let passTime = editItem.passageTime?editItem.passageTime:"";
-            setPassingTime(passTime.substring(0,passTime.length-3));
+            setPassingTime(passTime);
             setCountOfTry(editItem.numberOfAttemptsToPass);
             setTimeEnd(editItem.closingDateAndTime?editItem.closingDateAndTime:"");
             setTimeStart(editItem.openingDateAndTime?editItem.openingDateAndTime:"");
@@ -216,7 +216,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
             setCurrentType();
             setCurrentPassword("");
             setCurrentDescription("");
-            setPassingTime("00:00");
+            setPassingTime("00:00:00");
             setTimeStart(Date.now());
             setTimeEnd(Date.now());
             setCurrentTasks([]);
@@ -290,7 +290,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Время прохождения теста</Form.Label>
-                    <Form.Control value={passingTime} type="time"  onChange={(e) => {
+                    <Form.Control value={passingTime} type="time" step="1"  onChange={(e) => {
                         setPassingTime(e.target.value);
                     }}/>
                 </Form.Group>

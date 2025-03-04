@@ -9,10 +9,13 @@ const StartTestPage = () => {
     const [testName, setTestName] = useState("");
     const [testDescription, setTestDescription] = useState("");
     const [testTryCount, setTestTryCount] = useState(0);
-    const [testDateStart, setTestDateStart] = useState("");
-    const [testDateEnd, setTestDateEnd] = useState("");
+    const [testDateStart, setTestDateStart] = useState(""); // строковое значение
+    const [testDateEnd, setTestDateEnd] = useState("");     // строковое значение
     const [testTime, setTestTime] = useState("");
     const [attempts, setAttempts] = useState([]);
+    const [testDateStartValue, setTestDateStartValue] = useState(null); // строковое значение
+    const [testDateEndValue, setTestDateEndValue] = useState(null);     // строковое значение
+
     const options = {
         year: 'numeric',
         month: 'long',
@@ -50,6 +53,8 @@ const StartTestPage = () => {
                 setTestDescription(test.description || "Описание отсутствует");
                 setTestDateStart(new Date(test.openingDateAndTime).toLocaleString("ru", options) );
                 setTestDateEnd(new Date(test.closingDateAndTime).toLocaleString("ru", options));
+                setTestDateStartValue(new Date(test.openingDateAndTime));
+                setTestDateEndValue(new Date(test.closingDateAndTime));
                 setTestTime(test.passageTime || "неограничено");
                 setTestTryCount(test.numberOfAttemptsToPass||"неограничено")
 
@@ -78,20 +83,22 @@ const StartTestPage = () => {
 
     let navigate = useNavigate();
     function StartTest() {
-     /*  console.log(testDateStart);                                    //проверка отключена!!!
-       const now =Date.now().toLocaleString("ru", options);
-       if(Date.parse(testDateStart)<=now){
-           if(Date.parse(testDateEnd) >= now){
-               sessionStorage.setItem('startDate', new Date());*/
+
+        const now =new Date();//.toLocaleString("ru", options);
+        if(testDateStartValue<=now){
+           if(testDateEndValue >= now){
+               sessionStorage.setItem('startDate', new Date());
                navigate("/test");
-      /*     }
+           }
            else{
                console.log("Тест больше не доступен для прохождения!")
            }
        }
        else {
             console.log("Тест еще не начался!")
-       }*/
+
+
+        }
     }
 
     return (
