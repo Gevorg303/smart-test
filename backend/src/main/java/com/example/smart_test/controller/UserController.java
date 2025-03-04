@@ -54,6 +54,9 @@ public class UserController {
         return userMapper.toDTO(currentUser);
     }
 
+    /**
+     * Выводит список классов связанных с пользователем
+     * */
     @PostMapping("/find-student-class-by-user")
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
         return userService.findStudentClassByUser(userDto);
