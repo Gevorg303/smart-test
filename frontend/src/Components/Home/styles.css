@@ -121,6 +121,7 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшаем тень */
     padding: 10px; /* Уменьшаем внутренние отступы */
     overflow: hidden; /* Скрываем переполнение */
+    padding-bottom: 1% !important;
 }
 
 .container-home .card {
@@ -137,11 +138,12 @@ h1 {
     box-sizing: border-box; /* Включаем padding и border в общую ширину и высоту */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Добавляем анимацию */
     flex: 0 0 calc(33.333% - 64px); /* Ширина элемента с учетом отступов */
+
 }
 
 .container-home .card:hover {
-    transform: scale(1.05); /* Увеличиваем карточку при наведении */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Усиливаем тень при наведении */
+    transform: scale(1.05) !important; /* Увеличиваем карточку при наведении */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* Усиливаем тень при наведении */
 }
 
 .button-container {

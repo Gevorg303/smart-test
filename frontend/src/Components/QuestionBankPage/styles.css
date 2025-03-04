@@ -42,12 +42,19 @@
     height: 3em;
     margin-bottom: 2em;
     margin-top: 1em;
-
 }
-
-.create-button {
+.create-button{
     margin-right: 1em;
     margin-left: 2em;
+    background-color: #bdaa4a;
+    border-color: #bdaa4a;
+    color: #333333;
+    width: 15em;
+}
+.create-button:hover{
+    color: #f0f0f0;
+    background-color: darkgoldenrod;
+    border-color: darkgoldenrod;
 }
 
 

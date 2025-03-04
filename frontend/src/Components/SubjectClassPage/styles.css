@@ -1,0 +1,18 @@
+.container-home-subject-class {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px; /* Увеличиваем отступы между карточками */
+    width: 100%;
+    max-width: 1200px; /* Ограничиваем максимальную ширину контейнера */
+    background: white;
+
+    margin: 2% auto; /* Центрирует блок по горизонтали */
+
+    border-radius: 15px; /* Скругление углов */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшаем тень */
+    padding: 10px; /* Уменьшаем внутренние отступы */
+    overflow: hidden; /* Скрываем переполнение */
+
+    padding-bottom: 20% !important;
+}
