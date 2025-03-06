@@ -5,25 +5,25 @@ import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.UserClass;
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.SubjectUserMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
 import com.example.smart_test.request.SubjectClassRequest;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
+import com.example.smart_test.service.api.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -40,17 +40,17 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     private SubjectMapperInterface subjectMapper;
     @Autowired
     private UserClassRepositoryInterface userClassRepository;
+    @Autowired
+    private UserServiceInterface userService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     @Transactional
     public void addSubjectUserDto(SubjectClassRequest request) {
         try {
-            List<UserClass> userClassList = userClassRepository.findByStudentClass(studentClassMapper.toEntity(request.getStudentClass()));
-            List<User> userList = new ArrayList<>();
+            List<User> userList = getUsersBySubject(subjectMapper.toEntity(request.getSubject()));
 
-            for (UserClass userClass : userClassList) {
-                userList.add(userClass.getUser());
-            }
             Subject subject = subjectMapper.toEntity(request.getSubject());
             for (User user : userList) {
                 subjectUserRepositoryInterface.save(new SubjectUser(subject, user));
@@ -81,7 +81,7 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
 
     @Transactional
     @Override
-    public List<SubjectUser> findByUserId(User user){
+    public List<SubjectUser> findByUserId(User user) {
         return subjectUserRepositoryInterface.findByUserId(user.getId());
     }
 
@@ -98,5 +98,26 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
         return subjectUsers.stream()
                 .map(subjectUser -> subjectMapper.toDTO(subjectUser.getSubject()))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    @Transactional
+    public Set<StudentClassDto> findClassBySubject(SubjectDto dto) {
+        List<User> userList = getUsersBySubject(subjectMapper.toEntity(dto));
+        Set<StudentClassDto> studentClassDtoSet = new HashSet<>();
+        if (userList != null) {
+            for (User user : userList) {
+                List<StudentClassDto> studentClasses = userService.findStudentClassByUser(userMapper.toDTO(user));
+                studentClassDtoSet.addAll(studentClasses);
+            }
+        }
+        return studentClassDtoSet;
+    }
+
+    private List<User> getUsersBySubject(Subject subject) {
+        return subjectUserRepositoryInterface.findBySubject(subject)
+                .stream()
+                .map(SubjectUser::getUser)
+                .collect(Collectors.toList());
     }
 }

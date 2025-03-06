@@ -3,6 +3,7 @@ package com.example.smart_test.service.api;
 
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.request.SubjectClassRequest;
@@ -26,4 +27,6 @@ public interface SubjectUserServiceInterface {
 
     @Transactional
     Set<SubjectDto> getSubjectsByUsers(List<User> users);
+
+    Set<StudentClassDto> findClassBySubject(SubjectDto dto);
 }

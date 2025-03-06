@@ -1,6 +1,7 @@
 package com.example.smart_test.repository;
 
 
+import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface SubjectUserRepositoryInterface extends JpaRepository<SubjectUse
     void deleteBySubjectId(Long id);
     List<SubjectUser> findByUserId(Long userId);
     List<SubjectUser> findByUserIn(List<User> users);
+    List<SubjectUser> findBySubject(Subject subject);
 }
