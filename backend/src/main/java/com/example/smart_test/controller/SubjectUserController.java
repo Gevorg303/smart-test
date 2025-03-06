@@ -1,22 +1,34 @@
 package com.example.smart_test.controller;
 
-import com.example.smart_test.dto.SubjectUserDto;
+import com.example.smart_test.request.SubjectClassRequest;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/subject-teacher")
+@RequestMapping("/user-subject")
+@Slf4j
 public class SubjectUserController {
     @Autowired
     private SubjectUserServiceInterface subjectService;
 
-//    @PostMapping("/add")
-//    public SubjectUserDto addSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
-//        return subjectService.addSubjectTeacherDto(subjectDto);
-//    }
+    /**
+     * Метод для подписания класса на предмет, на вход необходимо подать класс и предмет
+     * */
+    @PostMapping("/add")
+    public ResponseEntity<String> addSubjectTeacherDto(@RequestBody SubjectClassRequest request) {
+        try {
+            subjectService.addSubjectUserDto(request);
+            return ResponseEntity.ok("Класс успешно подписан на предмет");
+        } catch (Exception e) {
+            log.error("Ошибка при подписании класса на предмет: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ошибка: " + e.getMessage());
+        }
+    }
 //
 //    @DeleteMapping("/delete")
 //    public void deleteSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {

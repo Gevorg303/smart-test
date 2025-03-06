@@ -4,12 +4,15 @@ package com.example.smart_test.service;
 import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
+import com.example.smart_test.domain.UserClass;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
+import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.SubjectUserMapperInterface;
-import com.example.smart_test.repository.SubjectRepositoryInterface;
 import com.example.smart_test.repository.SubjectUserRepositoryInterface;
+import com.example.smart_test.repository.UserClassRepositoryInterface;
+import com.example.smart_test.request.SubjectClassRequest;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,14 +35,27 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     @Autowired
     private SubjectUserMapperInterface subjectUserMapperInterface;
     @Autowired
+    private StudentClassMapperInterface studentClassMapper;
+    @Autowired
     private SubjectMapperInterface subjectMapper;
+    @Autowired
+    private UserClassRepositoryInterface userClassRepository;
 
     @Override
-    public SubjectUserDto addSubjectTeacherDto(SubjectUserDto dto) {
+    @Transactional
+    public void addSubjectUserDto(SubjectClassRequest request) {
         try {
-            SubjectUser subjectTeacher = subjectUserMapperInterface.toEntity(dto);
-            subjectTeacher = subjectUserRepositoryInterface.save(subjectTeacher);
-            return subjectUserMapperInterface.toDto(subjectTeacher);
+            List<UserClass> userClassList = userClassRepository.findByStudentClass(studentClassMapper.toEntity(request.getStudentClass()));
+            List<User> userList = new ArrayList<>();
+
+            for (UserClass userClass : userClassList) {
+                userList.add(userClass.getUser());
+            }
+            Subject subject = subjectMapper.toEntity(request.getSubject());
+            for (User user : userList) {
+                subjectUserRepositoryInterface.save(new SubjectUser(subject, user));
+            }
+
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при добавлении связи 'Полльзователь_предмет': " + e.getMessage(), e);
         }

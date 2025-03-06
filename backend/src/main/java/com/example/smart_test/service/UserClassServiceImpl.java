@@ -9,7 +9,7 @@ import com.example.smart_test.dto.UserClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
-import com.example.smart_test.mapper.api.TeacherClassMapperInterface;
+import com.example.smart_test.mapper.api.UserClassMapperInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
 import com.example.smart_test.service.api.UserClassServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     @Autowired
     private UserClassRepositoryInterface userClassRepositoryInterface;
     @Autowired
-    private TeacherClassMapperInterface userClassMapperInterface;
+    private UserClassMapperInterface userClassMapperInterface;
     @Autowired
     private StudentClassMapperInterface studentClassMapperInterface;
 

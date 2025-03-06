@@ -21,4 +21,6 @@ public interface UserClassRepositoryInterface extends JpaRepository<UserClass, L
     List<UserClass> findByUserId(Long userId);
 
     List<UserClass> findByStudentClass_IdAndUser_Roles_Id(Long studentClassId, Long roleId);
+
+    List<UserClass> findByStudentClass(StudentClass studentClass);
 }
