@@ -130,6 +130,7 @@ public class TestServiceImpl implements TestServiceInterface {
     @Override
     @Transactional
     public List<RequestForTask> endTesting(EndTestingRequest endTestingRequest) {
+        TestDto testDto = getTestById(endTestingRequest.getTest().getId());
         TestingAttempt testingAttempt = testingAttemptService.addTestingAttempt(
                 new TestingAttempt(
                         endTestingRequest.getStartDateTime(),
@@ -141,6 +142,12 @@ public class TestServiceImpl implements TestServiceInterface {
         List<RequestForTask> forTaskList = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
         for (RequestForTask requestForTask : forTaskList) {
             taskResultsService.addTaskResults(requestForTask.getTask(), requestForTask.isStatus(), testingAttempt);
+        }
+        if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.TRAINER.getId())){
+            List<TaskDto> taskList = taskService.findTasksTheTest(testMapper.toDto(endTestingRequest.getTest()));
+            for (TaskDto taskDto : taskList) {
+                taskService.removeTaskFromTest(taskDto);
+            }
         }
         return forTaskList;
     }

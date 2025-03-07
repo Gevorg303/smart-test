@@ -49,8 +49,7 @@ public class TestGeneratorServiceImpl implements TestGeneratorServiceInterface {
 
                 for (TaskOfIndicator taskOfIndicator1 : taskOfIndicatorByIndicator) {
                     Task candidateTask = taskOfIndicator1.getTask();
-                    //candidateTask.getTest() == null &&
-                    if (!availableTasks.contains(candidateTask)) {
+                    if (candidateTask.getTest() == null && !availableTasks.contains(candidateTask)) {
                         availableTasks.add(candidateTask);
                     }
                 }
