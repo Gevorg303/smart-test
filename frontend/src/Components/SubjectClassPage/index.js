@@ -22,6 +22,7 @@ const SubjectClass = () => {
     const [showModal, setShowModal] = useState(false); // переменная отвенчает за отображение модального окна на экране
     const [showToast, setShowToast] = useState(false); // отображение тоста
     const [toastText, setToastText] = useState(""); // текст тоста
+    const [currentSubject, setCurrentSubject] = useState();
 
     const [subjects, setSubjects] = useState([]);
     const containerRef = useRef(null);
@@ -60,12 +61,12 @@ const SubjectClass = () => {
                 const array = [];
                 subjectsJson.forEach(subject => {
                     array.push(
-                        <SubjectCardForClass key={subject.id} item={subject} setShowCreateModal={setShowModal} />
+                        <SubjectCardForClass setCurrentSubject = {setCurrentSubject} key={subject.id} item={subject} setShowCreateModal={setShowModal} />
                     );
                 });
                 setSubjects(array);
 
-                setCreateModal(<ClassModal/>)
+                setCreateModal(<ClassModal targetSubject={currentSubject}/>)
 
 
             } catch (error) {
@@ -74,7 +75,7 @@ const SubjectClass = () => {
         }
 
         fetchTests();
-    }, [toastText]);
+    }, [toastText, currentSubject]);
 
 
     return (

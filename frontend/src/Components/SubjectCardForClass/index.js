@@ -3,7 +3,7 @@ import './styles.css';
 import {Button} from "react-bootstrap";
 
 
-const SubjectCardForClass = ({item,setShowCreateModal}) => {
+const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject}) => {
 
     const [classes, setClasses] = useState();
 
@@ -40,6 +40,8 @@ const SubjectCardForClass = ({item,setShowCreateModal}) => {
                     <h2>{item.subjectName}</h2>
                     <Button variant="success" className="custom-button" onClick={() => {
                         setShowCreateModal(true)
+                        setCurrentSubject(item)
+                        console.log(item)
                     }}>Нажми меня</Button>
                 </div>
             </Button>
