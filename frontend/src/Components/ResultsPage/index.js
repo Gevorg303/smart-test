@@ -7,6 +7,8 @@ import Footer from "../Footer";
 const ResultsPage = ({ userId }) => {
     const [subjects, setSubjects] = useState([]);
 
+    localStorage.setItem('info', "Здесь вы можете увидеть вашу среднюю оценку за предмет");
+
     useEffect(() => {
         const fetchData = async () => {
             try {

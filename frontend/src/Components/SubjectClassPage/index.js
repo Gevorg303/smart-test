@@ -18,6 +18,8 @@ import ClassModal from "../ClassModal";
 
 const SubjectClass = () => {
 
+    localStorage.setItem('info', "Здесь вы можете подписать классы на предметы");
+
     const [createModal, setCreateModal] = useState(); // компонент с модальным окном для создания объекта в банке
     const [showModal, setShowModal] = useState(false); // переменная отвенчает за отображение модального окна на экране
     const [showToast, setShowToast] = useState(false); // отображение тоста

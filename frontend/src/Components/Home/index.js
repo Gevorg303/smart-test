@@ -11,7 +11,7 @@ const HomePage = () => {
     const [welcometext, setwelcometext] = useState("");
     const [subjects, setSubjects] = useState([]);
 
-    localStorage.setItem('info', "111");
+    localStorage.setItem('info', "Здесь находятся ваши предметы");
 
     useEffect(() => {
         async function fetchUser() {

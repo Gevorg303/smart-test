@@ -7,6 +7,9 @@ import Navbar from '../Navbar'; // Импортируем компонент Nav
 import Footer from '../Footer'; // Импортируем компонент Footer
 
 const ViewTestResultsPage = (props) => {
+
+    localStorage.setItem('info', "Здесь вы можете просмотреть правильность выполнения теста.");
+
     const [questions, setQuestions] = useState([]);
     const validList = JSON.parse(`${sessionStorage.getItem("testResult")}`)||[];
     const [answers, setAnswers] = useState(validList.map((item, index) => item.response));

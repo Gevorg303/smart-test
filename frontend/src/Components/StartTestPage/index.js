@@ -30,6 +30,7 @@ const StartTestPage = () => {
         second: 'numeric'
     };
 
+    localStorage.setItem('info', "На этой странице вы сможете просмотреть всю информацию по тесту, а также о пройденных попытках");
 
     useEffect(() => {
         function getCookie(name) {

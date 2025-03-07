@@ -20,6 +20,10 @@ const RegistrationPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
+    //localStorage.setItem('info', "Введите здесь данные ученика.");
+    //localStorage.setItem('info', "Выберите файл в формате .xlsx, .xlsm, .xls, .xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Место обучения, Класс, Почта");
+
+
     useEffect(() => {
         async function fetchEducationalInstitutions() {
             try {

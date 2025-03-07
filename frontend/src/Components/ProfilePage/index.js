@@ -9,6 +9,9 @@ import Question from "../Question";
 import SubjectCard from "../SubjectCard"; // Импортируем файл стилей
 
 const ProfilePage = () => {
+
+    localStorage.setItem('info', "Здесь вы можете увидеть ваши данные личного кабинета");
+
     const navigate = useNavigate();
     const [name, setName] = useState("Вася");
     const [surname, setSurname] = useState("Пупкин");

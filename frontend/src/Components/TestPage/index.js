@@ -23,6 +23,9 @@ const TestPage = () => {
 
     const [timer, setTimer] = useState();
 
+    localStorage.setItem('info', "Это тест с последовательным порядком выведения заданий. Можно пропускать и возвращаться к пропущенным заданиям. По выполнению всех заданий завершите тест");
+
+
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"

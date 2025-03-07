@@ -53,6 +53,8 @@ const QuestionBankPage = ({type}) => {
 
                 if(type === "test") {// заполнение тестов из бд
 
+                    localStorage.setItem('info', "На этой странице можно отсортировать все тесты по предмету, теме, типу теста и просмотреть");
+
                     setTitle("Банк тестов");// задать заголовок на странице
                     setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate}/>); // задать модальное окно для создания на странице
 
@@ -71,6 +73,8 @@ const QuestionBankPage = ({type}) => {
                     setBankItems(tests)
                 }
                 if(type === "task") {// заполнение заданий из бд
+
+                    localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
 
                     setTitle("Банк заданий"); // задать заголовок на странице
                     setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate}/>);// задать модальное окно для создания на странице
@@ -92,6 +96,8 @@ const QuestionBankPage = ({type}) => {
 
                 if(type === "subject") { // заполнение предметов из бд
 
+                    localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
+
                     setTitle("Банк предметов"); // задать заголовок на странице
                     setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate}/>);
 
@@ -111,6 +117,8 @@ const QuestionBankPage = ({type}) => {
                 }
                 if(type === "theme") { // заполнение предметов из бд
 
+                    localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
+
                     setTitle("Банк тем"); // задать заголовок на странице
                     setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate}/>);
 
@@ -128,6 +136,8 @@ const QuestionBankPage = ({type}) => {
                     setBankItems(theme)
                 }
                 if(type === "indicator") { // заполнение предметов из бд
+
+                    localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
 
                     setTitle("Банк индикаторов"); // задать заголовок на странице
                     setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate}/>);

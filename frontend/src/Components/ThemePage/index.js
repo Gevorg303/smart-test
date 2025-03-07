@@ -9,6 +9,7 @@ const ThemePage = () => {
     const [subjectName, setSubjectName] = useState("Название предмета");
     const [themes, setThemes] = useState([]);
     const navigate = useNavigate();
+    localStorage.setItem('info', "Здесь содержатся темы по выбранному предмету, а также виды тестов по отдельной теме");
 
     useEffect(() => {
         function getCookie(name) {
