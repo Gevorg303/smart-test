@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './styles.css';
 import {Button} from "react-bootstrap";
+import EditImage from '../../images/pencil.png';
 
 
 const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject}) => {
@@ -36,17 +37,20 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject}) => {
         <div>
             <Button className="component-button">
                 <div id={item.id} className="card-subject-class">
-                    <h2>{item.id}</h2>
+                    {/*<h2>{item.id}</h2>*/}
                     <h2>{item.subjectName}</h2>
                     <Button variant="success" className="custom-button" onClick={() => {
                         setShowCreateModal(true)
                         setCurrentSubject(item)
                         console.log(item)
-                    }}>Нажми меня</Button>
+                    }}>
+                        <img src={EditImage} alt="Icon" className="button-icon"/>
+                    </Button>
                 </div>
             </Button>
         </div>
-    );
+    )
+        ;
 };
 
 export default SubjectCardForClass;

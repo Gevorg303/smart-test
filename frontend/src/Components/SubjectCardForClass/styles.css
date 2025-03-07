@@ -1,11 +1,13 @@
 .card-subject-class{
-    border: 1px solid #ddd;
-    background-color: #fff;
+    /*border: 1px solid #ddd;*/
+    /*background-color: #99c242;*/
+    background-color: rgba(255, 255, 255, 0);
+
     margin: 20px;
     padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.3s;*/
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between;
@@ -14,55 +16,51 @@
     color: #333333;
 }
 
-.card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0) !important;
-    transform: scale(1.00) !important;
-
-}
-
-.card-header {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 5px;
-    background-color: #f5f5f5;
-    color: #333333;
-}
-
-.card-body {
-    padding: 10px;
-    flex-grow: 1;
-}
-
 .custom-button {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px 20px;
-    background-color: #007bff;
+    /*background-color: white;*/
+    background-color: rgba(255, 255, 255, 0);
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 60px; /* Задайте нужную ширину */
-    height: 60px; /* Задайте нужную высоту */
+    width: 50px; /* Задайте нужную ширину */
+    height: 50px; /* Задайте нужную высоту */
+}
+
+.button-icon {
+    width: 40px; /* Ширина иконки */
+    height: 40px; /* Высота иконки */
+    margin-right: 8px; /* Отступ между иконкой и текстом */
 }
 
 .custom-button:hover {
-    background-color: #0056b3;
+    background-color: #388E3C;
 }
 
 .button-image {
     /*width: 60px; /* Задайте нужную ширину */
     /*height: 60px; /* Задайте нужную высоту */
-    margin-right: 8px; /* Отступ между изображением и текстом */
+    /*margin-right: 8px; /* Отступ между изображением и текстом */
 }
-.card-style {
-    display: flex;
-    justify-content: center; /* Центрирует содержимое по горизонтали */
-    align-items: center; /* Центрирует содержимое по вертикали */
-    gap: 10px; /* Задает отступ между элементами */
-}
+
 
 .component-button{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #99c242; /* Оранжевый фон */
+    border: none;
+    border-radius: 20px; /* Скругленные углы */
+}
 
+.component-button:hover {
+    background-color: #4CAF50;
+}
+
+.component-button:active {
+    background-color: #4CAF50 !important;
 }
