@@ -11,9 +11,12 @@ const HomePage = () => {
     const [welcometext, setwelcometext] = useState("");
     const [subjects, setSubjects] = useState([]);
 
+    localStorage.setItem('info', "111");
+
     useEffect(() => {
         async function fetchUser() {
             try {
+                //localStorage.setItem('info', "111");
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 const response = await fetch('http://localhost:8080/users/current', {

@@ -67,7 +67,7 @@ const Navbar = ({IsTeacher,setShowHandbook}) => {
                 <Nav.Link as={Link} to="/results" className="navbar-link">Итоги</Nav.Link>
             </Nav>
             <Nav className="navbar-links right">
-                <Nav.Link className="navbar-link">
+                <Nav.Link className="navbar-link" onClick={()=>{setShowHandbook(true)}}>
                     ?
                 </Nav.Link>
                 <Nav.Link as={Link} to="/profile" className="navbar-link">Личный кабинет</Nav.Link>
