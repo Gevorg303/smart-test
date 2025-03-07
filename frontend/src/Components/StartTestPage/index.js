@@ -15,6 +15,9 @@ const StartTestPage = () => {
     const [attempts, setAttempts] = useState([]);
     const [testDateStartValue, setTestDateStartValue] = useState(null); // строковое значение
     const [testDateEndValue, setTestDateEndValue] = useState(null);     // строковое значение
+    const [typeTest,setTypeTest] = useState(null);
+    const [testTheme,setTestTheme] = useState(null);
+    const [currentUser,setCurrentUser] = useState(null);
 
     const options = {
         year: 'numeric',
@@ -42,13 +45,24 @@ const StartTestPage = () => {
                 {
                     navigate(-1,{replace:true})
                 }
-                const response = await fetch('http://localhost:8080/test/id:' + testid);
+                const response = await fetch('http://localhost:8080/users/current', { //получить пользователя
+                    credentials: "include",
+                });
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
-                const test = await response.json();
+                const user = await response.json();
+                setCurrentUser(user);
+
+                const response1 = await fetch('http://localhost:8080/test/id:' + testid);
+                if (!response1.ok) {
+                    throw new Error('Ошибка сети');
+                }
+                const test = await response1.json();
                 console.log(test);
 
+                setTypeTest(test.typeTest.id);
+                setTestTheme(test.theme);
                 setTestName(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
                 setTestDescription(test.description || "Описание отсутствует");
                 setTestDateStart(new Date(test.openingDateAndTime).toLocaleString("ru", options) );
@@ -82,13 +96,19 @@ const StartTestPage = () => {
     }, []);
 
     let navigate = useNavigate();
-    function StartTest() {
+
+    async function StartTest() {
 
         const now =new Date();//.toLocaleString("ru", options);
         if(testDateStartValue<=now){
            if(testDateEndValue >= now){
                sessionStorage.setItem('startDate', new Date());
-               navigate("/test");
+               if(typeTest === 2){
+                   StartTrainingTest();
+               }else {
+                   navigate("/test");
+               }
+
            }
            else{
                console.log("Тест больше не доступен для прохождения!")
@@ -99,6 +119,25 @@ const StartTestPage = () => {
 
 
         }
+    }
+    async function StartTrainingTest() {
+        let sendData = {
+            user:currentUser,
+            theme:testTheme
+        }
+        const response = await fetch('http://localhost:8080/test/create-test-simulator', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(sendData)
+        });
+        if (!response.ok) {
+            throw new Error('Ошибка сети');
+        }
+        const resJson = await response.json();
+        console.log(resJson);
+        navigate("/test");
     }
 
     return (
@@ -128,7 +167,7 @@ const StartTestPage = () => {
                         </Table>
 
                         <div className="button-container">
-                            <Button onClick={StartTest} className="start-test-button">
+                            <Button onClick={() =>{StartTest()}} className="start-test-button">
                                 Начать попытку
                             </Button>
                         </div>
