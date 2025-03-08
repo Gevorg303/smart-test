@@ -6,13 +6,6 @@ import "./styles.css";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
-import CreateTestPage from "../CreateTestPage";
-import CreateQuestionPage from "../CreateQuestionPage";
-import CreateSubjectPage from "../CreateSubjectPage";
-import CreateThemePage from "../CreateThemePage";
-import CreateIndicatorPage from "../CreateIndicatorPage";
-import Sorting from "../Sorting";
-import SubjectCard from "../SubjectCard";
 import SubjectCardForClass from "../SubjectCardForClass";
 import ClassModal from "../ClassModal";
 
@@ -25,6 +18,7 @@ const SubjectClass = () => {
     const [showToast, setShowToast] = useState(false); // отображение тоста
     const [toastText, setToastText] = useState(""); // текст тоста
     const [currentSubject, setCurrentSubject] = useState();
+    const [currentClasses, setCurrentClasses] = useState([]);
 
     const [subjects, setSubjects] = useState([]);
     const containerRef = useRef(null);
@@ -63,12 +57,12 @@ const SubjectClass = () => {
                 const array = [];
                 subjectsJson.forEach(subject => {
                     array.push(
-                        <SubjectCardForClass setCurrentSubject = {setCurrentSubject} key={subject.id} item={subject} setShowCreateModal={setShowModal} />
+                        <SubjectCardForClass setCurrentSubject = {setCurrentSubject} setCurrentClasses = {setCurrentClasses} key={subject.id} item={subject} setShowCreateModal={setShowModal} />
                     );
                 });
                 setSubjects(array);
 
-                setCreateModal(<ClassModal targetSubject={currentSubject}/>)
+                setCreateModal(<ClassModal targetSubject={currentSubject} classes={currentClasses} setClasses={setCurrentClasses()}/>)
 
 
             } catch (error) {
