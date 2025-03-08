@@ -31,16 +31,18 @@ const RegistrationPage = () => {
                 if (!response.ok) {
                     throw new Error('Ошибка получения данных об учебных заведениях');
                 }
+                if (selectedOption === 'single')
+                {localStorage.setItem('info', "Введите здесь данные ученика.");}
+                else {localStorage.setItem('info', "Выберите файл в формате .xlsx, .xlsm, .xls, .xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Место обучения, Класс, Почта");}
                 const data = await response.json();
                 setEducationalInstitutions(data);
             } catch (error) {
                 console.error('Ошибка получения данных об учебных заведениях:', error);
             }
         }
-
         fetchEducationalInstitutions();
         fetchUsers();
-    }, []);
+    }, [selectedOption]);
 
     useEffect(() => {
         if (selectedInstitution) {

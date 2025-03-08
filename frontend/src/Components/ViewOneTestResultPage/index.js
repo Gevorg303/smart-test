@@ -91,7 +91,6 @@ const ViewTestResultsPage = (props) => {
 
     return (
         <div>
-            <Navbar /> {/* Добавляем компонент Navbar */}
             <div className="content-container"> {/* Добавляем контейнер для контента */}
                 <div className="result-container">
                     <h1>{text}</h1>
