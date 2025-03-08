@@ -3,7 +3,8 @@ import { Container, Form, Button, Toast } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles.css'; // Ensure the path to your CSS file is correct
+import './styles.css';
+import BankCard from "../BankCard"; // Убедитесь, что путь к вашему CSS файлу правильный
 
 const RegistrationPage = () => {
     const location = useLocation();
@@ -20,10 +21,6 @@ const RegistrationPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
-    //localStorage.setItem('info', "Введите здесь данные ученика.");
-    //localStorage.setItem('info', "Выберите файл в формате .xlsx, .xlsm, .xls, .xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Место обучения, Класс, Почта");
-
-
     useEffect(() => {
         async function fetchEducationalInstitutions() {
             try {
@@ -31,18 +28,16 @@ const RegistrationPage = () => {
                 if (!response.ok) {
                     throw new Error('Ошибка получения данных об учебных заведениях');
                 }
-                if (selectedOption === 'single')
-                {localStorage.setItem('info', "Введите здесь данные ученика.");}
-                else {localStorage.setItem('info', "Выберите файл в формате .xlsx, .xlsm, .xls, .xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Место обучения, Класс, Почта");}
                 const data = await response.json();
                 setEducationalInstitutions(data);
             } catch (error) {
                 console.error('Ошибка получения данных об учебных заведениях:', error);
             }
         }
+
         fetchEducationalInstitutions();
         fetchUsers();
-    }, [selectedOption]);
+    }, []);
 
     useEffect(() => {
         if (selectedInstitution) {
@@ -142,7 +137,7 @@ const RegistrationPage = () => {
 
         const userRequestList = [userRequest];
 
-        // Check if the email is already registered
+        // Проверка, зарегистрирован ли уже email
         const isEmailRegistered = users.some(user => user.email === data.email);
         if (isEmailRegistered) {
             setErrorMessage('Пользователь с такой почтой уже зарегистрирован');
@@ -160,19 +155,18 @@ const RegistrationPage = () => {
             });
 
             if (response.ok) {
+                const answers = await response.json();
                 setShowSuccessToast(true);
                 form.reset();
-                setSelectedClass(null); // Clear selected class
+                setSelectedClass(null); // Очистить выбранный класс
                 await fetchUsers();
+                // Сгенерировать и скачать XLS файл
+                const userDetails = answers.map((item, index) => ({
+                    ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
+                    Логин: item.login,
+                    Пароль: item.rawPassword
+                }))
 
-                // Generate and download XLS file
-                const userDetails = [
-                    {
-                        'ФИО': `${data.lastName} ${data.firstName} ${data.middleName}`,
-                        'Логин': data.login,
-                        'Пароль': data.password // Replace with actual password logic
-                    }
-                ];
                 downloadXLS(userDetails, 'UserDetails');
             }
         } catch (error) {
@@ -195,42 +189,44 @@ const RegistrationPage = () => {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-            const userRequests = jsonData.slice(1).map(row => {
-                const [lastName, firstName, middleName, email] = row;
-                const educationalInstitution = educationalInstitutions.find(inst => inst.nameOfTheInstitution === selectedInstitution.nameOfTheInstitution);
-                if (!educationalInstitution) {
-                    return null;
-                }
+            const userRequests = [];
+            const errors = [];
 
-                const errors = [];
+            jsonData.slice(1).forEach((row, index) => {
+                const [lastName, firstName, middleName, email] = row;
+                const rowErrors = [];
+
                 if (!lastName) {
-                    errors.push('Фамилия');
+                    rowErrors.push('Фамилия');
                 }
                 if (!firstName) {
-                    errors.push('Имя');
+                    rowErrors.push('Имя');
                 }
                 if (!middleName) {
-                    errors.push('Отчество');
+                    rowErrors.push('Отчество');
                 }
                 if (!email || !isValidEmail(email)) {
-                    errors.push('Эл. почта');
+                    rowErrors.push('Эл. почта');
                 }
 
-                if (errors.length > 0) {
-                    setErrorMessage(`Заполнено некорректно: ${errors.join(', ')}`);
-                    setShowErrorToast(true);
-                    return null;
+                if (rowErrors.length > 0) {
+                    errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
+                    return;
                 }
 
-                // Check if the email is already registered
                 const isEmailRegistered = users.some(user => user.email === email);
                 if (isEmailRegistered) {
-                    setErrorMessage(`Пользователь с почтой ${email} уже зарегистрирован`);
-                    setShowErrorToast(true);
-                    return null;
+                    errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
+                    return;
                 }
 
-                return {
+                const educationalInstitution = educationalInstitutions.find(inst => inst.nameOfTheInstitution === selectedInstitution.nameOfTheInstitution);
+                if (!educationalInstitution) {
+                    errors.push(`Строка ${index + 2}: Место обучения не найдено`);
+                    return;
+                }
+
+                userRequests.push({
                     user: {
                         surname: lastName,
                         name: firstName,
@@ -240,8 +236,14 @@ const RegistrationPage = () => {
                     },
                     educationalInstitution: educationalInstitution,
                     studentClass: { id: parseInt(selectedClass, 10) }
-                };
-            }).filter(user => user !== null);
+                });
+            });
+
+            if (errors.length > 0) {
+                setErrorMessage(errors.join('\n'));
+                setShowErrorToast(true);
+                return;
+            }
 
             if (userRequests.length === 0) {
                 setErrorMessage('Строки в файле заполнены некорректно, либо пользователь был ранее зарегистрирован');
@@ -259,16 +261,17 @@ const RegistrationPage = () => {
                 });
 
                 if (response.ok) {
+                    const answers = await response.json();
                     setShowSuccessToast(true);
                     setSelectedClass(null); // Clear selected class
                     await fetchUsers();
 
                     // Generate and download XLS file
-                    const userDetails = userRequests.map(user => ({
-                        'ФИО': `${user.user.surname} ${user.user.name} ${user.user.patronymic}`,
-                        'Логин': data.user.login,
-                        'Пароль': user.user.password  // Replace with actual password logic
-                    }));
+                    const userDetails = answers.map((item, index) => ({
+                        ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
+                        Логин: item.login,
+                        Пароль: item.rawPassword
+                    }))
                     downloadXLS(userDetails, 'UserDetails');
                 }
             } catch (error) {
@@ -344,7 +347,7 @@ const RegistrationPage = () => {
                                 onChange={(e) => {
                                     const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
                                     setSelectedInstitution(institution);
-                                    setSelectedClass(null); // Clear selected class
+                                    setSelectedClass(null); // Очистить выбранный класс
                                 }}
                             >
                                 <option value="">Выберите место обучения</option>
@@ -383,7 +386,7 @@ const RegistrationPage = () => {
                                 onChange={(e) => {
                                     const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
                                     setSelectedInstitution(institution);
-                                    setSelectedClass(null); // Clear selected class
+                                    setSelectedClass(null); // Очистить выбранный класс
                                 }}
                             >
                                 <option value="">Выберите место обучения</option>
