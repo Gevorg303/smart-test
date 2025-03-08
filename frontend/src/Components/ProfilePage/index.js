@@ -69,7 +69,6 @@ const ProfilePage = () => {
     },[]);
     return (
         <div className="page-container">
-            <Navbar />
             <div className="content-wrapper">
                 <Container className="profile-container">
                     <div className="profile-section">

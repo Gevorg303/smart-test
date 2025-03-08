@@ -143,7 +143,6 @@ const StartTestPage = () => {
 
     return (
         <div className="page-container">
-            <Navbar />
             <div className="content-wrapper">
                 <h1 className="test-name">{testName}</h1>
                 <div className="test-container">
