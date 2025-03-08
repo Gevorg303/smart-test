@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const ClassSelector = ({targetSubject, indicators,setIndicators}) => {
+const ClassSelector = ({targetSubject, classes,setClasses}) => {
     const [themes, setThemes] = useState([]);
 
-
-
     const onClick = (id) => {
-        const array = [...indicators];
+        const array = [...classes];
         array[id] = !array[id]?true:false;
-        setIndicators(array);
+        setClasses(array);
         console.log(array)
     };
     useEffect(() => {
@@ -18,15 +16,22 @@ const ClassSelector = ({targetSubject, indicators,setIndicators}) => {
             try {
                 if(targetSubject!=null)
                 {
+                    const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
+                        credentials: "include",
+                    });
+                    if (!response1.ok) {
+                        throw new Error('Ошибка сети');
+                    }
+                    const user = await response1.json();
 
-                    //
+                    console.log(user)
 
-                    const response = await fetch('http://localhost:8080/user-subject/find-class-by-subject',{
+                    const response = await fetch('http://localhost:8080/users/find-student-class-by-user',{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
                         },
-                        body: JSON.stringify({id:targetSubject.id})});
+                        body: JSON.stringify(user)});
                     if (!response.ok) {
                         throw new Error('Ошибка получения классов ');
                     }
@@ -38,8 +43,6 @@ const ClassSelector = ({targetSubject, indicators,setIndicators}) => {
                 else
                 {
                 }
-
-
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }

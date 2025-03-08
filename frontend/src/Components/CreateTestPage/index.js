@@ -20,6 +20,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
     const [timeEnd, setTimeEnd] = useState(Date.now()); // введеное время конца теста
     const [currentTasks , setCurrentTasks] = useState([]); // выбранные задания для теста
     const [countOfTry, setCountOfTry] = useState(1); // количество попыток для теста
+    const [countOfTaskByError, setCountOfTaskByError] = useState(0); // количество заданий за ошибку для теста
     const [currentTheme, setCurrentTheme] = useState(-1); // id выбранной темы
     const [currentPassingScore, setCurrentPassingScore] = useState(60); // проходной балл
 
@@ -45,6 +46,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                         openingDateAndTime : timeStart,
                         passageTime : passingTime,
                         testPassword : currentPassword,
+                        numberOfTasksPerError: countOfTaskByError,
                         theme:{
                             id: theme
                         },
@@ -74,6 +76,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                             openingDateAndTime : timeStart,
                             passageTime : passingTime,
                             testPassword : currentPassword,
+                            numberOfTasksPerError: countOfTaskByError,
                            // passingScore: currentPassingScore,
                             theme:{
                                 id: theme
@@ -135,7 +138,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                 const typeJson = await response3.json();
                 console.log(typeJson)
                 setTypes(typeJson)
-                setCurrentType(typeJson[0].id);
+                //setCurrentType(typeJson[0].id);
 
                 const intTheme=  parseInt(currentTheme , 10 );
 
@@ -208,7 +211,8 @@ const CreateTestPage = ({editItem, onCreate}) => {
             setTimeEnd(editItem.closingDateAndTime?editItem.closingDateAndTime:"");
             setTimeStart(editItem.openingDateAndTime?editItem.openingDateAndTime:"");
             setCurrentTasks([]);
-           // setCurrentPassingScore();
+            setCurrentPassingScore(editItem.numberOfTasksPerError?editItem.numberOfTasksPerError:0);
+           // setCountOfTaskByError();
         }
         else if(targetSubject<0){
             setTasks([])
@@ -221,6 +225,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
             setTimeEnd(Date.now());
             setCurrentTasks([]);
             setCountOfTry(1);
+            setCountOfTaskByError(0);
             setCurrentTheme(-1);
             setCurrentPassingScore(60);
         }
@@ -268,6 +273,25 @@ const CreateTestPage = ({editItem, onCreate}) => {
 
                     }}/>
                 </Form.Group>
+                {
+                    currentType == 2?
+                        <Form.Group className="mb-3">
+                            <Form.Label>Количество заданий за ошибку</Form.Label>
+                            <Form.Control value={countOfTaskByError} onChange={(e) => {
+                                const re = /^[0-9\b]+$/;
+                                if(e.target.value === '' || e.target.value === '0') {
+                                    setCountOfTaskByError(0);
+                                }
+                                else if (re.test(e.target.value)) {
+                                    setCountOfTaskByError(parseInt(e.target.value));
+                                    console.log(parseInt(e.target.value))
+                                }
+
+                            }}/>
+                        </Form.Group>
+                        :
+                        <></>
+                }
                 <Form.Group className="mb-3">
                     <Form.Label>Проходной балл %</Form.Label>
                     <Form.Control value={currentPassingScore} onChange={(e) => {
