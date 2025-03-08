@@ -1,5 +1,6 @@
 package com.example.smart_test.repository;
 
+import com.example.smart_test.domain.EducationalInstitution;
 import com.example.smart_test.domain.StudentClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,7 @@ public interface StudentClassRepositoryInterface extends JpaRepository<StudentCl
 
     @Query(value = "SELECT класс.идентификатор_класс, номер_класса, буквенное_обозначение, идентификатор_образовательное_уч FROM пользователь_класс inner join класс on класс.идентификатор_класс = пользователь_класс.идентификатор_класс WHERE пользователь_класс.идентификатор_пользователя = :id",
             nativeQuery = true)
-    List<StudentClass> findByTeacherId(Long id);
+    List<StudentClass> findByUserId(Long id);
 
+    List<StudentClass> findByEducationalInstitution(EducationalInstitution educationalInstitution);
 }

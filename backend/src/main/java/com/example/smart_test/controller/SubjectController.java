@@ -37,7 +37,7 @@ public class SubjectController {
 
     /*Вывод информации про конкретный предмет*/
 //    @PostMapping("/get")
-//    public SubjectDto getSubjectById(@RequestBody SubjectDto subjectDto) {
+//    public SubjectDto getSubjectById(@RequestBody SubjectDto subjectDААto) {
 //        return subjectService.getSubjectById(subjectDto.getId());
 //    }
 

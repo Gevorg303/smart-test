@@ -3,6 +3,7 @@ package com.example.smart_test.service;
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
 import com.example.smart_test.request.UserRequest;
@@ -43,6 +44,8 @@ public class UserServiceImpl implements UserServiceInterface {
     private StudentClassRepositoryInterface studentClassRepository;
     @Autowired
     private UserClassServiceInterface userClassService;
+    @Autowired
+    private StudentClassMapperInterface studentClassMapper;
 
     @Transactional
     @Override
@@ -170,6 +173,11 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Override
     public List<StudentClassDto> findStudentClassByUser(UserDto userDto) {
-        return userClassService.findStudentClassByUser(userDto);
+        List<StudentClass> studentClassList = userEducationalInstitutionService.findUserEducationalInstitutionByUser(userDto);
+        List<StudentClassDto> studentClassDtoList = new ArrayList<>();
+        for (StudentClass studentClass : studentClassList) {
+            studentClassDtoList.add(studentClassMapper.toDTO(studentClass));
+        }
+        return studentClassDtoList;
     }
 }

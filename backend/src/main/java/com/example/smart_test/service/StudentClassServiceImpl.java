@@ -78,7 +78,7 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
     @Override
     public List<StudentClassDto> getStudentClassByUserId(Long id) {
         try {
-            List<StudentClass> subjects = studentClassRepository.findByTeacherId(id);
+            List<StudentClass> subjects = studentClassRepository.findByUserId(id);
             List<StudentClassDto> subjectDto = new ArrayList<>();
             for (StudentClass subject : subjects) {
                 subjectDto.add(studentClassMapper.toDTO(subject));

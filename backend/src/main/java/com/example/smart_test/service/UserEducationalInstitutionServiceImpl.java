@@ -1,9 +1,12 @@
 package com.example.smart_test.service;
 
 
+import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.UserEducationalInstitution;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.dto.UserEducationalInstitutionDto;
 import com.example.smart_test.mapper.api.UserEducationalInstitutionMapperInterface;
+import com.example.smart_test.repository.StudentClassRepositoryInterface;
 import com.example.smart_test.repository.UserEducationalInstitutionRepositoryInterface;
 import com.example.smart_test.service.api.UserEducationalInstitutionServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,15 @@ public class UserEducationalInstitutionServiceImpl implements UserEducationalIns
     private UserEducationalInstitutionRepositoryInterface userEducationalInstitutionRepositoryInterface;
     @Autowired
     private UserEducationalInstitutionMapperInterface userEducationalInstitutionMapperInterface;
+    @Autowired
+    private StudentClassRepositoryInterface studentClassRepository;
+
+    @Transactional
+    @Override
+    public List<StudentClass> findUserEducationalInstitutionByUser(UserDto userDto) {
+        UserEducationalInstitution userEducationalInstitution = userEducationalInstitutionRepositoryInterface.findByUserId(userDto.getId());
+        return studentClassRepository.findByEducationalInstitution(userEducationalInstitution.getEducationalInstitution());
+    }
 
     @Override
     @Transactional

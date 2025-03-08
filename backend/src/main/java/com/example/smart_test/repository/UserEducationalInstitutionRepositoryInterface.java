@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserEducationalInstitutionRepositoryInterface extends JpaRepository<UserEducationalInstitution, Long> {
-
+    UserEducationalInstitution findByUserId(Long userId);
 }
