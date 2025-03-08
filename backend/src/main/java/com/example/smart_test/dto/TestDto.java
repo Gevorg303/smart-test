@@ -20,4 +20,5 @@ public class TestDto {
     private int numberOfAttemptsToPass;
     private String description;
     private String testPassword;
+    private Integer numberOfTasksPerError;
 }

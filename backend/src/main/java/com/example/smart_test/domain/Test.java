@@ -36,4 +36,7 @@ public class Test {
     private String description;
     @Column(name = "пароль_теста")
     private String testPassword;
+    @Column(name = "количсетво_заданий_на_одну_ошибку")
+    private Integer numberOfTasksPerError;
+
 }

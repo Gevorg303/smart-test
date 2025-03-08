@@ -160,11 +160,12 @@ public class TestServiceImpl implements TestServiceInterface {
 
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
-                if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.ENTRY_TEST.getId())) {
-                    taskSet = testGeneratorService.generatorTasks(request.getUser(), testDto, 2);
-                }
+//                if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.ENTRY_TEST.getId())) {
+//                    taskSet = testGeneratorService.generatorTasks(request.getUser(), testDto, testDto.getNumberOfTasksPerError());
+//                }
                 if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.TRAINER.getId())) {
                     trainerTest = testDto;
+                    taskSet.addAll(testGeneratorService.generatorTasks(request.getUser(), trainerTest, trainerTest.getNumberOfTasksPerError()));
                 }
             }
         }
@@ -176,4 +177,5 @@ public class TestServiceImpl implements TestServiceInterface {
         }
         return Collections.emptyList();
     }
+
 }

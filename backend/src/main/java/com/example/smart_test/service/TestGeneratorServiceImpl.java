@@ -59,7 +59,7 @@ public class TestGeneratorServiceImpl implements TestGeneratorServiceInterface {
         Collections.shuffle(availableTasks);
 
         for (Task task : availableTasks) {
-            if (counter >= numberOfTasks) {
+            if (counter >= numberOfTasks * taskResultsList.size()) {
                 break;
             }
             tasks.add(task);
