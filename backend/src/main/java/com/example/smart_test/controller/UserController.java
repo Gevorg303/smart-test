@@ -55,7 +55,7 @@ public class UserController {
     }
 
     /**
-     * Выводит список классов связанных с пользователем
+     * Выводит список классов связанных со школой пользователя
      * */
     @PostMapping("/find-student-class-by-user")
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
