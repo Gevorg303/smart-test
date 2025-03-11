@@ -29,11 +29,11 @@ public class TestingAttempt {
     private LocalTime attemptDuration;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "идентификатор_тест", nullable = false)
     private Test test;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "идентификатор_пользователь")
     private User user;
 

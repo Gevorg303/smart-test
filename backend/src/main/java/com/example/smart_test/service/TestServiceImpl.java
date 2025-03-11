@@ -4,10 +4,12 @@ import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.TypeTestEnum;
 import com.example.smart_test.mapper.api.TestMapperInterface;
+import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.request.EndTestingRequest;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.request.TestSimulatorRequest;
+import com.example.smart_test.request.TestingAttemptAndTest;
 import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,8 @@ public class TestServiceImpl implements TestServiceInterface {
     private TestingAttemptServiceInterface testingAttemptService;
     @Autowired
     private TestGeneratorServiceInterface testGeneratorService;
+    @Autowired
+    private TestingAttemptMapperInterface testingAttemptMapper;
 
     @Override
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
@@ -104,6 +108,7 @@ public class TestServiceImpl implements TestServiceInterface {
     }
 
     @Override
+    @Transactional
     public List<TestDto> getUserTests(User user) {
         if (userService.getUserByLogin(user) == null) {
             throw new IllegalArgumentException("User not found");
@@ -153,6 +158,7 @@ public class TestServiceImpl implements TestServiceInterface {
     }
 
     @Override
+    @Transactional
     public List<TaskDto> createTestSimulator(TestSimulatorRequest request) {
         List<TestDto> testDtoList = getUserTests(request.getUser());
         Set<Task> taskSet = new HashSet<>();
@@ -160,22 +166,39 @@ public class TestServiceImpl implements TestServiceInterface {
 
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
-//                if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.ENTRY_TEST.getId())) {
-//                    taskSet = testGeneratorService.generatorTasks(request.getUser(), testDto, testDto.getNumberOfTasksPerError());
-//                }
                 if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.TRAINER.getId())) {
+                    trainerTest = findTestByENTRY_TESTType(request.getUser());
+                    taskSet.addAll(testGeneratorService.generatorTasks(request.getUser(), trainerTest, testDto.getNumberOfTasksPerError()));
                     trainerTest = testDto;
-                    taskSet.addAll(testGeneratorService.generatorTasks(request.getUser(), trainerTest, trainerTest.getNumberOfTasksPerError()));
                 }
             }
-        }
-
-        if (trainerTest != null) {
-            List<Task> taskList = new ArrayList<>(taskSet);
-            addTestDto(trainerTest, taskList);
-            return taskService.findTasksTheTest(trainerTest);
+            if (trainerTest != null && trainerTest.getTypeTest().getId().equals(TypeTestEnum.TRAINER.getId())) {
+                List<Task> taskList = new ArrayList<>(taskSet);
+                addTestDto(trainerTest, taskList);
+                return taskService.findTasksTheTest(trainerTest);
+            }
         }
         return Collections.emptyList();
+    }
+
+    private TestDto findTestByENTRY_TESTType(User user){
+        List<TestDto> testDtoList = getUserTests(user);
+        for (TestDto testDto : testDtoList) {
+            if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.ENTRY_TEST.getId())) {
+                return testDto;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public List<TestingAttemptDto> findTestingAttemptByTest(TestingAttemptAndTest request) {
+        List<TestingAttemptDto> testingAttemptDtoList = new ArrayList<>();
+        for (TestingAttempt testingAttempt : testingAttemptService.findTestingAttemptByTest(request.getUser(), testMapper.toEntity(request.getTest()))) {
+            testingAttemptDtoList.add(testingAttemptMapper.toDto(testingAttempt));
+        }
+        return testingAttemptDtoList;
     }
 
 }

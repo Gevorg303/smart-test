@@ -29,7 +29,7 @@ public class TestGeneratorServiceImpl implements TestGeneratorServiceInterface {
         List<Task> availableTasks = new ArrayList<>();
         int counter = 0;
 
-        TestingAttempt testingAttempt = testingAttemptService.findTestingAttemptByTest(user, test);
+        TestingAttempt testingAttempt = testingAttemptService.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, test);
         List<TaskResults> taskResultsList = taskResultsService.findTaskResultsByTestingAttempt(testingAttempt);
 
         for (TaskResults taskResults : taskResultsList) {

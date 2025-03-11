@@ -1,13 +1,12 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.TestingAttempt;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.TestingAttemptDto;
 import com.example.smart_test.dto.ThemeDto;
-import com.example.smart_test.request.EndTestingRequest;
-import com.example.smart_test.request.RequestForTask;
-import com.example.smart_test.request.TestRequest;
-import com.example.smart_test.request.TestSimulatorRequest;
+import com.example.smart_test.request.*;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +101,13 @@ public class TestController {
     @PostMapping("/create-test-simulator")
     public List<TaskDto> createTestSimulator(@RequestBody TestSimulatorRequest testSimulatorRequest) {
         return testService.createTestSimulator(testSimulatorRequest);
+    }
+
+    /**
+     * Метод выведет все попытки тестирования по тесту и пользователю
+     * */
+    @PostMapping("/find-testing-attempt-by-test")
+    public List<TestingAttemptDto> findTestingAttemptByTest(@RequestBody TestingAttemptAndTest request) {
+        return testService.findTestingAttemptByTest(request);
     }
 }

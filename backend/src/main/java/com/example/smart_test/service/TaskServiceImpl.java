@@ -96,7 +96,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
                     tasksTheTestList.add(task);
                 }
             }
-            Assert.assertFalse(tasksTheTestList.isEmpty());
+            //Assert.assertFalse(tasksTheTestList.isEmpty());
             return getDtoList(tasksTheTestList);
         } catch (Exception e) {
             log.error("У данного теста нет заданий: {}", e.getMessage(), e);
