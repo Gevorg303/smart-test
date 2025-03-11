@@ -21,6 +21,12 @@ const RegistrationPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
+    const isValidName = (name) => {
+        const nameRegex = /^[a-zA-Zа-яА-ЯёЁ'-]{2,50}$/;
+        return nameRegex.test(name);
+    };
+
+
     useEffect(() => {
         async function fetchEducationalInstitutions() {
             try {
@@ -90,13 +96,13 @@ const RegistrationPage = () => {
 
         const errors = [];
 
-        if (!data.lastName) {
+        if (!data.lastName || !isValidName(data.lastName)) {
             errors.push('Фамилия');
         }
-        if (!data.firstName) {
+        if (!data.firstName || !isValidName(data.firstName)) {
             errors.push('Имя');
         }
-        if (!data.middleName) {
+        if (!data.middleName || !isValidName(data.middleName)) {
             errors.push('Отчество');
         }
         if (!data.education) {
@@ -196,13 +202,13 @@ const RegistrationPage = () => {
                 const [lastName, firstName, middleName, email] = row;
                 const rowErrors = [];
 
-                if (!lastName) {
+                if (!lastName || !isValidName(lastName)) {
                     rowErrors.push('Фамилия');
                 }
-                if (!firstName) {
+                if (!firstName || !isValidName(firstName)) {
                     rowErrors.push('Имя');
                 }
-                if (!middleName) {
+                if (!middleName || !isValidName(middleName)) {
                     rowErrors.push('Отчество');
                 }
                 if (!email || !isValidEmail(email)) {
