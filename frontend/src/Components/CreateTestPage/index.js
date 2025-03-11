@@ -24,8 +24,48 @@ const CreateTestPage = ({editItem, onCreate}) => {
     const [currentTheme, setCurrentTheme] = useState(-1); // id выбранной темы
     const [currentPassingScore, setCurrentPassingScore] = useState(60); // проходной балл
 
+    // Валидация описания
+    const isValidDescription = (description) => {
+        return description.length >= 10 && description.length <= 500;
+    };
+
+    // Валидация пароля
+    const isValidPassword = (password) => {
+        return password.length >= 4 && password.length <= 20;
+    };
+
+    // Валидация дат
+    const isValidDateRange = (startDate, endDate) => {
+        return new Date(startDate) <= new Date(endDate);
+    };
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        const errors = [];
+
+        // Проверка поля Описание
+        if (!isValidDescription(currentDescription)) {
+            errors.push('Описание должно содержать от 10 до 500 символов.');
+        }
+
+        // Проверка поля Пароль
+        if (!isValidPassword(currentPassword)) {
+            errors.push('Пароль должен содержать от 4 до 20 символов.');
+        }
+
+        // Проверка полей Дата начала и Дата окончания
+        if (!isValidDateRange(timeStart, timeEnd)) {
+            errors.push('Дата начала не может быть позже даты окончания.');
+        }
+
+        if (errors.length > 0) {
+            // Вывести сообщение об ошибке
+            console.error('Ошибки валидации:', errors.join(', '));
+            return;
+        }
+
         try {
             const theme = parseInt(currentTheme , 10 );
             const taskList =[];

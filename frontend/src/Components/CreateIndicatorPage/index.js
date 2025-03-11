@@ -11,9 +11,28 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
     const [currentName, setCurrentName] = useState(""); // введеное название
     const [currentTheme, setCurrentTheme] = useState(-1); // id выбранной темы
 
+    // Валидация названия индикатора
+    const isValidIndicatorName = (name) => {
+        return name.length <= 100;
+    };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        const errors = [];
+
+        // Проверка поля Название индикатора
+        if (!isValidIndicatorName(currentName)) {
+            errors.push('Название индикатора превышает 100 символов.');
+        }
+
+        if (errors.length > 0) {
+            // Вывести сообщение об ошибке
+            console.error('Ошибки валидации:', errors.join(', '));
+            return;
+        }
+
         try {
             const theme = parseInt(currentTheme , 10 );
 

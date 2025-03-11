@@ -10,9 +10,29 @@ const CreateThemePage = ({editItem, onCreate}) => {
 
     const [currentName, setCurrentName] = useState(""); // введеное название
 
+    // Валидация названия темы
+    const isValidThemeName = (name) => {
+        return name.length <= 100;
+    };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        const errors = [];
+
+        // Проверка поля Название темы
+        if (!isValidThemeName(currentName)) {
+            errors.push('Название темы превышает 100 символов.');
+        }
+
+        if (errors.length > 0) {
+            // Вывести сообщение об ошибке
+            console.error('Ошибки валидации:', errors.join(', '));
+            return;
+        }
+
+
         try {
 
             /*console.log(

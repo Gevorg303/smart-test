@@ -10,8 +10,38 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
     const [currentDescription, setCurrentDescription] = useState(""); // введенное описание
     const [currentUser, setCurrentUser] = useState(); // user
 
+    // Валидация названия предмета
+    const isValidSubjectName = (name) => {
+        return name.length <= 100;
+    };
+
+    // Валидация описания предмета
+    const isValidSubjectDescription = (description) => {
+        return description.length <= 500;
+    };
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        const errors = [];
+
+        // Проверка поля Название предмета
+        if (!isValidSubjectName(currentName)) {
+            errors.push('Название предмета превышает 100 символов.');
+        }
+
+        // Проверка поля Описание предмета
+        if (!isValidSubjectDescription(currentDescription)) {
+            errors.push('Описание предмета превышает 500 символов.');
+        }
+
+        if (errors.length > 0) {
+            // Вывести сообщение об ошибке
+            console.error('Ошибки валидации:', errors.join(', '));
+            return;
+        }
+
         try {
 
             /*console.log(

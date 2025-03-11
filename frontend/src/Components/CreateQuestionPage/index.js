@@ -20,6 +20,19 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
     const [currentExplanation, setExplanation] = useState();
     const [currentAnswers,setCurrentAnswers] = useState([]);
 
+
+    // Валидация задания и пояснения
+    const isValidTaskOrExplanation = (text) => {
+        return text.length <= 500;
+    };
+
+    // Валидация ответа
+    const isValidAnswer = (text) => {
+        return text.length <= 50;
+    };
+
+
+
     const onClick = (id, answer) => {
         const array = [...currentAnswers];
         array[id] = answer;
@@ -32,6 +45,34 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
     };
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+
+        const errors = [];
+
+        // Проверка поля Задание
+        if (!isValidTaskOrExplanation(currentText)) {
+            errors.push('Текст задания превышает 500 символов.');
+        }
+
+        // Проверка поля Пояснение
+        if (!isValidTaskOrExplanation(currentExplanation)) {
+            errors.push('Пояснение превышает 500 символов.');
+        }
+
+        // Проверка полей Ответ
+        currentAnswers.forEach((answer, index) => {
+            if (answer.response && !isValidAnswer(answer.response)) {
+                errors.push(`Ответ ${index + 1} превышает 50 символов.`);
+            }
+        });
+
+        if (errors.length > 0) {
+            // Вывести сообщение об ошибке
+            console.error('Ошибки валидации:', errors.join(', '));
+            return;
+        }
+
+
         try {
             const type = parseInt(currentType , 10 );
             const indicators=[]; //=  currentIndicators.map((item, index) =>item!=undefined?{id:index}: null)
