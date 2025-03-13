@@ -294,8 +294,9 @@ const CreateTestPage = ({editItem, onCreate}) => {
                         setCurrentType(e.target.value);
                         /*setCurrentAnswers([]);*/
                     }}>
-
-                        {types.map((item, index) => <option key={item.id} value={item.id}> {item.nameOfTestType}  </option>)}
+                        <option value={-1}>Выберите тип теста</option>
+                        {types.map((item, index) => <option key={item.id}
+                                                            value={item.id}> {item.nameOfTestType}  </option>)}
 
                     </Form.Select>
                 </Form.Group>

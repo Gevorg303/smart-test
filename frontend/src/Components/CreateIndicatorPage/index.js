@@ -118,8 +118,10 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
 
         }
         else {
-            setTargetSubject(-1);
-            setCurrentTheme(-1);
+            if(currentTheme == null) {
+                setTargetSubject(-1);
+                setCurrentTheme(-1);
+            }
             setCurrentName("");
         }
 
