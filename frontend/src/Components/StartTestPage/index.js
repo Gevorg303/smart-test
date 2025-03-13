@@ -3,7 +3,8 @@ import { Button, Table } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
-import './styles.css'; // Импорт CSS файла
+import './styles.css';
+import TestAttemptsDisplay from "../TestAttemptsDisplay"; // Импорт CSS файла
 
 const StartTestPage = () => {
     const [testName, setTestName] = useState("");
@@ -62,6 +63,29 @@ const StartTestPage = () => {
                 const test = await response1.json();
                 console.log(test);
 
+                const response2 = await fetch('http://localhost:8080/test/find-testing-attempt-by-test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            user: {
+                                id:user.id
+                            },
+                            test:{
+                                id: test.id
+                            }
+                        }
+                    )
+                });
+                if (!response2.ok) {
+                    throw new Error('Ошибка сети');
+                }
+                const attemptsJson = await response2.json();
+                console.log(attemptsJson);
+                setAttempts(attemptsJson)
+
                 setTypeTest(test.typeTest.id);
                 setTestTheme(test.theme);
                 setTestName(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
@@ -73,21 +97,22 @@ const StartTestPage = () => {
                 setTestTime(test.passageTime || "неограничено");
                 setTestTryCount(test.numberOfAttemptsToPass||"неограничено")
 
+
                 // заполнение попыток
-                setAttempts(
+               /* setAttempts(
                     [
-                        <tr>
-                            <td>1</td>
-                            <td>Завершен: среда, 1 января 2025 г. в 00:00</td>
-                            <td>3/5</td>
-                        </tr>,
-                        <tr>
-                            <td>2</td>
-                            <td>Завершен: четверг, 2 января 2025 г. в 02:00</td>
-                            <td>5/5</td>
-                        </tr>
+                        {
+                            id: 1,
+                            date: "Завершен: среда, 1 января 2025 г. в 00:00",
+                            score: "3/5"
+                        },
+                        {
+                        id: 2,
+                        date: "Завершен: четверг, 2 января 2025 г. в 02:00",
+                        score: "5/5"
+                        }
                     ]
-                )
+                )*/
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -153,18 +178,7 @@ const StartTestPage = () => {
                         <h4>Разрешено попыток: {testTryCount}</h4>
                         <h4>Ограничение по времени: {testTime}</h4>
                         <h4>Предыдущие результаты</h4>
-                        <Table striped bordered hover>
-                            <thead>
-                            <tr>
-                                <th>Попытка</th>
-                                <th>Состояние</th>
-                                <th>Оценка / 5</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                {attempts}
-                            </tbody>
-                        </Table>
+                        <TestAttemptsDisplay attempts={attempts}/>
 
                         <div className="button-container">
                             <Button onClick={() =>{StartTest()}} className="start-test-button">
