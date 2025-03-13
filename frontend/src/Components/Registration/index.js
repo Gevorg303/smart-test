@@ -296,9 +296,15 @@ const RegistrationPage = () => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        setFile(file);
-        setFileName(file.name);
+        if (file) {
+            setFile(file);
+            setFileName(file.name);
+        } else {
+            setFile(null);
+            setFileName('');
+        }
     };
+
 
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
