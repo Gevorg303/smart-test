@@ -4,12 +4,13 @@ import {Button} from "react-bootstrap";
 import EditImage from '../../images/pencil.png';
 import { Accordion } from 'react-bootstrap';
 
-const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject}) => {
+const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject, setCurrentClasses}) => {
 
     const [classes, setClasses] = useState();
 
     useEffect(() => {
         async function fetchClasses() {
+            console.log(item)
             const response = await fetch('http://localhost:8080/user-subject/find-class-by-subject', {
                 method: 'POST',
                 headers: {
@@ -22,6 +23,7 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject}) => {
             }
             const subjectsJson = await response.json();
             console.log(subjectsJson)
+            setCurrentClasses(subjectsJson)
             const array = [];
             subjectsJson.forEach(subject => {
                 array.push(

@@ -54,15 +54,16 @@ const SubjectClass = () => {
                     throw new Error('Ошибка вывода предметов учителя');
                 }
                 const subjectsJson = await response2.json();
+                console.log(subjectsJson)
                 const array = [];
                 subjectsJson.forEach(subject => {
                     array.push(
-                        <SubjectCardForClass setCurrentSubject = {setCurrentSubject} setCurrentClasses = {setCurrentClasses} key={subject.id} item={subject} setShowCreateModal={setShowModal} />
+                        <SubjectCardForClass key={subject.id} setCurrentSubject = {setCurrentSubject} setCurrentClasses = {setCurrentClasses} item={subject} setShowCreateModal={setShowModal} />
                     );
                 });
                 setSubjects(array);
 
-                setCreateModal(<ClassModal targetSubject={currentSubject} classes={currentClasses} setClasses={setCurrentClasses()}/>)
+                setCreateModal(<ClassModal targetSubject={currentSubject} classes={currentClasses} setClasses={setCurrentClasses}/>)
 
 
             } catch (error) {
