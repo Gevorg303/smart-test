@@ -4,11 +4,13 @@ import Theme from "../Theme";
 import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 import './styles.css'; // Импортируйте стили
+import { useOutletContext } from 'react-router-dom';
 
 const ThemePage = () => {
     const [subjectName, setSubjectName] = useState("Название предмета");
     const [themes, setThemes] = useState([]);
     const navigate = useNavigate();
+    const [topText, setTopText] = useOutletContext();
     localStorage.setItem('info', "Здесь содержатся темы по выбранному предмету, а также виды тестов по отдельной теме");
 
     useEffect(() => {
@@ -42,7 +44,7 @@ const ThemePage = () => {
                 const subject = await response.json();
                 console.log(subject)
                 setSubjectName(subject.subjectName);
-
+                setTopText(subject.subjectName);
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -81,21 +83,21 @@ const ThemePage = () => {
         }
         fetchSubjectName();
         fetchThemes()
-    }, []);
+    }, [setTopText]);
 
     return (
 
         <div className="page-container">
             <div className="content">
-                <div className="Name">
+                {/*<div className="Name">
                     <h1>{subjectName}</h1>
-                </div>
+                </div>*/}
                 <div className="theme-container">
                     <h3>Доступные Вам темы:</h3>
                         {themes}
                 </div>
                 </div>
-                <Footer/>
+            {/*<Footer/>*/}
             </div>
             );
             };

@@ -5,7 +5,7 @@ import BankCard from "../BankCard";
 import "./styles.css";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useOutletContext} from "react-router-dom";
 import SubjectCardForClass from "../SubjectCardForClass";
 import ClassModal from "../ClassModal";
 
@@ -22,6 +22,7 @@ const SubjectClass = () => {
 
     const [subjects, setSubjects] = useState([]);
     const containerRef = useRef(null);
+    const [topText, setTopText] = useOutletContext();
 
 
     const handleCreate = (message) => {
@@ -64,7 +65,7 @@ const SubjectClass = () => {
                 setSubjects(array);
 
                 setCreateModal(<ClassModal targetSubject={currentSubject} classes={currentClasses} setClasses={setCurrentClasses}/>)
-
+                setTopText("Класс предметов");
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -72,14 +73,14 @@ const SubjectClass = () => {
         }
 
         fetchTests();
-    }, [toastText, currentSubject]);
+    }, [toastText, currentSubject,setTopText]);
 
 
     return (
         <div>
             <br/><br/><br/>
             <div>
-                <h1>Классы предметов</h1>
+                {/*<h1>Классы предметов</h1>*/}
                 <div className="container-home-subject-class" id="subjects-container" ref={containerRef}
                      data-count={subjects.length}>
                     {subjects}
@@ -89,6 +90,7 @@ const SubjectClass = () => {
                     show={showModal}
                     onHide={() => {
                         setShowModal(false);
+                        setCurrentClasses([]);
                     }}
                     dialogClassName="modal-90w"
                     size="xl"
@@ -122,7 +124,7 @@ const SubjectClass = () => {
                     <Toast.Body>{toastText}</Toast.Body>
                 </Toast>
             </ToastContainer>
-            <Footer/>
+            {/*<Footer/>*/}
         </div>
     )
         ;
