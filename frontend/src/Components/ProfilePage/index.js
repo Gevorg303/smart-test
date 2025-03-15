@@ -7,6 +7,7 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Question from "../Question";
 import SubjectCard from "../SubjectCard"; // Импортируем файл стилей
+import { useOutletContext } from 'react-router-dom';
 
 const ProfilePage = () => {
 
@@ -21,6 +22,7 @@ const ProfilePage = () => {
     const [studentClass, setStudentClass] = useState("");
     const [email, setEmail] = useState("");
     const [portraitUrl, setPortraitUrl] = useState(avatarImage);
+    const [topText, setTopText] = useOutletContext();
 
     const handleLogout = () => {
         // Логика выхода из аккаунта
@@ -67,13 +69,13 @@ const ProfilePage = () => {
                 });
                 setStudentClass(result);
                 //setStudentClass(studentClass);
-
+                setTopText("Личный кабинет");
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
         fetchUser();
-    },[]);
+    },[setTopText]);
     return (
         <div className="page-container">
             <div className="content-wrapper">
@@ -96,7 +98,7 @@ const ProfilePage = () => {
                     </div>
                 </Container>
             </div>
-            <Footer />
+            {/*<Footer />*/}
         </div>
     );
 };
