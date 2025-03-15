@@ -1,0 +1,62 @@
+.anavbar {
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f8ff;
+    color: #1e3a8a;
+    width: 250px;
+    height: 100vh;
+    border-right: 2px solid #a5b7d1;
+}
+
+.alogo {
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #a5b7d1;
+    color: white;
+    text-align: center;
+}
+.alogo img {
+    width: 75%; /* Устанавливаем ширину изображения на 75% от контейнера */
+    height: auto; /* Сохраняем пропорции изображения */
+    display: block; /* Убираем отступы и центрируем */
+    margin: 0 auto; /* Центрируем изображение */
+}
+
+.amenu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.amenu li.main-item {
+    padding: 10px 20px;
+    border-bottom: 1px solid #d0e2f7;
+    font-size: 16px;
+    color: black; /* Черный цвет текста */
+    position: relative; /* Устанавливаем относительное позиционирование */
+}
+
+.amenu li.main-item.clickable:hover {
+    background-color: #d0e2f7;
+    cursor: pointer;
+}
+
+.submenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+}
+
+.submenu li.sub-item {
+    font-size: 14px; /* Меньший шрифт для подпунктов */
+    padding: 5px 0;
+    cursor: pointer;
+    margin-left: 10%; /* Отступ для текста подпунктов на 10% */
+    color: black; /* Черный цвет текста */
+}
+
+.submenu li.sub-item:hover {
+    background-color: #a5b7d1; /* Цвет фона при наведении на подпункт */
+}

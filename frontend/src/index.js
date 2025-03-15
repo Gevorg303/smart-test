@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './Components/Home';
+import BetaPage from "./Components/BetaPage";
 import LoginPage from './Components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import StartTestPage from './Components/StartTestPage';
@@ -20,9 +21,11 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                {/* Страница входа без Layout */}
+                {/* Страница входа без Layout и AdminNavbar */}
                 <Route path="/" element={<LoginPage />} />
-                {/* Другие страницы с Layout */}
+                {/* BetaPage с AdminNavbar, но без Layout */}
+                <Route path="bPage" element={<BetaPage />} />
+                {/* Другие страницы с Layout, но без AdminNavbar */}
                 <Route element={<PrivateRoutes />}>
                     <Route element={<Layout />}>
                         <Route path="home" element={<HomePage />} />
@@ -34,11 +37,11 @@ const App = () => {
                         <Route path="theme" element={<ThemePage />} />
                         <Route path="profile" element={<ProfilePage />} />
                         <Route path="results" element={<ResultsPage />} />
-                        <Route path="testbank" element={<QuestionBankPage  type={"test"} />} />
-                        <Route path="taskbank" element={<QuestionBankPage  type={"task"}/>} />
-                        <Route path="itembank" element={<QuestionBankPage  type={"subject"}/>} />
-                        <Route path="themebank" element={<QuestionBankPage  type={"theme"}/>} />
-                        <Route path="indicatorbank" element={<QuestionBankPage  type={"indicator"}/>} />
+                        <Route path="testbank" element={<QuestionBankPage type={"test"} />} />
+                        <Route path="taskbank" element={<QuestionBankPage type={"task"} />} />
+                        <Route path="itembank" element={<QuestionBankPage type={"subject"} />} />
+                        <Route path="themebank" element={<QuestionBankPage type={"theme"} />} />
+                        <Route path="indicatorbank" element={<QuestionBankPage type={"indicator"} />} />
                         <Route path="subjectclass" element={<SubjectClassPage />} />
                     </Route>
                 </Route>
