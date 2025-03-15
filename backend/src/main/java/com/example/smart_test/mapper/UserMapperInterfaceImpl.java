@@ -18,6 +18,7 @@ public class UserMapperInterfaceImpl implements UserMapperInterface {
         dto.setPasswordEncoder(entity.getPasswordEncoder());
         dto.setSurname(entity.getSurname());
         dto.setRole(entity.getRoles());
+        dto.setPortraitUrl(entity.getPortraitUrl());
         return dto;
     }
 
@@ -32,6 +33,7 @@ public class UserMapperInterfaceImpl implements UserMapperInterface {
         entity.setPasswordEncoder(dto.getPasswordEncoder());
         entity.setSurname(dto.getSurname());
         entity.setRoles(dto.getRole());
+        entity.setPortraitUrl(dto.getPortraitUrl());
         return entity;
     }
 }

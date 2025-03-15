@@ -18,5 +18,6 @@ public class UserDto {
     private Long roleId;
     private Role role;
     private String password;
+    private String portraitUrl;
     // private Set<Role> roles;
 }

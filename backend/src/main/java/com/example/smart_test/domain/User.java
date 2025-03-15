@@ -31,6 +31,8 @@ public class User implements UserDetails {
     private String passwordEncoder;
     @Column(name = "фамилия_пользователя")
     private String surname;
+    @Column(name = "портрет")
+    private String portraitUrl;
     @ManyToOne
     @JoinColumn(name = "роль_пользователя")
     private Role roles;
