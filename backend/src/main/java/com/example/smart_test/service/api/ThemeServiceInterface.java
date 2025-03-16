@@ -28,4 +28,6 @@ public interface ThemeServiceInterface {
 
     @Transactional
     List<ThemeDto> getUserThemes(User dto);
+
+    Theme updateTheme(Theme updatedTheme);
 }

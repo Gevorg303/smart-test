@@ -12,6 +12,7 @@ import com.example.smart_test.repository.ThemeRepositoryInterface;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import com.example.smart_test.service.api.ThemeServiceInterface;
 import com.example.smart_test.service.api.UserServiceInterface;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,4 +116,14 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
         return new ArrayList<>(userThemes);
     }
 
+    @Override
+    public Theme updateTheme(Theme updatedTheme) {
+        return themeRepository.findById(updatedTheme.getId())
+                .map(theme -> {
+                    theme.setSubject(updatedTheme.getSubject());
+                    theme.setThemeName(updatedTheme.getThemeName());
+                    return themeRepository.save(theme);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Тема с ID " + updatedTheme.getId() + " не найдена"));
+    }
 }

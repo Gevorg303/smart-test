@@ -11,6 +11,7 @@ import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.request.AddSubjectRequest;
 import com.example.smart_test.service.api.SubjectServiceInterface;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,12 +72,22 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
         } catch (Exception e) {
             throw new RuntimeException("Не удалось получить предмет: " + e.getMessage(), e);
         }
-
     }
 
     @Override
     public List<Theme> getThemesBySubjectId(Long subjectId) {
         return null;
+    }
+
+    @Override
+    public Subject updateSubject(Subject updatedSubject) {
+        return subjectRepository.findById(updatedSubject.getId())
+                .map(subject -> {
+                    subject.setSubjectName(updatedSubject.getSubjectName());
+                    subject.setDescription(updatedSubject.getDescription());
+                    return subjectRepository.save(subject);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Предмет с ID " + updatedSubject.getId() + " не найден"));
     }
 
     @Transactional
@@ -93,7 +104,7 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
                 if (subjectUser.getUser() != null && subjectUser.getUser().getId().equals(user.getId())) {
                     Subject subject = findSubjectById(subjectUser.getSubject().getId());
                     if (subject != null) {
-                        subjectDtoList.add(subjectMapper.toDTO(subject)); // Маппинг каждого объекта отдельно
+                        subjectDtoList.add(subjectMapper.toDTO(subject));
                     }
                 }
             }

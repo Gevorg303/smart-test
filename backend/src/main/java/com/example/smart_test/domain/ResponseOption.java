@@ -21,8 +21,7 @@ public class ResponseOption {
     private String response;
     @Column(name = "оценка_за_ответ")
     private String evaluationResponse;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "идентификатор_задание")
     private Task task;
-
 }

@@ -40,4 +40,6 @@ public interface TaskServiceInterface {
 
     @Transactional
     void removeTaskFromTest(TaskDto taskDto);
+
+    Task updateTask(Task updatedTask);
 }

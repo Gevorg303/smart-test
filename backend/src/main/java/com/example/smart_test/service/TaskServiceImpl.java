@@ -6,6 +6,7 @@ import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TaskRepositoryInterface;
 import com.example.smart_test.service.api.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,6 +211,20 @@ public class TaskServiceImpl implements TaskServiceInterface {
                     "Не удалость удалить задание из теста: e.getMessage(), e)"
             );
         }
+    }
+
+    @Override
+    public Task updateTask(Task updatedTask) {
+        return taskRepositoryInterface.findById(updatedTask.getId())
+                .map(task -> {
+                    task.setTest(updatedTask.getTest());
+                    task.setTypeTask(updatedTask.getTypeTask());
+                    task.setAssessmentTask(updatedTask.getAssessmentTask());
+                    task.setExplanation(updatedTask.getExplanation());
+                    task.setTaskText(updatedTask.getTaskText());
+                    return taskRepositoryInterface.save(task);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Задание с ID " + updatedTask.getId() + " не найдено"));
     }
 
     private List<TaskDto> getDtoList(List<Task> taskList) {

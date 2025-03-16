@@ -28,4 +28,6 @@ public interface SubjectServiceInterface {
     List<SubjectDto> getSubjectByClassAndTeacher(Long idClass, Long idTeacher);
 
     List<Theme> getThemesBySubjectId(Long subjectId);
+
+    Subject updateSubject(Subject updatedSubject);
 }

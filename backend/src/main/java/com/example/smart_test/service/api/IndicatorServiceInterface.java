@@ -26,4 +26,6 @@ public interface IndicatorServiceInterface {
 
     @Transactional
     List<IndicatorDto> getUserIndicators(User dto);
+
+    Indicator updateIndicator(Indicator updatedIndicator);
 }

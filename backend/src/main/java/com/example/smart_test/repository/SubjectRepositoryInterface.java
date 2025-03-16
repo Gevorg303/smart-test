@@ -7,9 +7,11 @@ import com.example.smart_test.dto.SubjectDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface SubjectRepositoryInterface extends JpaRepository<Subject, Long> {
     @Query(value = "SELECT идентификатор_предмет, название_предмета, описание_предмета, предмет.идентификатор_пользователь_класс FROM предмет INNER JOIN пользователь_класс on предмет.идентификатор_пользователь_класс = пользователь_класс.идентификатор_пользователь_класс WHERE идентификатор_класс = :idClass and идентификатор_пользователя = :idTeacher",
             nativeQuery = true)

@@ -14,4 +14,6 @@ public interface TaskOfIndicatorRepositoryInterface extends JpaRepository<TaskOf
     List<TaskOfIndicator> findByIndicatorId(Long indicatorId);
     List<TaskOfIndicator> findByTask(Task task);
     List<TaskOfIndicator> findByIndicator(Indicator indicator);
+    List<TaskOfIndicator> findByTaskId(Long taskId);
+
 }

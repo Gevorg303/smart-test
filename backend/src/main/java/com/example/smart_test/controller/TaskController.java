@@ -6,6 +6,7 @@ import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.request.AddTaskRequest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,6 +64,15 @@ public class TaskController {
     @PutMapping("/remove-task-from-test")
     public void removeTaskFromTest (@RequestBody TaskDto taskDto){
         taskService.removeTaskFromTest(taskDto);
+    }
+
+    /**
+     * Запрос для обновления задания
+     * */
+    @PutMapping("/update-task")
+    public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask) {
+        Task task = taskService.updateTask(updatedTask);
+        return ResponseEntity.ok(task);
     }
 
 //    @GetMapping("/find-test")

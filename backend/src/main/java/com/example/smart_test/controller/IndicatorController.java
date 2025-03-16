@@ -1,10 +1,12 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.Indicator;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.IndicatorDto;
 import com.example.smart_test.service.api.IndicatorServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,4 +47,14 @@ public class IndicatorController {
     public List<IndicatorDto> getIndicatorsByIdUser(@RequestBody User user) {
         return indicatorService.getUserIndicators(user);
     }
+
+    /**
+     * Запрос для обновления данных индикатора
+     * */
+    @PutMapping("/update-indicator")
+    public ResponseEntity<Indicator> updateIndicator(@RequestBody Indicator updatedIndicator) {
+        Indicator indicator = indicatorService.updateIndicator(updatedIndicator);
+        return ResponseEntity.ok(indicator);
+    }
+
 }

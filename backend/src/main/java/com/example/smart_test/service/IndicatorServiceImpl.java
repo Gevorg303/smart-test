@@ -8,6 +8,7 @@ import com.example.smart_test.dto.*;
 import com.example.smart_test.mapper.api.IndicatorMapperInterface;
 import com.example.smart_test.repository.IndicatorRepositoryInterface;
 import com.example.smart_test.service.api.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -119,4 +120,16 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
         return new ArrayList<>(uniqueIndicators);
     }
+
+    @Override
+    public Indicator updateIndicator(Indicator updatedIndicator) {
+        return indicatorRepositoryInterface.findById(updatedIndicator.getId())
+                .map(indicator -> {
+                    indicator.setTheme(updatedIndicator.getTheme());
+                    indicator.setNameOfTheIndicator(updatedIndicator.getNameOfTheIndicator());
+                    return indicatorRepositoryInterface.save(indicator);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Индикатор с ID " + updatedIndicator.getId() + " не найден"));
+    }
+
 }

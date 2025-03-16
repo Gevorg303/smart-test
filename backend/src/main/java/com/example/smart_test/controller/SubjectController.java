@@ -64,4 +64,10 @@ public class SubjectController {
         List<Theme> themes = subjectService.getThemesBySubjectId(subjectId);
         return new ResponseEntity<>(themes, HttpStatus.OK);
     }
+
+    @PutMapping("/update-subject")
+    public ResponseEntity<Subject> updateSubject(@RequestBody Subject updatedSubject) {
+        Subject subject = subjectService.updateSubject(updatedSubject);
+        return ResponseEntity.ok(subject);
+    }
 }

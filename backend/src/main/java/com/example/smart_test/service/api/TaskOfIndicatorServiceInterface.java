@@ -3,6 +3,8 @@ package com.example.smart_test.service.api;
 import com.example.smart_test.domain.Indicator;
 import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.TaskOfIndicator;
+import com.example.smart_test.dto.IndicatorDto;
+import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TaskOfIndicatorDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,4 +30,6 @@ public interface TaskOfIndicatorServiceInterface {
     List<TaskOfIndicator> findTaskOfIndicatorByTask(Task task);
 
     List<TaskOfIndicator> findTaskOfIndicatorByIndicator(Indicator indicator);
+
+    List<IndicatorDto> findIndicatorByTask(Task task);
 }

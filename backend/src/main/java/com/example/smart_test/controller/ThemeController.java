@@ -6,6 +6,7 @@ import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.service.api.ThemeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,4 +56,14 @@ public class ThemeController {
     public List<ThemeDto> getThemeByIdUser(@RequestBody User user){
         return themeService.getUserThemes(user);
     }
+
+    /**
+     * Запрос для обновления данных темы
+     * */
+    @PutMapping("/update-theme")
+    public ResponseEntity<Theme> updateTheme(@RequestBody Theme updatedTheme) {
+        Theme theme = themeService.updateTheme(updatedTheme);
+        return ResponseEntity.ok(theme);
+    }
+
 }
