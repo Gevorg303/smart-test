@@ -12,6 +12,7 @@ import CreateSubjectPage from "../CreateSubjectPage";
 import CreateThemePage from "../CreateThemePage";
 import CreateIndicatorPage from "../CreateIndicatorPage";
 import Sorting from "../Sorting";
+import { useOutletContext } from 'react-router-dom';
 
 
 const QuestionBankPage = ({type}) => {
@@ -27,6 +28,7 @@ const QuestionBankPage = ({type}) => {
     const navigate = useNavigate();
     const [showToast, setShowToast] = useState(false); // отображение тоста
     const [toastText, setToastText] = useState(""); // текст тоста
+    const [topText, setTopText] = useOutletContext();
 
     function EditFunc(item) { //открывает модальное окно для редактирования объекта
         setEditItem(item)
@@ -55,7 +57,8 @@ const QuestionBankPage = ({type}) => {
 
                     localStorage.setItem('info', "На этой странице можно отсортировать все тесты по предмету, теме, типу теста и просмотреть");
 
-                    setTitle("Банк тестов");// задать заголовок на странице
+                    setTopText("Банк тестов");
+                    //setTitle("Банк тестов");// задать заголовок на странице
                     setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate}/>); // задать модальное окно для создания на странице
 
                     const response2 = await fetch('http://localhost:8080/test/get-user-tests', { // получить тесты пользователя
@@ -76,7 +79,8 @@ const QuestionBankPage = ({type}) => {
 
                     localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
 
-                    setTitle("Банк заданий"); // задать заголовок на странице
+                    setTopText("Банк заданий");
+                    //setTitle("Банк заданий"); // задать заголовок на странице
                     setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate}/>);// задать модальное окно для создания на странице
 
                     const response3 = await fetch('http://localhost:8080/task/get-user-tasks', { // получить задания пользователя
@@ -98,7 +102,8 @@ const QuestionBankPage = ({type}) => {
 
                     localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
 
-                    setTitle("Банк предметов"); // задать заголовок на странице
+                    setTopText("Банк предметов");
+                    //setTitle("Банк предметов"); // задать заголовок на странице
                     setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate}/>);
 
                     const response4 = await fetch('http://localhost:8080/subject/print-user-subject', {
@@ -119,7 +124,8 @@ const QuestionBankPage = ({type}) => {
 
                     localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
 
-                    setTitle("Банк тем"); // задать заголовок на странице
+                    setTopText("Банк тем");
+                    //setTitle("Банк тем"); // задать заголовок на странице
                     setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate}/>);
 
                     const response5 = await fetch('http://localhost:8080/theme/all', {
@@ -139,7 +145,8 @@ const QuestionBankPage = ({type}) => {
 
                     localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
 
-                    setTitle("Банк индикаторов"); // задать заголовок на странице
+                    setTopText("Банк индикаторов");
+                    //setTitle("Банк индикаторов"); // задать заголовок на странице
                     setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate}/>);
 
                     const response6 = await fetch('http://localhost:8080/indicator/all', {
@@ -162,13 +169,13 @@ const QuestionBankPage = ({type}) => {
         }
 
         fetchTests();
-    }, [type,editItem,toastText]);
+    }, [type,editItem,toastText, setTopText]);
     /* className="page-container-quest"*/
     return (
         <div>
 
             <br/><br/><br/>
-            <h1>{/*isTests ? "Тесты" : "Задания"*/title}</h1>
+            {/*<h1>{/*isTests ? "Тесты" : "Задания"title}</h1>*/}
             <div className="page-container-quest">
                 <div className="button-containers">
                     <Sorting type={type} setBankItems={setBankItems}/>
@@ -218,7 +225,7 @@ const QuestionBankPage = ({type}) => {
                     <Toast.Body>{toastText}</Toast.Body>
                 </Toast>
             </ToastContainer>
-                <Footer/>
+            {/*<Footer/>*/}
             </div>
             );
             };

@@ -5,10 +5,21 @@ import * as XLSX from 'xlsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import BankCard from "../BankCard"; // Убедитесь, что путь к вашему CSS файлу правильный
+import { useOutletContext } from 'react-router-dom';
 
 const RegistrationPage = () => {
     const location = useLocation();
-    const selectedOption = location.pathname.includes('multiple') ? 'multiple' : 'single';
+    const [topText, setTopText] = useOutletContext();
+    let selectedOption;
+    if (location.pathname.includes('multiple')) {
+        setTopText("Регистрация нескольких учеников");
+        localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Место обучения, Класс, Почта");
+        selectedOption = 'multiple';
+    } else {
+        setTopText("Регистрация");
+        localStorage.setItem('info', "Введите здесь данные ученика");
+        selectedOption = 'single';
+    }
     const [educationalInstitutions, setEducationalInstitutions] = useState([]);
     const [selectedInstitution, setSelectedInstitution] = useState(null);
     const [classes, setClasses] = useState([]);
@@ -20,6 +31,7 @@ const RegistrationPage = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
+
 
     const isValidName = (name) => {
         const nameRegex = /^[a-zA-Zа-яА-ЯёЁ'-]{2,50}$/;
@@ -52,7 +64,7 @@ const RegistrationPage = () => {
             setClasses([]);
             setSelectedClass(null);
         }
-    }, [selectedInstitution]);
+    }, [selectedInstitution,setTopText]);
 
     const fetchClassesByInstitution = async (institution) => {
         if (!institution) {
@@ -335,7 +347,7 @@ const RegistrationPage = () => {
     return (
         <Container className="container-registration">
             <div className="registration-box">
-                <h2>{selectedOption === 'single' ? 'Регистрация' : 'Регистрация нескольких учеников'}</h2>
+                {/*<h2>{selectedOption === 'single' ? 'Регистрация' : 'Регистрация нескольких учеников'}</h2>*/}
 
                 {selectedOption === 'single' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import './styles.css'; // Импортируем CSS-файл
 import Navbar from '../Navbar'; // Импортируем компонент Navbar
 import Footer from '../Footer'; // Импортируем компонент Footer
+import { useOutletContext } from 'react-router-dom';
 
 const ViewTestResultsPage = (props) => {
 
@@ -22,6 +23,7 @@ const ViewTestResultsPage = (props) => {
     const [score, setScore] = useState(0);
     const [countOfQuestions, setCountOfQuestions] = useState(0);
     const [currentPassingScore, setCurrentPassingScore] = useState(60);
+    const [topText, setTopText] = useOutletContext();
 
     console.log(answers);
 
@@ -63,6 +65,7 @@ const ViewTestResultsPage = (props) => {
                 setQuestions(questionsJson);
                 setCountOfQuestions(questionsJson.length);
                 setScore((rightAnswers / questionsJson.length) * 100);
+                setTopText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -82,7 +85,7 @@ const ViewTestResultsPage = (props) => {
         return () => {
             window.removeEventListener('popstate', handlePopState);
         };
-    }, [navigate]);
+    }, [navigate, setTopText]);
 
     function ViewResultsEnd() {
         sessionStorage.clear();
@@ -93,7 +96,7 @@ const ViewTestResultsPage = (props) => {
         <div>
             <div className="content-container"> {/* Добавляем контейнер для контента */}
                 <div className="result-container">
-                    <h1>{text}</h1>
+                    {/*<h1>{text}</h1>*/}
                     <div>
                         <h2 className="result-title">Ваш результат:</h2>
                         <Table className="result-table">
@@ -128,7 +131,7 @@ const ViewTestResultsPage = (props) => {
                     </div>
                 </div>
             </div>
-            <Footer />
+            {/*<Footer />*/}
         </div>
     );
 };

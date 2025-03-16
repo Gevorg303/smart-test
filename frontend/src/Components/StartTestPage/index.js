@@ -5,6 +5,7 @@ import Footer from "../Footer";
 import Navbar from "../Navbar";
 import './styles.css';
 import TestAttemptsDisplay from "../TestAttemptsDisplay"; // Импорт CSS файла
+import { useOutletContext } from 'react-router-dom';
 
 const StartTestPage = () => {
     const [testName, setTestName] = useState("");
@@ -19,6 +20,7 @@ const StartTestPage = () => {
     const [typeTest,setTypeTest] = useState(null);
     const [testTheme,setTestTheme] = useState(null);
     const [currentUser,setCurrentUser] = useState(null);
+    const [topText, setTopText] = useOutletContext();
 
     const options = {
         year: 'numeric',
@@ -97,7 +99,7 @@ const StartTestPage = () => {
                 setTestTime(test.passageTime || "неограничено");
                 setTestTryCount(test.numberOfAttemptsToPass||"неограничено")
 
-
+                setTopText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
                 // заполнение попыток
                /* setAttempts(
                     [
@@ -119,7 +121,7 @@ const StartTestPage = () => {
         }
 
         fetchTest();
-    }, []);
+    }, [setTopText]);
 
     let navigate = useNavigate();
 
@@ -169,7 +171,7 @@ const StartTestPage = () => {
     return (
         <div className="page-container">
             <div className="content-wrapper">
-                <h1 className="test-name">{testName}</h1>
+                {/*<h1 className="test-name">{testName}</h1>*/}
                 <div className="test-container">
                     <div className="info-card">
                         <h4 hidden={!testDateStart}>Открыто с: {testDateStart}</h4>
@@ -188,7 +190,7 @@ const StartTestPage = () => {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            {/*<Footer/>*/}
         </div>
     );
 };

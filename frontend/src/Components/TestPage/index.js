@@ -6,6 +6,7 @@ import './styles.css';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import TestTimer from "../TestTimer";
+import { useOutletContext } from 'react-router-dom';
 
 const TestPage = () => {
     let navigate = useNavigate();
@@ -22,6 +23,7 @@ const TestPage = () => {
     const [startDateTime, setStartDateTime] = useState(new Date(sessionStorage.getItem('startDate')));
 
     const [timer, setTimer] = useState();
+    const [topText, setTopText] = useOutletContext();
 
     localStorage.setItem('info', "Это тест с последовательным порядком выведения заданий. Можно пропускать и возвращаться к пропущенным заданиям. По выполнению всех заданий завершите тест");
 
@@ -132,19 +134,20 @@ const TestPage = () => {
                 const questionsJson = await response2.json();
                 setQuestions(questionsJson)
                 console.log(questionsJson)
+                setTopText("Контрольный тест");
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
 
         fetchTest();
-    }, []);
+    }, [setTopText]);
 
     //console.log(answers)
     return (
         <div className="page-container">
             <div className="content-wrapper">
-                <h1>Контрольный тест</h1>
+                {/*Контрольный тест</h1>*/}
                 {timer}
                     <Question id={active} name={questions[active]?.taskName || ""}
                               description={questions[active]?.taskText || ""} answers={answers}
@@ -164,7 +167,7 @@ const TestPage = () => {
                 <Button className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
 
             </div>
-            <Footer />
+            {/*<Footer />*/}
         </div>
     );
 };

@@ -1,0 +1,14 @@
+.beta-page-container {
+    display: flex;
+    height: 100vh;
+}
+
+.registration-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: transparent;
+}

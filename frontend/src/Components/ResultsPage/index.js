@@ -3,15 +3,18 @@ import { Table } from 'react-bootstrap';
 import './styles.css';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import { useOutletContext } from 'react-router-dom';
 
 const ResultsPage = ({ userId }) => {
     const [subjects, setSubjects] = useState([]);
+    const [topText, setTopText] = useOutletContext();
 
     localStorage.setItem('info', "Здесь вы можете увидеть вашу среднюю оценку за предмет");
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setTopText("Итоги");
                 setSubjects([
                     { name: "Математика", average: "4,3" },
                     { name: "Русский язык", average: "4,22" },
@@ -28,13 +31,13 @@ const ResultsPage = ({ userId }) => {
         };
 
         fetchData();
-    }, [userId]);
+    }, [userId,setTopText]);
 
     return (
         <div className="page-container">
 
             <div className="result-container">
-                <h1 className="result-title">Итоги</h1>
+                {/*<h1 className="result-title">Итоги</h1>*/}
 
                 <div className="container-wrapper-2">
                     <div className="container-home-2">
@@ -58,7 +61,7 @@ const ResultsPage = ({ userId }) => {
                     </div>
                 </div>
                 </div>
-                <Footer/>
+            {/*<Footer/>*/}
             </div>
             );
             };

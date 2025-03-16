@@ -7,19 +7,22 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Question from "../Question";
 import SubjectCard from "../SubjectCard"; // Импортируем файл стилей
+import { useOutletContext } from 'react-router-dom';
 
 const ProfilePage = () => {
 
     localStorage.setItem('info', "Здесь вы можете увидеть ваши данные личного кабинета");
 
     const navigate = useNavigate();
-    const [name, setName] = useState("Вася");
-    const [surname, setSurname] = useState("Пупкин");
-    const [patronymic, setPatronymic] = useState("Олегович");
-    const [login, setLogin] = useState("VPOlegovich11");
-    const [role, setRole] = useState("Учитель");
-    const [studentClass, setStudentClass] = useState("7Б");
-    const [email, setEmail] = useState("example@mail.ru");
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [patronymic, setPatronymic] = useState("");
+    const [login, setLogin] = useState("");
+    const [role, setRole] = useState("");
+    const [studentClass, setStudentClass] = useState("");
+    const [email, setEmail] = useState("");
+    const [portraitUrl, setPortraitUrl] = useState(avatarImage);
+    const [topText, setTopText] = useOutletContext();
 
     const handleLogout = () => {
         // Логика выхода из аккаунта
@@ -45,6 +48,12 @@ const ProfilePage = () => {
                 setLogin(user.login);
                 setRole(user.role.role);
                 setEmail(user.email);
+                console.log('http://26.188.252.197:9000/smart-test/'+user.portraitUrl)
+                if(user.portraitUrl) {
+                    setPortraitUrl('http://26.188.252.197:9000/smart-test/'+user.portraitUrl);
+                }else{
+                    setPortraitUrl(avatarImage)
+                }
 
                 const response2 = await fetch(`http://localhost:8080/student-class/teacherid=${user.id}`, {
                     credentials: "include",
@@ -60,19 +69,19 @@ const ProfilePage = () => {
                 });
                 setStudentClass(result);
                 //setStudentClass(studentClass);
-
+                setTopText("Личный кабинет");
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
         fetchUser();
-    },[]);
+    },[setTopText]);
     return (
         <div className="page-container">
             <div className="content-wrapper">
                 <Container className="profile-container">
                     <div className="profile-section">
-                        <img src={avatarImage} alt="Портрет" className="profile-image" />
+                        <img src={portraitUrl} alt="Портрет" className="profile-image" />
                         <div className="profile-info">
                             <h5>Информация о пользователе</h5>
                             <p><strong>Имя:</strong> {name} </p>
@@ -89,7 +98,7 @@ const ProfilePage = () => {
                     </div>
                 </Container>
             </div>
-            <Footer />
+            {/*<Footer />*/}
         </div>
     );
 };
