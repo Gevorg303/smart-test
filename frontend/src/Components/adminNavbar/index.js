@@ -1,8 +1,8 @@
 import React from 'react';
-import './style.css';
+import './style.css'; // Импортируем стили для Navbar
 import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
 
-const aNavbar = () => {
+const AdminNavbar = () => {
     const menuItems = [
         {
             title: "Управление",
@@ -80,4 +80,4 @@ const aNavbar = () => {
     );
 };
 
-export default aNavbar;
+export default AdminNavbar;
