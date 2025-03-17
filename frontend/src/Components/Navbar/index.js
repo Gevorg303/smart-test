@@ -29,6 +29,7 @@ const Navbar = ({IsTeacher,setShowHandbook}) => {
                         <NavDropdown.Item as={Link} to="/indicatorbank" className="dropdown-item">Индикаторы</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/themebank" className="dropdown-item">Темы</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/itembank" className="dropdown-item">Предметы</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/subjectclass" className="dropdown-item">Предмет-класс</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link as={Link} to="/results" className="navbar-link">Результаты</Nav.Link>
                     <NavDropdown title="Регистрация пользователя" id="register-dropdown"

@@ -17,7 +17,8 @@ body, html {
 .content-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /*justify-content: center;*/
+    justify-content: flex-start;
     flex: 1; /* Занимает всю доступную высоту */
     padding: 5.1% 0; /* Уменьшаем отступы сверху и снизу */
     margin-top: 5vh; /* Уменьшаем отступ сверху на одну пятую для разделения с Navbar */

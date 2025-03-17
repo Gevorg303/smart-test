@@ -173,8 +173,6 @@ const QuestionBankPage = ({type}) => {
     /* className="page-container-quest"*/
     return (
         <div>
-
-            <br/><br/><br/>
             {/*<h1>{/*isTests ? "Тесты" : "Задания"title}</h1>*/}
             <div className="page-container-quest">
                 <div className="button-containers">

@@ -60,9 +60,9 @@ const HomePage = () => {
     return (
         <>
             <div className="home-page">
-                <div className="welcome">
-                    {/*<WelcomeComponent text={welcometext} />*/}
-                </div>
+                {/*<div className="welcome">
+                    {/*<WelcomeComponent text={welcometext} />}
+                </div>*/}
                 <div className="container-wrapper">
                     <div className="container-home" id="subjects-container" ref={containerRef} data-count={subjects.length}>
                         {subjects}

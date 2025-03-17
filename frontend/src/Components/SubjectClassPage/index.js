@@ -78,7 +78,6 @@ const SubjectClass = () => {
 
     return (
         <div>
-            <br/><br/><br/>
             <div>
                 {/*<h1>Классы предметов</h1>*/}
                 <div className="container-home-subject-class" id="subjects-container" ref={containerRef}
