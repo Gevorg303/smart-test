@@ -1,27 +1,46 @@
-/*.all-container {
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /*overflow-y: auto; /* Добавляет прокрутку, если содержимое превышает высоту */
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.all-container {
     background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    /*padding: 15px;
+    /*border: 1px solid #ccc;
+    border-radius: 8px;*/
+    /*padding: 15px;*/
     margin-bottom: 15px;
-    /*width: 80%;
+    width: 80%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 5%;
-    /*background-color: rgba(255, 255, 255, 0);
-    width: auto;
-    height: auto;
-    padding: 20px;
+    /*background-color: rgba(255, 255, 255, 0);*/
+    /*width: auto;*/
+    /*padding: 20px;*/
     box-sizing: border-box;
     min-width: 40%;
+    /*overflow-y: auto; /* Добавляет прокрутку, если содержимое превышает высоту */
+    height: auto;
+    flex: 1;
+    /*padding: 20px;*/
+    border: none; /* Убирает рамки */
+    /*box-shadow: none; /* Убирает тени */
+    /*border-radius: 15px; /* Скругление углов */
+    border-radius: 15px;
 }
 .all-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    overflow-y: auto; /* Добавляет прокрутку, если содержимое превышает высоту */
 }
-
 .all-theme-container
 {
     background: #fff;
@@ -31,23 +50,58 @@
     margin-bottom: 15px;
     width: 80%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}*/
+}
 .top-text {
     font-weight: bold;
     color: #333;
     text-align: center;
     /*background-color: #f8f9fa;*/
     /*border-bottom: 1px solid #ddd;*/
-
-    padding-top: 5%;
+    padding-top: 120px; /*бред*/
     padding-bottom: 2%;
     font-size: 2em;
 }
 #root {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
 }
 .all-content {
     flex: 1;
+}
+
+.page-style-1 {
+    background-color: transparent; /* Стиль для одной группы страниц */
+    box-sizing: border-box;
+    border: none;
+    box-shadow: none;
+    /*height: 800px;*/
+    max-height: 600px;
+    margin: 0;
+    /*padding: 0;*/
+}
+
+.page-style-2 {
+    flex: 1;
+    background-color: #fff; /* Стиль для другой группы страниц */
+    box-shadow: 0 2px 4px rgba(0.2, 0.2, 0.2, 0.5); /* Уменьшаем тень */
+    max-height: none;
+}
+.page-style-top-1 {
+    padding-top: 100px;
+}
+.page-style-top-2 {
+    padding-top: 100px;
+}
+
+
+.footer {
+    width: 100%;
+    /*background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 1000;*/
 }

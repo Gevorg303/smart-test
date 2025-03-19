@@ -21,15 +21,15 @@
     flex-direction: column;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left: 10%;
+    /*margin-left: 10%;*/
 
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    /*background: #fff;*/
+    /*border: 1px solid #ccc;
+    border-radius: 8px;*/
     padding: 15px;
    /* margin-bottom: 15px;*/
-    width: 80%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
     justify-content: center;
     align-items: center;
 }

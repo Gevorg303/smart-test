@@ -83,10 +83,13 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start; /* Выравниваем контент по верхнему краю */
-    min-height: calc(100vh - 100px); /* Уменьшаем высоту контента, чтобы подвал был ближе */
+    /*min-height: calc(100vh - 100px); /* Уменьшаем высоту контента, чтобы подвал был ближе */
     text-align: center;
-    padding-top: 10px; /* Уменьшаем отступ сверху для контента */
-    margin-bottom: 10px; /* Уменьшаем отступ снизу для контента */
+    /*padding-top: 10px; /* Уменьшаем отступ сверху для контента */
+    /*margin-bottom: 10px; /* Уменьшаем отступ снизу для контента */
+    height: auto;
+    /*background-color: #fff;*/
+    padding-bottom: 18%;
 }
 
 .content-wrapper {
@@ -115,10 +118,10 @@ h1 {
     gap: 16px; /* Увеличиваем отступы между карточками */
     width: 100%;
     max-width: 1200px; /* Ограничиваем максимальную ширину контейнера */
-    background: #f0f0f0;
+    /*background: #f0f0f0;*/
     margin-top: 0.5%; /* Уменьшаем отступ сверху */
-    border-radius: 15px; /* Скругление углов */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшаем тень */
+    /*border-radius: 15px; /* Скругление углов */
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшаем тень */
     padding: 10px; /* Уменьшаем внутренние отступы */
     overflow: hidden; /* Скрываем переполнение */
     padding-bottom: 1% !important;
