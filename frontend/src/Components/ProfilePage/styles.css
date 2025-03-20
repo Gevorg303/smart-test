@@ -5,7 +5,7 @@ body, html {
     background-color: #f0f8ff; /* Светло-голубой фон для всей страницы */
     display: flex;
     flex-direction: column;
-    overflow: auto; /* Включаем вертикальную прокрутку */
+    /*overflow: auto; /* Включаем вертикальную прокрутку */
 }
 
 .page-container {
