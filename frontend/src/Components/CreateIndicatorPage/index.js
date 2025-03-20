@@ -50,27 +50,52 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
                  }
 
              );*/
-            const response = await fetch('http://localhost:8080/indicator/add', { // добавить индикатор
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify(
-                    {
+            let toastText;
+            if(editItem==null){
+                const response = await fetch('http://localhost:8080/indicator/add', { // добавить индикатор
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
                             nameOfTheIndicator : currentName,
                             id : null,
                             theme:{
                                 id: theme
                             }
-                    }
-                )
-            });
-            let toastText;
-            if (!response.ok) {
-                toastText = "Ошибка создания индикатора";
-                throw new Error();
+                        }
+                    )
+                });
+                if (!response.ok) {
+                    toastText = "Ошибка создания индикатора";
+                    throw new Error();
+                }
+                toastText = "Индикатор успешно создан.";
             }
-            toastText = "Индикатор успешно создан.";
+            else{
+                const response = await fetch('http://localhost:8080/indicator/update-indicator', { // добавить индикатор
+                    method: 'PUt',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            nameOfTheIndicator : currentName,
+                            id : editItem.id,
+                            theme:{
+                                id: theme
+                            }
+                        }
+                    )
+                });
+                if (!response.ok) {
+                    toastText = "Ошибка редактирования индикатора";
+                    throw new Error();
+                }
+                toastText = "Индикатор успешно редактирован.";
+            }
+
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -157,7 +182,7 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
                 <Button variant="primary" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
-                    Создать
+                    {editItem==null?"Создать":"Редактировать"}
                 </Button>
 
             </Form>

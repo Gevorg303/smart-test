@@ -57,30 +57,55 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
                 }
 
             );*/
-            const response = await fetch('http://localhost:8080/subject/add', { // добавить предмет
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify(
-                    {
-                        subject: {
-                            subjectName : currentName,
-                            description : currentDescription,
-                            id : null,
-                        },
-                        user: {
-                            id: currentUser.id
-                        }
-                    }
-                )
-            });
             let toastText;
-            if (!response.ok) {
-                toastText = "Ошибка создания предмета";
-                throw new Error();
+
+            if(editItem==null){
+                const response = await fetch('http://localhost:8080/subject/add', { // добавить предмет
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            subject: {
+                                subjectName : currentName,
+                                description : currentDescription,
+                                id : null,
+                            },
+                            user: {
+                                id: currentUser.id
+                            }
+                        }
+                    )
+                });
+                if (!response.ok) {
+                    toastText = "Ошибка создания предмета";
+                    throw new Error();
+                }
+                toastText = "Предмет успешно создан.";
             }
-            toastText = "Предмет успешно создан.";
+            else {
+                const response = await fetch('http://localhost:8080/subject/update-subject', { // добавить предмет
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                                subjectName : currentName,
+                                description : currentDescription,
+                                id : editItem.id,
+                        }
+                    )
+                });
+                if (!response.ok) {
+                    toastText = "Ошибка редактирования предмета";
+                    throw new Error();
+                }
+                toastText = "Предмет успешно редактирован.";
+            }
+
+
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -137,7 +162,7 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
                 <Button variant="primary" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
-                    Создать
+                    {editItem==null?"Создать":"Редактировать"}
                 </Button>
             </Form>
 

@@ -48,27 +48,55 @@ const CreateThemePage = ({editItem, onCreate}) => {
                 }
 
             );*/
-            const response = await fetch('http://localhost:8080/theme/add', { // добавить тему
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify(
-                    {
-                        themeName : currentName,
-                            id : null,
-                        subject: {
-                            id: targetSubject
-                        }
-                    }
-                )
-            });
             let toastText;
-            if (!response.ok) {
-                toastText = "Ошибка создания темы";
-                throw new Error();
+
+            if(editItem==null){
+                const response = await fetch('http://localhost:8080/theme/add', { // добавить тему
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            themeName : currentName,
+                            id : null,
+                            subject: {
+                                id: targetSubject
+                            }
+                        }
+                    )
+                });
+
+                if (!response.ok) {
+                    toastText = "Ошибка создания темы";
+                    throw new Error();
+                }
+                toastText = "Тема успешно создана.";
             }
-            toastText = "Тема успешно создана.";
+            else{
+                const response = await fetch('http://localhost:8080/theme/update-theme', { // добавить тему
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            themeName : currentName,
+                            id : editItem.id,
+                            subject: {
+                                id: targetSubject
+                            }
+                        }
+                    )
+                });
+
+                if (!response.ok) {
+                    toastText = "Ошибка редактирования темы";
+                    throw new Error();
+                }
+                toastText = "Тема успешно редактирована.";
+            }
+
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -142,7 +170,7 @@ const CreateThemePage = ({editItem, onCreate}) => {
                 <Button variant="primary" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
-                    Создать
+                    {editItem==null?"Создать":"Редактировать"}
                 </Button>
             </Form>
 
