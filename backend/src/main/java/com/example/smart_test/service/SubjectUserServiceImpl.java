@@ -121,6 +121,25 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
         return studentClassDtoSet;
     }
 
+    @Override
+    @Transactional
+    public void removeSubjectUserDto(SubjectClassRequest request) {
+        try {
+            Subject subject = subjectMapper.toEntity(request.getSubject());
+
+            for (StudentClassDto studentClassDto : request.getStudentClassDtoList()) {
+                Set<User> users = getUsersByClass(studentClassMapper.toEntity(studentClassDto));
+
+                for (User user : users) {
+                    subjectUserRepositoryInterface.deleteBySubjectAndUser(subject, user);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при удалении связи 'Пользователь_предмет': " + e.getMessage(), e);
+        }
+    }
+
+
     private List<User> getUsersBySubject(Subject subject) {
         return subjectUserRepositoryInterface.findBySubject(subject)
                 .stream()

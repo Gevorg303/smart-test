@@ -15,4 +15,5 @@ public interface SubjectUserRepositoryInterface extends JpaRepository<SubjectUse
     List<SubjectUser> findByUserId(Long userId);
     List<SubjectUser> findByUserIn(List<User> users);
     List<SubjectUser> findBySubject(Subject subject);
+    void deleteBySubjectAndUser(Subject subject, User user);
 }

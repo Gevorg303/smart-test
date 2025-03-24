@@ -29,4 +29,6 @@ public interface SubjectUserServiceInterface {
     Set<SubjectDto> getSubjectsByUsers(List<User> users);
 
     Set<StudentClassDto> findClassBySubject(SubjectDto dto);
+
+    void removeSubjectUserDto(SubjectClassRequest request);
 }

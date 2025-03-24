@@ -21,7 +21,7 @@ public class SubjectUserController {
     private SubjectUserServiceInterface subjectService;
 
     /**
-     * Метод для подписания класса на предмет, на вход необходимо подать класс и предмет
+     * Метод для подписания класса на предмет, на вход необходимо подать лист классов и предмет
      * */
     @PostMapping("/add")
     public ResponseEntity<String> addSubjectTeacherDto(@RequestBody SubjectClassRequest request) {
@@ -50,6 +50,20 @@ public class SubjectUserController {
         }
     }
 
+    /**
+     * Метод для отписки класса от предмета, на вход необходимо подать лист классов и предмет
+     */
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeSubjectTeacherDto(@RequestBody SubjectClassRequest request) {
+        try {
+            subjectService.removeSubjectUserDto(request);
+            return ResponseEntity.ok("Класс успешно отписан от предмета");
+        } catch (Exception e) {
+            log.error("Ошибка при отписке класса от предмета: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ошибка: " + e.getMessage());
+        }
+    }
 
 //
 //    @DeleteMapping("/delete")
