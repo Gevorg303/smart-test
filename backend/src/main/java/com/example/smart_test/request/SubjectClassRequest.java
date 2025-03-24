@@ -4,13 +4,15 @@ import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SubjectClassRequest {
     private SubjectDto subject;
-    private StudentClassDto studentClass;
+    private List<StudentClassDto> studentClassDtoList;
 
-    public SubjectClassRequest(SubjectDto subject, StudentClassDto studentClass) {
+    public SubjectClassRequest(SubjectDto subject, List<StudentClassDto> studentClassDtoList) {
         this.subject = subject;
-        this.studentClass = studentClass;
+        this.studentClassDtoList = studentClassDtoList;
     }
 }

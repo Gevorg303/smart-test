@@ -38,5 +38,6 @@ public class Test {
     private String testPassword;
     @Column(name = "количсетво_заданий_на_одну_ошибку")
     private Integer numberOfTasksPerError;
-
+    @Column(name = "порог_прохождения_теста")
+    private Integer passThreshold;
 }

@@ -1,10 +1,7 @@
 package com.example.smart_test.service;
 
 
-import com.example.smart_test.domain.Subject;
-import com.example.smart_test.domain.SubjectUser;
-import com.example.smart_test.domain.User;
-import com.example.smart_test.domain.UserClass;
+import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
@@ -49,17 +46,27 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     @Transactional
     public void addSubjectUserDto(SubjectClassRequest request) {
         try {
-            List<User> userList = getUsersBySubject(subjectMapper.toEntity(request.getSubject()));
-
             Subject subject = subjectMapper.toEntity(request.getSubject());
-            for (User user : userList) {
-                subjectUserRepositoryInterface.save(new SubjectUser(subject, user));
-            }
+            Set<Long> existingUserIds = getUsersBySubject(subject)
+                    .stream()
+                    .map(User::getId)
+                    .collect(Collectors.toSet());
 
+            for (StudentClassDto studentClassDto : request.getStudentClassDtoList()) {
+                Set<User> users = getUsersByClass(studentClassMapper.toEntity(studentClassDto));
+
+                for (User user : users) {
+                    if (!existingUserIds.contains(user.getId())) {
+                        subjectUserRepositoryInterface.save(new SubjectUser(subject, user));
+                        existingUserIds.add(user.getId());
+                    }
+                }
+            }
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при добавлении связи 'Полльзователь_предмет': " + e.getMessage(), e);
+            throw new RuntimeException("Ошибка при добавлении связи 'Пользователь_предмет': " + e.getMessage(), e);
         }
     }
+
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteSubjectUserDto(SubjectDto dto) {
@@ -119,5 +126,15 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
                 .stream()
                 .map(SubjectUser::getUser)
                 .collect(Collectors.toList());
+    }
+
+    private Set<User> getUsersByClass(StudentClass studentClass) {
+        Set<User> userList = new HashSet<>();
+        for (UserClass userClass : userClassRepository.findByStudentClass(studentClass)) {
+            if (userClass.getUser() != null) {
+                userList.add(userClass.getUser());
+            }
+        }
+        return userList;
     }
 }

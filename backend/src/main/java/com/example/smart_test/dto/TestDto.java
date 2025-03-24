@@ -21,4 +21,5 @@ public class TestDto {
     private String description;
     private String testPassword;
     private Integer numberOfTasksPerError;
+    private Integer passThreshold;
 }

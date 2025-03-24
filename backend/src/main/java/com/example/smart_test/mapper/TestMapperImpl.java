@@ -20,6 +20,7 @@ public class TestMapperImpl implements TestMapperInterface {
         dto.setDescription(entity.getDescription());
         dto.setTestPassword(entity.getTestPassword());
         dto.setNumberOfTasksPerError(entity.getNumberOfTasksPerError());
+        dto.setPassThreshold(entity.getPassThreshold());
         return dto;
     }
 
@@ -36,6 +37,7 @@ public class TestMapperImpl implements TestMapperInterface {
         entity.setDescription(dto.getDescription());
         entity.setTestPassword(dto.getTestPassword());
         entity.setNumberOfTasksPerError(dto.getNumberOfTasksPerError());
+        entity.setPassThreshold(dto.getPassThreshold());
         return entity;
     }
 }
