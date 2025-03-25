@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
-import BankCard from "../BankCard"; // Убедитесь, что путь к вашему CSS файлу правильный
 import { useOutletContext } from 'react-router-dom';
 
 const RegistrationPage = () => {
@@ -13,15 +12,13 @@ const RegistrationPage = () => {
     let selectedOption;
     if (location.pathname.includes('multiple')) {
         setTopText("Регистрация нескольких учеников");
-        localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Место обучения, Класс, Почта");
+        localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
         selectedOption = 'multiple';
     } else {
         setTopText("Регистрация");
         localStorage.setItem('info', "Введите здесь данные ученика");
         selectedOption = 'single';
     }
-    const [educationalInstitutions, setEducationalInstitutions] = useState([]);
-    const [selectedInstitution, setSelectedInstitution] = useState(null);
     const [classes, setClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState(null);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
@@ -32,62 +29,46 @@ const RegistrationPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
-
     const isValidName = (name) => {
         const nameRegex = /^[a-zA-Zа-яА-ЯёЁ'-]{2,50}$/;
         return nameRegex.test(name);
     };
 
-
     useEffect(() => {
-        async function fetchEducationalInstitutions() {
+        async function fetchClasses() {
             try {
-                const response = await fetch('http://localhost:8080/educational-institutions/all');
+                const response = await fetch('http://localhost:8080/users/current-user-classes', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+
                 if (!response.ok) {
-                    throw new Error('Ошибка получения данных об учебных заведениях');
+                    throw new Error('Ошибка получения данных о классах');
                 }
+
                 const data = await response.json();
-                setEducationalInstitutions(data);
+                console.log('Полученные классы:', data); // Проверьте, что данные получены
+
+                if (Array.isArray(data) && data.length > 0) {
+                    setClasses(data);
+                } else {
+                    console.error('Полученный массив классов пуст или не является массивом');
+                }
             } catch (error) {
-                console.error('Ошибка получения данных об учебных заведениях:', error);
+                console.error('Ошибка получения данных о классах:', error);
             }
         }
 
-        fetchEducationalInstitutions();
+        fetchClasses();
         fetchUsers();
     }, []);
 
     useEffect(() => {
-        if (selectedInstitution) {
-            fetchClassesByInstitution(selectedInstitution);
-        } else {
-            setClasses([]);
-            setSelectedClass(null);
-        }
-    }, [selectedInstitution,setTopText]);
-
-    const fetchClassesByInstitution = async (institution) => {
-        if (!institution) {
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:8080/student-class/find-class-by-educational-institution', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(institution),
-            });
-            if (!response.ok) {
-                throw new Error('Ошибка получения данных о классах');
-            }
-            const data = await response.json();
-            setClasses(data);
-        } catch (error) {
-            console.error('Ошибка получения данных о классах:', error);
-        }
-    };
+        console.log('Состояние classes обновлено:', classes);
+    }, [classes]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -117,9 +98,6 @@ const RegistrationPage = () => {
         if (!data.middleName || !isValidName(data.middleName)) {
             errors.push('Отчество');
         }
-        if (!data.education) {
-            errors.push('Место обучения');
-        }
         if (!data.class) {
             errors.push('Класс');
         }
@@ -133,14 +111,6 @@ const RegistrationPage = () => {
             return;
         }
 
-        const educationalInstitution = educationalInstitutions.find(inst => inst.id === parseInt(data.education));
-        if (!educationalInstitution) {
-            setErrorMessage('Место обучения не найдено');
-            setShowErrorToast(true);
-            return;
-        }
-        data.educationalInstitution = educationalInstitution;
-
         const userRequest = {
             user: {
                 surname: data.lastName,
@@ -149,7 +119,6 @@ const RegistrationPage = () => {
                 role: { id: 3 },
                 email: data.email
             },
-            educationalInstitution: data.educationalInstitution,
             studentClass: { id: parseInt(data.class, 10) }
         };
 
@@ -238,12 +207,6 @@ const RegistrationPage = () => {
                     return;
                 }
 
-                const educationalInstitution = educationalInstitutions.find(inst => inst.nameOfTheInstitution === selectedInstitution.nameOfTheInstitution);
-                if (!educationalInstitution) {
-                    errors.push(`Строка ${index + 2}: Место обучения не найдено`);
-                    return;
-                }
-
                 userRequests.push({
                     user: {
                         surname: lastName,
@@ -252,7 +215,6 @@ const RegistrationPage = () => {
                         role: { id: 3 },
                         email: email
                     },
-                    educationalInstitution: educationalInstitution,
                     studentClass: { id: parseInt(selectedClass, 10) }
                 });
             });
@@ -317,7 +279,6 @@ const RegistrationPage = () => {
         }
     };
 
-
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
@@ -347,8 +308,6 @@ const RegistrationPage = () => {
     return (
         <Container className="container-registration">
             <div className="registration-box">
-                {/*<h2>{selectedOption === 'single' ? 'Регистрация' : 'Регистрация нескольких учеников'}</h2>*/}
-
                 {selectedOption === 'single' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>
                         <Form.Group controlId="formLastName">
@@ -363,29 +322,19 @@ const RegistrationPage = () => {
                             <Form.Control type="text" name="middleName" placeholder="Отчество" />
                         </Form.Group>
 
-                        <Form.Group controlId="formEducation">
+                        <Form.Group controlId="formClass">
                             <Form.Control
                                 as="select"
-                                name="education"
-                                placeholder="Место обучения"
-                                onChange={(e) => {
-                                    const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
-                                    setSelectedInstitution(institution);
-                                    setSelectedClass(null); // Очистить выбранный класс
-                                }}
+                                name="class"
+                                placeholder="Класс"
+                                value={selectedClass || ''}
+                                onChange={(e) => setSelectedClass(e.target.value)}
                             >
-                                <option value="">Выберите место обучения</option>
-                                {educationalInstitutions.map(institution => (
-                                    <option key={institution.id} value={institution.id}>{institution.nameOfTheInstitution}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="formClass">
-                            <Form.Control as="select" name="class" placeholder="Класс" value={selectedClass || ''} onChange={(e) => setSelectedClass(e.target.value)}>
                                 <option value="">Выберите класс</option>
-                                {classes.map(cls => (
-                                    <option key={cls.id} value={cls.id}>{cls.numberOfInstitution} {cls.letterDesignation}</option>
+                                {classes.map((cls) => (
+                                    <option key={cls.id} value={cls.id}>
+                                        {cls.numberOfInstitution} {cls.letterDesignation}
+                                    </option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -402,24 +351,6 @@ const RegistrationPage = () => {
 
                 {selectedOption === 'multiple' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>
-                        <Form.Group controlId="formEducation">
-                            <Form.Control
-                                as="select"
-                                name="education"
-                                placeholder="Место обучения"
-                                onChange={(e) => {
-                                    const institution = educationalInstitutions.find(inst => inst.id === parseInt(e.target.value));
-                                    setSelectedInstitution(institution);
-                                    setSelectedClass(null); // Очистить выбранный класс
-                                }}
-                            >
-                                <option value="">Выберите место обучения</option>
-                                {educationalInstitutions.map(institution => (
-                                    <option key={institution.id} value={institution.id}>{institution.nameOfTheInstitution}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-
                         <Form.Group controlId="formClass">
                             <Form.Control
                                 as="select"
@@ -429,8 +360,10 @@ const RegistrationPage = () => {
                                 onChange={(e) => setSelectedClass(e.target.value)}
                             >
                                 <option value="">Выберите класс</option>
-                                {classes.map(cls => (
-                                    <option key={cls.id} value={cls.id}>{cls.numberOfInstitution} {cls.letterDesignation}</option>
+                                {classes.map((cls) => (
+                                    <option key={cls.id} value={cls.id}>
+                                        {cls.numberOfInstitution} {cls.letterDesignation}
+                                    </option>
                                 ))}
                             </Form.Control>
                         </Form.Group>

@@ -61,4 +61,14 @@ public class UserController {
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
         return userService.findStudentClassByUser(userDto);
     }
+/**Список классов по пользователю**/
+    @GetMapping("/current-user-classes")
+    public List<StudentClassDto> getCurrentUserClasses(@CookieValue("jwtToken") String token) {
+        var jwt = jwtUtils.decodeToken(token);
+        var login = jwt.getClaims().get("sub").toString();
+        User currentUser = userService.getUserByLogin(login);
+        return userService.findStudentClassByUser(userMapper.toDTO(currentUser));
+    }
+
 }
+

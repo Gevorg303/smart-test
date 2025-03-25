@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css'; // Импортируем стили для формы регистрации
 
 const AdminRegistrationForm = () => {
@@ -6,11 +6,29 @@ const AdminRegistrationForm = () => {
         lastName: '',
         firstName: '',
         middleName: '',
-        education: '',
         class: '',
         email: '',
         role: ''
     });
+
+    const [classes, setClasses] = useState([]);
+    const [roles, setRoles] = useState([]);
+
+    useEffect(() => {
+        // Fetch classes for the current user
+        fetch('/users/current-user-classes', {
+            credentials: 'include' // Включаем куки для отправки JWT токена
+        })
+            .then(response => response.json())
+            .then(data => setClasses(data))
+            .catch(error => console.error('Error fetching classes:', error));
+
+        // Fetch roles from the database
+        fetch('/api/roles')
+            .then(response => response.json())
+            .then(data => setRoles(data))
+            .catch(error => console.error('Error fetching roles:', error));
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -63,26 +81,19 @@ const AdminRegistrationForm = () => {
             </div>
             <div className="form-group">
                 <select
-                    id="education"
-                    name="education"
-                    value={formData.education}
-                    onChange={handleChange}
-                    required
-                >
-                    <option value="" disabled selected>Место обучения</option>
-                    {/* Добавьте опции динамически */}
-                </select>
-            </div>
-            <div className="form-group">
-                <input
-                    type="text"
                     id="class"
                     name="class"
                     value={formData.class}
                     onChange={handleChange}
-                    placeholder="Класс"
                     required
-                />
+                >
+                    <option value="" disabled>Выберите класс</option>
+                    {classes.map(cls => (
+                        <option key={cls.id} value={cls.name}>
+                            {cls.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="form-group">
                 <input
@@ -96,15 +107,20 @@ const AdminRegistrationForm = () => {
                 />
             </div>
             <div className="form-group">
-                <input
-                    type="text"
+                <select
                     id="role"
                     name="role"
                     value={formData.role}
                     onChange={handleChange}
-                    placeholder="Роль"
                     required
-                />
+                >
+                    <option value="" disabled>Выберите роль</option>
+                    {roles.map(role => (
+                        <option key={role.id} value={role.name}>
+                            {role.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <button type="submit" className="submit-button">
                 Зарегистрировать
