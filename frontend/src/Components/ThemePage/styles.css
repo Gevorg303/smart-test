@@ -25,13 +25,15 @@
 }
 
 .theme-container {
-    background: #fff;
+    /*background: #fff;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 8px;*/
+    background: transparent;
     padding: 15px;
     margin-bottom: 15px;
-    width: 80%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /*width: 80%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
 }
 
 .buttons-container {

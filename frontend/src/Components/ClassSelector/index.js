@@ -11,7 +11,41 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
 
         if (currentState) {
             console.log("delete");
-            // Здесь можно добавить логику для удаления, если нужно
+            try {
+                const subjectDto = {
+                    id: targetSubject.id,
+                    name: targetSubject.name,
+                    // Добавьте другие поля, если они есть в SubjectDto
+                };
+
+                const studentClassDto = {
+                    id: id,
+                    numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
+                    letterDesignation: themes.find(item => item.id === id).letterDesignation,
+                    // Добавьте другие поля, если они есть в StudentClassDto
+                };
+
+                const response = await fetch('http://localhost:8080/user-subject/remove', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        subject: subjectDto,
+                        studentClass: studentClassDto
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Ошибка при подписании класса на предмет: ${errorText}`);
+                }
+
+                const result = await response.text();
+                console.log(result);
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
         } else {
             console.log("add");
             try {
