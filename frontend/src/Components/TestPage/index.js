@@ -149,8 +149,7 @@ const TestPage = () => {
             <div className="content-wrapper">
                 {/*Контрольный тест</h1>*/}
                 {timer}
-                    <Question id={active} name={questions[active]?.taskName || ""}
-                              description={questions[active]?.taskText || ""} answers={answers}
+                    <Question id={active} item={questions[active]} answers={answers}
                               setAnswers={setAnswers}
                                setActive={setActive} qsCount={questions.length} />
                 <Pagination>

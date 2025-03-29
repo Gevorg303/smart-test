@@ -90,8 +90,8 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                         test: null,
                         typeTask: {id: type},
                         assessmentTask: 100,
-                        explanation: currentText,
-                        taskText: currentExplanation
+                        taskText: currentText,
+                        explanation: currentExplanation
                     },
 
                     responseOption: currentAnswers
@@ -111,8 +111,8 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                             test: null,
                             typeTask: {id: type},
                             assessmentTask: 100,
-                            explanation: currentText,
-                            taskText: currentExplanation
+                            taskText: currentText,
+                            explanation: currentExplanation
                         },
 
                         responseOption: currentAnswers
@@ -293,8 +293,8 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                     <Form.Select onChange={(e) => {
                         setCurrentType(e.target.value);
                         setCurrentAnswers([]);
-                    }} value={currentType} >
-
+                    }} value={currentType}>
+                        <option value={-1}>Выберите тип задания</option>
                         {types.map((item, index) => <option key={item.id}
                                                             value={item.id}> {item.taskTypeName}  </option>)}
 

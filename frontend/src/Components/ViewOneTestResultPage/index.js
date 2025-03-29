@@ -121,8 +121,7 @@ const ViewTestResultsPage = (props) => {
                                 qStatus={validList[index].status}
                                 view
                                 id={index}
-                                name={questions[index]?.taskName || ""}
-                                description={questions[index]?.taskText || ""}
+                                item={questions[index]}
                                 answers={answers}
                                 setAnswers={setAnswers}
                             />

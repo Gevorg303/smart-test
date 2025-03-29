@@ -21,6 +21,7 @@ const StartTestPage = () => {
     const [testTheme,setTestTheme] = useState(null);
     const [currentUser,setCurrentUser] = useState(null);
     const [topText, setTopText] = useOutletContext();
+    const [testTaskCount, setTestTaskCount] = useState(0);
 
     const options = {
         year: 'numeric',
@@ -88,6 +89,20 @@ const StartTestPage = () => {
                 console.log(attemptsJson);
                 setAttempts(attemptsJson)
 
+                const response3 = await fetch('http://localhost:8080/test/get-tasks-test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(test)
+                });
+                if (!response3.ok) {
+                    throw new Error("Ошибка получения вопросов");
+                }
+                const questionsJson = await response3.json();
+                setTestTaskCount(questionsJson.length)
+               // console.log(questionsJson.length)
+
                 setTypeTest(test.typeTest.id);
                 setTestTheme(test.theme);
                 setTestName(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
@@ -126,26 +141,27 @@ const StartTestPage = () => {
     let navigate = useNavigate();
 
     async function StartTest() {
+        if(testTaskCount != 0 || (typeTest == 2 && testTaskCount == 0) ) {
+            const now = new Date();//.toLocaleString("ru", options);
+            if (testDateStartValue <= now) {
+                if (testDateEndValue >= now) {
+                    sessionStorage.setItem('startDate', new Date());
+                    if (typeTest === 2) {
+                        StartTrainingTest();
+                    } else {
+                        navigate("/test");
+                    }
 
-        const now =new Date();//.toLocaleString("ru", options);
-        if(testDateStartValue<=now){
-           if(testDateEndValue >= now){
-               sessionStorage.setItem('startDate', new Date());
-               if(typeTest === 2){
-                   StartTrainingTest();
-               }else {
-                   navigate("/test");
-               }
-
-           }
-           else{
-               console.log("Тест больше не доступен для прохождения!")
-           }
-       }
-       else {
-            console.log("Тест еще не начался!")
+                } else {
+                    console.log("Тест больше не доступен для прохождения!")
+                }
+            } else {
+                console.log("Тест еще не начался!")
 
 
+            }
+        }else {
+            console.log("В тесте отсутсвуют задания!")
         }
     }
     async function StartTrainingTest() {
