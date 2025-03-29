@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 import EditImage from '../../images/pencil.png';
 import { Accordion } from 'react-bootstrap';
 
-const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject, setCurrentClasses}) => {
+const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject/*, setCurrentClasses*/}) => {
 
     const [classes, setClasses] = useState();
 
@@ -23,7 +23,7 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject, setCur
             }
             const subjectsJson = await response.json();
             console.log(subjectsJson)
-            setCurrentClasses(subjectsJson)
+            //setCurrentClasses(subjectsJson)
             const array = [];
             subjectsJson.forEach(subject => {
                 array.push(

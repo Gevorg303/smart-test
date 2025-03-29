@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const ClassSelector = ({targetSubject, classes,setClasses}) => {
-    const [themes, setThemes] = useState([]);
-    const [ids, setIds] = useState([]);
+const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
+    const [themes, setThemes] = useState([]); //все классы
+    const [ids, setIds] = useState([]); // связанные классы
 
     const onClick = async (id) => {
         const newIds = [...ids];
@@ -26,13 +26,13 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
                 };
 
                 const response = await fetch('http://localhost:8080/user-subject/remove', {
-                    method: 'POST',
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
                     body: JSON.stringify({
                         subject: subjectDto,
-                        studentClass: studentClassDto
+                        studentClassDtoList: [studentClassDto]
                     })
                 });
 
@@ -69,7 +69,7 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
                     },
                     body: JSON.stringify({
                         subject: subjectDto,
-                        studentClass: studentClassDto
+                        studentClassDtoList: [studentClassDto]
                     })
                 });
 
@@ -88,14 +88,13 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
         newIds[id] = !currentState;
         setIds(newIds);
 
-        const newClasses = [...classes];
-        newClasses[id] = newIds[id];
-        setClasses(newClasses);
+        /*  const newClasses = [...classes];
+          newClasses[id] = newIds[id];
+          setClasses(newClasses);*/
 
         console.log(newIds);
-        console.log(newClasses);
+        // console.log(newClasses);
     };
-
 
 
     useEffect(() => {
@@ -103,13 +102,43 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
             try {
                 if(targetSubject!=null) {
 
-                    if(classes!=null)
-                    {
-                    const array = []
-                    classes.map((item, index) => array[item.id] = true)
-                    setIds(array)
-                    console.log(array)
+                    const response = await fetch('http://localhost:8080/user-subject/find-class-by-subject', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(targetSubject)
+                    });
+                    if (!response.ok) {
+                        throw new Error('Ошибка вывода предметов учителя');
                     }
+                    const subjectsJson = await response.json();
+                    console.log(subjectsJson)
+                        //setThemes(subjectsJson)
+                    if(subjectsJson!=null)
+                    {
+                        const array = []
+                        subjectsJson.map((item, index) => array[item.id] = true)
+                        setIds(array)
+                        console.log(array)
+                    }
+                }
+                else
+                {
+                }
+            } catch (error) {
+                console.error('Ошибка получения данных:', error);
+            }
+        }
+        //console.log("prop changed: "+targetSubject.id)
+        fetchQuestions();
+    }, [targetSubject,]);
+    useEffect(() => {
+        async function fetchQuestions() {
+            try {
+                if(targetSubject!=null) {
+
+                    /*   */
                     const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
                         credentials: "include",
                     });
@@ -143,7 +172,7 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
         }
         //console.log("prop changed: "+targetSubject.id)
         fetchQuestions();
-    }, [targetSubject,classes]);
+    }, [targetSubject,/*classes*/ids]);
     return (
         <>
             <h3>Классы:</h3>

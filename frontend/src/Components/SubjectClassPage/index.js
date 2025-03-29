@@ -18,7 +18,7 @@ const SubjectClass = () => {
     const [showToast, setShowToast] = useState(false); // отображение тоста
     const [toastText, setToastText] = useState(""); // текст тоста
     const [currentSubject, setCurrentSubject] = useState();
-    const [currentClasses, setCurrentClasses] = useState([]);
+    //const [currentClasses, setCurrentClasses] = useState([]);
 
     const [subjects, setSubjects] = useState([]);
     const containerRef = useRef(null);
@@ -59,12 +59,12 @@ const SubjectClass = () => {
                 const array = [];
                 subjectsJson.forEach(subject => {
                     array.push(
-                        <SubjectCardForClass key={subject.id} setCurrentSubject = {setCurrentSubject} setCurrentClasses = {setCurrentClasses} item={subject} setShowCreateModal={setShowModal} />
+                        <SubjectCardForClass key={subject.id} setCurrentSubject = {setCurrentSubject} /*setCurrentClasses = {setCurrentClasses}*/ item={subject} setShowCreateModal={setShowModal} />
                     );
                 });
                 setSubjects(array);
 
-                setCreateModal(<ClassModal targetSubject={currentSubject} classes={currentClasses} setClasses={setCurrentClasses}/>)
+                setCreateModal(<ClassModal targetSubject={currentSubject} /*classes={currentClasses} setClasses={setCurrentClasses}*//>)
                 setTopText("Класс предметов");
 
             } catch (error) {
@@ -89,7 +89,7 @@ const SubjectClass = () => {
                     show={showModal}
                     onHide={() => {
                         setShowModal(false);
-                        setCurrentClasses([]);
+                        //setCurrentClasses([]);
                     }}
                     dialogClassName="modal-90w"
                     size="xl"
