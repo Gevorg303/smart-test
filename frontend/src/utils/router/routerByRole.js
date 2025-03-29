@@ -32,7 +32,7 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
         }
 
         fetchUser();
-    }, []);
+    }, [element]);
 
     return (
         <>

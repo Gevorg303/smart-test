@@ -29,14 +29,14 @@ const App = () => {
                 {/* Другие страницы с Layout */}
                 <Route element={<PrivateRoutes />}>
                     <Route element={<Layout />}>
-                        <Route path="home" element={<HomePage />} />
-                        <Route path="start-test" element={<StartTestPage />} />
-                        <Route path="test" element={<TestPage />} />
+                        <Route path="home" element={<RouterByRole rolesWithoutAccess={[]} element={<HomePage />} />} />
+                        <Route path="start-test" element={<RouterByRole rolesWithoutAccess={[]} element={<StartTestPage />} />} />
+                        <Route path="test" element={<RouterByRole rolesWithoutAccess={[]} element={<TestPage />} />} />
                         <Route path="register/single" element={<RouterByRole rolesWithoutAccess={[3]} element={<RegistrationPage />} />} />
                         <Route path="register/multiple" element={<RouterByRole rolesWithoutAccess={[3]} element={<RegistrationPage />} />} />
-                        <Route path="testresult" element={<ViewTestResultsPage />} />
-                        <Route path="theme" element={<ThemePage />} />
-                        <Route path="profile" element={<ProfilePage />} />
+                        <Route path="testresult" element={<RouterByRole rolesWithoutAccess={[]} element={<ViewTestResultsPage />} />} />
+                        <Route path="theme" element={<RouterByRole rolesWithoutAccess={[]} element={<ThemePage />} />} />
+                        <Route path="profile" element={<RouterByRole rolesWithoutAccess={[]} element={<ProfilePage />} />} />
                         <Route path="results" element={<RouterByRole rolesWithoutAccess={[1,2]} element={<ResultsPage />} />} />
                         <Route path="testbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"test"} />} />} />
                         <Route path="taskbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"task"} />} />} />
