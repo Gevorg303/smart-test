@@ -2,6 +2,7 @@ package com.example.smart_test.controller;
 
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
+import com.example.smart_test.request.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -36,13 +37,13 @@ public class SubjectUserController {
     }
 
     /**
-     * Метод для вывода классов связанных с предметом
+     * Метод для вывода классов связанных с предметом, выводит объект ClassStatusResponse который содержит класс и статус (входит класс в этот предмет или нет)
      * */
     @PostMapping("/find-class-by-subject")
     public ResponseEntity<?> findClassBySubject(@RequestBody SubjectDto dto) {
         try {
-            Set<StudentClassDto> studentClasses = subjectService.findClassBySubject(dto);
-            return ResponseEntity.ok(studentClasses);
+            Set<ClassStatusResponse> response = subjectService.findClassBySubject(dto);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Ошибка при поиске классов по предмету: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

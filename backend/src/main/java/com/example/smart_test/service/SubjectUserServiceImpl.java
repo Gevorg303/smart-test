@@ -5,12 +5,15 @@ import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
+import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.SubjectUserMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
+import com.example.smart_test.repository.StudentClassRepositoryInterface;
 import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
+import com.example.smart_test.request.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import com.example.smart_test.service.api.UserServiceInterface;
@@ -41,6 +44,8 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     private UserServiceInterface userService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    private StudentClassRepositoryInterface studentClassRepository;
 
     @Override
     @Transactional
@@ -109,13 +114,22 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
 
     @Override
     @Transactional
-    public Set<StudentClassDto> findClassBySubject(SubjectDto dto) {
+    public Set<ClassStatusResponse> findClassBySubject(SubjectDto dto) {
         List<User> userList = getUsersBySubject(subjectMapper.toEntity(dto));
-        Set<StudentClassDto> studentClassDtoSet = new HashSet<>();
+        Set<ClassStatusResponse> studentClassDtoSet = new HashSet<>();
         if (userList != null) {
             for (User user : userList) {
-                List<StudentClassDto> studentClasses = userService.findStudentClassByUser(userMapper.toDTO(user));
-                studentClassDtoSet.addAll(studentClasses);
+                List<StudentClassDto> studentClassDtoList = userService.findStudentClassByUser(userMapper.toDTO(user));
+                for (StudentClassDto studentClassDto : studentClassDtoList) {
+                    for (StudentClass studentClass1 : studentClassRepository.findByUserId(user.getId())) {
+                        if (Objects.equals(studentClassDto.getId(), studentClass1.getId())) {
+                            studentClassDtoSet.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass1), true));
+                        } else {
+                            studentClassDtoSet.add(new ClassStatusResponse(studentClassDto, false));
+                        }
+                    }
+                }
+
             }
         }
         return studentClassDtoSet;
@@ -131,7 +145,9 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
                 Set<User> users = getUsersByClass(studentClassMapper.toEntity(studentClassDto));
 
                 for (User user : users) {
-                    subjectUserRepositoryInterface.deleteBySubjectAndUser(subject, user);
+                    if (Objects.equals(user.getRoles().getId(), UserRoleEnum.STUDENT.getId())) {
+                        subjectUserRepositoryInterface.deleteBySubjectIdAndUserId(subject.getId(), user.getId());
+                    }
                 }
             }
         } catch (Exception e) {
