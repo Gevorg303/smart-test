@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import { Navbar as BootstrapNavbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles.css';
-import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
+import Full_logo from '../../images/Full_logo.png';
 
-const Navbar = ({IsTeacher,setShowHandbook}) => {
-    return (!IsTeacher?
+const Navbar = ({setShowHandbook,userRole}) => {
+    return (userRole!==3?
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="custom-navbar">
         <Container fluid>
             <BootstrapNavbar.Brand as={Link} to="/home" className="navbar-logo">

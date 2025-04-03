@@ -11,7 +11,28 @@ const Layout = () => {
     const [topText, setTopText] = useState();
     const location = useLocation();
 
+    const [userRole, setUserRole] = useState();
+
     useEffect(() => {
+
+        async function fetchUser() {
+            try {
+                const response = await fetch('http://localhost:8080/users/current', {
+                    credentials: "include",
+                });
+                if (!response.ok) {
+                    throw new Error('Ошибка сети');
+                }
+                const user = await response.json();
+                console.log(user);
+                setUserRole(user.role.id);
+            } catch (error) {
+                console.error('Ошибка получения данных:', error);
+            }
+        }
+
+        fetchUser();
+
         const container = document.querySelector('.all-container');
         const container_top = document.querySelector('.top-text');
 
@@ -44,7 +65,7 @@ const Layout = () => {
 
     return (
         <>
-            <Navbar setShowHandbook={setIsModalOpen} />
+            <Navbar setShowHandbook={setIsModalOpen} userRole={userRole} />
             <div className="all-content">
                 <div className="top-text">{topText}</div>
                 <div className="all-container">
