@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './Components/Home';
 import BetaPage from "./Components/BetaPage";
+import ClassBank from './Components/ClassBank';
 import LoginPage from './Components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import StartTestPage from './Components/StartTestPage';
@@ -18,6 +19,7 @@ import ResultsPage from "./Components/ResultsPage";
 import SubjectClassPage from "./Components/SubjectClassPage";
 import RouterByRole from "./utils/router/routerByRole";
 
+
 const App = () => {
     return (
         <BrowserRouter>
@@ -26,6 +28,7 @@ const App = () => {
                 <Route path="/" element={<LoginPage />} />
                 {/* BetaPage без Layout, но с AdminNavbar */}
                 <Route path="bPage" element={<BetaPage />} />
+                <Route path="ClassBank" element={<ClassBank />} />
                 {/* Другие страницы с Layout */}
                 <Route element={<PrivateRoutes />}>
                     <Route element={<Layout />}>

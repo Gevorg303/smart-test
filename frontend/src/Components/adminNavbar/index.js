@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './style.css'; // Импортируем стили для Navbar
 import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
 
-const AdminNavbar = () => {
+const AdminNavbar = ({ onFormSelect }) => {
+    const navigate = useNavigate();
+
     const menuItems = [
         {
             title: "Управление",
@@ -12,13 +15,15 @@ const AdminNavbar = () => {
                 "Индикаторы",
                 "Темы",
                 "Предметы",
-                "Классы"
+                "Классы",
+                "Ученики"
             ]
         },
         {
             title: "Регистрация",
             subItems: [
-                "Одного ученика",
+                "Одного пользователя",
+                "Несколько пользователей",
                 "Несколько учеников"
             ]
         },
@@ -33,7 +38,15 @@ const AdminNavbar = () => {
     ];
 
     const handleClick = (item) => {
-        console.log('Clicked:', item);
+        if (item === "Одного пользователя") {
+            onFormSelect('singleUser');
+        } else if (item === "Несколько учеников") {
+            onFormSelect('multipleStudents');
+        } else if (item === "Несколько пользователей") {
+            onFormSelect('multipleUsers');
+        } else if (item === "Классы") {
+            navigate('/ClassBank'); // Переход на страницу ClassBank
+        }
     };
 
     return (
