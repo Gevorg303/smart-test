@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css'; // Импортируем стили для Navbar
-import Full_logo from '../../images/Full_logo.png'; // Импортируем изображение
+import './style.css';
+import Full_logo from '../../images/Full_logo.png';
 
 const AdminNavbar = ({ onFormSelect }) => {
     const navigate = useNavigate();
@@ -39,15 +39,16 @@ const AdminNavbar = ({ onFormSelect }) => {
 
     const handleClick = (item) => {
         if (item === "Одного пользователя") {
-            onFormSelect('singleUser');
+            navigate('/bPage?form=singleUser');
         } else if (item === "Несколько учеников") {
-            onFormSelect('multipleStudents');
+            navigate('/bPage?form=multipleStudents');
         } else if (item === "Несколько пользователей") {
-            onFormSelect('multipleUsers');
+            navigate('/bPage?form=multipleUsers');
         } else if (item === "Классы") {
-            navigate('/ClassBank'); // Переход на страницу ClassBank
+            navigate('/ClassBank');
         }
     };
+
 
     return (
         <div className="anavbar">
@@ -76,7 +77,7 @@ const AdminNavbar = ({ onFormSelect }) => {
                                             key={subIndex}
                                             className="sub-item"
                                             onClick={(e) => {
-                                                e.stopPropagation(); // Предотвращает всплытие события
+                                                e.stopPropagation();
                                                 handleClick(subItem);
                                             }}
                                         >

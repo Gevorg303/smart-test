@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './style.css'; // Убедитесь, что путь к файлу стилей правильный
+import './style.css';
 import * as XLSX from 'xlsx';
 
 const AdminRegistrationForm = ({ selectedForm }) => {
@@ -254,157 +254,141 @@ const AdminRegistrationForm = ({ selectedForm }) => {
     };
 
     if (selectedForm === 'singleUser') {
-        return React.createElement(
-            'form',
-            { className: 'registration-form', onSubmit: handleSubmit },
-            React.createElement('h2', { className: 'form-title' }, 'Регистрация'),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement('input', {
-                    type: 'text',
-                    id: 'lastName',
-                    name: 'lastName',
-                    value: formData.lastName,
-                    onChange: handleChange,
-                    placeholder: 'Фамилия',
-                    required: true
-                })
-            ),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement('input', {
-                    type: 'text',
-                    id: 'firstName',
-                    name: 'firstName',
-                    value: formData.firstName,
-                    onChange: handleChange,
-                    placeholder: 'Имя',
-                    required: true
-                })
-            ),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement('input', {
-                    type: 'text',
-                    id: 'middleName',
-                    name: 'middleName',
-                    value: formData.middleName,
-                    onChange: handleChange,
-                    placeholder: 'Отчество',
-                    required: true
-                })
-            ),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement(
-                    'select',
-                    {
-                        id: 'class',
-                        name: 'class',
-                        value: formData.class,
-                        onChange: handleChange,
-                        required: true
-                    },
-                    React.createElement('option', { value: '', disabled: true }, 'Выберите класс'),
-                    classes.map(cls =>
-                        React.createElement('option', { key: cls.id, value: cls.id }, `${cls.numberOfInstitution} ${cls.letterDesignation}`)
-                    )
-                )
-            ),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement('input', {
-                    type: 'email',
-                    id: 'email',
-                    name: 'email',
-                    value: formData.email,
-                    onChange: handleChange,
-                    placeholder: 'Почта',
-                    required: true
-                })
-            ),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement(
-                    'select',
-                    {
-                        id: 'role',
-                        name: 'role',
-                        value: formData.role,
-                        onChange: handleChange,
-                        required: true
-                    },
-                    React.createElement('option', { value: '', disabled: true }, 'Выберите роль'),
-                    Object.keys(roleMapping).map(roleName =>
-                        React.createElement('option', { key: roleMapping[roleName], value: roleName }, roleName)
-                    )
-                )
-            ),
-            React.createElement(
-                'button',
-                { type: 'submit', className: 'single-user-submit-button' },
-                'Зарегистрировать'
-            ),
-            showSuccessToast && React.createElement('p', {}, 'Пользователь успешно зарегистрирован!'),
-            errorMessage && React.createElement('p', { style: { color: 'red' } }, errorMessage)
+        return (
+            <form className="registration-form" onSubmit={handleSubmit}>
+                <h2 className="form-title">Регистрация</h2>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        placeholder="Фамилия"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        placeholder="Имя"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        id="middleName"
+                        name="middleName"
+                        value={formData.middleName}
+                        onChange={handleChange}
+                        placeholder="Отчество"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <select
+                        id="class"
+                        name="class"
+                        value={formData.class}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="" disabled>Выберите класс</option>
+                        {classes.map(cls => (
+                            <option key={cls.id} value={cls.id}>
+                                {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="form-group">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Почта"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <select
+                        id="role"
+                        name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="" disabled>Выберите роль</option>
+                        {Object.keys(roleMapping).map(roleName => (
+                            <option key={roleMapping[roleName]} value={roleName}>
+                                {roleName}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <button type="submit" className="single-user-submit-button">
+                    Зарегистрировать
+                </button>
+                {showSuccessToast && <p>Пользователь успешно зарегистрирован!</p>}
+                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+            </form>
         );
     }
 
     if (selectedForm === 'multipleStudents' || selectedForm === 'multipleUsers') {
-        return React.createElement(
-            'form',
-            { className: 'registration-form', onSubmit: handleMultipleRegistration },
-            React.createElement('h2', { className: 'form-title' }, selectedForm === 'multipleStudents' ? 'Регистрация нескольких учеников' : 'Регистрация нескольких пользователей'),
-            selectedForm === 'multipleStudents' && React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement(
-                    'select',
-                    {
-                        id: 'class',
-                        name: 'class',
-                        value: selectedClass || '',
-                        onChange: (e) => setSelectedClass(e.target.value),
-                        required: true
-                    },
-                    React.createElement('option', { value: '', disabled: true }, 'Выберите класс'),
-                    classes.map(cls =>
-                        React.createElement('option', { key: cls.id, value: cls.id }, `${cls.numberOfInstitution} ${cls.letterDesignation}`)
-                    )
-                )
-            ),
-            React.createElement(
-                'div',
-                { className: 'form-group file-input-container' },
-                React.createElement('input', {
-                    type: 'file',
-                    className: 'file-input',
-                    onChange: handleFileChange
-                }),
-                fileName && React.createElement('span', { className: 'file-input-display' }, `Выбранный файл: ${fileName}`)
-            ),
-            React.createElement(
-                'div',
-                { className: 'button-container' },
-                React.createElement(
-                    'button',
-                    { type: 'submit', className: 'multiple-users-button' },
-                    'Зарегистрировать'
-                ),
-                React.createElement(
-                    'button',
-                    { type: 'button', className: 'multiple-users-button template-button', onClick: () => handleDownloadTemplate(selectedForm === 'multipleStudents' ? 'Ученики' : 'Пользователи') },
-                    'Выгрузить шаблон'
-                )
-            ),
-            showSuccessToast && React.createElement('p', {}, 'Пользователи успешно зарегистрированы!'),
-            showErrorToast && React.createElement('p', { style: { color: 'red' } }, errorMessage)
+        return (
+            <form className="registration-form" onSubmit={handleMultipleRegistration}>
+                <h2 className="form-title">
+                    {selectedForm === 'multipleStudents' ? 'Регистрация нескольких учеников' : 'Регистрация нескольких пользователей'}
+                </h2>
+                {selectedForm === 'multipleStudents' && (
+                    <div className="form-group">
+                        <select
+                            id="class"
+                            name="class"
+                            value={selectedClass || ''}
+                            onChange={(e) => setSelectedClass(e.target.value)}
+                            required
+                        >
+                            <option value="" disabled>Выберите класс</option>
+                            {classes.map(cls => (
+                                <option key={cls.id} value={cls.id}>
+                                    {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+                <div className="form-group file-input-container">
+                    <input
+                        type="file"
+                        className="file-input"
+                        onChange={handleFileChange}
+                    />
+                    {fileName && <span className="file-input-display">Выбранный файл: {fileName}</span>}
+                </div>
+                <div className="button-container">
+                    <button type="submit" className="multiple-users-button">
+                        Зарегистрировать
+                    </button>
+                    <button
+                        type="button"
+                        className="multiple-users-button template-button"
+                        onClick={() => handleDownloadTemplate(selectedForm === 'multipleStudents' ? 'Ученики' : 'Пользователи')}
+                    >
+                        Выгрузить шаблон
+                    </button>
+                </div>
+                {showSuccessToast && <p>Пользователи успешно зарегистрированы!</p>}
+                {showErrorToast && <p style={{ color: 'red' }}>{errorMessage}</p>}
+            </form>
         );
     }
 

@@ -1,0 +1,95 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* Убираем горизонтальную прокрутку */
+}
+
+.admin-navbar-wrapper {
+    height: 60px; /* Установите высоту вашего AdminNavbar */
+}
+
+.class-bank-page {
+    flex: 1;
+    position: relative;
+}
+
+.class-bank-form-wrapper {
+    position: absolute;
+    top: 2.5%; /* Уменьшенный отступ сверху */
+    right: 10%; /* Отступ справа */
+    left: 20%; /* Уменьшенный отступ слева */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Изменено для выравнивания по левому краю */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ширина 100% от родителя */
+    max-width: 1458px; /* Уменьшенная максимальная ширина формы на 10% */
+    box-sizing: border-box; /* Учитываем padding в ширине */
+    position: relative; /* Добавлено для позиционирования кнопки */
+}
+
+.class-bank-form-header {
+    margin: 25px 25px 20px 0; /* Отступы сверху и справа */
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.class-bank-form-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.class-bank-form-element {
+    margin-bottom: 0; /* Убираем нижний отступ */
+    width: 200px; /* Фиксированная ширина для выпадающего списка */
+}
+
+.class-bank-form-element label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.class-bank-form-element select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.class-bank-submit-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px; /* Отступ слева от кнопки */
+}
+
+.class-bank-submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.class-bank-create-subject-btn {
+    position: absolute;
+    right: 20%; /* Уменьшенный отступ справа */
+    top: 50%; /* Вертикальное выравнивание */
+    transform: translateY(-50%); /* Центрирование по вертикали */
+    padding: 10px 20px;
+    background-color: #ffc107; /* Желтый цвет */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.class-bank-create-subject-btn:hover {
+    background-color: #e0a800; /* Темнее желтый при наведении */
+}
