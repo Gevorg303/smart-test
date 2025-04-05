@@ -18,6 +18,7 @@ import Layout from './Components/Layout';
 import ResultsPage from "./Components/ResultsPage";
 import SubjectClassPage from "./Components/SubjectClassPage";
 import RouterByRole from "./utils/router/routerByRole";
+import AdminHome from "./Components/AdminHome";
 
 
 const App = () => {
@@ -32,7 +33,8 @@ const App = () => {
                 {/* Другие страницы с Layout */}
                 <Route element={<PrivateRoutes />}>
                     <Route element={<Layout />}>
-                        <Route path="home" element={<RouterByRole rolesWithoutAccess={[]} element={<HomePage />} />} />
+                        <Route path="admin-home" element={<RouterByRole rolesWithoutAccess={[2,3]} element={<AdminHome />} />} />
+                        <Route path="home" element={<RouterByRole rolesWithoutAccess={[1]} element={<HomePage />} />} />
                         <Route path="start-test" element={<RouterByRole rolesWithoutAccess={[]} element={<StartTestPage />} />} />
                         <Route path="test" element={<RouterByRole rolesWithoutAccess={[]} element={<TestPage />} />} />
                         <Route path="register/single" element={<RouterByRole rolesWithoutAccess={[3]} element={<RegistrationPage />} />} />

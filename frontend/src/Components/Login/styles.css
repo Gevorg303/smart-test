@@ -7,8 +7,10 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #000;
-    background: url(../../images/fon2.svg);
+  /*  background: url(../../images/fon2.svg);*/
     background-size: 170%;
+    background: url(../../images/fon2.svg);
+    background-size: 90%;
 }
 
 /*h1 {

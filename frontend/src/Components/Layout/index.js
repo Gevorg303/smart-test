@@ -5,6 +5,7 @@ import Navbar from '../Navbar';
 import Handbook from "../Handbook";
 import './styles.css';
 import Footer from "../Footer";
+import AdminNavbar from "../adminNavbar";
 
 const Layout = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,11 +65,12 @@ const Layout = () => {
         }, [location.pathname]);
 
     return (
-        <>
-            <Navbar setShowHandbook={setIsModalOpen} userRole={userRole} />
-            <div className="all-content">
+        <div className={userRole == 1 ? "admin-body" : "body"}>
+            {userRole == 1 ? <AdminNavbar/> : <Navbar setShowHandbook={setIsModalOpen} userRole={userRole} />}
+
+            <div  className={userRole == 1 ? "all-content-admin" : "all-content"}>
                 <div className="top-text">{topText}</div>
-                <div className="all-container">
+                <div  className="all-container">
                     <Outlet context={[topText, setTopText]} />
                 </div>
             </div>
@@ -76,7 +78,7 @@ const Layout = () => {
             <footer className="footer">
                 <Footer />
             </footer>
-        </>
+        </div>
     );
 };
 

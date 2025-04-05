@@ -25,7 +25,7 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
                 //setUserRole(user.role.id)
 
 
-                setPage(rolesWithoutAccess.includes(user.role.id) ?  <Navigate to="/home" state={{ from: location }} replace /> : element)
+                setPage(rolesWithoutAccess.includes(user.role.id) ?  <Navigate to={user.role.id == 1? "/admin-home":"/home"} state={{ from: location }} replace /> : element)
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }

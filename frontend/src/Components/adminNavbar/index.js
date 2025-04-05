@@ -34,6 +34,10 @@ const AdminNavbar = ({ onFormSelect }) => {
         {
             title: "Результаты",
             subItems: []
+        },
+        {
+            title: "Главная",
+            subItems: []
         }
     ];
 
@@ -41,11 +45,27 @@ const AdminNavbar = ({ onFormSelect }) => {
         if (item === "Одного пользователя") {
             navigate('/bPage?form=singleUser');
         } else if (item === "Несколько учеников") {
-            navigate('/bPage?form=multipleStudents');
+            navigate('/register/multiple');
         } else if (item === "Несколько пользователей") {
             navigate('/bPage?form=multipleUsers');
+        }  else if (item === "Тесты") {
+            navigate('/testbank');
+        } else if (item === "Задания") {
+            navigate('/taskbank');
+        } else if (item === "Индикаторы") {
+            navigate('/indicatorbank');
+        } else if (item === "Темы") {
+            navigate('/themebank');
+        } else if (item === "Предметы") {
+            navigate('/itembank');
         } else if (item === "Классы") {
             navigate('/ClassBank');
+        } else if (item === "Ученики") {
+           // navigate('/ClassBank');
+        } else if (item === "Личный кабинет") {
+             navigate('/profile');
+        } else if (item === "Главная") {
+            navigate('/admin-home');
         }
     };
 
@@ -66,8 +86,8 @@ const AdminNavbar = ({ onFormSelect }) => {
                     {menuItems.map((item, index) => (
                         <li
                             key={index}
-                            className={`main-item ${item.title === "Личный кабинет" || item.title === "Результаты" ? "clickable" : ""}`}
-                            onClick={item.title === "Личный кабинет" || item.title === "Результаты" ? () => handleClick(item.title) : null}
+                            className={`main-item ${item.title === "Личный кабинет" || item.title === "Результаты" || item.title === "Главная" ? "clickable" : ""}`}
+                            onClick={item.title === "Личный кабинет" || item.title === "Результаты" || item.title === "Главная" ? () => handleClick(item.title) : null}
                         >
                             {item.title}
                             {item.subItems.length > 0 && (
