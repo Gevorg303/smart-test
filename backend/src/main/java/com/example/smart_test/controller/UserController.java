@@ -36,9 +36,12 @@ public class UserController {
         userService.deleteUser(userDto);
     }
 
+    /**
+     * Метод для вывода всех пользователей по школе авторизованного пользователя
+     */
     @GetMapping("/all")
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+    public List<User> getAllUsers(UserDto userDto) {
+        return userService.getUser(userDto);
     }
 
     @GetMapping("/{login}")

@@ -126,7 +126,8 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Override
     @Transactional
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers(UserDto userDto) {
+
         List<User> userEntities = userRepository.findAll();
         return userEntities.stream()
                 .map(userMapper::toDTO)
@@ -179,5 +180,10 @@ public class UserServiceImpl implements UserServiceInterface {
             studentClassDtoList.add(studentClassMapper.toDTO(studentClass));
         }
         return studentClassDtoList;
+    }
+
+    @Override
+    public List<User> getUser(UserDto user){
+        return userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
     }
 }

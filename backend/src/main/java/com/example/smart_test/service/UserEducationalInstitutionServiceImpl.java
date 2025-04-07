@@ -1,7 +1,9 @@
 package com.example.smart_test.service;
 
 
+import com.example.smart_test.domain.EducationalInstitution;
 import com.example.smart_test.domain.StudentClass;
+import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.UserEducationalInstitution;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.dto.UserEducationalInstitutionDto;
@@ -74,5 +76,25 @@ public class UserEducationalInstitutionServiceImpl implements UserEducationalIns
     private boolean findTeacherEducationalInstitutionById(Long id) {
         Optional<UserEducationalInstitution> teacherEducationalInstitution = userEducationalInstitutionRepositoryInterface.findById(id);
         return teacherEducationalInstitution.isPresent();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<User> getUsersByEducationalInstitutionExcludingSelf(Long userId) {
+        UserEducationalInstitution userEducationalInstitution = userEducationalInstitutionRepositoryInterface.findByUserId(userId);
+        if (userEducationalInstitution == null) {
+            throw new RuntimeException("Пользователь не найден или не связан с образовательным учреждением.");
+        }
+
+        EducationalInstitution educationalInstitution = userEducationalInstitution.getEducationalInstitution();
+
+        List<UserEducationalInstitution> userEducationalInstitutions = userEducationalInstitutionRepositoryInterface.findByEducationalIns(educationalInstitution);
+
+        List<User> users = userEducationalInstitutions.stream()
+                .map(UserEducationalInstitution::getUser)
+                .filter(user -> !user.getId().equals(userId))
+                .collect(Collectors.toList());
+
+        return users;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.smart_test.service.api;
 
 import com.example.smart_test.domain.StudentClass;
+import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.UserEducationalInstitution;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.dto.UserEducationalInstitutionDto;
@@ -21,4 +22,7 @@ public interface UserEducationalInstitutionServiceInterface {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<UserEducationalInstitutionDto> getAllTeacherEducationalInstitutions();
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    List<User> getUsersByEducationalInstitutionExcludingSelf(Long userId);
 }

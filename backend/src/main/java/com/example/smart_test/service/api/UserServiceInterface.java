@@ -18,7 +18,7 @@ public interface UserServiceInterface {
     void deleteUser(UserDto userDto);
 
     @Transactional
-    List<UserDto> getAllUsers();
+    List<UserDto> getAllUsers(UserDto userDto);
 
     @Transactional
     UserDto getUserByLogin(User user);
@@ -27,4 +27,6 @@ public interface UserServiceInterface {
     User getUserByLogin(String login);
 
     List<StudentClassDto> findStudentClassByUser(UserDto userDto);
+
+    List<User> getUser(UserDto user);
 }
