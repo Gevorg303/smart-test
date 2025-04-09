@@ -6,6 +6,7 @@ import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
+import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.service.api.UserClassServiceInterface;
@@ -183,10 +184,19 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public List<UserDto> getUser(UserDto user){
-        List<User> userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
+    public List<UserDto> getUser(UserBiRoleRequest request) {
+        List<User> userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(request.getUserDto().getId());
+
+        if (request.getRoleDto() != null && request.getRoleDto().getId() != null) {
+            Long roleId = request.getRoleDto().getId();
+            userList = userList.stream()
+                    .filter(user -> user.getRoles() != null && user.getRoles().getId().equals(roleId))
+                    .collect(Collectors.toList());
+        }
+
         return userList.stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
 }

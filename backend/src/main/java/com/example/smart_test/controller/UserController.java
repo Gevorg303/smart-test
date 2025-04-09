@@ -4,6 +4,7 @@ import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
+import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.security.JWTUtils;
@@ -38,10 +39,11 @@ public class UserController {
 
     /**
      * Метод для вывода всех пользователей по школе авторизованного пользователя
+     * Если на вход указать роль, то на выход можно получить отфильтрованных пользователей с этой ролью, иначе на выход придут все пользователи)
      */
     @GetMapping("/all")
-    public List<UserDto> getUsers(UserDto userDto) {
-        return userService.getUser(userDto);
+    public List<UserDto> getUsers(UserBiRoleRequest request) {
+        return userService.getUser(request);
     }
 
     @GetMapping("/{login}")

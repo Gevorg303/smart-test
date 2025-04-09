@@ -3,6 +3,7 @@ package com.example.smart_test.service.api;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
 import jakarta.transaction.Transactional;
@@ -28,5 +29,5 @@ public interface UserServiceInterface {
 
     List<StudentClassDto> findStudentClassByUser(UserDto userDto);
 
-    List<UserDto> getUser(UserDto user);
+    List<UserDto> getUser(UserBiRoleRequest request);
 }
