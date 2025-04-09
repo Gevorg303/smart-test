@@ -1,6 +1,7 @@
 package com.example.smart_test.service.api;
 
 
+import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.StudentClassDto;
@@ -32,4 +33,6 @@ public interface SubjectUserServiceInterface {
     Set<ClassStatusResponse> findClassBySubject(SubjectDto dto);
 
     void removeSubjectUserDto(SubjectClassRequest request);
+
+    Set<User> getUsersByClass(StudentClass studentClass);
 }

@@ -40,7 +40,7 @@ public class UserController {
      * Метод для вывода всех пользователей по школе авторизованного пользователя
      */
     @GetMapping("/all")
-    public List<User> getAllUsers(UserDto userDto) {
+    public List<UserDto> getUsers(UserDto userDto) {
         return userService.getUser(userDto);
     }
 
@@ -64,7 +64,10 @@ public class UserController {
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
         return userService.findStudentClassByUser(userDto);
     }
-/**Список классов по пользователю**/
+
+    /**
+     * Список классов по пользователю
+     * */
     @GetMapping("/current-user-classes")
     public List<StudentClassDto> getCurrentUserClasses(@CookieValue("jwtToken") String token) {
         var jwt = jwtUtils.decodeToken(token);
@@ -72,6 +75,5 @@ public class UserController {
         User currentUser = userService.getUserByLogin(login);
         return userService.findStudentClassByUser(userMapper.toDTO(currentUser));
     }
-
 }
 

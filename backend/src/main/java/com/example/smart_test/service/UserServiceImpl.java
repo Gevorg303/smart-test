@@ -183,7 +183,10 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public List<User> getUser(UserDto user){
-        return userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
+    public List<UserDto> getUser(UserDto user){
+        List<User> userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
+        return userList.stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

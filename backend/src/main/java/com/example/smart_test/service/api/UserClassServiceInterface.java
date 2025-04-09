@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserClassServiceInterface {
     @Transactional
@@ -28,4 +29,6 @@ public interface UserClassServiceInterface {
 
     @Transactional
     List<User> getUsersByStudentClass(StudentClassDto studentClass);
+
+    Set<UserDto> getUserFilter(StudentClassDto request);
 }

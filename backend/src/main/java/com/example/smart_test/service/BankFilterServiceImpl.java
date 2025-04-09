@@ -72,7 +72,6 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         return filteredList;
     }
 
-
     @Override
     @Transactional
     public List<TaskDto> getTasksFilter(User user, Subject subject, Theme theme, Indicator indicator) {
@@ -146,5 +145,10 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     @Override
     public Set<SubjectDto> getSubjectFilter(StudentClassDto request) {
         return subjectUserService.getSubjectsByUsers(userClassService.getUsersByStudentClass(request));
+    }
+
+    @Override
+    public Set<UserDto> getUserFilter(StudentClassDto request) {
+        return userClassService.getUserFilter(request);
     }
 }

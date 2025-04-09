@@ -28,5 +28,5 @@ public interface UserServiceInterface {
 
     List<StudentClassDto> findStudentClassByUser(UserDto userDto);
 
-    List<User> getUser(UserDto user);
+    List<UserDto> getUser(UserDto user);
 }
