@@ -145,4 +145,13 @@ public class BankFiltersController {
         Set<SubjectDto> subjectDto = bankFilterService.getSubjectFilter(request);
         return ResponseEntity.ok(subjectDto);
     }
+
+    /**
+     * Фильтр для вывода пользователей по классу
+     * */
+    @PostMapping("/user")
+    public ResponseEntity<Set<UserDto>> getUserFilter(@RequestBody StudentClassDto request){
+        Set<UserDto> userDtoSet = bankFilterService.getUserFilter(request);
+        return ResponseEntity.ok(userDtoSet);
+    }
 }

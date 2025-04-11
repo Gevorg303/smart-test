@@ -17,4 +17,6 @@ public interface BankFilterServiceInterface {
     List<IndicatorDto> getIndicatorFilter(User user, Subject subject);
 
     Set<SubjectDto> getSubjectFilter(StudentClassDto request);
+
+    Set<UserDto> getUserFilter(StudentClassDto request);
 }

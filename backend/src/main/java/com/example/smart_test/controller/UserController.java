@@ -4,6 +4,7 @@ import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
+import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.security.JWTUtils;
@@ -36,9 +37,13 @@ public class UserController {
         userService.deleteUser(userDto);
     }
 
-    @GetMapping("/all")
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+    /**
+     * Метод для вывода всех пользователей по школе авторизованного пользователя
+     * Если на вход указать роль, то на выход можно получить отфильтрованных пользователей с этой ролью, иначе на выход придут все пользователи)
+     */
+    @PostMapping("/all")
+    public List<UserDto> getUsers(@RequestBody UserBiRoleRequest request) {
+        return userService.getUser(request);
     }
 
     @GetMapping("/{login}")
@@ -61,7 +66,10 @@ public class UserController {
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
         return userService.findStudentClassByUser(userDto);
     }
-/**Список классов по пользователю**/
+
+    /**
+     * Список классов по пользователю
+     * */
     @GetMapping("/current-user-classes")
     public List<StudentClassDto> getCurrentUserClasses(@CookieValue("jwtToken") String token) {
         var jwt = jwtUtils.decodeToken(token);
@@ -69,6 +77,5 @@ public class UserController {
         User currentUser = userService.getUserByLogin(login);
         return userService.findStudentClassByUser(userMapper.toDTO(currentUser));
     }
-
 }
 

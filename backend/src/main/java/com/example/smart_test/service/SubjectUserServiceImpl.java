@@ -163,7 +163,8 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
                 .collect(Collectors.toList());
     }
 
-    private Set<User> getUsersByClass(StudentClass studentClass) {
+    @Override
+    public Set<User> getUsersByClass(StudentClass studentClass) {
         Set<User> userList = new HashSet<>();
         for (UserClass userClass : userClassRepository.findByStudentClass(studentClass)) {
             if (userClass.getUser() != null) {

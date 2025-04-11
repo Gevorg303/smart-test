@@ -10,7 +10,9 @@ import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.UserClassMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
+import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import com.example.smart_test.service.api.UserClassServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +33,10 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     private UserClassMapperInterface userClassMapperInterface;
     @Autowired
     private StudentClassMapperInterface studentClassMapperInterface;
+    @Autowired
+    private SubjectUserServiceInterface subjectUserService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     @Transactional
@@ -106,5 +110,14 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
                 .stream()
                 .map(UserClass::getUser)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<UserDto> getUserFilter(StudentClassDto request) {
+        Set<UserDto> userDtoSet = new HashSet<>();
+        for (User user : subjectUserService.getUsersByClass(studentClassMapperInterface.toEntity(request))) {
+            userDtoSet.add(userMapper.toDTO(user));
+        }
+        return userDtoSet;
     }
 }

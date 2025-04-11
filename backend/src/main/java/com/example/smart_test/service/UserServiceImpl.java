@@ -6,6 +6,7 @@ import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
+import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.service.api.UserClassServiceInterface;
@@ -16,6 +17,7 @@ import com.nimbusds.jose.util.Pair;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserServiceInterface {
     @Autowired
     private StudentClassRepositoryInterface studentClassRepository;
     @Autowired
+    @Lazy
     private UserClassServiceInterface userClassService;
     @Autowired
     private StudentClassMapperInterface studentClassMapper;
@@ -126,7 +129,8 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Override
     @Transactional
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers(UserDto userDto) {
+
         List<User> userEntities = userRepository.findAll();
         return userEntities.stream()
                 .map(userMapper::toDTO)
@@ -180,4 +184,21 @@ public class UserServiceImpl implements UserServiceInterface {
         }
         return studentClassDtoList;
     }
+
+    @Override
+    public List<UserDto> getUser(UserBiRoleRequest request) {
+        List<User> userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(request.getUserDto().getId());
+
+        if (request.getRoleDto() != null && request.getRoleDto().getId() != null) {
+            Long roleId = request.getRoleDto().getId();
+            userList = userList.stream()
+                    .filter(user -> user.getRoles() != null && user.getRoles().getId().equals(roleId))
+                    .collect(Collectors.toList());
+        }
+
+        return userList.stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 }
