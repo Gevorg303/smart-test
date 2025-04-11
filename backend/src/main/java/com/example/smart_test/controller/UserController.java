@@ -41,8 +41,8 @@ public class UserController {
      * Метод для вывода всех пользователей по школе авторизованного пользователя
      * Если на вход указать роль, то на выход можно получить отфильтрованных пользователей с этой ролью, иначе на выход придут все пользователи)
      */
-    @GetMapping("/all")
-    public List<UserDto> getUsers(UserBiRoleRequest request) {
+    @PostMapping("/all")
+    public List<UserDto> getUsers(@RequestBody UserBiRoleRequest request) {
         return userService.getUser(request);
     }
 

@@ -88,7 +88,7 @@ public class UserEducationalInstitutionServiceImpl implements UserEducationalIns
 
         EducationalInstitution educationalInstitution = userEducationalInstitution.getEducationalInstitution();
 
-        List<UserEducationalInstitution> userEducationalInstitutions = userEducationalInstitutionRepositoryInterface.findByEducationalIns(educationalInstitution);
+        List<UserEducationalInstitution> userEducationalInstitutions = userEducationalInstitutionRepositoryInterface.findByEducationalInstitution(educationalInstitution);
 
         List<User> users = userEducationalInstitutions.stream()
                 .map(UserEducationalInstitution::getUser)

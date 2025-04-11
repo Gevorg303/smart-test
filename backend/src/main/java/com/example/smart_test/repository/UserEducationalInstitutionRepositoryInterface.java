@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface UserEducationalInstitutionRepositoryInterface extends JpaRepository<UserEducationalInstitution, Long> {
     UserEducationalInstitution findByUserId(Long userId);
-    List<UserEducationalInstitution> findByEducationalIns(EducationalInstitution educationalInstitution);
+    List<UserEducationalInstitution> findByEducationalInstitution(EducationalInstitution educationalInstitution);
 }
