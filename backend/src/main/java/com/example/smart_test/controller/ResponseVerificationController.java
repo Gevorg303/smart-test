@@ -1,6 +1,8 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.domain.ResponseOption;
 import com.example.smart_test.request.RequestForTask;
+import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.service.api.RequestVerificationServiceInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,11 @@ public class ResponseVerificationController {
     private RequestVerificationServiceInterface requestVerificationService;
 
     /**
-     Выводит обект содержащий задание, веденый пользователем ответ, статус (верно/неверно)
+     Выводит объект содержащий задание, веденный пользователем ответ, статус (верно/неверно)
      */
     @PostMapping("/result-test")
-    public ResponseEntity<List<RequestForTask>> checkingResponse(@RequestBody @Valid List<RequestForTask> requestForTaskList) {
-        List<RequestForTask> result = requestVerificationService.checkingResponse(requestForTaskList);
+    public ResponseEntity<List<ResponseForTask>> checkingResponse(@RequestBody @Valid List<RequestForTask> requestForTaskList) {
+        List<ResponseForTask> result = requestVerificationService.checkingResponse(requestForTaskList);
         if (result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

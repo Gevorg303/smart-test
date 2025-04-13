@@ -8,6 +8,6 @@ public class ResponseOptionDto {
     private Long id;
     private String question;
     private String response;
-    private String evaluationResponse;
+    private boolean evaluationResponse;
     private Task task;
 }

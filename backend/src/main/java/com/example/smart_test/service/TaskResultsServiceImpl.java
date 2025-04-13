@@ -1,10 +1,11 @@
 package com.example.smart_test.service;
 
 
-import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.TaskResults;
 import com.example.smart_test.domain.TestingAttempt;
+import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestResultsDto;
+import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestResultsMapperInterface;
 import com.example.smart_test.repository.TestResultsRepositoryInterface;
 import com.example.smart_test.service.api.TaskResultsServiceInterface;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,12 +26,14 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     private TestResultsRepositoryInterface testResultsRepositoryInterface;
     @Autowired
     private TestResultsMapperInterface testResultsMapperInterface;
+    @Autowired
+    private TaskMapperInterface taskMapper;
 
     @Override
     @Transactional
-    public TaskResults addTaskResults(Task task, boolean status, TestingAttempt testingAttempt) {
+    public TaskResults addTaskResults(TaskDto task, int assessmentTask, TestingAttempt testingAttempt) {
         try {
-            return testResultsRepositoryInterface.save(new TaskResults(task, status, testingAttempt));
+            return testResultsRepositoryInterface.save(new TaskResults(taskMapper.toEntity(task), true, testingAttempt));
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при создании сущности 'Результаты задания': " + e.getMessage(), e);
         }

@@ -7,9 +7,9 @@ import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.request.EndTestingRequest;
-import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.request.TestSimulatorRequest;
 import com.example.smart_test.request.TestingAttemptAndTest;
+import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +134,7 @@ public class TestServiceImpl implements TestServiceInterface {
 
     @Override
     @Transactional
-    public List<RequestForTask> endTesting(EndTestingRequest endTestingRequest) {
+    public List<ResponseForTask> endTesting(EndTestingRequest endTestingRequest) {
         TestDto testDto = getTestById(endTestingRequest.getTest().getId());
         TestingAttempt testingAttempt = testingAttemptService.addTestingAttempt(
                 new TestingAttempt(
@@ -144,9 +144,9 @@ public class TestServiceImpl implements TestServiceInterface {
                         endTestingRequest.getUser()
                 )
         );
-        List<RequestForTask> forTaskList = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
-        for (RequestForTask requestForTask : forTaskList) {
-            taskResultsService.addTaskResults(requestForTask.getTask(), requestForTask.isStatus(), testingAttempt);
+        List<ResponseForTask> forTaskList = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
+        for (ResponseForTask responseForTask : forTaskList) {
+            taskResultsService.addTaskResults(responseForTask.getTask(), responseForTask.getTask().getAssessmentTask(), testingAttempt);
         }
         if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.TRAINER.getId())){
             List<TaskDto> taskList = taskService.findTasksTheTest(testMapper.toDto(endTestingRequest.getTest()));
