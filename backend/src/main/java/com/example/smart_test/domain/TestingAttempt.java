@@ -37,6 +37,9 @@ public class TestingAttempt {
     @JoinColumn(name = "идентификатор_пользователь")
     private User user;
 
+    @Column(name = "результат_прохождения_теста")
+    private int testResult;
+
     public TestingAttempt(Instant startDateTime, LocalTime attemptDuration, Test test, User user) {
         this.startDateTime = startDateTime;
         this.attemptDuration = attemptDuration;

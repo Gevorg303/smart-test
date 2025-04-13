@@ -19,7 +19,7 @@ public class TaskResults {
     @ManyToOne
     @JoinColumn(name = "идентификатор_задания")
     private Task task;
-    @Column(name = "результат_пройденного_задания")
+    @Column(name = "пройден_индикатор")
     private boolean resultOfTheIndicator;
     @ManyToOne
     @JoinColumn(name = "идентификатор_попытка_тестирован")
