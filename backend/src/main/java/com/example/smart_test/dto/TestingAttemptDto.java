@@ -16,4 +16,5 @@ public class TestingAttemptDto {
     private Test test;
     @JsonIgnore
     private User user;
+    private int testResult;
 }

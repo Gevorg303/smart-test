@@ -219,7 +219,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
                 .map(task -> {
                     task.setTest(updatedTask.getTest());
                     task.setTypeTask(updatedTask.getTypeTask());
-                    task.setAssessmentTask(updatedTask.getAssessmentTask());
                     task.setExplanation(updatedTask.getExplanation());
                     task.setTaskText(updatedTask.getTaskText());
                     return taskRepositoryInterface.save(task);
