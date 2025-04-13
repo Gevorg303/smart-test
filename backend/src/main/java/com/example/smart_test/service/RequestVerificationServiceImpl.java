@@ -27,7 +27,6 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
             List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getResponseOptionsByTask(requestForTask.getTask());
             // TODO: для заданий на сопоставление
             if (requestForTask.getTask().getTypeTask().getTaskTypeName().equals(TypeTaskEnum.MATCHING_TASK.name())) {
-
                 for (ResponseOptionDto responseOptionDto : responseOptionDtoList) {
                     if (responseOptionDto.getQuestion() != null) {
                         // TODO: варианты ответов по заданию которые дал пользователь
@@ -35,11 +34,11 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                             if (responseOptionDto2.getQuestion() != null
                                     && responseOptionDto2.getQuestion().equals(responseOptionDto.getQuestion())
                                     && responseOptionDto2.getResponse().equals(responseOptionDto.getResponse())) {
-                                responseOptionDto2.setEvaluationResponse(true);
+                                responseOptionDto2.setValidResponse(true);
                                 counterCorrectResponse++;
                                 theUsersResponseOption.add(responseOptionDto2);
                             } else {
-                                responseOptionDto2.setEvaluationResponse(false);
+                                responseOptionDto2.setValidResponse(false);
                                 theUsersResponseOption.add(responseOptionDto2);
                             }
                         }
@@ -55,11 +54,11 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                         for (ResponseOptionDto responseOptionDto2 : requestForTask.getResponseOption()) {
                             if (responseOptionDto2.getQuestion() == null
                                     && responseOptionDto2.getResponse().equals(responseOptionDto.getResponse())) {
-                                responseOptionDto2.setEvaluationResponse(true);
+                                responseOptionDto2.setValidResponse(true);
                                 counterCorrectResponse++;
                                 theUsersResponseOption.add(responseOptionDto2);
                             } else {
-                                responseOptionDto2.setEvaluationResponse(false);
+                                responseOptionDto2.setValidResponse(false);
                                 theUsersResponseOption.add(responseOptionDto2);
                             }
                         }
@@ -67,7 +66,7 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                 }
             }
             int assessmentTask = (int) ((counterCorrectResponse * 100.0) / responseOptionDtoList.size());
-            requestForTask.getTask().setAssessmentTask(assessmentTask);
+//            requestForTask.getTask().setAssessmentTask(assessmentTask);
             responseForTaskList.add(new ResponseForTask(requestForTask.getTask(), theUsersResponseOption, null));
         }
         return responseForTaskList;

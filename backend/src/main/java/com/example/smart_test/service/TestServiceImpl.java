@@ -142,14 +142,15 @@ public class TestServiceImpl implements TestServiceInterface {
                         endTestingRequest.getStartDateTime(),
                         endTestingRequest.getAttemptDuration(),
                         endTestingRequest.getTest(),
-                        endTestingRequest.getUser()
+                        endTestingRequest.getUser(),
+                        1
                 )
         );
         int total = 0;
         List<ResponseForTask> forTaskList = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
         for (ResponseForTask responseForTask : forTaskList) {
-            total += responseForTask.getTask().getAssessmentTask();
-            taskResultsService.addTaskResults(responseForTask.getTask(), responseForTask.getTask().getAssessmentTask(), testingAttemptDto);
+//            total += responseForTask.getTask().getAssessmentTask();
+            taskResultsService.addTaskResults(responseForTask.getTask(), total, testingAttemptDto);
         }
         int average = total / taskService.findTasksTheTest(testDto).size();
         testDto.setNumberOfAttemptsToPass(average);
