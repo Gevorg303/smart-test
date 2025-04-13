@@ -8,6 +8,8 @@ import com.example.smart_test.request.EndTestingRequest;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.request.TestSimulatorRequest;
 import com.example.smart_test.request.TestingAttemptAndTest;
+import com.example.smart_test.response.ResponseForTask;
+import com.example.smart_test.response.ResponseForTest;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public interface TestServiceInterface {
 
     List<TestDto> getUserTests(User user);
 
-    List<RequestForTask> endTesting(EndTestingRequest endTestingRequest);
+    ResponseForTest endTesting(EndTestingRequest endTestingRequest);
 
     List<TaskDto> createTestSimulator(TestSimulatorRequest testSimulatorRequest);
 

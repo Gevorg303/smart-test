@@ -5,6 +5,7 @@ import com.example.smart_test.domain.TestingAttempt;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.TestingAttemptDto;
+import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TestingAttemptRepositoryInterface;
 import com.example.smart_test.service.api.TestingAttemptServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -19,16 +20,18 @@ import java.util.List;
 public class TestingAttemptServiceImpl implements TestingAttemptServiceInterface {
     @Autowired
     private TestingAttemptRepositoryInterface testingAttemptRepository;
+    @Autowired
+    private TestingAttemptMapperInterface testingAttemptMapper;
 
     @Override
     @Transactional
-    public TestingAttempt addTestingAttempt(TestingAttempt testingAttempt) {
-        return testingAttemptRepository.save(testingAttempt);
+    public TestingAttemptDto addTestingAttempt(TestingAttemptDto testingAttempt) {
+        return testingAttemptMapper.toDto(testingAttemptRepository.save(testingAttemptMapper.toEntity(testingAttempt)));
     }
 
     @Override
-    public TestingAttempt findTopByUserAndTest_IdOrderByStartDateTimeDesc(User user, TestDto test) {
-        return testingAttemptRepository.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, test.getId());
+    public TestingAttemptDto findTopByUserAndTest_IdOrderByStartDateTimeDesc(User user, TestDto test) {
+        return testingAttemptMapper.toDto(testingAttemptRepository.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, test.getId()));
     }
 
     @Override

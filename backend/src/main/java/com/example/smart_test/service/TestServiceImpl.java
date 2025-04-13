@@ -7,9 +7,10 @@ import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.request.EndTestingRequest;
-import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.request.TestSimulatorRequest;
 import com.example.smart_test.request.TestingAttemptAndTest;
+import com.example.smart_test.response.ResponseForTask;
+import com.example.smart_test.response.ResponseForTest;
 import com.example.smart_test.service.api.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,27 +135,31 @@ public class TestServiceImpl implements TestServiceInterface {
 
     @Override
     @Transactional
-    public List<RequestForTask> endTesting(EndTestingRequest endTestingRequest) {
+    public ResponseForTest endTesting(EndTestingRequest endTestingRequest) {
         TestDto testDto = getTestById(endTestingRequest.getTest().getId());
-        TestingAttempt testingAttempt = testingAttemptService.addTestingAttempt(
-                new TestingAttempt(
+        TestingAttemptDto testingAttemptDto = testingAttemptService.addTestingAttempt(
+                new TestingAttemptDto(
                         endTestingRequest.getStartDateTime(),
                         endTestingRequest.getAttemptDuration(),
                         endTestingRequest.getTest(),
                         endTestingRequest.getUser()
                 )
         );
-        List<RequestForTask> forTaskList = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
-        for (RequestForTask requestForTask : forTaskList) {
-            taskResultsService.addTaskResults(requestForTask.getTask(), requestForTask.isStatus(), testingAttempt);
+        int total = 0;
+        List<ResponseForTask> forTaskList = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
+        for (ResponseForTask responseForTask : forTaskList) {
+            total += responseForTask.getTask().getAssessmentTask();
+            taskResultsService.addTaskResults(responseForTask.getTask(), responseForTask.getTask().getAssessmentTask(), testingAttemptDto);
         }
-        if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.TRAINER.getId())){
+        int average = total / taskService.findTasksTheTest(testDto).size();
+        testDto.setNumberOfAttemptsToPass(average);
+        if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.TRAINER.getId())) {
             List<TaskDto> taskList = taskService.findTasksTheTest(testMapper.toDto(endTestingRequest.getTest()));
             for (TaskDto taskDto : taskList) {
                 taskService.removeTaskFromTest(taskDto);
             }
         }
-        return forTaskList;
+        return new ResponseForTest(testDto, forTaskList, testingAttemptDto);
     }
 
     @Override
@@ -181,7 +186,7 @@ public class TestServiceImpl implements TestServiceInterface {
         return Collections.emptyList();
     }
 
-    private TestDto findTestByENTRY_TESTType(User user){
+    private TestDto findTestByENTRY_TESTType(User user) {
         List<TestDto> testDtoList = getUserTests(user);
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.ENTRY_TEST.getId())) {
