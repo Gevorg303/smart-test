@@ -7,6 +7,7 @@ import com.example.smart_test.dto.TestingAttemptDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.request.*;
 import com.example.smart_test.response.ResponseForTask;
+import com.example.smart_test.response.ResponseForTest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,7 @@ public class TestController {
      * Завершение тестирования
      */
     @PostMapping("/end-testing")
-    public List<ResponseForTask> endTesting(@RequestBody EndTestingRequest endTestingRequest){
+    public ResponseForTest endTesting(@RequestBody EndTestingRequest endTestingRequest){
         return testService.endTesting(endTestingRequest);
     }
 

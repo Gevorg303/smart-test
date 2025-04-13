@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.TestingAttemptDto;
 import com.example.smart_test.service.api.TaskOfIndicatorServiceInterface;
 import com.example.smart_test.service.api.TaskResultsServiceInterface;
 import com.example.smart_test.service.api.TestGeneratorServiceInterface;
@@ -29,7 +30,7 @@ public class TestGeneratorServiceImpl implements TestGeneratorServiceInterface {
         List<Task> availableTasks = new ArrayList<>();
         int counter = 0;
 
-        TestingAttempt testingAttempt = testingAttemptService.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, test);
+        TestingAttemptDto testingAttempt = testingAttemptService.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, test);
         List<TaskResults> taskResultsList = taskResultsService.findTaskResultsByTestingAttempt(testingAttempt);
 
         for (TaskResults taskResults : taskResultsList) {

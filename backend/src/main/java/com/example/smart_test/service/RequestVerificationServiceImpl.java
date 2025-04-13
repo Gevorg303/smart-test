@@ -68,7 +68,7 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
             }
             int assessmentTask = (int) ((counterCorrectResponse * 100.0) / responseOptionDtoList.size());
             requestForTask.getTask().setAssessmentTask(assessmentTask);
-            responseForTaskList.add(new ResponseForTask(requestForTask.getTask(), theUsersResponseOption));
+            responseForTaskList.add(new ResponseForTask(requestForTask.getTask(), theUsersResponseOption, null));
         }
         return responseForTaskList;
     }

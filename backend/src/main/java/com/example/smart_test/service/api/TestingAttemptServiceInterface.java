@@ -9,9 +9,9 @@ import com.example.smart_test.dto.TestingAttemptDto;
 import java.util.List;
 
 public interface TestingAttemptServiceInterface {
-    TestingAttempt addTestingAttempt(TestingAttempt testingAttempt);
+    TestingAttemptDto addTestingAttempt(TestingAttemptDto testingAttempt);
 
-    TestingAttempt findTopByUserAndTest_IdOrderByStartDateTimeDesc(User user, TestDto test);
+    TestingAttemptDto findTopByUserAndTest_IdOrderByStartDateTimeDesc(User user, TestDto test);
 
     List<TestingAttempt> findTestingAttemptByTest(User user, Test test);
 }
