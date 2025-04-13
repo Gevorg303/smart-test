@@ -13,10 +13,8 @@ public class TaskMapperImpl implements TaskMapperInterface {
         dto.setId(entity.getId());
         dto.setTest(entity.getTest());
         dto.setTypeTask(entity.getTypeTask());
-        dto.setAssessmentTask(entity.getAssessmentTask());
         dto.setExplanation(entity.getExplanation());
         dto.setTaskText(entity.getTaskText());
-
         return dto;
     }
 
@@ -25,7 +23,6 @@ public class TaskMapperImpl implements TaskMapperInterface {
         entity.setId(dto.getId());
         entity.setTest(dto.getTest());
         entity.setTypeTask(dto.getTypeTask());
-        entity.setAssessmentTask(dto.getAssessmentTask());
         entity.setExplanation(dto.getExplanation());
         entity.setTaskText(dto.getTaskText());
         return entity;

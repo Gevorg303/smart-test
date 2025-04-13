@@ -19,8 +19,8 @@ public class ResponseOption {
     private String question;
     @Column(name = "ответ")
     private String response;
-    @Column(name = "оценка_за_ответ")
-    private boolean evaluationResponse;
+    @Column(name = "верный_ответ")
+    private boolean validResponse;
     @ManyToOne
     @JoinColumn(name = "идентификатор_задание")
     private Task task;

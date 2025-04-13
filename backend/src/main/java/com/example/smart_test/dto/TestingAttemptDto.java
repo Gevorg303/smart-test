@@ -18,12 +18,11 @@ public class TestingAttemptDto {
     private Test test;
     @JsonIgnore
     private User user;
-
+    private int testResult;
     public TestingAttemptDto(Instant startDateTime, LocalTime attemptDuration, Test test, User user) {
         this.startDateTime = startDateTime;
         this.attemptDuration = attemptDuration;
         this.test = test;
         this.user = user;
     }
-
 }

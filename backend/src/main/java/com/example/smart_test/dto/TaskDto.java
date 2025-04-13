@@ -10,7 +10,6 @@ public class TaskDto {
     private Long id;
     private Test test;
     private TypeTask typeTask;
-    private int assessmentTask;
     private String explanation;
     private String taskText;
 }
