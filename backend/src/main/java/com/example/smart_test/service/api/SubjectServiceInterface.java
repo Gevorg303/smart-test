@@ -9,12 +9,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface SubjectServiceInterface {
     SubjectDto addSubjectDto(AddSubjectRequest dto);
 
     @Transactional
-    List<SubjectDto> getSubjectByUser(User user);
+    Set<SubjectDto> getSubjectByUser(User user);
 
     Subject findSubjectById(Long id);
 
