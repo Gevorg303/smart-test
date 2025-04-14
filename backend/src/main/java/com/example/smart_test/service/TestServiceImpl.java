@@ -3,6 +3,7 @@ package com.example.smart_test.service;
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.TypeTestEnum;
+import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
@@ -48,6 +49,8 @@ public class TestServiceImpl implements TestServiceInterface {
     private TestGeneratorServiceInterface testGeneratorService;
     @Autowired
     private TestingAttemptMapperInterface testingAttemptMapper;
+    @Autowired
+    private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
 
     @Override
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
@@ -114,24 +117,47 @@ public class TestServiceImpl implements TestServiceInterface {
         if (userService.getUserByLogin(user) == null) {
             throw new IllegalArgumentException("User not found");
         }
+        List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
 
-        List<SubjectUserDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
-                .stream()
-                .filter(st -> st.getUser() != null && st.getUser().getId().equals(user.getId()))
-                .toList();
+        // TODO: Фильтруем по текущему пользователю
+        List<SubjectUserDto> subjectTeachers = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
+        if (user.getRoles().getRole().equals(UserRoleEnum.ADMIN.name())) {
+            userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
+        } else {
+            userList.add(user);
+        }
+        for (User user1 : userList) {
+            for (SubjectUserDto subjectTeacher : allSubjectTeachers) {
+                if (subjectTeacher.getUser() != null && subjectTeacher.getUser().getId().equals(user1.getId())) {
+                    subjectTeachers.add(subjectTeacher);
+                }
+            }
+        }
+        // TODO: Загружаем все темы и все тесты
+        List<ThemeDto> allThemes = themeService.getAllTheme();
+        List<TestDto> allTests = getAllTestDto();
 
-        List<ThemeDto> themes = themeService.getAllTheme();
-        List<TestDto> tests = getAllTestDto();
+        List<TestDto> result = new ArrayList<>();
 
-        return subjectTeachers.stream()
-                .flatMap(subjectTeacher -> themes.stream()
-                        .filter(theme -> theme.getSubject() != null && theme.getSubject().equals(subjectTeacher.getSubject()))
-                        .flatMap(theme -> tests.stream()
-                                .filter(test -> test.getTheme() != null && test.getTheme().getId().equals(theme.getId()))
-                        )
-                )
-                .toList();
+        for (SubjectUserDto subjectTeacher : subjectTeachers) {
+            // TODO: Ищем темы, соответствующие предмету
+            for (ThemeDto theme : allThemes) {
+                if (theme.getSubject() != null && theme.getSubject().equals(subjectTeacher.getSubject())) {
+
+                    // TODO: Ищем тесты, связанные с этой темой
+                    for (TestDto test : allTests) {
+                        if (test.getTheme() != null && test.getTheme().getId().equals(theme.getId())) {
+                            result.add(test);
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
+
 
     @Override
     @Transactional

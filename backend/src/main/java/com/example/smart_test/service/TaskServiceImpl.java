@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
+import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.repository.TaskRepositoryInterface;
@@ -41,6 +42,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
     private ThemeServiceInterface themeService;
     @Autowired
     private ResponseOptionServiceInterface responseOptionService;
+    @Autowired
+    private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
 
     @Override
     @Transactional
@@ -151,12 +154,24 @@ public class TaskServiceImpl implements TaskServiceInterface {
         if (userDto == null) {
             throw new IllegalArgumentException("User not found");
         }
+        List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
 
-        List<SubjectUserDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
-                .stream()
-                .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
-                .toList();
+        List<SubjectUserDto> subjectTeachers = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
+        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+            userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId());
+        } else {
+            userList.add(dto);
+        }
+        for (User user : userList) {
+            for (SubjectUserDto subjectTeacher : allSubjectTeachers) {
+                if (subjectTeacher.getUser() != null && subjectTeacher.getUser().getId().equals(user.getId())) {
+                    subjectTeachers.add(subjectTeacher);
+                }
+            }
+        }
 
+        // TODO: Загружаем все темы, индикаторы, задания и связи "задание-индикатор"
         List<ThemeDto> themes = themeService.getAllTheme();
         List<IndicatorDto> indicatorDtoList = indicatorService.getAllIndicators();
         List<TaskDto> allTasks = getAllTasks();
@@ -164,23 +179,35 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
         Set<TaskDto> uniqueTasks = new HashSet<>();
 
-        subjectTeachers.stream()
-                .flatMap(subjectTeacher -> themes.stream()
-                        .filter(theme -> theme.getSubject() != null && theme.getSubject().getId().equals(subjectTeacher.getSubject().getId()))
-                        .flatMap(theme -> indicatorDtoList.stream()
-                                .filter(indicator -> indicator.getTheme() != null && indicator.getTheme().getId().equals(theme.getId()))
-                                .flatMap(indicator -> taskOfIndicatorDtoList.stream()
-                                        .filter(taskOfIndicator -> taskOfIndicator.getIndicator() != null && taskOfIndicator.getIndicator().getId().equals(indicator.getId()))
-                                        .flatMap(taskOfIndicator -> allTasks.stream()
-                                                .filter(task -> task.getId().equals(taskOfIndicator.getTask().getId()))
-                                        )
-                                )
-                        )
-                )
-                .forEach(uniqueTasks::add);
+        for (SubjectUserDto subjectTeacher : subjectTeachers) {
+            // TODO: Ищем темы, относящиеся к предмету пользователя
+            for (ThemeDto theme : themes) {
+                if (theme.getSubject() != null && theme.getSubject().getId().equals(subjectTeacher.getSubject().getId())) {
 
+                    // TODO: Ищем индикаторы, относящиеся к теме
+                    for (IndicatorDto indicator : indicatorDtoList) {
+                        if (indicator.getTheme() != null && indicator.getTheme().getId().equals(theme.getId())) {
+
+                            // TODO: Ищем связи "задание-индикатор", относящиеся к индикатору
+                            for (TaskOfIndicatorDto taskOfIndicator : taskOfIndicatorDtoList) {
+                                if (taskOfIndicator.getIndicator() != null && taskOfIndicator.getIndicator().getId().equals(indicator.getId())) {
+
+                                    // TODO: Ищем само задание по ID и добавляем в множество
+                                    for (TaskDto task : allTasks) {
+                                        if (task.getId().equals(taskOfIndicator.getTask().getId())) {
+                                            uniqueTasks.add(task);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return new ArrayList<>(uniqueTasks);
     }
+
 
 
     @Override
