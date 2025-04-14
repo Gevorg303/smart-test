@@ -22,7 +22,6 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
         for (RequestForTask requestForTask : requestForTaskList) {
             int counterCorrectResponse = 0;
             List<ResponseOptionDto> theUsersResponseOption = new ArrayList<>();
-
             // TODO: получаем правильные варианты ответов на конкретное задание
             List<ResponseOptionDto> correctOptions = responseOptionServiceInterface.getResponseOptionsByTask(requestForTask.getTask());
 
