@@ -9,13 +9,13 @@ import java.util.List;
 
 @Data
 public class ResponseForTask {
-    private TaskDto task;
-    private List<ResponseOptionDto> responseOption;
-    private TestDto test;
+    private TaskDto task; // Задание
+    private List<ResponseOptionDto> responseOption; // Варианты ответа которые дал пользователь с указанием верно оно или нет
+    private int taskScore; // Процент прохождения задания
 
-    public ResponseForTask(TaskDto task, List<ResponseOptionDto> responseOption, TestDto test) {
+    public ResponseForTask(TaskDto task, List<ResponseOptionDto> responseOption, int taskScore) {
         this.task = task;
         this.responseOption = responseOption;
-        this.test = test;
+        this.taskScore = taskScore;
     }
 }

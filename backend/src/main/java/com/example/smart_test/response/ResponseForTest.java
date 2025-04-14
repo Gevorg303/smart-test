@@ -1,20 +1,19 @@
 package com.example.smart_test.response;
 
 import com.example.smart_test.dto.TestDto;
-import com.example.smart_test.dto.TestingAttemptDto;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class ResponseForTest {
-    private TestDto test;
-    private List<ResponseForTask> responseForTask;
-    private TestingAttemptDto testingAttemptDto;
+    private TestDto test; // Тест, который завершил пользователь
+    private List<ResponseForTask> responseForTask; // Лист сущностей, каждая из которых содержит: задание, варианты ответа предоставленные пользователем (с указанием верное оно или нет), процент выполнения каждого задания
+    private int testScore;// Процент прохождения теста
 
-    public ResponseForTest(TestDto test, List<ResponseForTask> responseForTask, TestingAttemptDto testingAttemptDto) {
+    public ResponseForTest(TestDto test, List<ResponseForTask> responseForTask, int testScore) {
         this.test = test;
         this.responseForTask = responseForTask;
-        this.testingAttemptDto = testingAttemptDto;
+        this.testScore = testScore;
     }
 }
