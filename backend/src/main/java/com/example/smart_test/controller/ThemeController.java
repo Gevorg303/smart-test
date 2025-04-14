@@ -52,7 +52,7 @@ public class ThemeController {
     /**
      * Метод для вывода тем пользователя
      * */
-    @GetMapping("/get-theme-by-id-user")
+    @PostMapping("/get-theme-by-id-user")
     public List<ThemeDto> getThemeByIdUser(@RequestBody User user){
         return themeService.getUserThemes(user);
     }
