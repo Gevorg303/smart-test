@@ -9,8 +9,8 @@ import java.util.List;
 
 @Data
 public class RequestForTask {
-    private TaskDto task;
-    private List<ResponseOptionDto> responseOption;
+    private TaskDto task; //Задание
+    private List<ResponseOptionDto> responseOption; //Лист вариантов ответов которые предоставил пользователь
 
     public RequestForTask(TaskDto task, List<ResponseOptionDto> responseOption) {
         this.task = task;
