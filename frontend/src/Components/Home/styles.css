@@ -89,7 +89,7 @@ h1 {
     /*margin-bottom: 10px; /* Уменьшаем отступ снизу для контента */
     height: auto;
     /*background-color: #fff;*/
-    padding-bottom: 18%;
+    /*padding-bottom: 18%;*/
 }
 
 .content-wrapper {
@@ -106,7 +106,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     gap: 10px; /* Уменьшаем отступ между контейнером и кнопкой */
-    margin-bottom: 3%;
+    /*margin-bottom: 3%;*/
     width: 100%;
     max-width: 1600px;
 }
