@@ -46,7 +46,7 @@ public class SubjectController {
      Вывод предметов конкретного пользователя
      */
     @PostMapping("/print-user-subject")
-    public Set<SubjectDto> getSubjectTeacherDto(@RequestBody User user) {
+    public Set<SubjectDto> getSubjectTeacherDto(@RequestBody UserDto user) {
         return subjectService.getSubjectByUser(user);
     }
 

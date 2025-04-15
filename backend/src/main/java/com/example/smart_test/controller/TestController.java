@@ -1,10 +1,7 @@
 package com.example.smart_test.controller;
 
 import com.example.smart_test.domain.User;
-import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
-import com.example.smart_test.dto.TestingAttemptDto;
-import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.request.*;
 import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.response.ResponseForTest;
@@ -60,7 +57,7 @@ public class TestController {
      * Выводит тесты конкретного пользователя
      */
     @PostMapping("/get-user-tests")
-    public List<TestDto> getUserTests(@RequestBody User user) {
+    public List<TestDto> getUserTests(@RequestBody UserDto user) {
         return testService.getUserTests(user);
     }
 

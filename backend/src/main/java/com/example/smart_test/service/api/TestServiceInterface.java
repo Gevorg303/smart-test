@@ -25,7 +25,7 @@ public interface TestServiceInterface {
 
     List<TestDto> outputTestsByIDTheme(ThemeDto themeDto);
 
-    List<TestDto> getUserTests(User user);
+    List<TestDto> getUserTests(UserDto user);
 
     ResponseForTest endTesting(EndTestingRequest endTestingRequest);
 

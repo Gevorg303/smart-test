@@ -8,6 +8,8 @@ import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.RequestForTask;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +32,7 @@ public interface TaskServiceInterface {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     Set<TaskDto> displayTheAvailableTasks(ThemeDto theme);
 
-    List<TaskDto> getUserTasks(User user);
+    List<TaskDto> getUserTasks(UserDto user);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void addTaskToTest(Long testId, Long taskId);
@@ -41,5 +43,5 @@ public interface TaskServiceInterface {
     @Transactional
     void removeTaskFromTest(TaskDto taskDto);
 
-    Task updateTask(Task updatedTask);
+    void updateTask(RequestForTask updatedTask);
 }

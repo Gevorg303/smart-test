@@ -10,6 +10,7 @@ import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.ThemeMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.ThemeRepositoryInterface;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import com.example.smart_test.service.api.ThemeServiceInterface;
@@ -38,6 +39,8 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
     private SubjectUserServiceInterface subjectUserService;
     @Autowired
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     public ThemeDto addThemeDto(ThemeDto dto) {
@@ -96,21 +99,22 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
 
     @Transactional
     @Override
-    public List<ThemeDto> getUserThemes(User dto) {
-        UserDto userDto = userService.getUserByLogin(dto);
+    public List<ThemeDto> getUserThemes(UserDto dto) {
+        UserDto userDto = userService.getUserByLogin(userMapper.toEntity(dto));
         if (userDto == null) {
             throw new IllegalArgumentException("User not found");
         }
 
         List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
-        if (dto.getRoles().getRole().equals(UserRoleEnum.ADMIN.name())) {
-            userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(dto.getId());
+        List<UserDto> userList = new ArrayList<>();
+        if (dto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+            for (User user : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(dto.getId()))
+                userList.add(userMapper.toDTO(user));
         } else {
             userList.add(dto);
         }
-        for (User user : userList) {
+        for (UserDto user : userList) {
             for (SubjectUserDto subjectTeacher : allSubjectTeachers) {
                 if (subjectTeacher.getUser() != null && subjectTeacher.getUser().getId().equals(user.getId())) {
                     subjectTeachers.add(subjectTeacher);

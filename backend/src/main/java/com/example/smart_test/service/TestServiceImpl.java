@@ -6,6 +6,7 @@ import com.example.smart_test.enums.TypeTestEnum;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.request.EndTestingRequest;
 import com.example.smart_test.request.TestSimulatorRequest;
@@ -51,6 +52,8 @@ public class TestServiceImpl implements TestServiceInterface {
     private TestingAttemptMapperInterface testingAttemptMapper;
     @Autowired
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
@@ -113,8 +116,8 @@ public class TestServiceImpl implements TestServiceInterface {
 
     @Override
     @Transactional
-    public List<TestDto> getUserTests(User user) {
-        if (userService.getUserByLogin(user) == null) {
+    public List<TestDto> getUserTests(UserDto user) {
+        if (userService.getUserByLogin(userMapper.toEntity(user)) == null) {
             throw new IllegalArgumentException("User not found");
         }
         List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
@@ -122,10 +125,10 @@ public class TestServiceImpl implements TestServiceInterface {
         // TODO: Фильтруем по текущему пользователю
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
         List<User> userList = new ArrayList<>();
-        if (user.getRoles().getRole().equals(UserRoleEnum.ADMIN.name())) {
+        if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
             userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
         } else {
-            userList.add(user);
+            userList.add(userMapper.toEntity(user));
         }
         for (User user1 : userList) {
             for (SubjectUserDto subjectTeacher : allSubjectTeachers) {
@@ -209,7 +212,7 @@ public class TestServiceImpl implements TestServiceInterface {
             if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
                 if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.TRAINER.getId())) {
                     trainerTest = findTestByENTRY_TESTType(request.getUser());
-                    taskSet.addAll(testGeneratorService.generatorTasks(request.getUser(), trainerTest, testDto.getNumberOfTasksPerError()));
+                    taskSet.addAll(testGeneratorService.generatorTasks(userMapper.toEntity(request.getUser()), trainerTest, testDto.getNumberOfTasksPerError()));
                     trainerTest = testDto;
                 }
             }
@@ -222,7 +225,7 @@ public class TestServiceImpl implements TestServiceInterface {
         return Collections.emptyList();
     }
 
-    private TestDto findTestByENTRY_TESTType(User user) {
+    private TestDto findTestByENTRY_TESTType(UserDto user) {
         List<TestDto> testDtoList = getUserTests(user);
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.ENTRY_TEST.getId())) {

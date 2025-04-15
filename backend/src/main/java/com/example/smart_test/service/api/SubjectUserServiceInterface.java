@@ -7,6 +7,7 @@ import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,7 +26,7 @@ public interface SubjectUserServiceInterface {
     List<SubjectUserDto> getAllSubjectTeachers();
 
     @Transactional
-    List<SubjectUser> findByUserId(User user);
+    List<SubjectUser> findByUserId(UserDto user);
 
     @Transactional
     Set<SubjectDto> getSubjectsByUsers(List<User> users);

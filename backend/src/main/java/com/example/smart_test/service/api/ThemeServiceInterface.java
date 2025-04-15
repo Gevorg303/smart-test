@@ -4,6 +4,7 @@ import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.UserDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ public interface ThemeServiceInterface {
     ThemeDto getThemeById(Long id);
 
     @Transactional
-    List<ThemeDto> getUserThemes(User dto);
+    List<ThemeDto> getUserThemes(UserDto dto);
 
     Theme updateTheme(Theme updatedTheme);
 }

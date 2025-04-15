@@ -4,6 +4,7 @@ import com.example.smart_test.domain.Indicator;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.IndicatorDto;
+import com.example.smart_test.dto.UserDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public interface IndicatorServiceInterface {
     List<Indicator> findIndicatorByIdTheme(Theme theme);
 
     @Transactional
-    List<IndicatorDto> getUserIndicators(User dto);
+    List<IndicatorDto> getUserIndicators(UserDto dto);
 
     Indicator updateIndicator(Indicator updatedIndicator);
 }
