@@ -7,6 +7,7 @@ import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.IndicatorMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.IndicatorRepositoryInterface;
 import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,6 +36,8 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
     private IndicatorMapperInterface indicatorMapperInterface;
     @Autowired
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     public IndicatorDto addIndicatorDto(IndicatorDto dto) {
@@ -96,20 +99,22 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
     @Transactional
     @Override
-    public List<IndicatorDto> getUserIndicators(User dto) {
-        UserDto userDto = userService.getUserByLogin(dto);
+    public List<IndicatorDto> getUserIndicators(UserDto dto) {
+        UserDto userDto = userService.getUserByLogin(userMapper.toEntity(dto));
         if (userDto == null) {
             throw new IllegalArgumentException("User not found");
         }
-        List<User> userList = new ArrayList<>();
+        List<UserDto> userList = new ArrayList<>();
         if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
-            userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId());
+            for (User user : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
+                userList.add(userMapper.toDTO(user));
+            }
         } else {
             userList.add(dto);
         }
         List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
-        for (User user : userList) {
+        for (UserDto user : userList) {
             for (SubjectUserDto subjectTeacher : allSubjectTeachers) {
                 if (subjectTeacher.getUser() != null && subjectTeacher.getUser().getId().equals(user.getId())) {
                     subjectTeachers.add(subjectTeacher);

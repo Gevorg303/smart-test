@@ -4,6 +4,7 @@ import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.service.api.ThemeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public class ThemeController {
      * Метод для вывода тем пользователя
      * */
     @PostMapping("/get-theme-by-id-user")
-    public List<ThemeDto> getThemeByIdUser(@RequestBody User user){
+    public List<ThemeDto> getThemeByIdUser(@RequestBody UserDto user){
         return themeService.getUserThemes(user);
     }
 

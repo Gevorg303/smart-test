@@ -5,7 +5,9 @@ import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.TaskRepositoryInterface;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
     private ResponseOptionServiceInterface responseOptionService;
     @Autowired
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     @Transactional
@@ -149,21 +153,23 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
-    public List<TaskDto> getUserTasks(User dto) {
-        UserDto userDto = userService.getUserByLogin(dto);
+    public List<TaskDto> getUserTasks(UserDto dto) {
+        UserDto userDto = userService.getUserByLogin(userMapper.toEntity(dto));
         if (userDto == null) {
             throw new IllegalArgumentException("User not found");
         }
         List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
 
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
+        List<UserDto> userList = new ArrayList<>();
         if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
-            userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId());
+            for (User user :  userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
+                userList.add(userMapper.toDTO(user));
+            }
         } else {
-            userList.add(dto);
+            userList.add(userDto);
         }
-        for (User user : userList) {
+        for (UserDto user : userList) {
             for (SubjectUserDto subjectTeacher : allSubjectTeachers) {
                 if (subjectTeacher.getUser() != null && subjectTeacher.getUser().getId().equals(user.getId())) {
                     subjectTeachers.add(subjectTeacher);
@@ -241,16 +247,24 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
-    public Task updateTask(Task updatedTask) {
-        return taskRepositoryInterface.findById(updatedTask.getId())
-                .map(task -> {
-                    task.setTest(updatedTask.getTest());
-                    task.setTypeTask(updatedTask.getTypeTask());
-                    task.setExplanation(updatedTask.getExplanation());
-                    task.setTaskText(updatedTask.getTaskText());
-                    return taskRepositoryInterface.save(task);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Задание с ID " + updatedTask.getId() + " не найдено"));
+    public void updateTask(RequestForTask updatedTask) {
+        Task task = taskRepositoryInterface.findById(updatedTask.getTask().getId()).orElse(null);
+
+        if (task == null) {
+            throw new EntityNotFoundException("Задание с ID " + updatedTask.getTask().getId() + " не найдено");
+        }
+
+        if (updatedTask.getTask() != null) {
+            //task.setTest(updatedTask.getTask().getTest());
+            task.setTypeTask(updatedTask.getTask().getTypeTask());
+            task.setExplanation(updatedTask.getTask().getExplanation());
+            task.setTaskText(updatedTask.getTask().getTaskText());
+            taskRepositoryInterface.save(task);
+        }
+
+        if (updatedTask.getResponseOption() != null) {
+            responseOptionService.updateResponseOption(updatedTask.getResponseOption());
+        }
     }
 
     private List<TaskDto> getDtoList(List<Task> taskList) {

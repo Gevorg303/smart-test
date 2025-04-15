@@ -5,6 +5,7 @@ import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
@@ -93,7 +94,7 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
 
     @Transactional
     @Override
-    public List<SubjectUser> findByUserId(User user) {
+    public List<SubjectUser> findByUserId(UserDto user) {
         return subjectUserRepositoryInterface.findByUserId(user.getId());
     }
 

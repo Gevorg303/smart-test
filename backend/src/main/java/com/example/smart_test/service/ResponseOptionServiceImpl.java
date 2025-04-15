@@ -89,4 +89,16 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
         }
         return responseOptionDtoList;
     }
+
+    @Override
+    public void updateResponseOption(List<ResponseOptionDto> responseOptionDtoList) {
+        for (ResponseOptionDto responseOptionDto : responseOptionDtoList) {
+            ResponseOption responseOption = responseOptionRepositoryInterface.findById(responseOptionDto.getId()).orElse(null);
+            if (responseOption != null) {
+                responseOption.setResponse(responseOptionDto.getResponse());
+                responseOption.setQuestion(responseOptionDto.getQuestion());
+                responseOptionRepositoryInterface.save(responseOption);
+            }
+        }
+    }
 }

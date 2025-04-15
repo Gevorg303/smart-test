@@ -23,4 +23,6 @@ public interface ResponseOptionServiceInterface {
     List<ResponseOption> findAllResponseOptionsByTaskId(Task task);
 
     List<ResponseOptionDto> getResponseOptionsByTask(TaskDto taskDto);
+
+    void updateResponseOption(List<ResponseOptionDto> responseOptionDtoList);
 }

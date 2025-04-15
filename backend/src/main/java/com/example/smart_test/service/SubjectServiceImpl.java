@@ -5,8 +5,10 @@ import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.SubjectRepositoryInterface;
 import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.request.AddSubjectRequest;
@@ -37,6 +39,8 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
     private SubjectUserServiceInterface subjectUserService;
     @Autowired
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     @Transactional
@@ -98,24 +102,26 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
 
     @Transactional
     @Override
-    public Set<SubjectDto> getSubjectByUser(User user) {
+    public Set<SubjectDto> getSubjectByUser(UserDto user) {
         // TODO: Проверка на null и корректность пользователя
         if (user == null || user.getId() == null) {
             throw new IllegalArgumentException("Некорректный пользователь: ID не должен быть null");
         }
 
         try {
-            List<User> userList = new ArrayList<>();
+            List<UserDto> userList = new ArrayList<>();
 
             // TODO: Если пользователь - админ, получаем всех пользователей учреждения (кроме него самого)
-            if (user.getRoles().getRole().equals(UserRoleEnum.ADMIN.name())) {
-                userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
+            if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+                for (User user1 : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId())) {
+                    userList.add(userMapper.toDTO(user1));
+                }
             } else {
                 // TODO: Иначе обрабатываем только текущего пользователя
                 userList.add(user);
             }
             Set<SubjectDto> subjectDtoList = new HashSet<>();
-            for (User currentUser : userList) {
+            for (UserDto currentUser : userList) {
                 // TODO: Получаем список связей "пользователь-предмет"
                 List<SubjectUser> subjectUserList = subjectUserService.findByUserId(currentUser);
 

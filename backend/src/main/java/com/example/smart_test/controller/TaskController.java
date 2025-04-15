@@ -3,7 +3,9 @@ package com.example.smart_test.controller;
 import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.TaskDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.AddTaskRequest;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +48,7 @@ public class TaskController {
      Выводит задачи конкретного пользователя
      */
     @PostMapping("/get-user-tasks")
-    public List<TaskDto> getUserTasks(@RequestBody User user) {
+    public List<TaskDto> getUserTasks(@RequestBody UserDto user) {
         return taskService.getUserTasks(user);
     }
 
@@ -70,9 +72,8 @@ public class TaskController {
      * Запрос для обновления задания
      * */
     @PutMapping("/update-task")
-    public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask) {
-        Task task = taskService.updateTask(updatedTask);
-        return ResponseEntity.ok(task);
+    public void updateTask(@RequestBody RequestForTask updatedTask) {
+        taskService.updateTask(updatedTask);
     }
 
 //    @GetMapping("/find-test")
