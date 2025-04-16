@@ -263,7 +263,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
         }
 
         if (updatedTask.getResponseOption() != null) {
-            responseOptionService.updateResponseOption(updatedTask.getResponseOption());
+            responseOptionService.updateResponseOption(updatedTask);
         }
     }
 

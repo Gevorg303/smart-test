@@ -7,6 +7,7 @@ import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.mapper.api.ResponseOptionMapperInterface;
 import com.example.smart_test.repository.ResponseOptionRepositoryInterface;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.service.api.ResponseOptionServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,13 +92,20 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     }
 
     @Override
-    public void updateResponseOption(List<ResponseOptionDto> responseOptionDtoList) {
-        for (ResponseOptionDto responseOptionDto : responseOptionDtoList) {
-            ResponseOption responseOption = responseOptionRepositoryInterface.findById(responseOptionDto.getId()).orElse(null);
+    public void updateResponseOption(RequestForTask updatedTask) {
+        List<ResponseOptionDto> dtoList = updatedTask.getResponseOption();
+
+        for (ResponseOption responseOption : responseOptionRepositoryInterface.findByTaskId(updatedTask.getTask().getId())) {
             if (responseOption != null) {
-                responseOption.setResponse(responseOptionDto.getResponse());
-                responseOption.setQuestion(responseOptionDto.getQuestion());
-                responseOptionRepositoryInterface.save(responseOption);
+                for (ResponseOptionDto dto : dtoList) {
+                    if (dto.getId() != null && dto.getId().equals(responseOption.getId())) {
+                        responseOption.setQuestion(dto.getQuestion());
+                        responseOption.setResponse(dto.getResponse());
+                        responseOption.setValidResponse(dto.isValidResponse());
+                        responseOptionRepositoryInterface.save(responseOption);
+                        break;
+                    }
+                }
             }
         }
     }
