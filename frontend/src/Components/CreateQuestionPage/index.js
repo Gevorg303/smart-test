@@ -150,7 +150,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                         onClick(currentAnswers.length,{
                             question: "",
                             response: "",
-                            evaluationResponse: "0"
+                            validResponse: false
                         });
                         console.log(currentAnswers)
                     }}>Добавить вариант ответа</Button>
@@ -167,7 +167,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                         array[0] = {
                             question: "",
                             response: e.target.value,
-                            evaluationResponse: "100"
+                            validResponse: true
                         };
                         setCurrentAnswers(array);
                        // console.log(currentAnswers);
@@ -183,7 +183,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                         onClick(currentAnswers.length,{
                             question: "",
                             response: "",
-                            evaluationResponse: "0"
+                            validResponse: false
                         });
                         console.log(currentAnswers)
                     }}>Добавить вариант ответа</Button>

@@ -19,7 +19,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
                             onClick(id,{
                                 question: "",
                                 response: e.target.value,
-                                evaluationResponse: answers[id].evaluationResponse
+                                validResponse: answers[id].validResponse
                             });
                         }} ></Form.Control>
                         <Form.Label>Верный:</Form.Label>
@@ -28,12 +28,12 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
                             type={'checkbox'}
                             id={id}
                             name="answer"
-                            checked={answers[id].evaluationResponse==100?true:false}
+                            checked={answers[id].validResponse}
                             onChange={(e)=>{
                                 onClick(id,{
                                     question: "",
                                     response: answers[id].response,
-                                    evaluationResponse: answers[id].evaluationResponse==100?0:100
+                                    validResponse: answers[id].validResponse
                                 });
                             }}
                         />
@@ -45,7 +45,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
                             onClick(id,{
                                 question: e.target.value,
                                 response: answers[id].response,
-                                evaluationResponse: "100"
+                                validResponse: true
                             });
                         }}></Form.Control>
                         <Form.Label>Вариант ответа: </Form.Label>
@@ -53,7 +53,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
                             onClick(id,{
                                 question: answers[id].question,
                                 response: e.target.value,
-                                evaluationResponse: "100"
+                                validResponse: true
                             });
                         }}></Form.Control>
                     </>

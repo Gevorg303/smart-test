@@ -54,7 +54,7 @@ const Theme = (props) => {
             }
         }
         fetchTests();
-    }, [props.id, navigate]);
+    }, [props.id]);
 
     return (
         <div className="accordion">
