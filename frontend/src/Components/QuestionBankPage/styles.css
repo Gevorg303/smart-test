@@ -82,3 +82,16 @@
 .button-quest:active {
     background-color: #388E3C !important;
 }
+.no-items-message {
+    font-size: 26px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.scrollable-container {
+    height: 100vh; /* Высота контейнера равна высоте viewport */
+    overflow-y: auto; /* Включаем вертикальную прокрутку */
+    padding: 20px; /* Отступы вокруг контента */
+    box-sizing: border-box; /* Включаем box-sizing для корректного отображения отступов */
+
+}

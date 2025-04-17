@@ -159,3 +159,10 @@ h1 {
     width: 100%;
     text-align: center;
 }
+
+.no-subjects-message {
+    font-size: 26px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}

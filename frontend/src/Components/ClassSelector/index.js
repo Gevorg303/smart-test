@@ -114,13 +114,14 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                     }
                     const subjectsJson = await response.json();
                     console.log(subjectsJson)
-                        //setThemes(subjectsJson)
+                    //setThemes(subjectsJson)
                     if(subjectsJson!=null)
                     {
-                        const array = []
+                        /*const array = []
                         subjectsJson.map((item, index) => array[item.id] = true)
                         setIds(array)
-                        console.log(array)
+                        console.log(array)*/
+                        setThemes(subjectsJson);
                     }
                 }
                 else
@@ -132,13 +133,13 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         }
         //console.log("prop changed: "+targetSubject.id)
         fetchQuestions();
-    }, [targetSubject,]);
-    useEffect(() => {
+    }, [targetSubject]);
+    /*useEffect(() => {
         async function fetchQuestions() {
             try {
                 if(targetSubject!=null) {
 
-                    /*   */
+                    /*
                     const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
                         credentials: "include",
                     });
@@ -172,19 +173,19 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         }
         //console.log("prop changed: "+targetSubject.id)
         fetchQuestions();
-    }, [targetSubject,/*classes*/ids]);
+    }, [targetSubject,ids]);*/
     return (
         <>
             <h3>Классы:</h3>
             {targetSubject != null ?
                 themes.map((item, index) => <Form.Check // prettier-ignore
-                        key={item.id}
+                        key={item.studentClassDto.id}
                         type={'checkbox'}
-                        checked={ids[item.id] || false}
-                        id={item.id}
+                        checked={item.status}
+                        id={item.studentClassDto.id}
                         name="class"
-                        label={item.numberOfInstitution + item.letterDesignation}
-                        onChange={() => onClick(item.id)}
+                        label={item.studentClassDto.numberOfInstitution + item.studentClassDto.letterDesignation}
+                        onChange={() => onClick(item.studentClassDto.id)}
                     />
                     /*<p key={item.id} value={item.id} > {item.nameOfTheClass}  </p>*/)
                 :

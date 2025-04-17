@@ -128,11 +128,12 @@ const QuestionBankPage = ({type}) => {
                     //setTitle("Банк тем"); // задать заголовок на странице
                     setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate}/>);
 
-                    const response5 = await fetch('http://localhost:8080/theme/all', {
-                        method: 'GET',
+                    const response5 = await fetch('http://localhost:8080/theme/get-theme-by-id-user', {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
-                        }
+                        },
+                        body: JSON.stringify(user)
                     });
                     if (!response5.ok) {
                         throw new Error('Ошибка получения тем');
@@ -149,11 +150,12 @@ const QuestionBankPage = ({type}) => {
                     //setTitle("Банк индикаторов"); // задать заголовок на странице
                     setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate}/>);
 
-                    const response6 = await fetch('http://localhost:8080/indicator/all', {
-                        method: 'GET',
+                    const response6 = await fetch('http://localhost:8080/indicator/indicator-by-user', {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
-                        }
+                        },
+                        body: JSON.stringify(user)
                     });
                     if (!response6.ok) {
                         throw new Error('Ошибка получения индикаторов');
@@ -172,44 +174,43 @@ const QuestionBankPage = ({type}) => {
     }, [type,editItem,toastText, setTopText]);
     /* className="page-container-quest"*/
     return (
-        <div>
-            {/*<h1>{/*isTests ? "Тесты" : "Задания"title}</h1>*/}
+        <div className="scrollable-container"> {/* Добавлена эта строка */}
             <div className="page-container-quest">
                 <div className="button-containers">
-                    <Sorting type={type} setBankItems={setBankItems}/>
+                    <Sorting type={type} setBankItems={setBankItems} />
                     <Button variant="success" className="create-button" onClick={() => {
-                        setShowCreateModal(true)
+                        setShowCreateModal(true);
                     }}>Создать</Button>
                 </div>
-                    <Modal
-                        show={showCreateModal || showEditModal}
-                        onHide={() => {
-                            setShowCreateModal(false);
-                            setShowEditModal(false)
-                            setEditItem(null);
-                        }}
-                        dialogClassName="modal-90w"
-                        size="xl"
-                        aria-labelledby="example-custom-modal-styling-title"
-                    >
-                        <Modal.Header closeButton>
-                        </Modal.Header>
-                        <Modal.Body>
+                <Modal
+                    show={showCreateModal || showEditModal}
+                    onHide={() => {
+                        setShowCreateModal(false);
+                        setShowEditModal(false);
+                        setEditItem(null);
+                    }}
+                    dialogClassName="modal-90w"
+                    size="xl"
+                    aria-labelledby="example-custom-modal-styling-title"
+                >
+                    <Modal.Header closeButton></Modal.Header>
+                    <Modal.Body>
+                        {createModal}
+                    </Modal.Body>
+                </Modal>
 
-                            {createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
-
-                        </Modal.Body>
-                    </Modal>
-
-                    {bankItems.map((item, index) => <BankCard key={index} id={item.id} objectItem={item} type={type}
-                                                              setEditItem={EditFunc}/>)}
-
-
-                </div>
+                {bankItems.length > 0 ? (
+                    bankItems.map((item, index) => (
+                        <BankCard key={index} id={item.id} objectItem={item} type={type} setEditItem={EditFunc} />
+                    ))
+                ) : (
+                    <p className="no-items-message">Нет доступных элементов</p>
+                )}
+            </div>
             <ToastContainer
                 className="p-3"
                 position={'middle-center'}
-                style={{zIndex: 1}}
+                style={{ zIndex: 1 }}
             >
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
                     <Toast.Header closeButton={false}>
@@ -223,9 +224,8 @@ const QuestionBankPage = ({type}) => {
                     <Toast.Body>{toastText}</Toast.Body>
                 </Toast>
             </ToastContainer>
-            {/*<Footer/>*/}
-            </div>
-            );
-            };
+        </div>
+);
+};
 
             export default QuestionBankPage;

@@ -30,7 +30,7 @@ body {
     /*padding: 15px;*/
 
    /* margin-bottom: 15px;*/
-    margin-bottom: 20vh;
+    /*margin-bottom: 20vh;*/
     width: 80%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     /*margin-top: 5%;*/
@@ -115,6 +115,7 @@ body {
     background-color: #fff; /* Стиль для другой группы страниц */
     box-shadow: 0 2px 4px rgba(0.2, 0.2, 0.2, 0.5); /* Уменьшаем тень */
     max-height: none;
+    margin-bottom: 200px;
 }
 /*.page-style-top-1 {
     padding-top: 100px;
