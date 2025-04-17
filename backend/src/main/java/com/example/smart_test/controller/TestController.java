@@ -108,4 +108,12 @@ public class TestController {
     public List<TestingAttemptDto> findTestingAttemptByTest(@RequestBody TestingAttemptAndTest request) {
         return testService.findTestingAttemptByTest(request);
     }
+
+    /**
+     * Метод для обновления данных теста
+     * */
+    @PutMapping("update-test")
+    public void updateTest(@RequestBody EditingTheTestRequest request) {
+        testService.updateTest(request);
+    }
 }
