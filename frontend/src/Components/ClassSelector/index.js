@@ -4,26 +4,30 @@ import { Form, Button } from 'react-bootstrap';
 const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
     const [themes, setThemes] = useState([]); //все классы
     const [ids, setIds] = useState([]); // связанные классы
+    let flag = false;
 
-    const onClick = async (id) => {
+    const onClick = async (id, value) => {
         const newIds = [...ids];
         const currentState = newIds[id];
 
-        if (currentState) {
+
+        if (!value) {
             console.log("delete");
             try {
                 const subjectDto = {
                     id: targetSubject.id,
                     name: targetSubject.name,
-                    // Добавьте другие поля, если они есть в SubjectDto
                 };
 
-                const studentClassDto = {
-                    id: id,
-                    numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
-                    letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                    // Добавьте другие поля, если они есть в StudentClassDto
-                };
+                const themesFind = themes.find(item => item.id === id);
+                let studentClassDto;
+                if (themesFind != undefined)
+                {
+                    studentClassDto = {
+                        id: id,
+                        numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
+                        letterDesignation: themes.find(item => item.id === id).letterDesignation,
+                    };}
 
                 const response = await fetch('http://localhost:8080/user-subject/remove', {
                     method: 'DELETE',
@@ -52,15 +56,16 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                 const subjectDto = {
                     id: targetSubject.id,
                     name: targetSubject.name,
-                    // Добавьте другие поля, если они есть в SubjectDto
                 };
-
-                const studentClassDto = {
+                const themesFind = themes.find(item => item.id === id);
+                let studentClassDto;
+                if (themesFind != undefined)
+                {
+                    studentClassDto = {
                     id: id,
                     numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
                     letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                    // Добавьте другие поля, если они есть в StudentClassDto
-                };
+                };}
 
                 const response = await fetch('http://localhost:8080/user-subject/add', {
                     method: 'POST',
@@ -86,6 +91,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         }
 
         newIds[id] = !currentState;
+        flag = !flag;
         setIds(newIds);
 
         /*  const newClasses = [...classes];
@@ -133,7 +139,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         }
         //console.log("prop changed: "+targetSubject.id)
         fetchQuestions();
-    }, [targetSubject]);
+    }, [targetSubject, flag]);
     /*useEffect(() => {
         async function fetchQuestions() {
             try {
@@ -185,7 +191,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                         id={item.studentClassDto.id}
                         name="class"
                         label={item.studentClassDto.numberOfInstitution + item.studentClassDto.letterDesignation}
-                        onChange={() => onClick(item.studentClassDto.id)}
+                        onChange={(e) => onClick(item.studentClassDto.id, e.target.value)}
                     />
                     /*<p key={item.id} value={item.id} > {item.nameOfTheClass}  </p>*/)
                 :

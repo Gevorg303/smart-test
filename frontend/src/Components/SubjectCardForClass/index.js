@@ -4,6 +4,7 @@ import {Button} from "react-bootstrap";
 import EditImage from '../../images/pencil.png';
 import { Accordion } from 'react-bootstrap';
 
+
 const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject/*, setCurrentClasses*/}) => {
 
     const [classes, setClasses] = useState();
@@ -26,6 +27,7 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject/*, setC
             //setCurrentClasses(subjectsJson)
             const array = [];
             subjectsJson.forEach(subject => {
+                //if (subject.status)
                 array.push(
                     <p>{subject.studentClassDto.numberOfInstitution + subject.studentClassDto.letterDesignation}</p>
                 );
