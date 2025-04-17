@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
         for (UserRequest userRequest : userRequestList) {
             try {
-                validateUserRequest(userRequest);
+                //validateUserRequest(userRequest);
 
                 Pair<User, String> userWithPassword = prepareUserEntity(userRequest);
                 User newUser = userRepository.save(userWithPassword.getLeft());
@@ -107,9 +107,10 @@ public class UserServiceImpl implements UserServiceInterface {
         return Pair.of(userEntity, rawPassword);
     }
 
-
     private void linkUserToEducationalInstitution(UserRequest userRequest, User newUser) {
-        EducationalInstitution educationalInstitution = educationalInstitutionRepository.findById(userRequest.getEducationalInstitution().getId())
+        StudentClass studentClass = studentClassRepository.findById(userRequest.getStudentClass().getId()).orElse(null);
+        assert studentClass != null;
+        EducationalInstitution educationalInstitution = educationalInstitutionRepository.findById(studentClass.getEducationalInstitution().getId())
                 .orElseThrow(() -> new RuntimeException("Учебное заведение не найдено"));
         userEducationalInstitutionService.addUserEducationalInstitution(new UserEducationalInstitution(newUser, educationalInstitution));
     }
