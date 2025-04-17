@@ -8,6 +8,7 @@ import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
+import com.example.smart_test.request.EditingTheTestRequest;
 import com.example.smart_test.request.EndTestingRequest;
 import com.example.smart_test.request.TestSimulatorRequest;
 import com.example.smart_test.request.TestingAttemptAndTest;
@@ -245,4 +246,29 @@ public class TestServiceImpl implements TestServiceInterface {
         return testingAttemptDtoList;
     }
 
+    @Override
+    @Transactional
+    public void updateTest(EditingTheTestRequest request) {
+        if (request.getTestDto() != null) {
+            Test test = testRepository.findById(request.getTestDto().getId()).orElse(null);
+            if (test != null) {
+                test.setClosingDateAndTime(request.getTestDto().getClosingDateAndTime());
+                test.setPassageTime(request.getTestDto().getPassageTime());
+                test.setOpeningDateAndTime(request.getTestDto().getOpeningDateAndTime());
+                test.setTheme(request.getTestDto().getTheme());
+                test.setTypeTest(request.getTestDto().getTypeTest());
+                test.setNumberOfAttemptsToPass(request.getTestDto().getNumberOfAttemptsToPass());
+                test.setDescription(request.getTestDto().getDescription());
+                test.setTestPassword(request.getTestDto().getTestPassword());
+                test.setNumberOfTasksPerError(request.getTestDto().getNumberOfTasksPerError());
+                test.setPassThreshold(request.getTestDto().getPassThreshold());
+                testRepository.save(test);
+            }
+        }
+        if (request.getTaskDtoList() != null) {
+            for (TaskDto taskDto : request.getTaskDtoList()) {
+                taskService.removeTaskFromTest(taskDto);
+            }
+        }
+    }
 }

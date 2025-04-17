@@ -1,14 +1,12 @@
 package com.example.smart_test.controller;
 
 import com.example.smart_test.domain.Task;
-import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.AddTaskRequest;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
