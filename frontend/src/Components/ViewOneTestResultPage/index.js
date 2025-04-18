@@ -13,7 +13,7 @@ const ViewTestResultsPage = (props) => {
 
     const [questions, setQuestions] = useState([]);
     const validList = JSON.parse(`${sessionStorage.getItem("testResult")}`)||[];
-    const [answers, setAnswers] = useState(validList.map((item, index) => item.response));
+    const [answers, setAnswers] = useState(validList.responseForTask/*.map((item, index) => item.response)*/);
     let ra = 0;
     for (let number = 0; number < validList.length; number++) {
         validList[number].status ? ra++ : ra = ra;
@@ -50,6 +50,7 @@ const ViewTestResultsPage = (props) => {
                 }
                 const test = await response.json();
                 setText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
+                setCurrentPassingScore(test.passThreshold);
                 //setCurrentPassingScore(test.passingScore); // проходной балл теста
                 const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
                     method: 'POST',
@@ -64,7 +65,8 @@ const ViewTestResultsPage = (props) => {
                 const questionsJson = await response2.json();
                 setQuestions(questionsJson);
                 setCountOfQuestions(questionsJson.length);
-                setScore((rightAnswers / questionsJson.length) * 100);
+               // setScore((rightAnswers / questionsJson.length) * 100);
+                setScore(validList.testScore);
                 setTopText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -111,14 +113,14 @@ const ViewTestResultsPage = (props) => {
                             </tr>
                             <tr>
                                 <td>Оценка:</td>
-                                <td> {score >= 60/*currentPassingScore*/ ? "Зачтено" : "Не зачтено"}</td>
+                                <td> {score >= currentPassingScore ? "Зачтено" : "Не зачтено"}</td>
                             </tr>
                             </tbody>
                         </Table>
                         {questions.map((item, index) => (
                             <Question
                                 key={index}
-                                qStatus={validList[index].status}
+                                qStatus={validList[index]!=undefined?(validList[index].taskScore==0?false:true):false}
                                 view
                                 id={index}
                                 item={questions[index]}

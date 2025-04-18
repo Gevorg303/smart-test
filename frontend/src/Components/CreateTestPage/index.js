@@ -87,6 +87,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                         passageTime : passingTime,
                         testPassword : currentPassword,
                         numberOfTasksPerError: countOfTaskByError,
+                        passThreshold: currentPassingScore,
                         theme:{
                             id: theme
                         },
@@ -117,7 +118,7 @@ const CreateTestPage = ({editItem, onCreate}) => {
                             passageTime : passingTime,
                             testPassword : currentPassword,
                             numberOfTasksPerError: countOfTaskByError,
-                           // passingScore: currentPassingScore,
+                            passThreshold: currentPassingScore,
                             theme:{
                                 id: theme
                             },

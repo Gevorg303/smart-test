@@ -1,29 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const DisplayTestTextAnswers = ({id,view,currentAnswers,setCurrentAnswers,setAnswers,setActive,qsCount,answers}) => {
+const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,setActive,qsCount}) => {
 
     const [userAnswer, setUserAnswer] = useState('');
 
-    const handleInputChange = (id, answer) => {
-        const array = [...currentAnswers];
+    const handleInputChange = (answer) => {
+       /* const array = [...currentAnswers];
         array[id] = answer;
         setCurrentAnswers(array);
+        setUserAnswer(answer);*/
+        const find = currentAnswers.find(el => el.task.id===item.id);
+        if(find != undefined) {
+            currentAnswers[currentAnswers.indexOf(find)] =
+            {
+                task:{id:item.id},
+                responseOption:[
+                    {
+                        question: null,
+                        response: answer,
+                    }
+                ]
+            }
+        } else{
+            currentAnswers.push(
+                {
+                task:{id:item.id},
+                responseOption:[
+                    {
+                        question: null,
+                        response: answer,
+                    }
+                ]
+                }
+            );
+        }
         setUserAnswer(answer);
         console.log(answer)
         console.log(currentAnswers)
     };
 
-    const onClick = (id, answer) => {
-        const array = [...answers];
+    const onClick = () => {
+       /* const array = [...answers];
         array[id] = answer;
-        setAnswers(array);
+        setAnswers(array);*/
+        setAnswers(currentAnswers);
         setActive(prev => qsCount === prev + 1 ? prev : prev + 1);
     };
 
     useEffect(() => {
         if (view) {
-            setUserAnswer(currentAnswers[id]);
+            const find = currentAnswers.find(el => el.task.id===item.id);
+            setUserAnswer(currentAnswers[currentAnswers.indexOf(find)].responseOption[0].response);
         }
 
     }, [view, currentAnswers, id]);
@@ -34,8 +62,8 @@ const DisplayTestTextAnswers = ({id,view,currentAnswers,setCurrentAnswers,setAns
                 <Form.Control
                     type="text"
                     placeholder="Ответ"
-                    value={view ? userAnswer : (currentAnswers[id] || "")}
-                    onChange={(e) => handleInputChange(id, e.target.value)}
+                    value={view ? userAnswer : (currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))]!=undefined?currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))].responseOption[0].response:"" || "")}
+                    onChange={(e) => handleInputChange( e.target.value)}
                     required
                     readOnly={view}
                 />
@@ -44,7 +72,7 @@ const DisplayTestTextAnswers = ({id,view,currentAnswers,setCurrentAnswers,setAns
             {view ? (
                 <></>
             ) : (
-                <Button className="answer-button" onClick={() => onClick(id, currentAnswers[id])}>Ответить</Button>
+                <Button className="answer-button" onClick={() => onClick()}>Ответить</Button>
             )}
         </>
     );
