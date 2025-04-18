@@ -23,7 +23,8 @@ const Question = ({ id, item, qStatus, view, answers, setAnswers, setActive, qsC
                                                              qsCount={qsCount} currentAnswers={currentAnswers}  setActive={setAnswers} />)
                     break;
                 case 1:
-                    setDisplay(<DisplayTestComparisonAnswers item={item} view={view}/>)
+                    setDisplay(<DisplayTestComparisonAnswers id={id} item={item} view={view} setAnswers={setAnswers}
+                                                             qsCount={qsCount} currentAnswers={currentAnswers}  setActive={setAnswers}/>)
                     break;
                 default:
                     setDisplay(<p>Упс...</p>)

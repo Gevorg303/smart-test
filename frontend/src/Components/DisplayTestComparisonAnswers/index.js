@@ -18,7 +18,7 @@ import {
 
 import {DragDropCardForComparisonAnswers} from "../DragDropCardForComparisonAnswers";
 
-const DisplayTestComparisonAnswers = ({item,view}) => {
+const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,setAnswers,setActive,qsCount}) => {
     //const [items, setItems] = useState([1, 2, 3]);
     const [items, setItems] = useState([]);
     const [responseOptions,setResponseOptions] = useState([]);
@@ -38,27 +38,77 @@ const DisplayTestComparisonAnswers = ({item,view}) => {
                 console.log(responseOptions)
               //  setItems(responseOptions)
                 setResponseOptions(responseOptions)
-                setItems( responseOptions.map((item,index) => index+" "+item.response));
-
+                const find = currentAnswers.find(el => el.task.id===item.id);
+                console.log(find);
+                if(currentAnswers.length>0 && find != undefined && find.responseOption.length > 0){
+                    const array =[];
+                    find.responseOption.map((item,index)=>{array.push(item.response)})
+                    setItems(array);
+                } else {
+                    setItems( responseOptions.map((item,index) => item.response).map(value => ({ value, sort: Math.random() }))
+                        .sort((a, b) => a.sort - b.sort)
+                        .map(({ value }) => value));
+                }
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
 
         fetchAnswers();
-    }, []);
+    }, [item]);
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
+    useEffect(() => {   //после перетаскивания объектов
+        if(items.length >0){
+            console.log(items)
+
+            const array = [];
+            items.map((item,index)=>{
+                array.push(
+                    {
+                        id: responseOptions[index].id,
+                        question: responseOptions[index].question,
+                        response: item
+                    }
+                )
+            })
+            console.log(array)
+
+
+            const find = currentAnswers.find(el => el.task.id===item.id);
+            if(find != undefined) {
+                currentAnswers[currentAnswers.indexOf(find)] =
+                    {
+                        task:{id:item.id},
+                        responseOption:array
+                    }
+            } else{
+                currentAnswers.push(
+                    {
+                        task:{id:item.id},
+                        responseOption:array
+                    }
+                );
+            }
+
+            console.log(currentAnswers)
+        }
+
+    }, [items]);
+    const onClickNext = () => {
+        setAnswers(currentAnswers);
+        setActive(prev => qsCount === prev + 1 ? prev : prev + 1);
+    };
 
     return (
         <>
             <div className={'comparison-container'} style={{display: 'flex'}}>
                 <div className={'comparison-container-question'} style={{display: 'flex', flexDirection: 'column'}}>
-                    {responseOptions.map((item,index) => <p>{index+" "+item.question}</p>)}
+                    {responseOptions.map((item,index) => <p>{item.question}</p>)}
                 </div>
                 <div className={'comparison-container-response'} style={{display: 'flex', flexDirection: 'column'}}>
                     <DndContext
@@ -70,7 +120,13 @@ const DisplayTestComparisonAnswers = ({item,view}) => {
                         items={items}
                         strategy={verticalListSortingStrategy}
                     >
-                        {items.map(id => <DragDropCardForComparisonAnswers key={id} id={id} />)}
+                        {view
+                            ?
+                            items.map((item,id) => <p key={id} id={id} >{item}</p>)
+                            :
+                            items.map((id) => <DragDropCardForComparisonAnswers key={id} id={id} />)
+                        }
+
                     </SortableContext>
                     </DndContext>
                 </div>
@@ -78,7 +134,7 @@ const DisplayTestComparisonAnswers = ({item,view}) => {
             {view ? (
                 <></>
             ) : (
-                <Button className="answer-button" onClick={() => {/*onClick(id, currentAnswers[id])}*/}}>Ответить</Button>
+                <Button className="answer-button" onClick={onClickNext}>Ответить</Button>
             )}
         </>
 
@@ -88,14 +144,18 @@ const DisplayTestComparisonAnswers = ({item,view}) => {
         const {active, over} = event;
 
         if (active.id !== over.id) {
+
             setItems((items) => {
                 const oldIndex = items.indexOf(active.id);
                 const newIndex = items.indexOf(over.id);
 
                 return arrayMove(items, oldIndex, newIndex);
             });
+
         }
+
     }
+
 };
 
 export default DisplayTestComparisonAnswers;

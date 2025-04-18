@@ -43,7 +43,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,setAnswers,se
         console.log(currentAnswers)
     };
 
-    const onClick = (id) => {
+    const onClick = () => {
        /* const array = [...userAnswer];
         array[id] = !array[id]?true:undefined;
         setUserAnswer(array);*/
@@ -111,7 +111,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,setAnswers,se
         }
 
         fetchAnswers();
-    }, []);
+    }, [item]);
 
     return (
         <>
@@ -133,7 +133,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,setAnswers,se
             {view ? (
                 <></>
             ) : (
-                <Button className="answer-button" onClick={() => {/*onClick(id, currentAnswers[id])}*/}}>Ответить</Button>
+                <Button className="answer-button" onClick={() => {onClick()}}>Ответить</Button>
             )}
         </>
     );

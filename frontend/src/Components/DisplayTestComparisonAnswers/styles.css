@@ -5,7 +5,16 @@
     padding: 1vw;
     margin: 1vw;
 }
+.comparison-container-question p{
+    margin: 1vw;
+}
 .comparison-container-response {
     padding: 1vw;
     margin: 1vw;
+}
+.comparison-container-response div{
+
+    margin: 1vw;
+    min-width: 3vw;
+    text-align: center;
 }
