@@ -28,8 +28,9 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject/*, setC
             const array = [];
             subjectsJson.forEach(subject => {
                 //if (subject.status)
-                array.push(
-                    <p>{subject.studentClassDto.numberOfInstitution + subject.studentClassDto.letterDesignation}</p>
+                array.push(subject.status ?
+                    <p> {subject.studentClassDto.numberOfInstitution + subject.studentClassDto.letterDesignation}</p> :
+                    <></>
                 );
             });
             setClasses(array);

@@ -8,6 +8,7 @@ import Footer from "../Footer";
 import Question from "../Question";
 import SubjectCard from "../SubjectCard"; // Импортируем файл стилей
 import { useOutletContext } from 'react-router-dom';
+import subjectCardForClass from "../SubjectCardForClass";
 
 const ProfilePage = () => {
 
@@ -19,6 +20,7 @@ const ProfilePage = () => {
     const [patronymic, setPatronymic] = useState("");
     const [login, setLogin] = useState("");
     const [role, setRole] = useState("");
+    const [studentSchool, setStudentSchool] = useState("");
     const [studentClass, setStudentClass] = useState("");
     const [email, setEmail] = useState("");
     const [portraitUrl, setPortraitUrl] = useState(avatarImage);
@@ -64,10 +66,13 @@ const ProfilePage = () => {
                 const studentClass = await response2.json();
                 console.log(studentClass);
                 let result = "";
+                let result_sch = "";
                 studentClass.forEach(sc => {
                    result += sc.numberOfInstitution + " " + sc.letterDesignation + "; "
+                   result_sch+= sc.educationalInstitution.nameOfTheInstitution + "; "
                 });
                 setStudentClass(result);
+                setStudentSchool(result_sch);
                 //setStudentClass(studentClass);
                 setTopText("Личный кабинет");
             } catch (error) {
@@ -89,6 +94,7 @@ const ProfilePage = () => {
                             <p><strong>Отчество:</strong> {patronymic} </p>
                             <p><strong>Логин:</strong> {login} </p>
                             <p><strong>Статус:</strong> {role} </p>
+                            <p><strong>Образовательное учреждение:</strong> {studentSchool} </p>
                             <p><strong>Класс:</strong> {studentClass} </p>
                             <p><strong>Электронная почта:</strong> {email} </p>
                         </div>
