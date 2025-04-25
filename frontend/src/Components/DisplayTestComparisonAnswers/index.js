@@ -18,7 +18,7 @@ import {
 
 import {DragDropCardForComparisonAnswers} from "../DragDropCardForComparisonAnswers";
 
-const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,setAnswers,setActive,qsCount}) => {
+const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setAnswers,setActive,qsCount}) => {
     //const [items, setItems] = useState([1, 2, 3]);
     const [items, setItems] = useState([]);
     const [responseOptions,setResponseOptions] = useState([]);
@@ -100,6 +100,7 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,setAnswers,s
 
     }, [items]);
     const onClickNext = () => {
+        console.log(answers)
         setAnswers(currentAnswers);
         setActive(prev => qsCount === prev + 1 ? prev : prev + 1);
     };

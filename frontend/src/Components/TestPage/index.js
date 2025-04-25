@@ -161,7 +161,7 @@ const TestPage = () => {
                         if (active < questions.length - 1) setActive(active + 1)
                     }} />
                 </Pagination>
-                <Button className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
+                <Button hidden={active+1!=questions.length?"hidden":""}  className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
 
             </div>
             {/*<Footer />*/}

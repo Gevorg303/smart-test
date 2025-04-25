@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,setAnswers,setActive,qsCount}) => {
+const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAnswers,setActive,qsCount}) => {
     const [responseOptions,setResponseOptions] = useState([]);
     const [userAnswer, setUserAnswer] = useState([]);
 
@@ -112,6 +112,24 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,setAnswers,se
 
         fetchAnswers();
     }, [item]);
+
+    useEffect(() => {
+        if (answers != undefined) {
+            const find = answers.find(el => el.task.id===item.id);
+            if(find==undefined){
+                currentAnswers.push(
+                    {
+                        task:{id:item.id},
+                        responseOption:userAnswer
+                    }
+                );
+                setAnswers(currentAnswers);
+                //console.log("do some")
+            }
+
+        }
+
+    }, [answers]);
 
     return (
         <>

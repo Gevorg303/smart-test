@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,setActive,qsCount}) => {
+const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,answers,setActive,qsCount}) => {
 
     const [userAnswer, setUserAnswer] = useState('');
 
@@ -55,6 +55,29 @@ const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,setActi
         }
 
     }, [view, currentAnswers, id]);
+
+    useEffect(() => {
+        if (answers != undefined) {
+            const find = answers.find(el => el.task.id===item.id);
+            if(find==undefined){
+                currentAnswers.push(
+                    {
+                        task:{id:item.id},
+                        responseOption:[
+                            {
+                                question: null,
+                                response: "",
+                            }
+                        ]
+                    }
+                );
+                setUserAnswer("");
+                setAnswers(currentAnswers);
+            }
+
+        }
+
+    }, [answers]);
     return (
         <>
             <Form.Group className="answer-group">
