@@ -67,7 +67,7 @@ public class TaskController {
     }
 
     /**
-     * Запрос для обновления задания
+     * Запрос для редактирования задания
      * */
     @PutMapping("/update-task")
     public void updateTask(@RequestBody RequestForTask updatedTask) {

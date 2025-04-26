@@ -34,7 +34,7 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
         EducationalInstitution educationalInstitution = educationalInstitutionService.getEducationalInstitutionsById(educationalInstitutionDto);
         List<StudentClass> studentClassList = new ArrayList<>();
         if (educationalInstitution != null) {
-            List<StudentClass> studentClasses = getAllStudentClass();
+            List<StudentClass> studentClasses = getAllActiveStudentClasses();
             for (StudentClass studentClass : studentClasses) {
                 if (studentClass.getEducationalInstitution().getId().equals(educationalInstitution.getId())) {
                     studentClassList.add(studentClass);
@@ -67,18 +67,18 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
         }
     }
 
-    private List<StudentClass> getAllStudentClass() {
+    private List<StudentClass> getAllActiveStudentClasses() {
         try {
-            return studentClassRepository.findAll();
+            return studentClassRepository.findByIsDeleteFalse();
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при получении всех классов: " + e.getMessage(), e);
+            throw new RuntimeException("Ошибка при получении активных классов: " + e.getMessage(), e);
         }
     }
 
     @Override
     public List<StudentClassDto> getStudentClassByUserId(Long id) {
         try {
-            List<StudentClass> subjects = studentClassRepository.findByUserId(id);
+            List<StudentClass> subjects = studentClassRepository.findByIdAndIsDeleteFalse(id);
             List<StudentClassDto> subjectDto = new ArrayList<>();
             for (StudentClass subject : subjects) {
                 subjectDto.add(studentClassMapper.toDTO(subject));
@@ -105,11 +105,16 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
         for (StudentClass studentClass : classes) {
             try {
                 int currentNumber = Integer.parseInt(studentClass.getNumberOfInstitution());
-                studentClass.setNumberOfInstitution(String.valueOf(currentNumber + 1));
+                if (currentNumber >= 11) {
+                    studentClass.setIsDelete(true);
+                } else {
+                    studentClass.setNumberOfInstitution(String.valueOf(currentNumber + 1));
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Ошибка преобразования номера класса для ID: " + studentClass.getId());
             }
         }
         studentClassRepository.saveAll(classes);
     }
+
 }

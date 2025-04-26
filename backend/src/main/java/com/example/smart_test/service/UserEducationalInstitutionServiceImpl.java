@@ -36,7 +36,7 @@ public class UserEducationalInstitutionServiceImpl implements UserEducationalIns
     @Override
     public List<StudentClass> findUserEducationalInstitutionByUser(UserDto userDto) {
         UserEducationalInstitution userEducationalInstitution = userEducationalInstitutionRepositoryInterface.findByUserId(userDto.getId());
-        return studentClassRepository.findByEducationalInstitution(userEducationalInstitution.getEducationalInstitution());
+        return studentClassRepository.findByEducationalInstitutionAndIsDeleteFalse(userEducationalInstitution.getEducationalInstitution());
     }
 
     @Override

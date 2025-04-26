@@ -1,9 +1,14 @@
 package com.example.smart_test.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "класс")
@@ -22,4 +27,9 @@ public class StudentClass {
     private EducationalInstitution educationalInstitution;
     @Column(name = "номер_класса")
     private String numberOfInstitution;
+    @NotNull
+    @ColumnDefault("false")
+    @Column(name = "флаг_мягкого_удаления", nullable = false)
+    private Boolean isDelete  = false;
+
 }
