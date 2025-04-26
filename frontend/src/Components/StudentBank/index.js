@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../adminNavbar';
 import './styles.css'; // Подключаем CSS файл для стилей
 
-const ClassBank = () => {
+const StudentBank = () => {
     const [classNumber, setClassNumber] = useState('');
     const [classes, setClasses] = useState([]);
-    const [selectedClass, setSelectedClass] = useState(null);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const token = getTokenFromCookie();
+        console.log('Token:', token); // Логируем токен для отладки
         if (!token) {
             setError('Токен не найден');
             return;
         }
 
+        // Получение классов
         fetch('http://localhost:8080/users/current-user-classes', {
             method: 'GET',
             credentials: 'include',
@@ -59,17 +61,47 @@ const ClassBank = () => {
         return "";
     };
 
+    const fetchUsers = async () => {
+        const token = getTokenFromCookie();
+        if (!token) {
+            setError('Токен не найден');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8080/users/all', {
+                method: 'POST', // Используем метод POST
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Передаем токен в заголовке
+                },
+                body: JSON.stringify({ classNumber }) // Передаем номер класса в теле запроса
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Ошибка получения данных о пользователях: ${errorText}`);
+            }
+            const data = await response.json();
+            console.log('Все пользователи:', data);
+            setSelectedUsers(data);
+        } catch (error) {
+            console.error('Ошибка получения данных о пользователях:', error);
+            setError(`Ошибка: ${error.message}`);
+        }
+    };
+
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Номер класса:', classNumber);
+        fetchUsers();
     };
 
     const handleClassChange = (e) => {
         const selectedClassId = e.target.value;
         setClassNumber(selectedClassId);
-        const selected = classes.find(cls => cls.id === parseInt(selectedClassId, 10));
-        setSelectedClass(selected);
-        console.log('Выбранный класс:', selected); // Логируем выбранный класс для отладки
+        console.log('Выбранный класс:', selectedClassId); // Логируем выбранный класс для отладки
     };
 
     return (
@@ -80,12 +112,12 @@ const ClassBank = () => {
             <div className="class-bank-page">
                 <div className="class-bank-form-wrapper">
                     <div className="class-bank-form-header">
-                        Сортировка класса по цифре и букве
+                        Сортировка пользователей по классу
                     </div>
                     {error && <div style={{ color: 'red' }}>{error}</div>}
                     <form onSubmit={handleSubmit} className="class-bank-form-content">
                         <div className="class-bank-form-element">
-                            <label htmlFor="classNumber">Номер класса:</label>
+                            <label htmlFor="classNumber">Класс:</label>
                             <select
                                 id="classNumber"
                                 value={classNumber}
@@ -107,11 +139,16 @@ const ClassBank = () => {
                         Создать предмет
                     </button>
                 </div>
-                {selectedClass && (
-                    <div className="class-bank-selected-class-container-newnew">
-                        <p>ID: {selectedClass.id}</p>
-                        <p>Цифра: {selectedClass.numberOfInstitution}</p>
-                        <p>Буква: {selectedClass.letterDesignation}</p>
+                {selectedUsers.length > 0 && (
+                    <div className="class-bank-selected-class-container-new">
+                        <h3>Выбранные пользователи:</h3>
+                        {selectedUsers.map(user => (
+                            <div key={user.id}>
+                                <p>ID: {user.id}</p>
+                                <p>Имя: {user.name}</p>
+                                <p>Фамилия: {user.surname}</p>
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>
@@ -119,4 +156,4 @@ const ClassBank = () => {
     );
 };
 
-export default ClassBank;
+export default StudentBank;

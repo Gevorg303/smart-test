@@ -28,27 +28,44 @@ const AdminRegistrationForm = ({ selectedForm }) => {
     };
 
     useEffect(() => {
-        fetch('http://localhost:8080/users/current-user-classes', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
+        const fetchClassesAndUsers = async () => {
+            try {
+                const classesResponse = await fetch('http://localhost:8080/users/current-user-classes', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!classesResponse.ok) {
                     throw new Error('Ошибка получения данных о классах');
                 }
-                return response.json();
-            })
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setClasses(data);
+                const classesData = await classesResponse.json();
+                if (Array.isArray(classesData)) {
+                    setClasses(classesData);
                 } else {
-                    console.error('Неожиданная структура данных для классов:', data);
+                    console.error('Неожиданная структура данных для классов:', classesData);
                 }
-            })
-            .catch(error => console.error('Ошибка получения данных о классах:', error));
+
+                const usersResponse = await fetch('http://localhost:8080/users/all', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!usersResponse.ok) {
+                    throw new Error('Ошибка получения данных о пользователях');
+                }
+                const usersData = await usersResponse.json();
+                console.log('Все пользователи при загрузке страницы:', usersData);
+                setUsers(usersData);
+            } catch (error) {
+                console.error('Ошибка получения данных:', error);
+            }
+        };
+
+        fetchClassesAndUsers();
     }, []);
 
     const handleChange = (e) => {
@@ -70,7 +87,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 name: formData.firstName,
                 patronymic: formData.middleName,
                 role: { id: roleMapping[formData.role] },
-                email: formData.email
+                email: formData.email,
+                educationalInstitution: { id: parseInt(formData.class, 10) } // Добавляем поле educationalInstitution
             },
             studentClass: { id: parseInt(formData.class, 10) }
         };
@@ -94,6 +112,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                     email: '',
                     role: ''
                 });
+                await fetchUsers(); // Обновляем список пользователей после регистрации
             } else {
                 const errorText = await response.text();
                 throw new Error(`Ошибка регистрации пользователя: ${errorText}`);
@@ -156,7 +175,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                         name: firstName,
                         patronymic: middleName,
                         role: { id: 3 },
-                        email: email
+                        email: email,
+                        educationalInstitution: { id: parseInt(selectedClass, 10) } // Добавляем поле educationalInstitution
                     },
                     studentClass: { id: parseInt(selectedClass, 10) }
                 });
@@ -187,7 +207,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                     const answers = await response.json();
                     setShowSuccessToast(true);
                     setSelectedClass(null); // Clear selected class
-                    await fetchUsers();
+                    await fetchUsers(); // Обновляем список пользователей после регистрации
 
                     // Generate and download XLS file
                     const userDetails = answers.map((item, index) => ({
@@ -239,7 +259,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 throw new Error('Ошибка получения данных о пользователях');
             }
             const data = await response.json();
-            console.log('Все пользователи:', data);
+            console.log('Все пользователи после регистрации:', data);
             setUsers(data);
         } catch (error) {
             console.error('Ошибка получения данных о пользователях:', error);

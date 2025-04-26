@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './Components/Home';
 import BetaPage from "./Components/BetaPage";
 import ClassBank from './Components/ClassBank';
+import StudentBank from './Components/StudentBank';
 import LoginPage from './Components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import StartTestPage from './Components/StartTestPage';
@@ -48,6 +49,7 @@ const App = () => {
                         <Route path="itembank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"subject"} />} />} />
                         <Route path="themebank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"theme"} />} />} />
                         <Route path="indicatorbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"indicator"} />} />} />
+                        <Route path="studentbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"student"} />} />} />
                         <Route path="subjectclass" element={<RouterByRole rolesWithoutAccess={[3]} element={<SubjectClassPage />} />} />
                     </Route>
                 </Route>
