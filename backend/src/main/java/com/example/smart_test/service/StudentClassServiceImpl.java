@@ -94,4 +94,22 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
         Optional<StudentClass> studentClass = studentClassRepository.findById(id);
         return studentClass.isPresent();
     }
+
+    /**
+     * Увеличивает номер класса на 1 для всех классов
+     */
+    @Transactional
+    @Override
+    public void incrementClassNumbers() {
+        List<StudentClass> classes = studentClassRepository.findAll();
+        for (StudentClass studentClass : classes) {
+            try {
+                int currentNumber = Integer.parseInt(studentClass.getNumberOfInstitution());
+                studentClass.setNumberOfInstitution(String.valueOf(currentNumber + 1));
+            } catch (NumberFormatException e) {
+                System.out.println("Ошибка преобразования номера класса для ID: " + studentClass.getId());
+            }
+        }
+        studentClassRepository.saveAll(classes);
+    }
 }
