@@ -65,46 +65,106 @@ const CreateTestPage = ({ editItem, onCreate }) => {
             const theme = parseInt(currentTheme, 10);
             const taskList = [];
             for (var i = 0; i < currentTasks.length; i++) {
-                if (currentTasks[i] != undefined) {
-                    taskList.push({ id: i })
+               // if (currentTasks[i] != undefined) {
+                    taskList.push(currentTasks[i])
+              //  }
+            }
+            let toastText;
+            console.log({
+                testDto: {
+                    closingDateAndTime: timeEnd,
+                    description: currentDescription,
+                    id: editItem.id,
+                    numberOfAttemptsToPass: countOfTry,
+                    openingDateAndTime: timeStart,
+                    passageTime: passingTime,
+                    testPassword: currentPassword,
+                    numberOfTasksPerError: countOfTaskByError,
+                    passThreshold: currentPassingScore,
+                    theme: {
+                        id: theme
+                    },
+                    typeTest: {
+                        id: currentType
+                    }
+                },
+                taskDtoList: taskList
+            });
+            if(editItem==null) {
+                const response = await fetch('http://localhost:8080/test/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            test: {
+                                closingDateAndTime: timeEnd,
+                                description: currentDescription,
+                                id: null,
+                                numberOfAttemptsToPass: countOfTry,
+                                openingDateAndTime: timeStart,
+                                passageTime: passingTime,
+                                testPassword: currentPassword,
+                                numberOfTasksPerError: countOfTaskByError,
+                                passThreshold: currentPassingScore,
+                                theme: {
+                                    id: theme
+                                },
+                                typeTest: {
+                                    id: currentType
+                                }
+                            },
+                            taskList
+                        }
+                    )
+                });
+
+                if (!response.ok) {
+                    toastText = "Ошибка создания теста";
+                    setCurrentTasks([]);
+                    throw new Error();
                 }
+                toastText = "Тест успешно создан.";
+            } else {
+                const response = await fetch('http://localhost:8080/test/update-test', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(
+                        {
+                            testDto: {
+                                closingDateAndTime: timeEnd,
+                                description: currentDescription,
+                                id: editItem.id,
+                                numberOfAttemptsToPass: countOfTry,
+                                openingDateAndTime: timeStart,
+                                passageTime: passingTime,
+                                testPassword: currentPassword,
+                                numberOfTasksPerError: countOfTaskByError,
+                                passThreshold: currentPassingScore,
+                                theme: {
+                                    id: theme
+                                },
+                                typeTest: {
+                                    id: currentType
+                                }
+                            }
+                            ,
+                            taskDtoList: taskList
+                        }
+                    )
+                });
+
+                if (!response.ok) {
+                    toastText = "Ошибка редактирования теста";
+                    setCurrentTasks([]);
+                    throw new Error();
+                }
+                toastText = "Тест успешно отредактирован.";
             }
 
-            const response = await fetch('http://localhost:8080/test/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify(
-                    {
-                        test: {
-                            closingDateAndTime: timeEnd,
-                            description: currentDescription,
-                            id: null,
-                            numberOfAttemptsToPass: countOfTry,
-                            openingDateAndTime: timeStart,
-                            passageTime: passingTime,
-                            testPassword: currentPassword,
-                            numberOfTasksPerError: countOfTaskByError,
-                            passThreshold: currentPassingScore,
-                            theme: {
-                                id: theme
-                            },
-                            typeTest: {
-                                id: currentType
-                            }
-                        },
-                        taskList
-                    }
-                )
-            });
-            let toastText;
-            if (!response.ok) {
-                toastText = "Ошибка создания теста";
-                setCurrentTasks([]);
-                throw new Error();
-            }
-            toastText = "Тест успешно создан.";
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -188,7 +248,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                     setTasks(aveliabletaskrfortest.concat(tasksFromTestJson))
 
                     const array = [...currentTasks];
-                    tasksFromTestJson.map((item, index) => { array[item.id] = { id: item.id }; })
+                    tasksFromTestJson.map((item, index) => { array.push({ id: item.id }); })
                     setCurrentTasks(array);
                 }
 
@@ -339,8 +399,10 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                         :
                         <></>
                 }
-                <Button variant="primary" type="submit">
-                    Создать
+                <Button variant="primary" type="submit" onClick={() => {
+                    //setShow(true); /*console.log(currentAnswers)*/
+                }}>
+                    {editItem==null?"Создать":"Редактировать"}
                 </Button>
             </Form>
         </div>

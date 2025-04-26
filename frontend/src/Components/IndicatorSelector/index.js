@@ -46,9 +46,9 @@ const IndicatorSelector = ({targetSubject, indicators,setIndicators}) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
-        console.log("prop changed: "+targetSubject)
+        console.log("indicators: prop changed: "+targetSubject)
         fetchQuestions();
-    }, [targetSubject]);
+    }, [targetSubject,indicators]);
     return (
         <>
             <h3>Индикаторы:</h3>

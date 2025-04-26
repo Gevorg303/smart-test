@@ -319,9 +319,10 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 <Form.Group className="mb-3">
                     {renderAnswers()}
                 </Form.Group>
-                <Button variant="primary" type="submit" onClick={() => {/*setShow(true);*//*console.log(currentAnswers)*/
+                <Button variant="primary" type="submit" onClick={() => {
+                    //setShow(true); /*console.log(currentAnswers)*/
                 }}>
-                    Создать
+                    {editItem==null?"Создать":"Редактировать"}
                 </Button>
             </Form>
 

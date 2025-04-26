@@ -1,17 +1,44 @@
-import {Reactm, useState }from 'react';
+import {Reactm, useState,useEffect }from 'react';
 import { Form, Button } from 'react-bootstrap';
 
 const TaskForTestSelector = ({id,task,answers, setAnswers}) => {
 
-    const [currentCheck, setCurrentCheck] = useState(answers[id]===undefined?false:true);
+    const [currentCheck, setCurrentCheck] = useState(answers.find(el => el.id === id)===undefined?false:true);
 
-    const onClick = (id, answer) => {
-        const array = [...answers];
+    const onClick = (id,isAdd) => {
+      /*  const array = [...answers];
         array[id] = answer;
-        setAnswers(array);
-        console.log("ЗАДАНИЯ В ТЕСТЕ")
-        console.log(array)
+        setAnswers(array);*/
+
+       // console.log(array)
+        let find = answers.find(el => el.id === id)
+        if(find == undefined ) {
+           // if(isAdd){
+                answers.push({id: id});
+                setAnswers(answers)
+                console.log("задание добавлено")
+          //  }
+
+        } else {
+
+                setAnswers(
+                    answers.filter(function(item) {
+                        return item.id !== id
+                    })
+                )
+                console.log("задание убрано")
+
+        }
+
     };
+
+    useEffect(() => {
+        if(answers != []){
+            setAnswers(answers);
+        }
+
+    }, [answers]);
+
     return (
         <>
             <Form.Check // prettier-ignore
@@ -21,15 +48,13 @@ const TaskForTestSelector = ({id,task,answers, setAnswers}) => {
                 name="task"
                 checked={currentCheck}
                 onChange={(e)=>{
-                    if(!currentCheck){
+                   // if(!currentCheck){
 
-                       onClick(id,{  // checked={answers[id].evaluationResponse==100?true:false}
-                        id: id
-                    });
-                   }
+                       onClick(id,true);
+                  /* }
                    else {
-                       onClick(id,undefined);
-                   }
+                       onClick(id,false);
+                   }*/
                     setCurrentCheck(!currentCheck)
                 }}
             />
