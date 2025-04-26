@@ -9,4 +9,5 @@ public class StudentClassDto {
     private String letterDesignation;
     private EducationalInstitution educationalInstitution;
     private String numberOfInstitution;
+    private Boolean isDelete  = false;
 }

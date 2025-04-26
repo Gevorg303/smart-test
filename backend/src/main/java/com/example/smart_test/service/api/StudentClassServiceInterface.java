@@ -20,4 +20,7 @@ public interface StudentClassServiceInterface {
 
     @Transactional
     List<StudentClassDto> getStudentClassByUserId(Long id);
+
+    @Transactional
+    void incrementClassNumbers();
 }
