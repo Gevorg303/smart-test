@@ -100,33 +100,63 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 }
 
             );
-             const response = await fetch('http://localhost:8080/task/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify({
+            let toastText;
+            if(editItem==null) {
+                const response = await fetch('http://localhost:8080/task/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                            task: {
+                                id: null,
+                                test: null,
+                                typeTask: {id: type},
+                                assessmentTask: 100,
+                                taskText: currentText,
+                                explanation: currentExplanation
+                            },
+
+                            responseOption: currentAnswers
+                            ,
+                            indicator: indicators
+                        }
+                    )
+                });
+
+                if (!response.ok) {
+                    toastText = "Ошибка создния задания";
+                    throw new Error();
+                }
+                toastText = "Задание создано";
+            } else {
+                const response = await fetch('http://localhost:8080/task/update-task', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
                         task: {
-                            id: null,
-                            test: null,
-                            typeTask: {id: type},
-                            assessmentTask: 100,
-                            taskText: currentText,
-                            explanation: currentExplanation
-                        },
+                                id: editItem.id,
+                                test: editItem.test,
+                                typeTask: {id: type},
+                                taskText: currentText,
+                                explanation: currentExplanation
+                            },
 
                         responseOption: currentAnswers
-                        ,
-                        indicator: indicators
-                    }
-                )
-            });
-            let toastText;
-            if (!response.ok) {
-                toastText = "Ошибка создния задания";
-                throw new Error();
+                            ,
+                           // indicator: indicators
+                        }
+                    )
+                });
+
+                if (!response.ok) {
+                    toastText = "Ошибка создния задания";
+                    throw new Error();
+                }
+                toastText = "Задание создано";
             }
-            toastText = "Задание создано";
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -240,33 +270,79 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 console.error('Ошибка получения данных:', error);
             }
         }
-        if(editItem!=null){ //выполняется если предается предмет который нужно изменить
-            if(editItem.test!=null) {
-                console.log("sub= "+editItem.test.theme.subject.id+"; theme= "+editItem.test.theme.id)
-                setTargetSubject(editItem.test.theme.subject.id);
-                setCurrentTheme(editItem.test.theme.id);
-            }else {
-                setTargetSubject(-1);
-                setCurrentTheme(-1);
-            }
+        async function setData() {
+            if (editItem != null) { //выполняется если предается предмет который нужно изменить
+                if (editItem.test != null) {
+                    console.log("sub= " + editItem.test.theme.subject.id + "; theme= " + editItem.test.theme.id)
+                    setTargetSubject(editItem.test.theme.subject.id);
+                    setCurrentTheme(editItem.test.theme.id);
+                } else {
+                    setTargetSubject(-1);
+                    setCurrentTheme(-1);
+                }
 
-            setCurrentType(editItem.typeTask.id);
-           // setIndicators([]);
-            setText(editItem.taskText);
-            setExplanation(editItem.explanation);
-           // setCurrentAnswers([]);
-        }
-        else {
-            setTargetSubject(-1);
-            setCurrentType(-1);
-            setCurrentTheme(-1);
-            setIndicators([]);
-            setText("");
-            setExplanation("");
-            setCurrentAnswers([]);
-            setCurrentType(-1);
+                setCurrentType(editItem.typeTask.id);
+                try {
+                    const response2 = await fetch('http://localhost:8080/task-of-indicator/find-indicator-by-task', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({id:editItem.id})
+                    });
+                    if (!response2.ok) {
+                        throw new Error('Ошибка получения предметов');
+                    }
+
+                    const indicatorsJson = await response2.json();
+                    console.log(indicatorsJson)
+                    indicatorsJson.map((item,index) => {
+                        currentIndicators[item.id]=true;
+                    })
+                   // setIndicators(indicatorsJson)
+
+
+
+                } catch (error) {
+                    console.error('Ошибка получения данных:', error);
+                }
+                // setIndicators([]);
+                setText(editItem.taskText);
+                setExplanation(editItem.explanation);
+                try {
+                    const response2 = await fetch('http://localhost:8080/response-option/find-response-option-by-task', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({id:editItem.id})
+                    });
+                    if (!response2.ok) {
+                        throw new Error('Ошибка получения предметов');
+                    }
+
+                    const responseOptionsJson = await response2.json();
+                    console.log(responseOptionsJson)
+                    setCurrentAnswers(responseOptionsJson)
+
+
+                } catch (error) {
+                    console.error('Ошибка получения данных:', error);
+                }
+                // setCurrentAnswers([]);
+            } else {
+                setTargetSubject(-1);
+                setCurrentType(-1);
+                setCurrentTheme(-1);
+                setIndicators([]);
+                setText("");
+                setExplanation("");
+                setCurrentAnswers([]);
+                setCurrentType(-1);
+            }
         }
         fetchSubjects();
+        setData();
     }, [editItem]);
     return (
         <div>
