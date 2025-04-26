@@ -122,7 +122,7 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
             for (User user : userList) {
                 List<StudentClassDto> studentClassDtoList = userService.findStudentClassByUser(userMapper.toDTO(user));
                 for (StudentClassDto studentClassDto : studentClassDtoList) {
-                    for (StudentClass studentClass1 : studentClassRepository.findByIdAndIsDeleteFalse(user.getId())) {
+                    for (StudentClass studentClass1 : studentClassRepository.findByUserId(user.getId())) {
                         if (Objects.equals(studentClassDto.getId(), studentClass1.getId())) {
                             studentClassDtoSet.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass1), true));
                         } else {

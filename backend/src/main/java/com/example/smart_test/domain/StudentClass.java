@@ -28,7 +28,6 @@ public class StudentClass {
     @Column(name = "номер_класса")
     private String numberOfInstitution;
     @NotNull
-    @ColumnDefault("false")
     @Column(name = "флаг_мягкого_удаления", nullable = false)
     private Boolean isDelete  = false;
 
