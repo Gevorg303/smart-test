@@ -36,7 +36,7 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                 // TODO: сравниваем каждый пользовательский ответ с правильными
                 for (ResponseOptionDto correctOption : correctOptions) {
                     // TODO: логика для заданий на сопоставление
-                    if (TypeTaskEnum.MATCHING_TASK.name().equals(taskType)) {
+                    if (TypeTaskEnum.MATCHING_TASK.getDescription().equals(taskType)) {
                         if (userOption.getQuestion() != null && correctOption.getQuestion() != null &&
                                 userOption.getQuestion().equals(correctOption.getQuestion()) &&
                                 userOption.getResponse().equals(correctOption.getResponse())) {
@@ -45,7 +45,7 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                         }
                     }
                     // TODO: логика для заданий с выбором ответа или c одним ответом
-                    else if (TypeTaskEnum.MULTIPLE_CHOICE.name().equals(taskType)
+                    else if (TypeTaskEnum.MULTIPLE_CHOICE.getDescription().equals(taskType)
                             || TypeTaskEnum.INPUT_ANSWER.name().equals(taskType)) {
                         if (userOption.getQuestion() == null && correctOption.getQuestion() == null &&
                                 userOption.getResponse().equals(correctOption.getResponse())) {

@@ -8,6 +8,7 @@ import com.example.smart_test.response.ResponseForTest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -89,8 +90,9 @@ public class TestController {
      * Завершение тестирования
      */
     @PostMapping("/end-testing")
-    public ResponseForTest endTesting(@RequestBody EndTestingRequest endTestingRequest){
-        return testService.endTesting(endTestingRequest);
+    public ResponseEntity<ResponseForTest> endTesting(@RequestBody EndTestingRequest endTestingRequest){
+        ResponseForTest responseForTest =  testService.endTesting(endTestingRequest);
+        return ResponseEntity.ok(responseForTest);
     }
 
     /**
