@@ -4,6 +4,7 @@ import com.example.smart_test.domain.Indicator;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.IndicatorDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.service.api.IndicatorServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class IndicatorController {
      Выводит список индикаторов пользователя
      */
     @PostMapping("/indicator-by-user")
-    public List<IndicatorDto> getIndicatorsByIdUser(@RequestBody User user) {
+    public List<IndicatorDto> getIndicatorsByIdUser(@RequestBody UserDto user) {
         return indicatorService.getUserIndicators(user);
     }
 

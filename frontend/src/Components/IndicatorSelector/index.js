@@ -14,7 +14,6 @@ const IndicatorSelector = ({targetSubject, indicators,setIndicators}) => {
     };
     useEffect(() => {
         async function fetchQuestions() {
-
             try {
                 if(targetSubject>0)
                 {
@@ -35,20 +34,21 @@ const IndicatorSelector = ({targetSubject, indicators,setIndicators}) => {
                         const thjson = await response.json();
                         console.log(thjson)
                         setThemes(thjson)
+                        if(indicators != undefined || indicators.length > 0){
+                            console.log(indicators)
+                        }
 
                 }
-                else
-                {
-                }
+
 
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
-        console.log("prop changed: "+targetSubject)
+        console.log("indicators: prop changed: "+targetSubject)
         fetchQuestions();
-    }, [targetSubject]);
+    }, [targetSubject,indicators]);
     return (
         <>
             <h3>Индикаторы:</h3>
@@ -58,6 +58,7 @@ const IndicatorSelector = ({targetSubject, indicators,setIndicators}) => {
                         type={'checkbox'}
                         id={item.id}
                         name="indicator"
+                        checked={indicators[item.id]===true?true:false}
                         label={item.nameOfTheIndicator}
                         onChange={() => {onClick(item.id)}}
                     />

@@ -1,17 +1,18 @@
 package com.example.smart_test.request;
 
-import com.example.smart_test.domain.Task;
+import com.example.smart_test.dto.ResponseOptionDto;
+import com.example.smart_test.dto.TaskDto;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class RequestForTask {
-    private Task task;
-    private String response;
-    private boolean status;
+    private TaskDto task; //Задание
+    private List<ResponseOptionDto> responseOption; //Лист вариантов ответов
 
-    public RequestForTask(Task task, String response, boolean status) {
+    public RequestForTask(TaskDto task, List<ResponseOptionDto> responseOption) {
         this.task = task;
-        this.response = response;
-        this.status = status;
+        this.responseOption = responseOption;
     }
 }

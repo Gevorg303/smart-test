@@ -1,51 +1,71 @@
 package com.example.smart_test.service;
 
-import com.example.smart_test.domain.ResponseOption;
-import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.ResponseOptionDto;
+import com.example.smart_test.enums.TypeTaskEnum;
 import com.example.smart_test.request.RequestForTask;
-import com.example.smart_test.dto.TaskDto;
+import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.service.api.RequestVerificationServiceInterface;
 import com.example.smart_test.service.api.ResponseOptionServiceInterface;
-import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class RequestVerificationServiceImpl implements RequestVerificationServiceInterface {
     @Autowired
     private ResponseOptionServiceInterface responseOptionServiceInterface;
-    @Autowired
-    private TaskServiceInterface taskServiceInterface;
 
     @Override
-    public List<RequestForTask> checkingResponse(List<RequestForTask> RequestForTaskList) {
-        List<ResponseOptionDto> responseOptionDtoList = responseOptionServiceInterface.getAllResponseOptions();
+    public List<ResponseForTask> checkingResponse(List<RequestForTask> requestForTaskList) {
+        List<ResponseForTask> responseForTaskList = new ArrayList<>();
+        for (RequestForTask requestForTask : requestForTaskList) {
+            int counterCorrectResponse = 0;
+            List<ResponseOptionDto> theUsersResponseOption = new ArrayList<>();
+            // TODO: получаем правильные варианты ответов на конкретное задание
+            List<ResponseOptionDto> correctOptions = responseOptionServiceInterface.getResponseOptionsByTask(requestForTask.getTask());
 
-        Map<Long, Task> taskCache = RequestForTaskList.stream()
-                .map(RequestForTask::getTask)
-                .map(task -> taskServiceInterface.getTaskById(task.getId()))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(Task::getId, dto -> dto));
+            // TODO: получаем пользовательские ответы на задание
+            List<ResponseOptionDto> userOptions = requestForTask.getResponseOption();
+            String taskType = requestForTask.getTask().getTypeTask().getTaskTypeName();
 
-        return RequestForTaskList.stream()
-                .map(RequestForTask -> {
-                    Task task = taskCache.get(RequestForTask.getTask().getId());
-                    boolean isCorrect = task != null && responseOptionDtoList.stream().anyMatch(option ->
-                            Objects.equals(task.getId(), option.getTask().getId()) &&
-                                    Objects.equals(option.getResponse(), RequestForTask.getResponse())
-                    );
+            // TODO: перебираем пользовательские ответы
+            for (ResponseOptionDto userOption : userOptions) {
+                boolean isCorrect = false;
 
-                    return new RequestForTask(
-                            task,
-                            RequestForTask.getResponse(),
-                            isCorrect
-                    );
-                })
-                .collect(Collectors.toList());
+                // TODO: сравниваем каждый пользовательский ответ с правильными
+                for (ResponseOptionDto correctOption : correctOptions) {
+                    // TODO: логика для заданий на сопоставление
+                    if (TypeTaskEnum.MATCHING_TASK.getDescription().equals(taskType)) {
+                        if (userOption.getQuestion() != null && correctOption.getQuestion() != null &&
+                                userOption.getQuestion().equals(correctOption.getQuestion()) &&
+                                userOption.getResponse().equals(correctOption.getResponse())) {
+                            isCorrect = true;
+                            break;
+                        }
+                    }
+                    // TODO: логика для заданий с выбором ответа или c одним ответом
+                    else if (TypeTaskEnum.MULTIPLE_CHOICE.getDescription().equals(taskType)
+                            || TypeTaskEnum.INPUT_ANSWER.name().equals(taskType)) {
+                        if (userOption.getQuestion() == null && correctOption.getQuestion() == null &&
+                                userOption.getResponse().equals(correctOption.getResponse())) {
+                            isCorrect = true;
+                            break;
+                        }
+                    }
+                }
+                userOption.setValidResponse(isCorrect);
+                if (isCorrect) {
+                    counterCorrectResponse++;
+                }
+                theUsersResponseOption.add(userOption);
+            }
+            // TODO: вычисляем оценку по заданию
+            int assessmentTask = correctOptions.isEmpty() ? 0
+                    : (int) ((counterCorrectResponse * 100.0) / correctOptions.size());
+
+            responseForTaskList.add(new ResponseForTask(requestForTask.getTask(), theUsersResponseOption, assessmentTask));
+        }
+        return responseForTaskList;
     }
-
 }

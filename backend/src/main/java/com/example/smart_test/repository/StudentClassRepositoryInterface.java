@@ -11,9 +11,15 @@ import java.util.List;
 @Repository
 public interface StudentClassRepositoryInterface extends JpaRepository<StudentClass, Long> {
 
-    @Query(value = "SELECT класс.идентификатор_класс, номер_класса, буквенное_обозначение, идентификатор_образовательное_уч FROM пользователь_класс inner join класс on класс.идентификатор_класс = пользователь_класс.идентификатор_класс WHERE пользователь_класс.идентификатор_пользователя = :id",
+    @Query(value = "SELECT класс.идентификатор_класс, номер_класса, буквенное_обозначение, идентификатор_образовательное_уч, флаг_мягкого_удаления " +
+            "FROM пользователь_класс " +
+            "INNER JOIN класс ON класс.идентификатор_класс = пользователь_класс.идентификатор_класс " +
+            "WHERE пользователь_класс.идентификатор_пользователя = :id " +
+            "AND класс.флаг_мягкого_удаления = false",
             nativeQuery = true)
     List<StudentClass> findByUserId(Long id);
 
-    List<StudentClass> findByEducationalInstitution(EducationalInstitution educationalInstitution);
+    List<StudentClass> findByEducationalInstitutionAndIsDeleteFalse(EducationalInstitution educationalInstitution);
+
+    List<StudentClass> findByIsDeleteFalse();
 }

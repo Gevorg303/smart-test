@@ -14,6 +14,7 @@ public class StudentClassMapperImpl implements StudentClassMapperInterface {
         dto.setLetterDesignation(entity.getLetterDesignation());
         dto.setEducationalInstitution(entity.getEducationalInstitution());
         dto.setNumberOfInstitution(entity.getNumberOfInstitution());
+        dto.setIsDelete(entity.getIsDelete());
         return dto;
     }
 
@@ -24,6 +25,7 @@ public class StudentClassMapperImpl implements StudentClassMapperInterface {
         entity.setLetterDesignation(dto.getLetterDesignation());
         entity.setEducationalInstitution(dto.getEducationalInstitution());
         entity.setNumberOfInstitution(dto.getNumberOfInstitution());
+        entity.setIsDelete(dto.getIsDelete());
         return entity;
     }
 }

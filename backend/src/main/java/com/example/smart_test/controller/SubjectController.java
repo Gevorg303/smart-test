@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/subject")
@@ -45,7 +46,7 @@ public class SubjectController {
      Вывод предметов конкретного пользователя
      */
     @PostMapping("/print-user-subject")
-    public List<SubjectDto> getSubjectTeacherDto(@RequestBody User user) {
+    public Set<SubjectDto> getSubjectTeacherDto(@RequestBody UserDto user) {
         return subjectService.getSubjectByUser(user);
     }
 

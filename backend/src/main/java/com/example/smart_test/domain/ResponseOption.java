@@ -20,7 +20,7 @@ public class ResponseOption {
     @Column(name = "ответ")
     private String response;
     @Column(name = "верный_ответ")
-    private boolean validResponse;
+    private Boolean validResponse;
     @ManyToOne
     @JoinColumn(name = "идентификатор_задание")
     private Task task;

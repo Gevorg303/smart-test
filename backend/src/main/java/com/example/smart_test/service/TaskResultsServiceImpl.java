@@ -1,11 +1,14 @@
 package com.example.smart_test.service;
 
 
-import com.example.smart_test.domain.Task;
 import com.example.smart_test.domain.TaskResults;
 import com.example.smart_test.domain.TestingAttempt;
+import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestResultsDto;
+import com.example.smart_test.dto.TestingAttemptDto;
+import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestResultsMapperInterface;
+import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TestResultsRepositoryInterface;
 import com.example.smart_test.service.api.TaskResultsServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,12 +28,16 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     private TestResultsRepositoryInterface testResultsRepositoryInterface;
     @Autowired
     private TestResultsMapperInterface testResultsMapperInterface;
+    @Autowired
+    private TaskMapperInterface taskMapper;
+    @Autowired
+    private TestingAttemptMapperInterface testingAttemptMapper;
 
     @Override
     @Transactional
-    public TaskResults addTaskResults(Task task, boolean status, TestingAttempt testingAttempt) {
+    public void addTaskResults(TaskDto task, int assessmentTask, TestingAttemptDto testingAttempt) {
         try {
-            return testResultsRepositoryInterface.save(new TaskResults(task, status, testingAttempt));
+            testResultsRepositoryInterface.save(new TaskResults(taskMapper.toEntity(task), true, testingAttemptMapper.toEntity(testingAttempt)));
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при создании сущности 'Результаты задания': " + e.getMessage(), e);
         }
@@ -61,8 +67,8 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     }
 
     @Override
-    public List<TaskResults> findTaskResultsByTestingAttempt(TestingAttempt testingAttempt) {
-        return testResultsRepositoryInterface.findByTestingAttemptAndResultOfTheIndicatorFalse(testingAttempt);
+    public List<TaskResults> findTaskResultsByTestingAttempt(TestingAttemptDto testingAttempt) {
+        return testResultsRepositoryInterface.findByTestingAttemptAndResultOfTheIndicatorFalse(testingAttemptMapper.toEntity(testingAttempt));
     }
 
 }

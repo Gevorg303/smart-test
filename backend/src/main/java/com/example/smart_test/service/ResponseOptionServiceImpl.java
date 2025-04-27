@@ -7,6 +7,7 @@ import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.mapper.api.ResponseOptionMapperInterface;
 import com.example.smart_test.repository.ResponseOptionRepositoryInterface;
+import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.service.api.ResponseOptionServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +89,24 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
             responseOptionDtoList.add(responseOptionMapperInterface.toDTO(responseOption));
         }
         return responseOptionDtoList;
+    }
+
+    @Override
+    public void updateResponseOption(RequestForTask updatedTask) {
+        List<ResponseOptionDto> dtoList = updatedTask.getResponseOption();
+
+        for (ResponseOption responseOption : responseOptionRepositoryInterface.findByTaskId(updatedTask.getTask().getId())) {
+            if (responseOption != null) {
+                for (ResponseOptionDto dto : dtoList) {
+                    if (dto.getId() != null && dto.getId().equals(responseOption.getId())) {
+                        responseOption.setQuestion(dto.getQuestion());
+                        responseOption.setResponse(dto.getResponse());
+                        responseOption.setValidResponse(dto.isValidResponse());
+                        responseOptionRepositoryInterface.save(responseOption);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

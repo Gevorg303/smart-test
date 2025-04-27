@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.service.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,12 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     private UserClassServiceInterface userClassService;
     @Autowired
     private SubjectUserServiceInterface subjectUserService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Transactional
     @Override
-    public List<TestDto> getTestsFilter(TypeTest typeTest, User user, Subject subject, Theme theme) {
+    public List<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme) {
         List<TestDto> testDtoList = testService.getUserTests(user);
         List<TestDto> filteredList = new ArrayList<>();
 
@@ -75,7 +78,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     @Override
     @Transactional
     public List<TaskDto> getTasksFilter(User user, Subject subject, Theme theme, Indicator indicator) {
-        List<TaskDto> taskDtoList = taskService.getUserTasks(user);
+        List<TaskDto> taskDtoList = taskService.getUserTasks(userMapper.toDTO(user));
 
         if (indicator == null && theme == null && subject == null) {
             return taskDtoList;
@@ -130,7 +133,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
 
     @Transactional
     @Override
-    public List<IndicatorDto> getIndicatorFilter(User user, Subject subject) {
+    public List<IndicatorDto> getIndicatorFilter(UserDto user, Subject subject) {
         List<IndicatorDto> userIndicators = indicatorService.getUserIndicators(user);
         if (subject == null) {
             return userIndicators;

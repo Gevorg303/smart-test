@@ -4,17 +4,19 @@ import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.AddSubjectRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface SubjectServiceInterface {
     SubjectDto addSubjectDto(AddSubjectRequest dto);
 
     @Transactional
-    List<SubjectDto> getSubjectByUser(User user);
+    Set<SubjectDto> getSubjectByUser(UserDto user);
 
     Subject findSubjectById(Long id);
 

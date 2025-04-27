@@ -189,7 +189,9 @@ const QuestionBankPage = ({ type }) => {
                     size="xl"
                     aria-labelledby="example-custom-modal-styling-title"
                 >
+
                     <Modal.Header closeButton />
+
                     <Modal.Body>
                         {createModal}
                     </Modal.Body>

@@ -36,17 +36,15 @@ const TestPage = () => {
     }
 
     async function TestEnd() {
+        console.log(questions)
+        console.log(answers)
+       // let requestForTaskList =[];
 
-        let requestForTaskList =[];
+        answers.map((item, index) => {
+            item.task = questions.find(elem => elem.id === item.task.id);
 
-        questions.map((item, index) => {
-            var obj = {};
-            obj['task'] = {
-                "id": item.id
-            };
-            obj['response'] = answers[index] || ""
-            requestForTaskList.push(obj)
         })
+
         let sec = attemptDuration % 60;
         let min = Math.floor(parseInt(attemptDuration)/60%60) ;
         let hour= Math.floor(parseInt(attemptDuration)/3600) ;
@@ -70,7 +68,7 @@ const TestPage = () => {
             "user": {
                 "id": user.id
             },
-            "requestForTaskList": requestForTaskList
+            "requestForTaskList": answers
         }
         console.log(sendData)
 
@@ -163,7 +161,7 @@ const TestPage = () => {
                         if (active < questions.length - 1) setActive(active + 1)
                     }} />
                 </Pagination>
-                <Button className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
+                <Button hidden={active+1!=questions.length?"hidden":""}  className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
 
             </div>
             {/*<Footer />*/}

@@ -14,16 +14,17 @@ const Question = ({ id, item, qStatus, view, answers, setAnswers, setActive, qsC
         if(item!=undefined || item!=null){
             switch (item.typeTask.id){
                 case 3:
-                    setDisplay( <DisplayTestTextAnswers id={id} view={view}
-                                       currentAnswers={currentAnswers}  setCurrentAnswers={setCurrentAnswers}
-                                        answers={answers} setAnswers={setAnswers} qsCount={qsCount} setActive={setActive}/>)
+                    setDisplay( <DisplayTestTextAnswers id={id} item={item} view={view}
+                                       currentAnswers={currentAnswers} setAnswers={setAnswers} answers={answers}
+                                                        qsCount={qsCount} setActive={setActive}/>)
                     break;
                 case 2:
-                    setDisplay(<DisplayTestSelectManyAnswers item={item} view={view} setAnswers={setAnswers}
-                                                             qsCount={qsCount} setActive={setAnswers} answers={answers}/>)
+                    setDisplay(<DisplayTestSelectManyAnswers id={id} item={item} view={view} setAnswers={setAnswers} answers={answers}
+                                                             qsCount={qsCount} currentAnswers={currentAnswers}  setActive={setAnswers} />)
                     break;
                 case 1:
-                    setDisplay(<DisplayTestComparisonAnswers item={item} view={view}/>)
+                    setDisplay(<DisplayTestComparisonAnswers id={id} item={item} view={view} setAnswers={setAnswers} answers={answers}
+                                                             qsCount={qsCount} currentAnswers={currentAnswers}  setActive={setActive}/>)
                     break;
                 default:
                     setDisplay(<p>Упс...</p>)

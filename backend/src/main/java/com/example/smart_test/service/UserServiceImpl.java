@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
         for (UserRequest userRequest : userRequestList) {
             try {
-                validateUserRequest(userRequest);
+                //validateUserRequest(userRequest);
 
                 Pair<User, String> userWithPassword = prepareUserEntity(userRequest);
                 User newUser = userRepository.save(userWithPassword.getLeft());
@@ -106,9 +107,10 @@ public class UserServiceImpl implements UserServiceInterface {
         return Pair.of(userEntity, rawPassword);
     }
 
-
     private void linkUserToEducationalInstitution(UserRequest userRequest, User newUser) {
-        EducationalInstitution educationalInstitution = educationalInstitutionRepository.findById(userRequest.getEducationalInstitution().getId())
+        StudentClass studentClass = studentClassRepository.findById(userRequest.getStudentClass().getId()).orElse(null);
+        assert studentClass != null;
+        EducationalInstitution educationalInstitution = educationalInstitutionRepository.findById(studentClass.getEducationalInstitution().getId())
                 .orElseThrow(() -> new RuntimeException("Учебное заведение не найдено"));
         userEducationalInstitutionService.addUserEducationalInstitution(new UserEducationalInstitution(newUser, educationalInstitution));
     }
@@ -166,7 +168,7 @@ public class UserServiceImpl implements UserServiceInterface {
         if (dto.getPatronymic() != null && !dto.getPatronymic().isEmpty()) {
             patronymicInitials = dto.getPatronymic().substring(0, Math.min(dto.getPatronymic().length(), 2));
         }
-        int id = userRepository.maxIdUser() + 1;
+        int id = Optional.ofNullable(userRepository.maxIdUser()).orElse(0) + 1;
         return surnameInitials + nameInitials + patronymicInitials + id;
     }
 

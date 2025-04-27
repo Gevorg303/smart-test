@@ -5,6 +5,7 @@ import { useOutletContext } from 'react-router-dom';
 
 const HomePage = () => {
     const containerRef = useRef(null);
+    const containerRef2 = useRef(null);
     const [subjects, setSubjects] = useState([]);
     const [topText, setTopText] = useOutletContext();
 
@@ -51,11 +52,39 @@ const HomePage = () => {
         fetchUser();
     }, [setTopText]);
 
+    /*useEffect(() => {
+        const adjustStyleBasedOnHeight = () => {
+            const element = containerRef.current;
+            if (element) {
+                const height = element.offsetHeight;
+                if (height > 200) {
+                    element.style.backgroundColor = 'lightblue';
+
+                } else {
+                    element.style.backgroundColor = 'lightgray';
+                    element.style.marginBottom = '220px'; // Указываем единицы измерения
+                }
+            }
+        };
+
+        // Вызовите функцию при монтировании компонента
+        adjustStyleBasedOnHeight();
+
+        // Вызовите функцию при изменении размера окна
+        window.addEventListener('resize', adjustStyleBasedOnHeight);
+
+        // Очистка события при размонтировании компонента
+        return () => {
+            window.removeEventListener('resize', adjustStyleBasedOnHeight);
+        };
+    }, [subjects]);
+
+*/
     return (
-        <div className="home-page">
+        <div className="home-page" ref={containerRef2}>
             <div className="container-wrapper">
                 <div className="container-home" id="subjects-container" ref={containerRef} data-count={subjects.length}>
-                    {subjects}
+                    {subjects.length > 0 ? subjects : <p className="no-subjects-message">У Вас нет доступных предметов</p>}
                 </div>
             </div>
         </div>

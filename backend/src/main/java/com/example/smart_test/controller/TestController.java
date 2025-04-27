@@ -1,15 +1,14 @@
 package com.example.smart_test.controller;
 
-import com.example.smart_test.domain.TestingAttempt;
 import com.example.smart_test.domain.User;
-import com.example.smart_test.dto.TaskDto;
-import com.example.smart_test.dto.TestDto;
-import com.example.smart_test.dto.TestingAttemptDto;
-import com.example.smart_test.dto.ThemeDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.request.*;
+import com.example.smart_test.response.ResponseForTask;
+import com.example.smart_test.response.ResponseForTest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import com.example.smart_test.service.api.TestServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +58,7 @@ public class TestController {
      * Выводит тесты конкретного пользователя
      */
     @PostMapping("/get-user-tests")
-    public List<TestDto> getUserTests(@RequestBody User user) {
+    public List<TestDto> getUserTests(@RequestBody UserDto user) {
         return testService.getUserTests(user);
     }
 
@@ -91,8 +90,9 @@ public class TestController {
      * Завершение тестирования
      */
     @PostMapping("/end-testing")
-    public List<RequestForTask> endTesting(@RequestBody EndTestingRequest endTestingRequest){
-        return testService.endTesting(endTestingRequest);
+    public ResponseEntity<ResponseForTest> endTesting(@RequestBody EndTestingRequest endTestingRequest){
+        ResponseForTest responseForTest =  testService.endTesting(endTestingRequest);
+        return ResponseEntity.ok(responseForTest);
     }
 
     /**
@@ -109,5 +109,13 @@ public class TestController {
     @PostMapping("/find-testing-attempt-by-test")
     public List<TestingAttemptDto> findTestingAttemptByTest(@RequestBody TestingAttemptAndTest request) {
         return testService.findTestingAttemptByTest(request);
+    }
+
+    /**
+     * Метод для обновления данных теста
+     * */
+    @PutMapping("update-test")
+    public void updateTest(@RequestBody EditingTheTestRequest request) {
+        testService.updateTest(request);
     }
 }

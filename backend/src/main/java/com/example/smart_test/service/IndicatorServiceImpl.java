@@ -5,7 +5,9 @@ import com.example.smart_test.domain.Indicator;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.*;
+import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.IndicatorMapperInterface;
+import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.IndicatorRepositoryInterface;
 import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,6 +34,10 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
     private IndicatorRepositoryInterface indicatorRepositoryInterface;
     @Autowired
     private IndicatorMapperInterface indicatorMapperInterface;
+    @Autowired
+    private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
+    @Autowired
+    private UserMapperInterface userMapper;
 
     @Override
     public IndicatorDto addIndicatorDto(IndicatorDto dto) {
@@ -93,33 +99,47 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
     @Transactional
     @Override
-    public List<IndicatorDto> getUserIndicators(User dto) {
-        UserDto userDto = userService.getUserByLogin(dto);
+    public List<IndicatorDto> getUserIndicators(UserDto dto) {
+        UserDto userDto = userService.getUserByLogin(userMapper.toEntity(dto));
         if (userDto == null) {
             throw new IllegalArgumentException("User not found");
         }
-
-        List<SubjectUserDto> subjectTeachers = subjectUserService.getAllSubjectTeachers()
-                .stream()
-                .filter(st -> st.getUser() != null && st.getUser().getId().equals(userDto.getId()))
-                .toList();
-
-        List<ThemeDto> themes = themeService.getAllTheme();
-        List<IndicatorDto> indicatorDtoList = getAllIndicators();
+        List<UserDto> userList = new ArrayList<>();
+        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+            for (User user : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
+                userList.add(userMapper.toDTO(user));
+            }
+        } else {
+            userList.add(dto);
+        }
+        List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
+        List<SubjectUserDto> subjectTeachers = new ArrayList<>();
+        for (UserDto user : userList) {
+            for (SubjectUserDto subjectTeacher : allSubjectTeachers) {
+                if (subjectTeacher.getUser() != null && subjectTeacher.getUser().getId().equals(user.getId())) {
+                    subjectTeachers.add(subjectTeacher);
+                }
+            }
+        }
+        // TODO: Загружаем все темы и индикаторы
+        List<ThemeDto> allThemes = themeService.getAllTheme();
+        List<IndicatorDto> allIndicators = getAllIndicators();
 
         Set<IndicatorDto> uniqueIndicators = new HashSet<>();
-
-        subjectTeachers.stream()
-                .flatMap(subjectTeacher -> themes.stream()
-                        .filter(theme -> theme.getSubject() != null && theme.getSubject().getId().equals(subjectTeacher.getSubject().getId()))
-                        .flatMap(theme -> indicatorDtoList.stream()
-                                .filter(indicator -> indicator.getTheme() != null && indicator.getTheme().getId().equals(theme.getId()))
-                        )
-                )
-                .forEach(uniqueIndicators::add);
-
+        for (SubjectUserDto subjectTeacher : subjectTeachers) {
+            for (ThemeDto theme : allThemes) {
+                if (theme.getSubject() != null && theme.getSubject().getId().equals(subjectTeacher.getSubject().getId())) {
+                    for (IndicatorDto indicator : allIndicators) {
+                        if (indicator.getTheme() != null && indicator.getTheme().getId().equals(theme.getId())) {
+                            uniqueIndicators.add(indicator);
+                        }
+                    }
+                }
+            }
+        }
         return new ArrayList<>(uniqueIndicators);
     }
+
 
     @Override
     public Indicator updateIndicator(Indicator updatedIndicator) {

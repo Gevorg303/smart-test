@@ -4,26 +4,30 @@ import { Form, Button } from 'react-bootstrap';
 const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
     const [themes, setThemes] = useState([]); //все классы
     const [ids, setIds] = useState([]); // связанные классы
+    let flag = false;
 
-    const onClick = async (id) => {
+    const onClick = async (id, value) => {
         const newIds = [...ids];
         const currentState = newIds[id];
 
-        if (currentState) {
+
+        if (!value) {
             console.log("delete");
             try {
                 const subjectDto = {
                     id: targetSubject.id,
                     name: targetSubject.name,
-                    // Добавьте другие поля, если они есть в SubjectDto
                 };
 
-                const studentClassDto = {
-                    id: id,
-                    numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
-                    letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                    // Добавьте другие поля, если они есть в StudentClassDto
-                };
+                const themesFind = themes.find(item => item.id === id);
+                let studentClassDto;
+                if (themesFind != undefined)
+                {
+                    studentClassDto = {
+                        id: id,
+                        numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
+                        letterDesignation: themes.find(item => item.id === id).letterDesignation,
+                    };}
 
                 const response = await fetch('http://localhost:8080/user-subject/remove', {
                     method: 'DELETE',
@@ -52,15 +56,16 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                 const subjectDto = {
                     id: targetSubject.id,
                     name: targetSubject.name,
-                    // Добавьте другие поля, если они есть в SubjectDto
                 };
-
-                const studentClassDto = {
+                const themesFind = themes.find(item => item.id === id);
+                let studentClassDto;
+                if (themesFind != undefined)
+                {
+                    studentClassDto = {
                     id: id,
                     numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
                     letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                    // Добавьте другие поля, если они есть в StudentClassDto
-                };
+                };}
 
                 const response = await fetch('http://localhost:8080/user-subject/add', {
                     method: 'POST',
@@ -86,6 +91,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         }
 
         newIds[id] = !currentState;
+        flag = !flag;
         setIds(newIds);
 
         /*  const newClasses = [...classes];
@@ -114,13 +120,14 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                     }
                     const subjectsJson = await response.json();
                     console.log(subjectsJson)
-                        //setThemes(subjectsJson)
+                    //setThemes(subjectsJson)
                     if(subjectsJson!=null)
                     {
-                        const array = []
+                        /*const array = []
                         subjectsJson.map((item, index) => array[item.id] = true)
                         setIds(array)
-                        console.log(array)
+                        console.log(array)*/
+                        setThemes(subjectsJson);
                     }
                 }
                 else
@@ -132,13 +139,13 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         }
         //console.log("prop changed: "+targetSubject.id)
         fetchQuestions();
-    }, [targetSubject,]);
-    useEffect(() => {
+    }, [targetSubject, flag]);
+    /*useEffect(() => {
         async function fetchQuestions() {
             try {
                 if(targetSubject!=null) {
 
-                    /*   */
+                    /*
                     const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
                         credentials: "include",
                     });
@@ -172,19 +179,19 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         }
         //console.log("prop changed: "+targetSubject.id)
         fetchQuestions();
-    }, [targetSubject,/*classes*/ids]);
+    }, [targetSubject,ids]);*/
     return (
         <>
             <h3>Классы:</h3>
             {targetSubject != null ?
                 themes.map((item, index) => <Form.Check // prettier-ignore
-                        key={item.id}
+                        key={item.studentClassDto.id}
                         type={'checkbox'}
-                        checked={ids[item.id] || false}
-                        id={item.id}
+                        checked={item.status}
+                        id={item.studentClassDto.id}
                         name="class"
-                        label={item.numberOfInstitution + item.letterDesignation}
-                        onChange={() => onClick(item.id)}
+                        label={item.studentClassDto.numberOfInstitution + item.studentClassDto.letterDesignation}
+                        onChange={(e) => onClick(item.studentClassDto.id, e.target.value)}
                     />
                     /*<p key={item.id} value={item.id} > {item.nameOfTheClass}  </p>*/)
                 :
