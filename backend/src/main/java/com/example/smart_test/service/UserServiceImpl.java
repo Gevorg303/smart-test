@@ -202,5 +202,11 @@ public class UserServiceImpl implements UserServiceInterface {
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
 }

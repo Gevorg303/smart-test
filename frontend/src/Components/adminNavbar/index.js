@@ -24,7 +24,6 @@ const AdminNavbar = ({ onFormSelect }) => {
             subItems: [
                 "Одного пользователя",
                 "Несколько пользователей",
-                "Несколько учеников"
             ]
         },
         {
@@ -61,7 +60,7 @@ const AdminNavbar = ({ onFormSelect }) => {
         } else if (item === "Классы") {
             navigate('/ClassBank');
         } else if (item === "Ученики") {
-           // navigate('/ClassBank');
+            navigate('/StudentBank');
         } else if (item === "Личный кабинет") {
              navigate('/profile');
         } else if (item === "Главная") {
