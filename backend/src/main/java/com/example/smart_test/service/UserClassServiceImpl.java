@@ -106,7 +106,7 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     @Transactional
     @Override
     public List<User> getUsersByStudentClass(StudentClassDto request) {
-        return userClassRepositoryInterface.findByStudentClass_IdAndUser_Roles_Id(request.getId(), UserRoleEnum.STUDENT.getId())
+        return userClassRepositoryInterface.findByStudentClassIdAndUserRoles(request.getId(), UserRoleEnum.STUDENT.convertToRole(UserRoleEnum.STUDENT))
                 .stream()
                 .map(UserClass::getUser)
                 .collect(Collectors.toList());
