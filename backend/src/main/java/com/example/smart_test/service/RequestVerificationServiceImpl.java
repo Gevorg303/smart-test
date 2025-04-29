@@ -46,8 +46,8 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                     }
                     // TODO: логика для заданий с выбором ответа или c одним ответом
                     else if (TypeTaskEnum.MULTIPLE_CHOICE.getDescription().equals(taskType)
-                            || TypeTaskEnum.INPUT_ANSWER.name().equals(taskType)) {
-                        if (userOption.getQuestion() == null && correctOption.getQuestion() == null &&
+                            || TypeTaskEnum.INPUT_ANSWER.getDescription().equals(taskType)) {
+                        if (userOption.getQuestion() == null && (correctOption.getQuestion() == null || correctOption.getQuestion().isBlank()) &&
                                 userOption.getResponse().equals(correctOption.getResponse())) {
                             isCorrect = true;
                             break;
