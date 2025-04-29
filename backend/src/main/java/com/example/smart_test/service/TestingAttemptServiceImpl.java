@@ -38,4 +38,14 @@ public class TestingAttemptServiceImpl implements TestingAttemptServiceInterface
     public List<TestingAttempt> findTestingAttemptByTest(User user, Test test) {
         return testingAttemptRepository.findByTestAndUser(test, user);
     }
+
+    @Override
+    public void deleteByTestId(TestDto test) {
+        testingAttemptRepository.deleteByTestId(test.getId());
+    }
+
+    @Override
+    public List<TestingAttempt> findByTest(Test test) {
+        return testingAttemptRepository.findByTest(test);
+    }
 }

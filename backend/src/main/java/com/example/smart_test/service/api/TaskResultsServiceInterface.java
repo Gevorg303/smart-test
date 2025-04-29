@@ -21,4 +21,6 @@ public interface TaskResultsServiceInterface {
     List<TestResultsDto> getAllTestResults();
 
     List<TaskResults> findTaskResultsByTestingAttempt(TestingAttemptDto testingAttempt);
+
+    void deleteByTestingAttemptId(TestingAttemptDto testingAttempt);
 }

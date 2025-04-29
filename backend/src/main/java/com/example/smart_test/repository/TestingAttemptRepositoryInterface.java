@@ -13,4 +13,6 @@ import java.util.List;
 public interface TestingAttemptRepositoryInterface extends JpaRepository<TestingAttempt, Long> {
     TestingAttempt findTopByUserAndTest_IdOrderByStartDateTimeDesc(User user, Long idTest);
     List<TestingAttempt> findByTestAndUser(Test test, User user);
+    void deleteByTestId(Long testId);
+    List<TestingAttempt> findByTest(Test test);
 }
