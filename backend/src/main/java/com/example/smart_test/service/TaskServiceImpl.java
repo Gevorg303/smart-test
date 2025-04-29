@@ -162,7 +162,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
         List<UserDto> userList = new ArrayList<>();
-        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
             for (User user :  userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
                 userList.add(userMapper.toDTO(user));
             }

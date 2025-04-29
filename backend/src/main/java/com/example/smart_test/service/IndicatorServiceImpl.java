@@ -105,7 +105,7 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
             throw new IllegalArgumentException("User not found");
         }
         List<UserDto> userList = new ArrayList<>();
-        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
             for (User user : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
                 userList.add(userMapper.toDTO(user));
             }

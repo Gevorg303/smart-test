@@ -108,7 +108,7 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
         List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
         List<UserDto> userList = new ArrayList<>();
-        if (dto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+        if (dto.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
             for (User user : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(dto.getId()))
                 userList.add(userMapper.toDTO(user));
         } else {

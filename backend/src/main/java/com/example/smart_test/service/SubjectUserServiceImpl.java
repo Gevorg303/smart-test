@@ -146,7 +146,7 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
                 Set<User> users = getUsersByClass(studentClassMapper.toEntity(studentClassDto));
 
                 for (User user : users) {
-                    if (Objects.equals(user.getRoles().getId(), UserRoleEnum.STUDENT.getId())) {
+                    if (Objects.equals(user.getRoles().getRole(), UserRoleEnum.STUDENT.getDescription())) {
                         subjectUserRepositoryInterface.deleteBySubjectIdAndUserId(subject.getId(), user.getId());
                     }
                 }

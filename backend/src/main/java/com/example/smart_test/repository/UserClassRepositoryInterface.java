@@ -1,9 +1,10 @@
 package com.example.smart_test.repository;
 
 
+import com.example.smart_test.domain.Role;
 import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.UserClass;
-import com.example.smart_test.dto.StudentClassDto;
+import com.example.smart_test.enums.UserRoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,7 @@ public interface UserClassRepositoryInterface extends JpaRepository<UserClass, L
 
     List<UserClass> findByUserId(Long userId);
 
-    List<UserClass> findByStudentClass_IdAndUser_Roles_Id(Long studentClassId, Long roleId);
+    List<UserClass> findByStudentClassIdAndUserRoles(Long studentClassId, Role role);
 
     List<UserClass> findByStudentClass(StudentClass studentClass);
 }

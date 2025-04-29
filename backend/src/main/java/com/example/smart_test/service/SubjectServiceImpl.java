@@ -112,7 +112,7 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
             List<UserDto> userList = new ArrayList<>();
 
             // TODO: Если пользователь - админ, получаем всех пользователей учреждения (кроме него самого)
-            if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+            if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
                 for (User user1 : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId())) {
                     userList.add(userMapper.toDTO(user1));
                 }
@@ -127,7 +127,7 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
 
                 // TODO: Проверяем, привязан ли предмет именно к исходному пользователю (а не просто текущему из userList)
                 for (SubjectUser subjectUser : subjectUserList) {
-                    if (subjectUser.getUser() != null && subjectUser.getUser().getId().equals(user.getId())) {
+                    if (subjectUser.getUser() != null && subjectUser.getUser().getId().equals(currentUser.getId())) {
                         // TODO: Получаем предмет по ID, если он не null
                         Subject subject = findSubjectById(subjectUser.getSubject().getId());
                         if (subject != null) {

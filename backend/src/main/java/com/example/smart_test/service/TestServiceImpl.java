@@ -126,7 +126,7 @@ public class TestServiceImpl implements TestServiceInterface {
         // TODO: Фильтруем по текущему пользователю
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
         List<User> userList = new ArrayList<>();
-        if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+        if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
             userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
         } else {
             userList.add(userMapper.toEntity(user));
