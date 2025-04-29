@@ -71,13 +71,17 @@ public class TestServiceImpl implements TestServiceInterface {
     @Override
     @Transactional
     public void deleteTestDto(TestDto testDto) {
-        for (TaskDto taskDto : taskService.getAllTasks()) {
+        for (TaskDto taskDto : taskService.findTasksTheTest(testDto)) {
             if (taskDto.getTest() != null) {
                 if (taskDto.getTest().getId().equals(testDto.getId())) {
                     taskService.removeTaskFromTest(taskDto);
                 }
             }
         }
+        for (TestingAttempt testingAttempt : testingAttemptService.findByTest(testMapper.toEntity(testDto))) {
+            taskResultsService.deleteByTestingAttemptId(testingAttemptMapper.toDto(testingAttempt));
+        }
+        testingAttemptService.deleteByTestId(testDto);
         testRepository.deleteById(testDto.getId());
     }
 
