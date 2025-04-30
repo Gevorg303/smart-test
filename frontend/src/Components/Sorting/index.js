@@ -25,7 +25,7 @@ const Sorting = ({type,setBankItems}) => {
     useEffect(() => {
         async function fetchFilterOptions() {
             try {
-                const subjectsResponse = await fetch('http://localhost:8080/subject/all', {
+                const subjectsResponse = await fetch('http://localhost:8080/subject/all', { // поменять на предметы по образоватеньному учреждению
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -51,7 +51,7 @@ const Sorting = ({type,setBankItems}) => {
                 setTestTypes(testTypesData);
 
 
-
+                // не заполняются классы по образовательному учреждению
 
 
 
@@ -66,7 +66,7 @@ const Sorting = ({type,setBankItems}) => {
                 const user = await response1.json();*/
 
 
-                /*const classesResponse = await fetch('http://localhost:8080/class/all', {
+             /*   const classesResponse = await fetch('http://localhost:8080/student-class/find-class-by-educational-institution', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -152,6 +152,12 @@ const Sorting = ({type,setBankItems}) => {
                         user,
                         subject: subjectId>0 ? { id: subjectId } : null,
                     };}
+                    break;
+                case 'student':
+                    url = 'http://localhost:8080/bank-filters/user';
+                    requestBody = {
+                        id: classId
+                    };
                     break;
                 default:
                     return;
@@ -342,6 +348,32 @@ const Sorting = ({type,setBankItems}) => {
                                                     </div>
                                                     </>
                                                     : <></>}
+
+                                            {type === 'student' ?
+                                                <>
+                                                    <div className="button-containers-filter">
+                                                        <Form.Group>
+                                                            <Form.Label>Класс</Form.Label>
+                                                            <Form.Select
+                                                                /*value={filterCriteria.class} //заменить на currentClass
+                                                                onChange={(e) => setFilterCriteria({ ...filterCriteria, class: e.target.value })}*/
+                                                            >
+                                                                <option value="">Выберите класс</option>
+                                                                {classes.length > 0 ? (
+                                                                    classes.map((cls) => (
+                                                                        <option key={cls.id} value={cls.id}>
+                                                                            {cls.letterDesignation + cls.numberOfInstitution}
+                                                                        </option>
+                                                                    ))
+                                                                ) : (
+                                                                    <option disabled>Нет данных</option>
+                                                                )}
+                                                            </Form.Select>
+                                                        </Form.Group>
+                                                    </div>
+                                                </>
+                                                : <></>}
+
                                                     <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
                                                     {mainBlock}
                                                 </>
