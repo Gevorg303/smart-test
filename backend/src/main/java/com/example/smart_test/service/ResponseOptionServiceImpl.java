@@ -44,11 +44,7 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     @Override
     @Transactional
     public void deleteResponseOption(ResponseOption responseOption) {
-        if (responseOptionRepositoryInterface.findById(responseOption.getId()).isPresent()) {
-            responseOptionRepositoryInterface.delete(responseOption);
-        } else {
-            log.error("вариант ответа с идентификатором " + responseOption.getId() + " не найден");
-        }
+        responseOptionRepositoryInterface.deleteById(responseOption.getId());
     }
 
     @Override

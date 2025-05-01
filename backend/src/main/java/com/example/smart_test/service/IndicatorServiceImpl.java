@@ -142,7 +142,7 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
 
     @Override
-    public Indicator updateIndicator(Indicator updatedIndicator) {
+    public Indicator updateIndicator(IndicatorDto updatedIndicator) {
         return indicatorRepositoryInterface.findById(updatedIndicator.getId())
                 .map(indicator -> {
                     indicator.setTheme(updatedIndicator.getTheme());

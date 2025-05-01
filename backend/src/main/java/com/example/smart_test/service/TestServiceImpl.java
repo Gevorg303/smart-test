@@ -8,10 +8,7 @@ import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
-import com.example.smart_test.request.EditingTheTestRequest;
-import com.example.smart_test.request.EndTestingRequest;
-import com.example.smart_test.request.TestSimulatorRequest;
-import com.example.smart_test.request.TestingAttemptAndTest;
+import com.example.smart_test.request.*;
 import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.response.ResponseForTest;
 import com.example.smart_test.service.api.*;
@@ -55,6 +52,8 @@ public class TestServiceImpl implements TestServiceInterface {
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    private IndicatorServiceInterface indicatorService;
 
     @Override
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
@@ -269,10 +268,17 @@ public class TestServiceImpl implements TestServiceInterface {
                 testRepository.save(test);
             }
         }
-        if (request.getTaskDtoList() != null) {
-            for (TaskDto taskDto : request.getTaskDtoList()) {
-                taskService.removeTaskFromTest(taskDto);
+        if (request.getEditingTaskRequests() != null) {
+            for (EditingTaskRequest editingTaskRequests : request.getEditingTaskRequests()) {
+                if (editingTaskRequests.isDeleted()) {
+                    taskService.removeTaskFromTest(editingTaskRequests.getTask());
+                } else {
+                    taskService.addTaskToTest(request.getTestDto() != null ? request.getTestDto().getId() : null, editingTaskRequests.getTask().getId());
+                }
             }
+        }
+        if (request.getIndicator() != null) {
+            indicatorService.updateIndicator(request.getIndicator());
         }
     }
 }
