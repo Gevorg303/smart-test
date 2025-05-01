@@ -16,6 +16,7 @@ import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
 import com.example.smart_test.request.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
+import com.example.smart_test.service.api.StudentClassServiceInterface;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
 import com.example.smart_test.service.api.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,8 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     private UserMapperInterface userMapper;
     @Autowired
     private StudentClassRepositoryInterface studentClassRepository;
+    @Autowired
+    private StudentClassServiceInterface studentClassService;
 
     @Override
     @Transactional
@@ -120,17 +123,18 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
         Set<ClassStatusResponse> studentClassDtoSet = new HashSet<>();
         if (userList != null) {
             for (User user : userList) {
-                List<StudentClassDto> studentClassDtoList = userService.findStudentClassByUser(userMapper.toDTO(user));
-                for (StudentClassDto studentClassDto : studentClassDtoList) {
-                    for (StudentClass studentClass1 : studentClassRepository.findByUserId(user.getId())) {
-                        if (Objects.equals(studentClassDto.getId(), studentClass1.getId())) {
-                            studentClassDtoSet.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass1), true));
-                        } else {
-                            studentClassDtoSet.add(new ClassStatusResponse(studentClassDto, false));
+                if (user.getRoles().getRole().equals(UserRoleEnum.STUDENT.getDescription())) {
+                    List<StudentClassDto> studentClassDtoList = studentClassService.getStudentClassByUserId(user.getId());
+                    for (StudentClassDto studentClassDto : studentClassDtoList) {
+                        for (StudentClass studentClass1 : studentClassRepository.findByUserId(user.getId())) {
+                            if (Objects.equals(studentClassDto.getId(), studentClass1.getId())) {
+                                studentClassDtoSet.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass1), true));
+                            } else {
+                                studentClassDtoSet.add(new ClassStatusResponse(studentClassDto, false));
+                            }
                         }
                     }
                 }
-
             }
         }
         return studentClassDtoSet;

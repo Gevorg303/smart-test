@@ -85,7 +85,7 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
             }
             return subjectDto;
         } catch (Exception e) {
-            throw new RuntimeException("Не удалось получить предмет: " + e.getMessage(), e);
+            throw new RuntimeException("Не удалось получить класс: " + e.getMessage(), e);
         }
 
     }
