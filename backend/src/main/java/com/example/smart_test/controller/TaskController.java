@@ -4,7 +4,7 @@ import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.AddTaskRequest;
-import com.example.smart_test.request.RequestForTask;
+import com.example.smart_test.request.EditingTaskRequest;
 import com.example.smart_test.service.api.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +70,7 @@ public class TaskController {
      * Запрос для редактирования задания
      * */
     @PutMapping("/update-task")
-    public void updateTask(@RequestBody RequestForTask updatedTask) {
+    public void updateTask(@RequestBody EditingTaskRequest updatedTask) {
         taskService.updateTask(updatedTask);
     }
 

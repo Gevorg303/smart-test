@@ -3,15 +3,15 @@ package com.example.smart_test.service;
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.UserRoleEnum;
+import com.example.smart_test.mapper.api.ResponseOptionMapperInterface;
 import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.TaskRepositoryInterface;
-import com.example.smart_test.request.RequestForTask;
+import com.example.smart_test.request.EditingTaskRequest;
 import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -48,6 +48,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    private ResponseOptionMapperInterface responseOptionMapper;
 
     @Override
     @Transactional
@@ -76,7 +78,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
             }
             List<ResponseOption> responseOptionList = responseOptionService.findAllResponseOptionsByTaskId(task);
             for (ResponseOption responseOption : responseOptionList) {
-                responseOptionService.deleteResponseOption(responseOption);
+                responseOptionService.deleteResponseOption(responseOptionMapper.toDTO(responseOption));
             }
             taskRepositoryInterface.delete(task);
         } else {
@@ -247,7 +249,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
     }
 
     @Override
-    public void updateTask(RequestForTask updatedTask) {
+    @Transactional
+    public void updateTask(EditingTaskRequest updatedTask) {
         Task task = taskRepositoryInterface.findById(updatedTask.getTask().getId()).orElse(null);
 
         if (task == null) {
@@ -262,8 +265,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
             taskRepositoryInterface.save(task);
         }
 
-        if (updatedTask.getResponseOption() != null) {
-            responseOptionService.updateResponseOption(updatedTask);
+        if (updatedTask.getEditingResponseOption() != null) {
+            responseOptionService.editingResponseOption(updatedTask);
         }
     }
 

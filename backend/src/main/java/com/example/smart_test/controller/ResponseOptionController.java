@@ -31,7 +31,7 @@ public class ResponseOptionController {
 //    }
 
     @DeleteMapping("/delete")
-    public void deleteResponseOption(@RequestBody ResponseOption responseOption) {
+    public void deleteResponseOption(@RequestBody ResponseOptionDto responseOption) {
         responseOptionService.deleteResponseOption(responseOption);
     }
 

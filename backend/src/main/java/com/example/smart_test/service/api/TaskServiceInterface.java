@@ -9,6 +9,7 @@ import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.request.EditingTaskRequest;
 import com.example.smart_test.request.RequestForTask;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,5 +44,5 @@ public interface TaskServiceInterface {
     @Transactional
     void removeTaskFromTest(TaskDto taskDto);
 
-    void updateTask(RequestForTask updatedTask);
+    void updateTask(EditingTaskRequest updatedTask);
 }

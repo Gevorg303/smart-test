@@ -6,7 +6,10 @@ import com.example.smart_test.domain.Task;
 import com.example.smart_test.dto.ResponseOptionDto;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.mapper.api.ResponseOptionMapperInterface;
+import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.repository.ResponseOptionRepositoryInterface;
+import com.example.smart_test.request.EditingResponseOptionRequest;
+import com.example.smart_test.request.EditingTaskRequest;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.service.api.ResponseOptionServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +31,10 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     private ResponseOptionRepositoryInterface responseOptionRepositoryInterface;
     @Autowired
     private ResponseOptionMapperInterface responseOptionMapperInterface;
+    @Autowired
+    private TaskMapperInterface taskMapper;
 
     @Override
-    @Transactional
     public ResponseOption addResponseOption(Task task, ResponseOption responseOption) {
         try {
             responseOption.setTask(task);
@@ -42,8 +46,7 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     }
 
     @Override
-    @Transactional
-    public void deleteResponseOption(ResponseOption responseOption) {
+    public void deleteResponseOption(ResponseOptionDto responseOption) {
         responseOptionRepositoryInterface.deleteById(responseOption.getId());
     }
 
@@ -88,18 +91,23 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     }
 
     @Override
-    public void updateResponseOption(RequestForTask updatedTask) {
-        List<ResponseOptionDto> dtoList = updatedTask.getResponseOption();
-
-        for (ResponseOption responseOption : responseOptionRepositoryInterface.findByTaskId(updatedTask.getTask().getId())) {
+    @Transactional
+    public void editingResponseOption(EditingTaskRequest editingTaskRequest) {
+        for (ResponseOption responseOption : responseOptionRepositoryInterface.findByTaskId(editingTaskRequest.getTask().getId())) {
             if (responseOption != null) {
-                for (ResponseOptionDto dto : dtoList) {
-                    if (dto.getId() != null && dto.getId().equals(responseOption.getId())) {
-                        responseOption.setQuestion(dto.getQuestion());
-                        responseOption.setResponse(dto.getResponse());
-                        responseOption.setValidResponse(dto.isValidResponse());
+                for (EditingResponseOptionRequest request : editingTaskRequest.getEditingResponseOption()) {
+                    if (request.getResponseOptionDto().getId() != null
+                            && request.getResponseOptionDto().getId().equals(responseOption.getId())
+                            && !request.isDeleted()) {
+                        responseOption.setQuestion(request.getResponseOptionDto().getQuestion());
+                        responseOption.setResponse(request.getResponseOptionDto().getResponse());
+                        responseOption.setValidResponse(request.getResponseOptionDto().isValidResponse());
                         responseOptionRepositoryInterface.save(responseOption);
                         break;
+                    } else if (request.getResponseOptionDto().getId() == null && !request.isDeleted()) {
+                        addResponseOption(taskMapper.toEntity(editingTaskRequest.getTask()), responseOptionMapperInterface.toEntity(request.getResponseOptionDto()));
+                    } else if (request.getResponseOptionDto().getId() != null && request.isDeleted()) {
+                        deleteResponseOption(request.getResponseOptionDto());
                     }
                 }
             }
