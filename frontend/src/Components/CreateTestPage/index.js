@@ -74,7 +74,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                 testDto: {
                     closingDateAndTime: timeEnd,
                     description: currentDescription,
-                    id: editItem.id,
+                    id: editItem === null ? null : editItem.id,
                     numberOfAttemptsToPass: countOfTry,
                     openingDateAndTime: timeStart,
                     passageTime: passingTime,
