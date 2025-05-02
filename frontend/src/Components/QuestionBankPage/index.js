@@ -162,14 +162,14 @@ const QuestionBankPage = ({type}) => {
                         setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} />);
 
                         const response7 = await fetch('http://localhost:8080/users/all', {
-                            method: 'GET',
+                            method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
-                            }/*,
+                            },
                             body: JSON.stringify({
                                 userDto: user,
-                                roleDto: user.role
-                            })*/
+                                roleDto: null
+                            })
                         });
                         if (!response7.ok) {
                             throw new Error('Ошибка получения индикаторов');

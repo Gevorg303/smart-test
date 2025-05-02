@@ -37,27 +37,13 @@ public class UserController {
         userService.deleteUser(userDto);
     }
 
-   /* @PostMapping("/all")
-    public List<UserDto> getUsers(@RequestBody UserBiRoleRequest request) {
-        System.out.println("Received request: " + request); // Логирование запроса
-        if (request.getUserDto() == null) {
-            throw new IllegalArgumentException("UserDto cannot be null");
-        }
-        List<UserDto> users = userService.getUser(request);
-        System.out.println("Returning users: " + users); // Логирование ответа
-        return users;
-    }*/
-
     /**
-     *
-     * @return Возвращает всех пользователей из БД
+     * Метод для вывода всех пользователей по школе авторизованного пользователя
+     * Если на вход указать роль, то на выход можно получить отфильтрованных пользователей с этой ролью, иначе на выход придут все пользователи)
      */
-    @GetMapping("/all")
-    public List<UserDto> getAllUsers() {
-        System.out.println("Received request to get all users"); // Логирование запроса
-        List<UserDto> users = userService.getAllUsers();
-        System.out.println("Returning users: " + users); // Логирование ответа
-        return users;
+    @PostMapping("/all")
+    public List<UserDto> getUsers(@RequestBody UserBiRoleRequest request) {
+        return userService.getUser(request);
     }
 
     @GetMapping("/{login}")
@@ -78,11 +64,4 @@ public class UserController {
         return userService.findStudentClassByUser(userDto);
     }
 
-  /*  @GetMapping("/current-user-classes")
-    public List<StudentClassDto> getCurrentUserClasses(@CookieValue("jwtToken") String token) {
-        var jwt = jwtUtils.decodeToken(token);
-        var login = jwt.getClaims().get("sub").toString();
-        User currentUser = userService.getUserByLogin(login);
-        return userService.findStudentClassByUser(userMapper.toDTO(currentUser));
-    }*/
 }
