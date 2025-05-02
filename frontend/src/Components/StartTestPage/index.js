@@ -140,28 +140,34 @@ const StartTestPage = () => {
 
     let navigate = useNavigate();
 
-    async function StartTest() {
-        if(testTaskCount != 0 || (typeTest == 2 && testTaskCount == 0) ) {
-            const now = new Date();//.toLocaleString("ru", options);
-            if (testDateStartValue <= now) {
-                if (testDateEndValue >= now) {
-                    sessionStorage.setItem('startDate', new Date());
-                    if (typeTest === 2) {
-                        StartTrainingTest();
-                    } else {
-                        navigate("/test");
-                    }
 
+    async function StartTest() {
+        // Проверка, что количество попыток больше или равно количеству сделанных попыток
+        if (attempts.length < testTryCount) {
+            // Проверка наличия заданий в тесте
+            if (testTaskCount != 0 || (typeTest == 2 && testTaskCount == 0)) {
+                const now = new Date();
+                // Проверка, что тест уже начался
+                if (testDateStartValue <= now) {
+                    // Проверка, что тест еще не закончился
+                    if (testDateEndValue >= now) {
+                        sessionStorage.setItem('startDate', new Date());
+                        if (typeTest === 2) {
+                            StartTrainingTest();
+                        } else {
+                            navigate("/test");
+                        }
+                    } else {
+                        console.log("Тест больше не доступен для прохождения!");
+                    }
                 } else {
-                    console.log("Тест больше не доступен для прохождения!")
+                    console.log("Тест еще не начался!");
                 }
             } else {
-                console.log("Тест еще не начался!")
-
-
+                console.log("В тесте отсутствуют задания!");
             }
-        }else {
-            console.log("В тесте отсутсвуют задания!")
+        } else {
+            console.log("Количество попыток исчерпано!");
         }
     }
     async function StartTrainingTest() {

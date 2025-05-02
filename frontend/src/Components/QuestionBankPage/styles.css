@@ -89,9 +89,8 @@
     font-weight: bold;
 }
 .scrollable-container {
-    height: 100vh; /* Высота контейнера равна высоте viewport */
-    overflow-y: auto; /* Включаем вертикальную прокрутку */
+    /*height: 100vh; /* Высота контейнера равна высоте viewport */
+    /*overflow-y: auto; /* Включаем вертикальную прокрутку */
     padding: 20px; /* Отступы вокруг контента */
     box-sizing: border-box; /* Включаем box-sizing для корректного отображения отступов */
-
 }

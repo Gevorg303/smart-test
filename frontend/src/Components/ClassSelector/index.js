@@ -2,32 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
 const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
-    const [themes, setThemes] = useState([]); //все классы
+    const [classes, setClasses] = useState([]); //все классы //переименвать на классы
     const [ids, setIds] = useState([]); // связанные классы
     let flag = false;
 
     const onClick = async (id, value) => {
-        const newIds = [...ids];
-        const currentState = newIds[id];
+        //const newIds = [...ids];
+        //const currentState = newIds[id];
 
+        const subjectDto = {
+            id: targetSubject.id,
+            name: targetSubject.name,
+        };
+        const classesFind = classes.find(item => item.studentClassDto.id === id);
+        let studentClassDto;
+        if (classesFind != undefined)
+        {
+            studentClassDto = {
+                id: id,
+                numberOfInstitution: classes.find(item => item.studentClassDto.id === id).numberOfInstitution,
+                letterDesignation: classes.find(item => item.studentClassDto.id === id).letterDesignation,
+            };}
 
         if (!value) {
             console.log("delete");
             try {
-                const subjectDto = {
-                    id: targetSubject.id,
-                    name: targetSubject.name,
-                };
-
-                const themesFind = themes.find(item => item.id === id);
-                let studentClassDto;
-                if (themesFind != undefined)
-                {
-                    studentClassDto = {
-                        id: id,
-                        numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
-                        letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                    };}
 
                 const response = await fetch('http://localhost:8080/user-subject/remove', {
                     method: 'DELETE',
@@ -53,19 +52,12 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         } else {
             console.log("add");
             try {
-                const subjectDto = {
-                    id: targetSubject.id,
-                    name: targetSubject.name,
-                };
-                const themesFind = themes.find(item => item.id === id);
-                let studentClassDto;
-                if (themesFind != undefined)
-                {
-                    studentClassDto = {
-                    id: id,
-                    numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
-                    letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                };}
+
+
+                console.log(studentClassDto)
+                console.log(classesFind)
+                console.log(id)
+                console.log(classes)
 
                 const response = await fetch('http://localhost:8080/user-subject/add', {
                     method: 'POST',
@@ -90,15 +82,15 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
             }
         }
 
-        newIds[id] = !currentState;
+        //newIds[id] = !currentState;
         flag = !flag;
-        setIds(newIds);
+        //setIds(newIds);
 
         /*  const newClasses = [...classes];
           newClasses[id] = newIds[id];
           setClasses(newClasses);*/
 
-        console.log(newIds);
+        //console.log(newIds);
         // console.log(newClasses);
     };
 
@@ -120,14 +112,14 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                     }
                     const subjectsJson = await response.json();
                     console.log(subjectsJson)
-                    //setThemes(subjectsJson)
+                    //setClasses(subjectsJson)
                     if(subjectsJson!=null)
                     {
                         /*const array = []
                         subjectsJson.map((item, index) => array[item.id] = true)
                         setIds(array)
                         console.log(array)*/
-                        setThemes(subjectsJson);
+                        setClasses(subjectsJson);
                     }
                 }
                 else
@@ -167,7 +159,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                     }
                     const thjson = await response.json();
                     console.log(thjson)
-                    setThemes(thjson)
+                    setClasses(thjson)
 
                 }
                 else
@@ -184,7 +176,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         <>
             <h3>Классы:</h3>
             {targetSubject != null ?
-                themes.map((item, index) => <Form.Check // prettier-ignore
+                classes.map((item, index) => <Form.Check // prettier-ignore
                         key={item.studentClassDto.id}
                         type={'checkbox'}
                         checked={item.status}
