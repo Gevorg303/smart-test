@@ -164,17 +164,14 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
     }
 
     const renderAnswers = () => {
+        //console.log("Current type - "+currentType)
         switch (currentType) {
-           /* case "1":
+            case "1":
                 return <>
-                    <Form.Label>Ответы</Form.Label>
-                    <Form.Control type="text"/>
-                </>;*/
-            case "2":
-                return  <>
-                    <Form.Label>Ответы для выбора:</Form.Label>
+                    <Form.Label>Ответы для сопоставления:</Form.Label>
+                    <br></br>
                     {currentAnswers.map((item, index) =>
-                        <FormSelectAnswer key={index} id={index} isMultiple={true} answers={currentAnswers} setAnswers={setCurrentAnswers}/>
+                        <FormSelectAnswer key={index} id={index} isMultiple={false} answers={currentAnswers} setAnswers={setCurrentAnswers}/>
                     )}
                     <Button onClick={()=>{
                         onClick(currentAnswers.length,{
@@ -185,6 +182,27 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                         console.log(currentAnswers)
                     }}>Добавить вариант ответа</Button>
                     <Button onClick={()=>{
+                        onClickDel();
+                        console.log(currentAnswers)
+                    }}>Убрать последний вариант ответа</Button>
+                </>;
+            case "2":
+                return <>
+                    <Form.Label>Ответы для выбора:</Form.Label>
+                    <br></br>
+                    {currentAnswers.map((item, index) =>
+                        <FormSelectAnswer key={index} id={index} isMultiple={true} answers={currentAnswers}
+                                          setAnswers={setCurrentAnswers}/>
+                    )}
+                    <Button onClick={() => {
+                        onClick(currentAnswers.length, {
+                            question: "",
+                            response: "",
+                            validResponse: false
+                        });
+                        console.log(currentAnswers)
+                    }}>Добавить вариант ответа</Button>
+                    <Button onClick={() => {
                         onClickDel();
                         console.log(currentAnswers)
                     }}>Убрать последний вариант ответа</Button>
@@ -205,22 +223,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 </>;
             default:
                 return <>
-                    <Form.Label>Ответы для сопоставления:</Form.Label>
-                    {currentAnswers.map((item, index) =>
-                    <FormSelectAnswer key={index} id={index} isMultiple={false} answers={currentAnswers} setAnswers={setCurrentAnswers}/>
-                    )}
-                    <Button onClick={()=>{
-                        onClick(currentAnswers.length,{
-                            question: "",
-                            response: "",
-                            validResponse: false
-                        });
-                        console.log(currentAnswers)
-                    }}>Добавить вариант ответа</Button>
-                    <Button onClick={()=>{
-                        onClickDel();
-                        console.log(currentAnswers)
-                    }}>Убрать последний вариант ответа</Button>
+                    <Form.Label>Выберите тип теста чтобы создавать варианты ответов</Form.Label>
                 </>;
         }
     };
