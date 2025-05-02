@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 
-const CreateSubjectPage = ({editItem, onCreate}) => {
+const CreateSubjectPage = ({editItem, onCreate, onError}) => {
 
     //const [show, setShow] = useState(false); // отображение тоста
     // [toastText, setToastText] = useState(""); // текст тоста
@@ -38,6 +38,7 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }
@@ -104,7 +105,6 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
                 }
                 toastText = "Предмет успешно редактирован.";
             }
-
 
             onCreate(toastText);
         } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 
-const CreateStudentPage = ({ editItem, onCreate }) => {
+const CreateStudentPage = ({ editItem, onCreate, onError}) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
@@ -41,6 +41,7 @@ const CreateStudentPage = ({ editItem, onCreate }) => {
         }
 
         if (errors.length > 0) {
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }

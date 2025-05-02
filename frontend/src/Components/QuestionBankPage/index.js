@@ -27,6 +27,10 @@ const QuestionBankPage = ({type}) => {
     const [showToast, setShowToast] = useState(false); // отображение тоста
     const [toastText, setToastText] = useState(""); // текст тоста
     const [topText, setTopText] = useOutletContext();
+    const [showErrorToast, setShowErrorToast] = useState(false);
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     function EditFunc(item) { //открывает модальное окно для редактирования объекта
         setEditItem(item)
@@ -34,9 +38,22 @@ const QuestionBankPage = ({type}) => {
     }
     const handleCreate = (message) => {
         setShowCreateModal(false);
-        setShowToast(true);
-        setToastText(message);
+        console.log(toastText)
+        //setShowToast(true);
+        //setToastText(message);
+        setShowSuccessToast(true);
+        setShowErrorToast(true);
     };
+    const ErrorToast = (message) => {
+        console.log('ошибка')
+        //setShowToast(true);
+        //setToastText(message);
+        //setShowSuccessToast(true);
+        setErrorMessage(message);
+        setShowSuccessToast(false);
+        setShowErrorToast(true);
+    };
+
 
     useEffect(() => {
         async function fetchTests() {
@@ -56,7 +73,7 @@ const QuestionBankPage = ({type}) => {
 
                         setTopText("Банк тестов");
                         //setTitle("Банк тестов");// задать заголовок на странице
-                        setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate}/>); // задать модальное окно для создания на странице
+                        setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>); // задать модальное окно для создания на странице
 
                         const response2 = await fetch('http://localhost:8080/test/get-user-tests', { // получить тесты пользователя
                             method: 'POST',
@@ -77,7 +94,7 @@ const QuestionBankPage = ({type}) => {
 
                         setTopText("Банк заданий");
                         //setTitle("Банк заданий"); // задать заголовок на странице
-                        setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate}/>);// задать модальное окно для создания на странице
+                        setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);// задать модальное окно для создания на странице
 
                         const response3 = await fetch('http://localhost:8080/task/get-user-tasks', { // получить задания пользователя
                             method: 'POST',
@@ -98,7 +115,7 @@ const QuestionBankPage = ({type}) => {
 
                         setTopText("Банк предметов");
                         //setTitle("Банк предметов"); // задать заголовок на странице
-                        setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate}/>);
+                        setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
 
                         const response4 = await fetch('http://localhost:8080/subject/print-user-subject', {
                             method: 'POST',
@@ -119,7 +136,7 @@ const QuestionBankPage = ({type}) => {
 
                         setTopText("Банк тем");
                         //setTitle("Банк тем"); // задать заголовок на странице
-                        setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate}/>);
+                        setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
 
                         const response5 = await fetch('http://localhost:8080/theme/get-theme-by-id-user', {
                             method: 'POST',
@@ -140,7 +157,7 @@ const QuestionBankPage = ({type}) => {
 
                         setTopText("Банк индикаторов");
                         //setTitle("Банк индикаторов"); // задать заголовок на странице
-                        setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate}/>);
+                        setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
 
                         const response6 = await fetch('http://localhost:8080/indicator/indicator-by-user', {
                             method: 'POST',
@@ -159,7 +176,7 @@ const QuestionBankPage = ({type}) => {
                     case "student":
                         localStorage.setItem('info', "На этой странице посмотреть список учеников");
                         setTopText("Банк учеников");
-                        setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} />);
+                        setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
 
                         const response7 = await fetch('http://localhost:8080/users/all', {
                             method: 'POST',
@@ -189,7 +206,7 @@ const QuestionBankPage = ({type}) => {
         }
 
         fetchTests();
-    }, [type,editItem,toastText, setTopText]);
+    }, [type,editItem,showSuccessToast,setTopText]);
     /* className="page-container-quest"*/
     return (
         <div className="scrollable-container"> {/* Добавлена эта строка */}
@@ -225,7 +242,33 @@ const QuestionBankPage = ({type}) => {
                     <p className="no-items-message">Нет доступных элементов</p>
                 )}
             </div>
-            <ToastContainer
+
+            {showErrorToast && (
+                <Toast
+                    onClose={() => setShowErrorToast(false)}
+                    show={showErrorToast}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        zIndex: 100000,
+                        backgroundColor: showSuccessToast ? 'green':'red',
+                        color: 'white'
+                    }}
+                >
+                    <Toast.Header closeButton={false}>
+                        <strong className="mr-auto">Успешно</strong>
+                        <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
+                            {/*&times;*/} x
+                        </Button>
+                    </Toast.Header>
+                    <Toast.Body>{showSuccessToast ? 'Успешно': errorMessage}</Toast.Body>
+                </Toast>
+            )}
+
+
+
+            {/*<ToastContainer
                 className="p-3"
                 position={'middle-center'}
                 style={{ zIndex: 1 }}
@@ -241,7 +284,7 @@ const QuestionBankPage = ({type}) => {
                     </Toast.Header>
                     <Toast.Body>{toastText}</Toast.Body>
                 </Toast>
-            </ToastContainer>
+            </ToastContainer>*/}
         </div>
     );
 };

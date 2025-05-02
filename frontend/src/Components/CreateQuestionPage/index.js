@@ -5,7 +5,7 @@ import FormSelectAnswer from "../FormSelectAnswer";
 
 
 
-const CreateQuestionPage = ({editItem, onCreate}) => {
+const CreateQuestionPage = ({editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]);
     const [types, setTypes] = useState([]);
     const [targetSubject, setTargetSubject] = useState(0);
@@ -68,6 +68,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }

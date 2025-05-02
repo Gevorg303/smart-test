@@ -3,7 +3,7 @@ import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import TaskForTestSelector from "../TaskForTestSelector";
 
-const CreateTestPage = ({ editItem, onCreate }) => {
+const CreateTestPage = ({ editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]);
     const [tasks, setTasks] = useState([]);
     const [targetSubject, setTargetSubject] = useState(0);
@@ -57,6 +57,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
         }
 
         if (errors.length > 0) {
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }
