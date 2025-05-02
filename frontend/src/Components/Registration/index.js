@@ -29,6 +29,7 @@ const RegistrationPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
+
     const isValidName = (name) => {
         const nameRegex = /^[a-zA-Zа-яА-ЯёЁ'-]{2,50}$/;
         return nameRegex.test(name);
@@ -37,12 +38,45 @@ const RegistrationPage = () => {
     useEffect(() => {
         async function fetchClasses() {
             try {
-                const response = await fetch('http://localhost:8080/users/current-user-classes', {
+                const responseCurrent = await fetch('http://localhost:8080/users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include',
+                });
+
+                if (!responseCurrent.ok) {
+                    throw new Error('Ошибка получения данных о классах');
+                }
+
+                const user = await responseCurrent.json();
+                console.log('ntreobq gjkmpjdfnktq:', user); // Проверьте, что данные получены
+
+                const responseAll = await fetch('http://localhost:8080/users/all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        userDto: user,
+                        roleDto: null
+                    })
+                });
+                if (!responseAll.ok) {
+                    throw new Error('Ошибка получения данных о пользователях');
+                }
+                const data2 = await responseAll.json();
+                console.log('Все пользователи:', data2);
+                setUsers(data2);
+
+                const response = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(user)
                 });
 
                 if (!response.ok) {
@@ -63,7 +97,7 @@ const RegistrationPage = () => {
         }
 
         fetchClasses();
-        fetchUsers();
+        // fetchUsers();
     }, []);
 
     useEffect(() => {
@@ -146,7 +180,7 @@ const RegistrationPage = () => {
                 setShowSuccessToast(true);
                 form.reset();
                 setSelectedClass(null); // Очистить выбранный класс
-                await fetchUsers();
+                // await fetchUsers();
                 // Сгенерировать и скачать XLS файл
                 const userDetails = answers.map((item, index) => ({
                     ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
@@ -244,7 +278,7 @@ const RegistrationPage = () => {
                     const answers = await response.json();
                     setShowSuccessToast(true);
                     setSelectedClass(null); // Clear selected class
-                    await fetchUsers();
+                    // await fetchUsers();
 
                     // Generate and download XLS file
                     const userDetails = answers.map((item, index) => ({
@@ -284,19 +318,28 @@ const RegistrationPage = () => {
         return emailRegex.test(email);
     };
 
-    const fetchUsers = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/users/all');
-            if (!response.ok) {
-                throw new Error('Ошибка получения данных о пользователях');
-            }
-            const data = await response.json();
-            console.log('Все пользователи:', data);
-            setUsers(data);
-        } catch (error) {
-            console.error('Ошибка получения данных о пользователях:', error);
-        }
-    };
+    /* const fetchUsers = async () => {
+         try {
+             const response = await fetch('http://localhost:8080/users/all', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json;charset=UTF-8'
+                 },
+                 body: JSON.stringify({
+                     userDto: currentUser,
+                     roleDto: null
+                 })
+             });
+             if (!response.ok) {
+                 throw new Error('Ошибка получения данных о пользователях');
+             }
+             const data = await response.json();
+             console.log('Все пользователи:', data);
+             setUsers(data);
+         } catch (error) {
+             console.error('Ошибка получения данных о пользователях:', error);
+         }
+     };*/
 
     const downloadXLS = (data, filename) => {
         const worksheet = XLSX.utils.json_to_sheet(data);

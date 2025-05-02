@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import * as XLSX from 'xlsx';
+import { Toast, Button } from 'react-bootstrap';
 
 const AdminRegistrationForm = ({ selectedForm }) => {
     const [formData, setFormData] = useState({
@@ -14,12 +15,12 @@ const AdminRegistrationForm = ({ selectedForm }) => {
 
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
-    const [selectedClass, setSelectedClass] = useState(null);
     const [classes, setClasses] = useState([]);
     const [users, setUsers] = useState([]);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [currentUser, setCurrentUser] = useState(null); // Сохраняем данные текущего пользователя
 
     const roleMapping = {
         'Админ': 1,
@@ -28,44 +29,68 @@ const AdminRegistrationForm = ({ selectedForm }) => {
     };
 
     useEffect(() => {
-        const fetchClassesAndUsers = async () => {
+        async function fetchClasses() {
             try {
-                const classesResponse = await fetch('http://localhost:8080/users/current-user-classes', {
+                const responseCurrent = await fetch('http://localhost:8080/users/current', {
                     method: 'GET',
-                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
                 });
-                if (!classesResponse.ok) {
-                    throw new Error('Ошибка получения данных о классах');
-                }
-                const classesData = await classesResponse.json();
-                if (Array.isArray(classesData)) {
-                    setClasses(classesData);
-                } else {
-                    console.error('Неожиданная структура данных для классов:', classesData);
+
+                if (!responseCurrent.ok) {
+                    throw new Error('Ошибка получения данных о текущем пользователе');
                 }
 
-                const usersResponse = await fetch('http://localhost:8080/users/all', {
-                    method: 'GET',
-                    credentials: 'include',
+                const user = await responseCurrent.json();
+                console.log('Текущий пользователь:', user); // Логирование текущего пользователя
+                setCurrentUser(user); // Сохраняем данные текущего пользователя
+
+                const responseAll = await fetch('http://localhost:8080/users/all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        userDto: user,
+                        roleDto: null
+                    })
+                });
+                if (!responseAll.ok) {
+                    throw new Error('Ошибка получения данных о пользователях');
+                }
+                const data2 = await responseAll.json();
+                console.log('Все пользователи:', data2);
+                setUsers(data2);
+
+                const response = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
+                    body: JSON.stringify(user)
                 });
-                if (!usersResponse.ok) {
-                    throw new Error('Ошибка получения данных о пользователях');
+
+                if (!response.ok) {
+                    throw new Error('Ошибка получения данных о классах');
                 }
-                const usersData = await usersResponse.json();
-                console.log('Все пользователи при загрузке страницы:', usersData);
-                setUsers(usersData);
+
+                const data = await response.json();
+                console.log('Полученные классы:', data); // Логирование классов
+
+                if (Array.isArray(data) && data.length > 0) {
+                    setClasses(data);
+                } else {
+                    console.error('Полученный массив классов пуст или не является массивом');
+                }
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
-        };
+        }
 
-        fetchClassesAndUsers();
+        fetchClasses();
     }, []);
 
     const handleChange = (e) => {
@@ -93,6 +118,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             studentClass: { id: parseInt(formData.class, 10) }
         };
 
+        console.log('Данные для регистрации одного пользователя:', userRequest); // Логирование данных
+
         try {
             const response = await fetch('http://localhost:8080/users/add', {
                 method: 'POST',
@@ -113,6 +140,15 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                     role: ''
                 });
                 await fetchUsers(); // Обновляем список пользователей после регистрации
+                const answers = await response.json();
+                setShowSuccessToast(true);
+                const userDetails = answers.map((item, index) => ({
+                    ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
+                    Логин: item.login,
+                    Пароль: item.rawPassword
+                }))
+
+                downloadXLS(userDetails, 'UserDetails');
             } else {
                 const errorText = await response.text();
                 throw new Error(`Ошибка регистрации пользователя: ${errorText}`);
@@ -123,7 +159,9 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         }
     };
 
-    const handleMultipleRegistration = async () => {
+    const handleMultipleRegistration = async (e) => {
+        e.preventDefault(); // Предотвращаем перезагрузку страницы
+
         if (!file) {
             setErrorMessage('Файл не выбран');
             setShowErrorToast(true);
@@ -142,7 +180,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             const errors = [];
 
             jsonData.slice(1).forEach((row, index) => {
-                const [lastName, firstName, middleName, email] = row;
+                const [lastName, firstName, middleName, email, role] = row;
                 const rowErrors = [];
 
                 if (!lastName || !isValidName(lastName)) {
@@ -157,6 +195,9 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 if (!email || !isValidEmail(email)) {
                     rowErrors.push('Эл. почта');
                 }
+                if (!role || !roleMapping[role]) {
+                    rowErrors.push('Роль');
+                }
 
                 if (rowErrors.length > 0) {
                     errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
@@ -169,18 +210,25 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                     return;
                 }
 
+                console.log(`Роль для пользователя ${email}: ${role}`); // Логирование роли
+
+                const studentClass = { id: 23 }; // Устанавливаем studentClass по умолчанию
+                const educationalInstitution = { id: currentUser?.educationalInstitution?.id || 23 }; // Используем educationalInstitution текущего пользователя или 23 по умолчанию
+
                 userRequests.push({
                     user: {
-                        surname: lastName,
-                        name: firstName,
-                        patronymic: middleName,
-                        role: { id: 3 },
-                        email: email,
-                        educationalInstitution: { id: parseInt(selectedClass, 10) } // Добавляем поле educationalInstitution
+                        surname: lastName || currentUser?.surname || 'Фамилия',
+                        name: firstName || currentUser?.name || 'Имя',
+                        patronymic: middleName || currentUser?.patronymic || 'Отчество',
+                        role: { id: roleMapping[role] }, // Устанавливаем роль из файла
+                        email: email || currentUser?.email || 'email@example.com',
+                        educationalInstitution: educationalInstitution
                     },
-                    studentClass: { id: parseInt(selectedClass, 10) }
+                    studentClass: studentClass
                 });
             });
+
+            console.log('Данные для регистрации из файла:', userRequests); // Логирование данных
 
             if (errors.length > 0) {
                 setErrorMessage(errors.join('\n'));
@@ -206,7 +254,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 if (response.ok) {
                     const answers = await response.json();
                     setShowSuccessToast(true);
-                    setSelectedClass(null); // Clear selected class
                     await fetchUsers(); // Обновляем список пользователей после регистрации
 
                     // Generate and download XLS file
@@ -216,9 +263,14 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                         Пароль: item.rawPassword
                     }));
                     downloadXLS(userDetails, 'UserDetails');
+                } else {
+                    const errorText = await response.text();
+                    throw new Error(`Ошибка регистрации пользователей: ${errorText}`);
                 }
             } catch (error) {
                 console.error('Ошибка регистрации пользователей:', error);
+                setErrorMessage(error.message);
+                setShowErrorToast(true);
             }
         };
         reader.readAsArrayBuffer(file);
@@ -254,13 +306,36 @@ const AdminRegistrationForm = ({ selectedForm }) => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:8080/users/all');
+            console.log('Fetching current user...');
+            const currentUserResponse = await fetch('http://localhost:8080/users/current', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!currentUserResponse.ok) {
+                throw new Error('Ошибка получения данных о текущем пользователе');
+            }
+            const currentUser = await currentUserResponse.json();
+
+            console.log('Fetching users...');
+            const response = await fetch('http://localhost:8080/users/all', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userDto: currentUser,
+                    roleDto: { id: roleMapping[currentUser.role] } // Передаем роль текущего пользователя
+                })
+            });
             if (!response.ok) {
                 throw new Error('Ошибка получения данных о пользователях');
             }
             const data = await response.json();
             console.log('Все пользователи после регистрации:', data);
-            setUsers(data);
+            setUsers(data); // Обновление состояния пользователей
         } catch (error) {
             console.error('Ошибка получения данных о пользователях:', error);
         }
@@ -356,8 +431,50 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 <button type="submit" className="single-user-submit-button">
                     Зарегистрировать
                 </button>
-                {showSuccessToast && <p>Пользователь успешно зарегистрирован!</p>}
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                {showSuccessToast && (
+                    <Toast
+                        onClose={() => setShowSuccessToast(false)}
+                        show={showSuccessToast}
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: 1000,
+                            backgroundColor: 'green',
+                            color: 'white'
+                        }}
+                    >
+                        <Toast.Header closeButton={false}>
+                            <strong className="mr-auto">Успешно</strong>
+                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
+                                &times;
+                            </Button>
+                        </Toast.Header>
+                        <Toast.Body>Вы успешно зарегистрировали пользователя</Toast.Body>
+                    </Toast>
+                )}
+                {showErrorToast && (
+                    <Toast
+                        onClose={() => setShowErrorToast(false)}
+                        show={showErrorToast}
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: 1000,
+                            backgroundColor: 'red',
+                            color: 'white'
+                        }}
+                    >
+                        <Toast.Header closeButton={false}>
+                            <strong className="mr-auto">Ошибка</strong>
+                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
+                                &times;
+                            </Button>
+                        </Toast.Header>
+                        <Toast.Body>{errorMessage}</Toast.Body>
+                    </Toast>
+                )}
             </form>
         );
     }
@@ -368,24 +485,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 <h2 className="form-title">
                     {selectedForm === 'multipleStudents' ? 'Регистрация нескольких учеников' : 'Регистрация нескольких пользователей'}
                 </h2>
-                {selectedForm === 'multipleStudents' && (
-                    <div className="form-group">
-                        <select
-                            id="class"
-                            name="class"
-                            value={selectedClass || ''}
-                            onChange={(e) => setSelectedClass(e.target.value)}
-                            required
-                        >
-                            <option value="" disabled>Выберите класс</option>
-                            {classes.map(cls => (
-                                <option key={cls.id} value={cls.id}>
-                                    {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                )}
                 <div className="form-group file-input-container">
                     <input
                         type="file"
@@ -406,8 +505,50 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                         Выгрузить шаблон
                     </button>
                 </div>
-                {showSuccessToast && <p>Пользователи успешно зарегистрированы!</p>}
-                {showErrorToast && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                {showSuccessToast && (
+                    <Toast
+                        onClose={() => setShowSuccessToast(false)}
+                        show={showSuccessToast}
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: 1000,
+                            backgroundColor: 'green',
+                            color: 'white'
+                        }}
+                    >
+                        <Toast.Header closeButton={false}>
+                            <strong className="mr-auto">Успешно</strong>
+                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
+                                &times;
+                            </Button>
+                        </Toast.Header>
+                        <Toast.Body>Вы успешно зарегистрировали пользователей</Toast.Body>
+                    </Toast>
+                )}
+                {showErrorToast && (
+                    <Toast
+                        onClose={() => setShowErrorToast(false)}
+                        show={showErrorToast}
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: 1000,
+                            backgroundColor: 'red',
+                            color: 'white'
+                        }}
+                    >
+                        <Toast.Header closeButton={false}>
+                            <strong className="mr-auto">Ошибка</strong>
+                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
+                                &times;
+                            </Button>
+                        </Toast.Header>
+                        <Toast.Body>{errorMessage}</Toast.Body>
+                    </Toast>
+                )}
             </form>
         );
     }
