@@ -2,10 +2,7 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.*;
-import com.example.smart_test.dto.StudentClassDto;
-import com.example.smart_test.dto.SubjectDto;
-import com.example.smart_test.dto.SubjectUserDto;
-import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
@@ -18,6 +15,7 @@ import com.example.smart_test.request.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
 import com.example.smart_test.service.api.StudentClassServiceInterface;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
+import com.example.smart_test.service.api.UserEducationalInstitutionServiceInterface;
 import com.example.smart_test.service.api.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +48,8 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     private StudentClassRepositoryInterface studentClassRepository;
     @Autowired
     private StudentClassServiceInterface studentClassService;
+    @Autowired
+    private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
 
     @Override
     @Transactional
@@ -119,25 +119,45 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     @Override
     @Transactional
     public Set<ClassStatusResponse> findClassBySubject(SubjectDto dto) {
+        Set<ClassStatusResponse> result = new HashSet<>();
+
         List<User> userList = getUsersBySubject(subjectMapper.toEntity(dto));
-        Set<ClassStatusResponse> studentClassDtoSet = new HashSet<>();
-        if (userList != null) {
-            for (User user : userList) {
-                if (user.getRoles().getRole().equals(UserRoleEnum.STUDENT.getDescription())) {
-                    List<StudentClassDto> studentClassDtoList = studentClassService.getStudentClassByUserId(user.getId());
-                    for (StudentClassDto studentClassDto : studentClassDtoList) {
-                        for (StudentClass studentClass1 : studentClassRepository.findByUserId(user.getId())) {
-                            if (Objects.equals(studentClassDto.getId(), studentClass1.getId())) {
-                                studentClassDtoSet.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass1), true));
-                            } else {
-                                studentClassDtoSet.add(new ClassStatusResponse(studentClassDto, false));
-                            }
-                        }
+        if (userList == null || userList.isEmpty()) {
+            return result;
+        }
+
+        EducationalInstitutionDto institution = null;
+        for (User user : userList) {
+            if (user.getRoles().getRole().equals(UserRoleEnum.TEACHER.getDescription())) {
+                institution = userEducationalInstitutionService.findEducationalInstitutionByUser(userMapper.toDTO(user));
+                break;
+            }
+        }
+
+        if (institution == null) {
+            return result;
+        }
+
+        List<StudentClass> allInstitutionClasses = studentClassService.findClassByEducationalInstitution(institution);
+
+        Set<Long> subscribedClassIds = new HashSet<>();
+        for (User user : userList) {
+            List<StudentClass> userClasses = studentClassRepository.findByUserId(user.getId());
+            if (userClasses != null) {
+                for (StudentClass studentClass : userClasses) {
+                    if (studentClass != null && studentClass.getId() != null) {
+                        subscribedClassIds.add(studentClass.getId());
                     }
                 }
             }
         }
-        return studentClassDtoSet;
+
+        for (StudentClass studentClass : allInstitutionClasses) {
+            boolean isSubscribed = subscribedClassIds.contains(studentClass.getId());
+            result.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass), isSubscribed));
+        }
+
+        return result;
     }
 
     @Override
