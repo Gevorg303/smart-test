@@ -10,7 +10,7 @@ import DisplayIndicatorCard from "../DisplayIndicatorCard";
 import DisplayStudentCard from "../DisplayStudentCard";
 
 const BankCard = ({ id, objectItem, type, setEditItem }) => {
-    console.log('BankCard props:', { id, objectItem, type, setEditItem }); // Проверка пропсов
+  //  console.log('BankCard props:', { id, objectItem, type, setEditItem }); // Проверка пропсов
     const [item, setItem] = useState(); // компонент отображения контента для карточек
 
     const handleDelete = async (event) => {
@@ -67,7 +67,7 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
 
     useEffect(() => {
         async function fetchQuestions() {
-            console.log(objectItem); // Проверка objectItem
+           // console.log(objectItem); // Проверка objectItem
             if (type === "test") setItem(<DisplayTestCard objectItem={objectItem} />);
             if (type === "task") setItem(<DisplayTaskCard objectItem={objectItem} />);
             if (type === "subject") setItem(<DisplaySubjectCard objectItem={objectItem} />);

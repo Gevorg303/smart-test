@@ -165,9 +165,10 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
     }
 
     const renderAnswers = () => {
-        //console.log("Current type - "+currentType)
-        switch (currentType) {
-            case "1":
+        console.log("Current type : "+currentType)
+        let type = parseInt(currentType)
+        switch (type) {
+            case 1:
                 return <>
                     <Form.Label>Ответы для сопоставления:</Form.Label>
                     <br></br>
@@ -187,7 +188,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                         console.log(currentAnswers)
                     }}>Убрать последний вариант ответа</Button>
                 </>;
-            case "2":
+            case 2:
                 return <>
                     <Form.Label>Ответы для выбора:</Form.Label>
                     <br></br>
@@ -208,7 +209,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                         console.log(currentAnswers)
                     }}>Убрать последний вариант ответа</Button>
                 </>;
-            case "3":
+            case 3:
                 return  <>
                     <Form.Label >Ответ</Form.Label>
                     <Form.Control key={0} type="text" onChange={(e) => {
@@ -284,6 +285,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                     setTargetSubject(-1);
                     setCurrentTheme(-1);
                 }
+                console.log(editItem.test);
 
                 setCurrentType(editItem.typeTask.id);
                 try {
@@ -303,6 +305,10 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                     indicatorsJson.map((item,index) => {
                         currentIndicators[item.id]=true;
                     })
+                    if(indicatorsJson.length > 0){
+                        setCurrentTheme(indicatorsJson[0].theme.id)
+                        setTargetSubject(indicatorsJson[0].theme.subject.id)
+                    }
                    // setIndicators(indicatorsJson)
 
 
@@ -326,7 +332,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                     }
 
                     const responseOptionsJson = await response2.json();
-                    console.log(responseOptionsJson)
+                    console.log( responseOptionsJson)
                     setCurrentAnswers(responseOptionsJson)
 
 
@@ -336,13 +342,13 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 // setCurrentAnswers([]);
             } else {
                 setTargetSubject(-1);
-                setCurrentType(-1);
+               // setCurrentType(-1);
                 setCurrentTheme(-1);
                 setIndicators([]);
                 setText("");
                 setExplanation("");
                 setCurrentAnswers([]);
-                setCurrentType(-1);
+               // setCurrentType(-1);
             }
         }
         fetchSubjects();
