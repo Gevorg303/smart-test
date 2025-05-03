@@ -13,7 +13,7 @@ const SubjectClass = () => {
 
     localStorage.setItem('info', "Здесь вы можете подписать классы на предметы");
 
-    const [createModal, setCreateModal] = useState(); // компонент с модальным окном для создания объекта в банке
+    //const [createModal, setCreateModal] = useState(); // компонент с модальным окном для создания объекта в банке
     const [showModal, setShowModal] = useState(false); // переменная отвенчает за отображение модального окна на экране
     const [showToast, setShowToast] = useState(false); // отображение тоста
     const [toastText, setToastText] = useState(""); // текст тоста
@@ -59,12 +59,12 @@ const SubjectClass = () => {
                 const array = [];
                 subjectsJson.forEach(subject => {
                     array.push(
-                        <SubjectCardForClass key={subject.id} setCurrentSubject = {setCurrentSubject} /*setCurrentClasses = {setCurrentClasses}*/ item={subject} setShowCreateModal={setShowModal} />
+                        <SubjectCardForClass key={subject.id} setCurrentSubject = {setCurrentSubject} showModal = {showModal}/*setCurrentClasses = {setCurrentClasses}*/ item={subject} setShowCreateModal={setShowModal} />
                     );
                 });
                 setSubjects(array);
 
-                setCreateModal(<ClassModal targetSubject={currentSubject} /*classes={currentClasses} setClasses={setCurrentClasses}*//>)
+                //setCreateModal(<ClassModal targetSubject={currentSubject} showModal={showModal} /*classes={currentClasses} setClasses={setCurrentClasses}*//>)
                 setTopText("Класс предметов");
 
             } catch (error) {
@@ -99,7 +99,8 @@ const SubjectClass = () => {
                     </Modal.Header>
                     <Modal.Body>
 
-                        {createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
+                        <ClassModal targetSubject={currentSubject} showModal={showModal} onCreate={handleCreate}/*classes={currentClasses} setClasses={setCurrentClasses}*//>
+                        {/*createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
 
                     </Modal.Body>
                 </Modal>

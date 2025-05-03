@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
-    const [classes, setClasses] = useState([]); //все классы //переименвать на классы
+const ClassSelector = ({targetSubject, classes,setClasses}) => {
+    /*const [classes, setClasses] = useState([]);*/ //все классы //переименвать на классы
     const [ids, setIds] = useState([]); // связанные классы
-    let flag = false;
+    const [flag, setFlag] = useState(false)
+    //let flag = false;
 
     const onClick = async (id, value) => {
+        classes.map((item, index) => {
+            if (id === item.studentClassDto.id){
+            const find = classes.find(el => el.studentClassDto.id===item.studentClassDto.id);
+            if (find!==undefined)
+            {
+                item.status = value;
+            }
+            }
+        })
         //const newIds = [...ids];
         //const currentState = newIds[id];
 
-        const subjectDto = {
+        /*const subjectDto = {
             id: targetSubject.id,
             name: targetSubject.name,
         };
@@ -24,7 +34,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                 letterDesignation: classes.find(item => item.studentClassDto.id === id).letterDesignation,
             };}
 
-        if (!value) {
+        /*if (!value) {
             console.log("delete");
             try {
 
@@ -80,10 +90,10 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
             } catch (error) {
                 console.error('Ошибка:', error);
             }
-        }
+        }*/
 
         //newIds[id] = !currentState;
-        flag = !flag;
+        setFlag(!flag);
         //setIds(newIds);
 
         /*  const newClasses = [...classes];
@@ -95,43 +105,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
     };
 
 
-    useEffect(() => {
-        async function fetchQuestions() {
-            try {
-                if(targetSubject!=null) {
 
-                    const response = await fetch('http://localhost:8080/user-subject/find-class-by-subject', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify(targetSubject)
-                    });
-                    if (!response.ok) {
-                        throw new Error('Ошибка вывода предметов учителя');
-                    }
-                    const subjectsJson = await response.json();
-                    console.log(subjectsJson)
-                    //setClasses(subjectsJson)
-                    if(subjectsJson!=null)
-                    {
-                        /*const array = []
-                        subjectsJson.map((item, index) => array[item.id] = true)
-                        setIds(array)
-                        console.log(array)*/
-                        setClasses(subjectsJson);
-                    }
-                }
-                else
-                {
-                }
-            } catch (error) {
-                console.error('Ошибка получения данных:', error);
-            }
-        }
-        //console.log("prop changed: "+targetSubject.id)
-        fetchQuestions();
-    }, [targetSubject, flag]);
     /*useEffect(() => {
         async function fetchQuestions() {
             try {
@@ -179,11 +153,11 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                 classes.map((item, index) => <Form.Check // prettier-ignore
                         key={item.studentClassDto.id}
                         type={'checkbox'}
-                        checked={item.status}
+                        checked={item.status}/*{classes.find(el => el.studentClassDto.id===item.studentClassDto.id).status}*/
                         id={item.studentClassDto.id}
                         name="class"
                         label={item.studentClassDto.numberOfInstitution + item.studentClassDto.letterDesignation}
-                        onChange={(e) => onClick(item.studentClassDto.id, e.target.value)}
+                        onChange={(e) => onClick(item.studentClassDto.id, e.target.checked/*e.target.value*/)}
                     />
                     /*<p key={item.id} value={item.id} > {item.nameOfTheClass}  </p>*/)
                 :
