@@ -20,6 +20,9 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
     const [currentExplanation, setExplanation] = useState();
     const [currentAnswers,setCurrentAnswers] = useState([]);
 
+    const [notEditedAnswers, setNotEditedAnswers] = useState([])
+    const [notEditedIndicatros, setNotEditedIndicatros] = useState([])
+
 
     // Валидация задания и пояснения
     const isValidTaskOrExplanation = (text) => {
@@ -84,6 +87,62 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 }
             }
 
+            const editedIndicators=[];
+            currentIndicators.map((item,index) => {
+                if(item !== undefined){
+                    const isDelteted = notEditedIndicatros[index] !== undefined && currentIndicators[index] !== notEditedIndicatros[index]
+                    editedIndicators.push({
+                        editingResponseOption: {id: index},
+                        isDeleted: isDelteted
+                    })
+                }
+            })
+            console.log(currentIndicators)
+            console.log(notEditedIndicatros)
+            console.log(editedIndicators)
+            console.log("---")
+
+            const editedAnswers = [];
+            currentAnswers.map((item,index) => {
+                editedAnswers.push({
+                    responseOptionDto:item,
+                    isDeleted: false
+                })
+            })
+
+            console.log(notEditedAnswers)
+            console.log(editedAnswers)
+            if(editItem !=null){
+                editedAnswers.map((item,index) => {
+                    const find = notEditedAnswers.find(el => el.id===item.responseOptionDto.id);
+                    // console.log(find)
+                    if(find  !== undefined){
+                        item.isDeleted = false;
+                    } else {
+                        if(item.responseOptionDto.id !== undefined){
+                            item.isDeleted = true;
+                        } else {
+                            item.isDeleted = false;
+                        }
+                    }
+                })
+
+            }
+            notEditedAnswers.map((item,index) => {
+                const find = editedAnswers.find(el => el.responseOptionDto.id !== undefined && el.responseOptionDto.id===item.id);
+                // console.log(find)
+                if(find  === undefined){
+                    editedAnswers.push({
+                        responseOptionDto:item,
+                        isDeleted: true
+                    })
+                }
+            })
+            const array = []
+            editedAnswers.map((item,index) => {
+                array.push(item.responseOptionDto)
+            })
+            setNotEditedAnswers(array);
             console.log(
                 {
                     task: {
@@ -95,12 +154,14 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                         explanation: currentExplanation
                     },
 
-                    responseOption: currentAnswers
+                    responseOption: editItem==null?currentAnswers:editedAnswers
                     ,
-                    indicator: indicators
+                    indicator: editItem==null?indicators:editedIndicators
                 }
 
             );
+
+
             let toastText;
             if(editItem==null) {
                 const response = await fetch('http://localhost:8080/task/add', {
@@ -120,7 +181,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
 
                             responseOption: currentAnswers
                             ,
-                            indicator: indicators
+                           // indicator: indicators
                         }
                     )
                 });
@@ -145,9 +206,9 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                                 explanation: currentExplanation
                             },
 
-                        responseOption: currentAnswers
+                        editingResponseOption: editedAnswers
                             ,
-                           // indicator: indicators
+                        editingIndicator: editedIndicators
                         }
                     )
                 });
@@ -158,6 +219,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 }
                 toastText = "Задание создано";
             }
+
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -304,11 +366,13 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                     console.log(indicatorsJson)
                     indicatorsJson.map((item,index) => {
                         currentIndicators[item.id]=true;
+                        notEditedIndicatros[item.id]=true;
                     })
                     if(indicatorsJson.length > 0){
                         setCurrentTheme(indicatorsJson[0].theme.id)
                         setTargetSubject(indicatorsJson[0].theme.subject.id)
                     }
+                   // setNotEditedIndicatros(indicatorsJson);
                    // setIndicators(indicatorsJson)
 
 
@@ -334,6 +398,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                     const responseOptionsJson = await response2.json();
                     console.log( responseOptionsJson)
                     setCurrentAnswers(responseOptionsJson)
+                    setNotEditedAnswers(responseOptionsJson)
 
 
                 } catch (error) {
