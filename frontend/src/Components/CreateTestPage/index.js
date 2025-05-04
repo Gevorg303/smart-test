@@ -21,6 +21,8 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
     const [currentTheme, setCurrentTheme] = useState(-1);
     const [currentPassingScore, setCurrentPassingScore] = useState(60);
 
+    const [notEditedTasks, setNotEditedTasks] = useState([]);
+
     // Валидация описания
     const isValidDescription = (description) => {
         return description === "" || (description.length >= 10 && description.length <= 500);
@@ -70,6 +72,30 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                     taskList.push(currentTasks[i])
               //  }
             }
+            console.log(currentTasks)
+            console.log(notEditedTasks)
+            const editedTaskList = [];
+            currentTasks.map((item,index)=>{
+
+                    editedTaskList.push({
+                        task: item,
+                        isDeleted: false
+                    })
+            })
+            notEditedTasks.map((item,index)=>{
+                const find = currentTasks.find(el => el.id===item.id);
+                if(find === undefined) {
+                    editedTaskList.push({
+                        task: item,
+                        isDeleted: true
+                    })
+                }
+            })
+            const array = []
+            editedTaskList.map((item,index) => {
+                array.push(item.task)
+            })
+            setNotEditedTasks(array);
             let toastText;
             console.log({
                 testDto: {
@@ -89,7 +115,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                         id: currentType
                     }
                 },
-                taskDtoList: taskList
+                taskDtoList: editItem==null?taskList:editedTaskList
             });
             if(editItem==null) {
                 const response = await fetch('http://localhost:8080/test/add', {
@@ -153,7 +179,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                                 }
                             }
                             ,
-                            taskDtoList: taskList
+                            editingTaskRequests: editedTaskList
                         }
                     )
                 });
@@ -165,7 +191,6 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 }
                 toastText = "Тест успешно отредактирован.";
             }
-
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -251,6 +276,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                     const array = [...currentTasks];
                     tasksFromTestJson.map((item, index) => { array.push({ id: item.id }); })
                     setCurrentTasks(array);
+                    setNotEditedTasks(array)
                 }
 
             } catch (error) {

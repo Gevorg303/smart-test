@@ -38,6 +38,7 @@ const QuestionBankPage = ({type}) => {
     }
     const handleCreate = (message) => {
         setShowCreateModal(false);
+        setShowEditModal(false)
         console.log(toastText)
         //setShowToast(true);
         //setToastText(message);
