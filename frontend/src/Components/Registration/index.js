@@ -399,8 +399,8 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Успешно</strong>
-                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
+                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
+                                {/*&times;*/}x
                             </Button>
                         </Toast.Header>
                         <Toast.Body>Вы успешно зарегистрировали пользователя</Toast.Body>
@@ -422,17 +422,14 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Ошибка</strong>
-                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
+                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
+                                {/*&times;*/}x
                             </Button>
                         </Toast.Header>
                         <Toast.Body>{errorMessage}</Toast.Body>
                     </Toast>
                 )}
             </div>
-            <Button className="mt-3 custom-button full-width-button">
-                Справка
-            </Button>
         </Container>
     );
 };
