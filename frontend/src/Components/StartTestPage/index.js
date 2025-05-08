@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Toast } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
@@ -17,11 +17,14 @@ const StartTestPage = () => {
     const [attempts, setAttempts] = useState([]);
     const [testDateStartValue, setTestDateStartValue] = useState(null); // строковое значение
     const [testDateEndValue, setTestDateEndValue] = useState(null);     // строковое значение
-    const [typeTest,setTypeTest] = useState(null);
-    const [testTheme,setTestTheme] = useState(null);
-    const [currentUser,setCurrentUser] = useState(null);
+    const [typeTest, setTypeTest] = useState(null);
+    const [testTheme, setTestTheme] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const [topText, setTopText] = useOutletContext();
     const [testTaskCount, setTestTaskCount] = useState(0);
+    const [showErrorToast, setShowErrorToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     const options = {
         year: 'numeric',
@@ -46,9 +49,8 @@ const StartTestPage = () => {
         async function fetchTest() {
             try {
                 const testid = getCookie("test");
-                if(!testid)
-                {
-                    navigate(-1,{replace:true})
+                if (!testid) {
+                    navigate(-1, { replace: true })
                 }
                 const response = await fetch('http://localhost:8080/users/current', { //получить пользователя
                     credentials: "include",
@@ -74,9 +76,9 @@ const StartTestPage = () => {
                     body: JSON.stringify(
                         {
                             user: {
-                                id:user.id
+                                id: user.id
                             },
-                            test:{
+                            test: {
                                 id: test.id
                             }
                         }
@@ -101,35 +103,35 @@ const StartTestPage = () => {
                 }
                 const questionsJson = await response3.json();
                 setTestTaskCount(questionsJson.length)
-               // console.log(questionsJson.length)
+                // console.log(questionsJson.length)
 
                 setTypeTest(test.typeTest.id);
                 setTestTheme(test.theme);
                 setTestName(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
                 setTestDescription(test.description || "Описание отсутствует");
-                setTestDateStart(new Date(test.openingDateAndTime).toLocaleString("ru", options) );
+                setTestDateStart(new Date(test.openingDateAndTime).toLocaleString("ru", options));
                 setTestDateEnd(new Date(test.closingDateAndTime).toLocaleString("ru", options));
                 setTestDateStartValue(new Date(test.openingDateAndTime));
                 setTestDateEndValue(new Date(test.closingDateAndTime));
                 setTestTime(test.passageTime || "неограничено");
-                setTestTryCount(test.numberOfAttemptsToPass||"неограничено")
+                setTestTryCount(test.numberOfAttemptsToPass || "неограничено")
 
                 setTopText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
                 // заполнение попыток
-               /* setAttempts(
-                    [
-                        {
-                            id: 1,
-                            date: "Завершен: среда, 1 января 2025 г. в 00:00",
-                            score: "3/5"
-                        },
-                        {
-                        id: 2,
-                        date: "Завершен: четверг, 2 января 2025 г. в 02:00",
-                        score: "5/5"
-                        }
-                    ]
-                )*/
+                /* setAttempts(
+                     [
+                         {
+                             id: 1,
+                             date: "Завершен: среда, 1 января 2025 г. в 00:00",
+                             score: "3/5"
+                         },
+                         {
+                         id: 2,
+                         date: "Завершен: четверг, 2 января 2025 г. в 02:00",
+                         score: "5/5"
+                         }
+                     ]
+                 )*/
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -140,6 +142,10 @@ const StartTestPage = () => {
 
     let navigate = useNavigate();
 
+    const ErrorToast = (message) => {
+        setErrorMessage(message);
+        setShowErrorToast(true);
+    };
 
     async function StartTest() {
         // Проверка, что количество попыток больше или равно количеству сделанных попыток
@@ -158,22 +164,23 @@ const StartTestPage = () => {
                             navigate("/test");
                         }
                     } else {
-                        console.log("Тест больше не доступен для прохождения!");
+                        ErrorToast("Тест больше не доступен для прохождения!");
                     }
                 } else {
-                    console.log("Тест еще не начался!");
+                    ErrorToast("Тест еще не начался!");
                 }
             } else {
-                console.log("В тесте отсутствуют задания!");
+                ErrorToast("В тесте отсутствуют задания!");
             }
         } else {
-            console.log("Количество попыток исчерпано!");
+            ErrorToast("Количество попыток исчерпано!");
         }
     }
+
     async function StartTrainingTest() {
         let sendData = {
-            user:currentUser,
-            theme:testTheme
+            user: currentUser,
+            theme: testTheme
         }
         const response = await fetch('http://localhost:8080/test/create-test-simulator', {
             method: 'POST',
@@ -193,7 +200,6 @@ const StartTestPage = () => {
     return (
         <div className="page-container">
             <div className="content-wrapper">
-                {/*<h1 className="test-name">{testName}</h1>*/}
                 <div className="test-container">
                     <div className="info-card">
                         <h4 hidden={!testDateStart}>Открыто с: {testDateStart}</h4>
@@ -202,17 +208,39 @@ const StartTestPage = () => {
                         <h4>Разрешено попыток: {testTryCount}</h4>
                         <h4>Ограничение по времени: {testTime}</h4>
                         <h4>Предыдущие результаты</h4>
-                        <TestAttemptsDisplay attempts={attempts}/>
+                        <TestAttemptsDisplay attempts={attempts} />
 
                         <div className="button-container">
-                            <Button onClick={() =>{StartTest()}} className="start-test-button">
+                            <Button onClick={() => { StartTest() }} className="start-test-button">
                                 Начать попытку
                             </Button>
                         </div>
                     </div>
                 </div>
             </div>
-            {/*<Footer/>*/}
+
+            {showErrorToast && (
+                <Toast
+                    onClose={() => setShowErrorToast(false)}
+                    show={showErrorToast}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        zIndex: 100000,
+                        backgroundColor: showSuccessToast ? 'green':'red',
+                        color: 'white'
+                    }}
+                >
+                    <Toast.Header closeButton={false}>
+                        <strong className="mr-auto">Успешно</strong>
+                        <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
+                            {/*&times;*/} x
+                        </Button>
+                    </Toast.Header>
+                    <Toast.Body>{showSuccessToast ? 'Успешно': errorMessage}</Toast.Body>
+                </Toast>
+            )}
         </div>
     );
 };

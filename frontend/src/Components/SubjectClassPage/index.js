@@ -24,11 +24,24 @@ const SubjectClass = () => {
     const containerRef = useRef(null);
     const [topText, setTopText] = useOutletContext();
 
+    const [showErrorToast, setShowErrorToast] = useState(false);
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     const handleCreate = (message) => {
         setShowModal(false);
         setShowToast(true);
         setToastText(message);
+        setShowSuccessToast(true);
+        setShowErrorToast(true);
+    };
+
+    const ErrorToast = (message) => {
+        console.log('ошибка')
+        setErrorMessage(message);
+        setShowSuccessToast(false);
+        setShowErrorToast(true);
     };
 
     useEffect(() => {
@@ -73,7 +86,7 @@ const SubjectClass = () => {
         }
 
         fetchTests();
-    }, [toastText, currentSubject,setTopText]);
+    }, [toastText, currentSubject,setTopText,showSuccessToast]);
 
 
     return (
@@ -99,7 +112,7 @@ const SubjectClass = () => {
                     </Modal.Header>
                     <Modal.Body>
 
-                        <ClassModal targetSubject={currentSubject} showModal={showModal} onCreate={handleCreate}/*classes={currentClasses} setClasses={setCurrentClasses}*//>
+                        <ClassModal targetSubject={currentSubject} showModal={showModal} onCreate={handleCreate} onError={ErrorToast}/*classes={currentClasses} setClasses={setCurrentClasses}*//>
                         {/*createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
 
                     </Modal.Body>
@@ -107,24 +120,29 @@ const SubjectClass = () => {
 
 
             </div>
-            <ToastContainer
-                className="p-3"
-                position={'middle-center'}
-                style={{zIndex: 1}}
-            >
-                <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
-                    <Toast.Header closeButton={false}>
-                        <img
-                            src="holder.js/20x20?text=%20"
-                            className="rounded me-2"
-                            alt=""
-                        />
-                        <strong className="me-auto">Уведомление:</strong>
-                    </Toast.Header>
-                    <Toast.Body>{toastText}</Toast.Body>
-                </Toast>
-            </ToastContainer>
             {/*<Footer/>*/}
+            {showErrorToast && (
+                <Toast
+                    onClose={() => setShowErrorToast(false)}
+                    show={showErrorToast}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        zIndex: 100000,
+                        backgroundColor: showSuccessToast ? 'green':'red',
+                        color: 'white'
+                    }}
+                >
+                    <Toast.Header closeButton={false}>
+                        <strong className="mr-auto">Успешно</strong>
+                        <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
+                            {/*&times;*/} x
+                        </Button>
+                    </Toast.Header>
+                    <Toast.Body>{showSuccessToast ? 'Успешно': errorMessage}</Toast.Body>
+                </Toast>
+            )}
         </div>
     )
         ;
