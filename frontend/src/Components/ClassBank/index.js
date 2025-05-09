@@ -3,44 +3,84 @@ import AdminNavbar from '../adminNavbar';
 import './styles.css'; // Подключаем CSS файл для стилей
 
 const ClassBank = () => {
-    const [classNumber, setClassNumber] = useState('');
     const [classes, setClasses] = useState([]);
-    const [selectedClass, setSelectedClass] = useState(null);
     const [error, setError] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-        const token = getTokenFromCookie();
-        if (!token) {
-            setError('Токен не найден');
-            return;
-        }
+        const fetchCurrentUser = async () => {
+            try {
+                const token = getTokenFromCookie();
+                if (!token) {
+                    setError('Токен не найден');
+                    return;
+                }
 
-        fetch('http://localhost:8080/users/current-user-classes', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Передаем токен в заголовке
-            },
-        })
-            .then(response => {
+                const response = await fetch('http://localhost:8080/users/current', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка получения данных о текущем пользователе');
+                }
+
+                const user = await response.json();
+                setCurrentUser(user);
+                console.log('Текущий пользователь:', user);
+
+                return user;
+            } catch (error) {
+                console.error('Ошибка получения данных о текущем пользователе:', error);
+                setError(error.message);
+                return null;
+            }
+        };
+
+        const fetchClasses = async (user) => {
+            try {
+                const token = getTokenFromCookie();
+                if (!token) {
+                    setError('Токен не найден');
+                    return;
+                }
+
+                const response = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(user)
+                });
+
                 if (!response.ok) {
                     throw new Error('Ошибка получения данных о классах');
                 }
-                return response.json();
-            })
-            .then(data => {
+
+                const data = await response.json();
                 console.log('Полученные данные о классах:', data);
                 if (Array.isArray(data)) {
                     setClasses(data);
                 } else {
                     setError('Неожиданная структура данных для классов');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Ошибка получения данных о классах:', error);
                 setError(error.message);
-            });
+            }
+        };
+
+        fetchCurrentUser().then(user => {
+            if (user) {
+                fetchClasses(user);
+            }
+        });
     }, []);
 
     const getTokenFromCookie = () => {
@@ -59,19 +99,6 @@ const ClassBank = () => {
         return "";
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Номер класса:', classNumber);
-    };
-
-    const handleClassChange = (e) => {
-        const selectedClassId = e.target.value;
-        setClassNumber(selectedClassId);
-        const selected = classes.find(cls => cls.id === parseInt(selectedClassId, 10));
-        setSelectedClass(selected);
-        console.log('Выбранный класс:', selected); // Логируем выбранный класс для отладки
-    };
-
     return (
         <div>
             <div className="admin-navbar-wrapper">
@@ -80,40 +107,19 @@ const ClassBank = () => {
             <div className="class-bank-page">
                 <div className="class-bank-form-wrapper">
                     <div className="class-bank-form-header">
-                        Сортировка класса по цифре и букве
+                        Список классов
                     </div>
                     {error && <div style={{ color: 'red' }}>{error}</div>}
-                    <form onSubmit={handleSubmit} className="class-bank-form-content">
-                        <div className="class-bank-form-element">
-                            <label htmlFor="classNumber">Номер класса:</label>
-                            <select
-                                id="classNumber"
-                                value={classNumber}
-                                onChange={handleClassChange}
-                            >
-                                <option value="">Выберите класс</option>
-                                {classes.map(cls => (
-                                    <option key={cls.id} value={cls.id}>
-                                        {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <button type="submit" className="class-bank-submit-btn">
-                            Поиск
-                        </button>
-                    </form>
-                    <button className="class-bank-create-subject-btn">
-                        Создать предмет
-                    </button>
-                </div>
-                {selectedClass && (
-                    <div className="class-bank-selected-class-container-newnew">
-                        <p>ID: {selectedClass.id}</p>
-                        <p>Цифра: {selectedClass.numberOfInstitution}</p>
-                        <p>Буква: {selectedClass.letterDesignation}</p>
+                    <div className="class-list">
+                        {classes.map(cls => (
+                            <div key={cls.id} className="class-item">
+                                <p>ID: {cls.id}</p>
+                                <p>Цифра: {cls.numberOfInstitution}</p>
+                                <p>Буква: {cls.letterDesignation}</p>
+                            </div>
+                        ))}
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
