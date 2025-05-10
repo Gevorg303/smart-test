@@ -131,9 +131,6 @@ const StudentBank = () => {
                                 ))}
                             </select>
                         </div>
-                        <button type="submit" className="class-bank-submit-btn">
-                            Поиск
-                        </button>
                     </form>
                     <button className="class-bank-create-subject-btn">
                         Создать предмет

@@ -10,8 +10,6 @@ const AdminHome = ({ userId }) => {
     const [topText, setTopText] = useOutletContext();
     const canvasRef = useRef(null);
 
-    localStorage.setItem('info', "Здесь вы можете увидеть вашу среднюю оценку за предмет");
-
     useEffect(() => {
         const fetchData = async () => {
             try {
