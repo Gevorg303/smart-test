@@ -22,43 +22,46 @@ public class TeacherStatisticsServiceImpl extends BasicStatistics implements Tea
     private SubjectUserServiceInterface subjectUserService;
 
     @Override
-    public List<TeacherStatisticsResponse> getTeacherStatistics(UserDto user) {
+    public List<TeacherStatisticsResponse> getTeacherStatistics(UserDto user, SubjectDto subject) {
         List<TeacherStatisticsResponse> teacherStatisticsResponseList = new ArrayList<>();
         Set<SubjectDto> subjectDtoList = subjectService.getSubjectByUser(user);
 
         for (SubjectDto subjectDto : subjectDtoList) {
-            List<UserDto> excellentStudents = new ArrayList<>();
-            List<UserDto> goodStudents = new ArrayList<>();
-            List<UserDto> averageStudents = new ArrayList<>();
-            List<UserDto> poorStudents = new ArrayList<>();
+            if (subject != null && subject.getId().equals(subjectDto.getId())) {
 
-            List<UserDto> userDtoList = subjectUserService.getUsersBySubject(subjectDto);
-            if (userDtoList != null) {
-                for (UserDto userDto : userDtoList) {
-                    if (userDto != null && UserRoleEnum.STUDENT.getDescription().equals(userDto.getRole().getRole())) {
-                        double scope = calculateFinalGrade(subjectDto, userDto);
+                List<UserDto> excellentStudents = new ArrayList<>();
+                List<UserDto> goodStudents = new ArrayList<>();
+                List<UserDto> averageStudents = new ArrayList<>();
+                List<UserDto> poorStudents = new ArrayList<>();
 
-                        if (scope >= 4.5) {
-                            excellentStudents.add(userDto);
-                        } else if (scope >= 3.5) {
-                            goodStudents.add(userDto);
-                        } else if (scope >= 2.5) {
-                            averageStudents.add(userDto);
-                        } else {
-                            poorStudents.add(userDto);
+                List<UserDto> userDtoList = subjectUserService.getUsersBySubject(subjectDto);
+                if (userDtoList != null) {
+                    for (UserDto userDto : userDtoList) {
+                        if (userDto != null && UserRoleEnum.STUDENT.getDescription().equals(userDto.getRole().getRole())) {
+                            double scope = calculateFinalGrade(subjectDto, userDto);
+
+                            if (scope >= 4.5) {
+                                excellentStudents.add(userDto);
+                            } else if (scope >= 3.5) {
+                                goodStudents.add(userDto);
+                            } else if (scope >= 2.5) {
+                                averageStudents.add(userDto);
+                            } else {
+                                poorStudents.add(userDto);
+                            }
                         }
                     }
                 }
-            }
 
-            TeacherStatisticsResponse response = new TeacherStatisticsResponse(
-                    subjectDto,
-                    excellentStudents,
-                    goodStudents,
-                    averageStudents,
-                    poorStudents
-            );
-            teacherStatisticsResponseList.add(response);
+                TeacherStatisticsResponse response = new TeacherStatisticsResponse(
+                        subjectDto,
+                        excellentStudents,
+                        goodStudents,
+                        averageStudents,
+                        poorStudents
+                );
+                teacherStatisticsResponseList.add(response);
+            }
         }
         return teacherStatisticsResponseList;
     }
