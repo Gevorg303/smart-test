@@ -3,6 +3,7 @@ package com.example.smart_test.service.api;
 import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,7 +20,7 @@ public interface ThemeServiceInterface {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<ThemeDto> getAllTheme();
 
-    List<Theme> findThemeByIdSubject(Subject subject);
+    List<Theme> findThemeByIdSubject(SubjectDto subject);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     boolean findThemeById(Long id);

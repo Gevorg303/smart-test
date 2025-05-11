@@ -143,13 +143,16 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
     @Override
     public Indicator updateIndicator(IndicatorDto updatedIndicator) {
-        return indicatorRepositoryInterface.findById(updatedIndicator.getId())
-                .map(indicator -> {
-                    indicator.setTheme(updatedIndicator.getTheme());
-                    indicator.setNameOfTheIndicator(updatedIndicator.getNameOfTheIndicator());
-                    return indicatorRepositoryInterface.save(indicator);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Индикатор с ID " + updatedIndicator.getId() + " не найден"));
+        Optional<Indicator> optionalIndicator = indicatorRepositoryInterface.findById(updatedIndicator.getId());
+
+        if (optionalIndicator.isPresent()) {
+            Indicator indicator = optionalIndicator.get();
+            indicator.setTheme(updatedIndicator.getTheme());
+            indicator.setNameOfTheIndicator(updatedIndicator.getNameOfTheIndicator());
+            return indicatorRepositoryInterface.save(indicator);
+        } else {
+            throw new EntityNotFoundException("Индикатор с ID " + updatedIndicator.getId() + " не найден");
+        }
     }
 
 }

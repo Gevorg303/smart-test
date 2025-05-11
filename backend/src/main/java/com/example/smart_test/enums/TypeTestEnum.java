@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum TypeTestEnum {
-    ENTRY_TEST(1L),   // Входной контроль
-    TRAINER(2L),      // Тренажер
-    FINAL_TEST(3L);   // Итоговый тест
+    ENTRY_TEST("Входной контроль"),
+    TRAINER("Тренажер"),
+    FINAL_TEST("Итоговый тест");
 
-    private final Long id;
+    private final String description;
 
-    TypeTestEnum(Long id) {
-        this.id = id;
+    TypeTestEnum(String description) {
+        this.description = description;
     }
 }

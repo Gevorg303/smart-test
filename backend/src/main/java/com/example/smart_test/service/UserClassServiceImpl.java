@@ -122,6 +122,10 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     }
 
     @Override
+
+    public int countUsersByClassId(StudentClassDto request) {
+        return userClassRepositoryInterface.countUsersByClassId(request.getId());
+
     public List<UserDto> findUserByClass(StudentClassDto studentClassDto) {
         List<UserClass> userClasList = userClassRepositoryInterface.findByStudentClass(studentClassMapperInterface.toEntity(studentClassDto));
         List<UserDto> userDtoList = new ArrayList<>();
