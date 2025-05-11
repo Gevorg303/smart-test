@@ -9,6 +9,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     };
 
     const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
     const [login, setLogin] = useState("");
@@ -64,6 +65,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
         if (editItem) {
             setName(editItem.name);
+            setSurname(editItem.surname);
             setEmail(editItem.email);
             setRole(editItem.role);
             setLogin(editItem.login);
@@ -153,6 +155,22 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
+                    <Form.Label>Фамилия</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={surname}
+                        onChange={(e) => setSurname(e.target.value)}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Отчество</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={patronymic}
+                        onChange={(e) => setPatronymic(e.target.value)}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                         type="email"
@@ -196,14 +214,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         onChange={(e) => setLogin(e.target.value)}
                     />
                 </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Отчество</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={patronymic}
-                        onChange={(e) => setPatronymic(e.target.value)}
-                    />
-                </Form.Group>
+
 
                 <Button variant="primary" type="submit">
                     {editItem ? "Редактировать" : "Создать"}
