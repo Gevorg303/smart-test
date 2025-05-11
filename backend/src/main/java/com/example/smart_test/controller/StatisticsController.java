@@ -2,7 +2,8 @@ package com.example.smart_test.controller;
 
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.TeacherStatisticsResponse;
-import com.example.smart_test.response.AdminStatisticsResponse;
+import com.example.smart_test.response.UserClassCountStatisticsResponse;
+import com.example.smart_test.response.UserCountStatisticsResponse;
 import com.example.smart_test.service.statistics.api.AdminStatisticsServiceInterface;
 import com.example.smart_test.service.statistics.api.TeacherStatisticsServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,17 @@ public class StatisticsController {
      * Вывод количества администраторов, учителей и учеников в школе
      * */
     @PostMapping("/admin")
-    public ResponseEntity<List<AdminStatisticsResponse>> getAdminStatistics(@RequestBody UserDto user) {
-        List<AdminStatisticsResponse> statistics = adminStatisticsService.countUser(user);
+    public ResponseEntity<List<UserCountStatisticsResponse>> getAdminStatistics(@RequestBody UserDto user) {
+        List<UserCountStatisticsResponse> statistics = adminStatisticsService.countUser(user);
+        return ResponseEntity.ok(statistics);
+    }
+
+    /**
+     * Вывод количества учеников в классах школы
+     * */
+    @PostMapping("/admin")
+    public ResponseEntity<List<UserClassCountStatisticsResponse>> getAdminStatistics(@RequestBody UserDto user) {
+        List<UserClassCountStatisticsResponse> statistics = adminStatisticsService.countStudentClass(user);
         return ResponseEntity.ok(statistics);
     }
 }

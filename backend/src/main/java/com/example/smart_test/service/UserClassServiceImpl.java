@@ -120,4 +120,9 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
         }
         return userDtoSet;
     }
+
+    @Override
+    public int countUsersByClassId(StudentClassDto request) {
+        return userClassRepositoryInterface.countUsersByClassId(request.getId());
+    }
 }

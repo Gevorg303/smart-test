@@ -4,9 +4,9 @@ package com.example.smart_test.repository;
 import com.example.smart_test.domain.Role;
 import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.UserClass;
-import com.example.smart_test.enums.UserRoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +24,8 @@ public interface UserClassRepositoryInterface extends JpaRepository<UserClass, L
     List<UserClass> findByStudentClassIdAndUserRoles(Long studentClassId, Role role);
 
     List<UserClass> findByStudentClass(StudentClass studentClass);
+
+    // Получить количество пользователей в конкретном классе
+    @Query("SELECT COUNT(uc) FROM UserClass uc WHERE uc.studentClass.id = :classId")
+    int countUsersByClassId(@Param("classId") Long classId);
 }

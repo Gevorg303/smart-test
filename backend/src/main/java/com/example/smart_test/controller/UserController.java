@@ -63,7 +63,4 @@ public class UserController {
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
         return userService.findStudentClassByUser(userDto);
     }
-
-
-
 }
