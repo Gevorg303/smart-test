@@ -43,7 +43,7 @@ public class UserController {
      */
     @PostMapping("/all")
     public List<UserDto> getUsers(@RequestBody UserBiRoleRequest request) {
-        return userService.getUser(request);
+        return userService.getUser(request.getUserDto(), request.getRoleDto());
     }
 
     @GetMapping("/{login}")
@@ -63,5 +63,7 @@ public class UserController {
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
         return userService.findStudentClassByUser(userDto);
     }
+
+
 
 }

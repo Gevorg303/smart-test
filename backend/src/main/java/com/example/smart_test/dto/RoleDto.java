@@ -6,4 +6,8 @@ import lombok.Data;
 public class RoleDto {
     private Long id;
     private String role;
+
+    public RoleDto(String role) {
+        this.role = role;
+    }
 }

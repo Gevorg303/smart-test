@@ -33,4 +33,5 @@ public class UserClassController {
     public UserClassDto getAllThemesBySubjectId(@PathVariable Long idClass, @PathVariable Long idTeacher) {
         return teacherClassService.getTeacherClassByClassAndTeacher(idClass, idTeacher);
     }
+
 }
