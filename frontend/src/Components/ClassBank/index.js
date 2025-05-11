@@ -123,7 +123,7 @@ const ClassBank = () => {
                     </div>
                 </div>
             </div>
-            {editItem && <CreateClassPage editItem={editItem} onCreate={() => {}} onError={() => {}} />}
+            {editItem && <CreateClassPage editItem={editItem} onCreate={() => {}} onError={() => {}} currentUser={currentUser} />}
         </div>
     );
 };

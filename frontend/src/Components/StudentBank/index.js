@@ -9,6 +9,7 @@ const StudentBank = () => {
     const [error, setError] = useState(null);
     const [filterType, setFilterType] = useState('class'); // 'class' или 'role'
     const [selectedFilter, setSelectedFilter] = useState('');
+    const [currentClass, setCurrentClass] = useState('');
 
     const roleMapping = {
         'Админ': 1,
@@ -121,7 +122,9 @@ const StudentBank = () => {
     const handleClassChange = (e) => {
         const selectedClassId = e.target.value;
         setClassNumber(selectedClassId);
+        setCurrentClass(selectedClassId); // Обновляем currentClass
         console.log('Выбранный класс:', selectedClassId); // Логируем выбранный класс для отладки
+        fetchUsers(); // Вызываем функцию fetchUsers при изменении класса
     };
 
     const handleFilterTypeChange = (e) => {

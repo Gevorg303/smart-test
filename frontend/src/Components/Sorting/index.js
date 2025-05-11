@@ -107,6 +107,12 @@ const Sorting = ({ type, setBankItems }) => {
         fetchFilterOptions();
     }, [type]);
 
+    const handleClassChange = (e) => {
+        const selectedClassId = e.target.value;
+        setCurrentClass(selectedClassId);
+        console.log('Выбранный класс:', selectedClassId);
+    };
+
     const handleSearch = async (roleId = null) => {
         try {
             const userResponse = await fetch('http://localhost:8080/users/current', {
@@ -364,8 +370,8 @@ const Sorting = ({ type, setBankItems }) => {
                         <Form.Group>
                             <Form.Label>{filterType === 'class' ? 'Класс' : 'Роль'}</Form.Label>
                             <Form.Select
-                                value={selectedFilter}
-                                onChange={(e) => setSelectedFilter(e.target.value)}
+                                value={filterType === 'class' ? currentClass : selectedFilter}
+                                onChange={filterType === 'class' ? handleClassChange : (e) => setSelectedFilter(e.target.value)}
                             >
                                 <option value="">Выберите {filterType === 'class' ? 'класс' : 'роль'}</option>
                                 {filterType === 'class' ? (

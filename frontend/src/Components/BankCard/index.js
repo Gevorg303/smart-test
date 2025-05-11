@@ -37,7 +37,7 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                     url = 'http://localhost:8080/users/delete';
                     break;
                 case "class":
-                    url = 'http://localhost:8080/teacherClass/delete';
+                    url = 'http://localhost:8080/student-class/delete';
                     break;
                 default:
                     throw new Error("Неизвестный тип");
@@ -56,10 +56,12 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                 throw new Error("Ошибка удаления объекта");
             }
             console.log("Объект успешно удалён");
+            window.location.reload();
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
         }
     };
+
 
     const handleEdit = async (event) => {
         try {
