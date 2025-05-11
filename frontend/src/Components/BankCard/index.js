@@ -10,12 +10,11 @@ import DisplayIndicatorCard from "../DisplayIndicatorCard";
 import DisplayStudentCard from "../DisplayStudentCard";
 
 const BankCard = ({ id, objectItem, type, setEditItem }) => {
-  //  console.log('BankCard props:', { id, objectItem, type, setEditItem }); // Проверка пропсов
     const [item, setItem] = useState(); // компонент отображения контента для карточек
 
     const handleDelete = async (event) => {
         try {
-            console.log("удалить задание: " + id);
+            console.log("Попытка удалить объект с id: " + id + " и типом: " + type);
             let url;
             switch (type) {
                 case "test":
@@ -40,6 +39,7 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                     throw new Error("Неизвестный тип");
             }
 
+            console.log("Отправка запроса на URL: " + url + " с id: " + id);
             const response = await fetch(url, {
                 method: 'DELETE',
                 headers: {
@@ -47,14 +47,18 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                 },
                 body: JSON.stringify({ id: id })
             });
+
             if (!response.ok) {
-                throw new Error("Ошибка удаления задания");
+                throw new Error("Ошибка удаления объекта");
             }
+            console.log("Объект успешно удалён");
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
         }
-        window.location.reload();
+        // Уберите временно эту строку, чтобы успеть посмотреть логи
+        // window.location.reload();
     };
+
 
     const handleEdit = async (event) => {
         try {
@@ -67,7 +71,6 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
 
     useEffect(() => {
         async function fetchQuestions() {
-           // console.log(objectItem); // Проверка objectItem
             if (type === "test") setItem(<DisplayTestCard objectItem={objectItem} />);
             if (type === "task") setItem(<DisplayTaskCard objectItem={objectItem} />);
             if (type === "subject") setItem(<DisplaySubjectCard objectItem={objectItem} />);

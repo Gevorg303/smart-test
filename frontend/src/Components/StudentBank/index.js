@@ -7,6 +7,14 @@ const StudentBank = () => {
     const [classes, setClasses] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [error, setError] = useState(null);
+    const [filterType, setFilterType] = useState('class'); // 'class' или 'role'
+    const [selectedFilter, setSelectedFilter] = useState('');
+
+    const roleMapping = {
+        'Админ': 1,
+        'Учитель': 2,
+        'Ученик': 3
+    };
 
     useEffect(() => {
         const token = getTokenFromCookie();
@@ -69,14 +77,28 @@ const StudentBank = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/users/all', {
+            let url = 'http://localhost:8080/users/all';
+            let requestBody = {};
+
+            if (filterType === 'class') {
+                requestBody = {
+                    classNumber
+                };
+            } else {
+                requestBody = {
+                    userDto: null,
+                    roleDto: { id: roleMapping[selectedFilter] } // Убедитесь, что роль передается как объект с id
+                };
+            }
+
+            const response = await fetch(url, {
                 method: 'POST', // Используем метод POST
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}` // Передаем токен в заголовке
                 },
-                body: JSON.stringify({ classNumber }) // Передаем номер класса в теле запроса
+                body: JSON.stringify(requestBody) // Передаем номер класса или роль в теле запроса
             });
             if (!response.ok) {
                 const errorText = await response.text();
@@ -91,8 +113,6 @@ const StudentBank = () => {
         }
     };
 
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
         fetchUsers();
@@ -104,6 +124,16 @@ const StudentBank = () => {
         console.log('Выбранный класс:', selectedClassId); // Логируем выбранный класс для отладки
     };
 
+    const handleFilterTypeChange = (e) => {
+        setFilterType(e.target.value);
+    };
+
+    const handleFilterChange = (e) => {
+        const selectedRole = e.target.value;
+        setSelectedFilter(selectedRole);
+        fetchUsers(); // Вызываем функцию fetchUsers при изменении роли
+    };
+
     return (
         <div>
             <div className="admin-navbar-wrapper">
@@ -112,25 +142,47 @@ const StudentBank = () => {
             <div className="class-bank-page">
                 <div className="class-bank-form-wrapper">
                     <div className="class-bank-form-header">
-                        Сортировка пользователей по классу
+                        Сортировка пользователей
                     </div>
                     {error && <div style={{ color: 'red' }}>{error}</div>}
                     <form onSubmit={handleSubmit} className="class-bank-form-content">
                         <div className="class-bank-form-element">
-                            <label htmlFor="classNumber">Класс:</label>
+                            <label htmlFor="filterType">Фильтр:</label>
                             <select
-                                id="classNumber"
-                                value={classNumber}
-                                onChange={handleClassChange}
+                                id="filterType"
+                                value={filterType}
+                                onChange={handleFilterTypeChange}
                             >
-                                <option value="">Выберите класс</option>
-                                {classes.map(cls => (
-                                    <option key={cls.id} value={cls.id}>
-                                        {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
-                                    </option>
-                                ))}
+                                <option value="class">По классу</option>
+                                <option value="role">По роли</option>
                             </select>
                         </div>
+                        <div className="class-bank-form-element">
+                            <label htmlFor="filter">{filterType === 'class' ? 'Класс:' : 'Роль:'}</label>
+                            <select
+                                id="filter"
+                                value={filterType === 'class' ? classNumber : selectedFilter}
+                                onChange={filterType === 'class' ? handleClassChange : handleFilterChange}
+                            >
+                                <option value="">Выберите {filterType === 'class' ? 'класс' : 'роль'}</option>
+                                {filterType === 'class' ? (
+                                    classes.map(cls => (
+                                        <option key={cls.id} value={cls.id}>
+                                            {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                                        </option>
+                                    ))
+                                ) : (
+                                    Object.keys(roleMapping).map(roleName => (
+                                        <option key={roleMapping[roleName]} value={roleName}>
+                                            {roleName}
+                                        </option>
+                                    ))
+                                )}
+                            </select>
+                        </div>
+                        <button type="submit" className="class-bank-submit-btn">
+                            Применить фильтр
+                        </button>
                     </form>
                     <button className="class-bank-create-subject-btn">
                         Создать предмет

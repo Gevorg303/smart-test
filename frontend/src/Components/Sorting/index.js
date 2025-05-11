@@ -1,11 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {Form, Button} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Form, Button } from "react-bootstrap";
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import CreateIndicatorPage from "../CreateIndicatorPage";
 import SingleIndicatorSelector from "../SingleIndicatorSelector";
 import "./styles.css";
 
-const Sorting = ({type, setBankItems}) => {
+const Sorting = ({ type, setBankItems }) => {
+    const roleMapping = {
+        'Админ': 1,
+        'Учитель': 2,
+        'Ученик': 3
+    };
+
     const [subjects, setSubjects] = useState([]);
     const [themes, setThemes] = useState([]);
     const [indicators, setIndicators] = useState([]);
@@ -49,27 +55,48 @@ const Sorting = ({type, setBankItems}) => {
                 const testTypesData = await testTypesResponse.json();
                 setTestTypes(testTypesData);
 
-                const classesResponse = await fetch('http://localhost:8080/student-class/find-class-by-educational-institution', {
+                const currentUserResponse = await fetch('http://localhost:8080/users/current', {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    }
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
                 });
-                if (!classesResponse.ok) {
-                    throw new Error('Ошибка получения классов');
+
+                if (!currentUserResponse.ok) {
+                    throw new Error('Ошибка получения данных о текущем пользователе');
                 }
+
+                const currentUser = await currentUserResponse.json();
+
+                const classesResponse = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(currentUser)
+                });
+
+                if (!classesResponse.ok) {
+                    throw new Error('Ошибка получения данных о классах');
+                }
+
                 const classesData = await classesResponse.json();
                 setClasses(classesData);
 
-                const rolesResponse = await fetch('http://localhost:8080/roles/all', {
+                const rolesResponse = await fetch('http://localhost:8080/users/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     }
                 });
+
                 if (!rolesResponse.ok) {
-                    throw new Error('Ошибка получения ролей');
+                    const errorText = await rolesResponse.text();
+                    throw new Error(`Ошибка получения ролей: ${errorText}`);
                 }
+
                 const rolesData = await rolesResponse.json();
                 setRoles(rolesData);
             } catch (error) {
@@ -80,7 +107,7 @@ const Sorting = ({type, setBankItems}) => {
         fetchFilterOptions();
     }, [type]);
 
-    const handleSearch = async () => {
+    const handleSearch = async (roleId = null) => {
         try {
             const userResponse = await fetch('http://localhost:8080/users/current', {
                 credentials: "include",
@@ -97,7 +124,6 @@ const Sorting = ({type, setBankItems}) => {
             let testTypeId = parseInt(targetTypeTest, 10);
             let indicatorId = parseInt(currentIndicator, 10);
             let classId = parseInt(currentClass, 10);
-            let roleId = parseInt(selectedFilter, 10);
 
             switch (type) {
                 case 'test':
@@ -134,7 +160,7 @@ const Sorting = ({type, setBankItems}) => {
                 case 'indicator':
                     if (subjectId > 0 && themeId > 0) {
                         url = 'http://localhost:8080/indicator/indicator-by-theme';
-                        requestBody = {id: themeId}
+                        requestBody = { id: themeId }
                     } else {
                         url = 'http://localhost:8080/bank-filters/indicators';
                         requestBody = {
@@ -150,9 +176,10 @@ const Sorting = ({type, setBankItems}) => {
                             id: classId
                         };
                     } else {
-                        url = 'http://localhost:8080/bank-filters/user-by-role';
+                        url = 'http://localhost:8080/users/all';
                         requestBody = {
-                            id: roleId
+                            userDto: user,
+                            roleDto: roleId ? { id: roleId } : null
                         };
                     }
                     break;
@@ -188,6 +215,7 @@ const Sorting = ({type, setBankItems}) => {
         setCurrentClass(0);
         setFilterType('class');
         setSelectedFilter(0);
+        handleSearch(); // Запускаем метод all без роли
     };
 
     return (
@@ -212,14 +240,14 @@ const Sorting = ({type, setBankItems}) => {
                         <Form.Group>
                             <Form.Label>Тема</Form.Label>
                             <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
-                                                       currentTheme={currentTheme} setCurrentTheme={setCurrentTheme}/>
+                                                       currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
                         </Form.Group>
                     </div>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Индикатор</Form.Label>
                             <SingleIndicatorSelector targetTheme={currentTheme} currentIndicator={currentIndicator}
-                                                     setCurrentIndicator={setCurrentIndicator}/>
+                                                     setCurrentIndicator={setCurrentIndicator} />
                         </Form.Group>
                     </div>
                 </>
@@ -246,7 +274,7 @@ const Sorting = ({type, setBankItems}) => {
                             <Form.Label>Тема</Form.Label>
                             <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
                                                        currentTheme={currentTheme}
-                                                       setCurrentTheme={setCurrentTheme}/>
+                                                       setCurrentTheme={setCurrentTheme} />
                         </Form.Group>
                     </div>
                     <div className="button-containers-filter">
@@ -295,7 +323,7 @@ const Sorting = ({type, setBankItems}) => {
                             <ThemeAndIndicatorSelector needIndicators={false}
                                                        targetSubject={targetSubject}
                                                        currentTheme={currentTheme}
-                                                       setCurrentTheme={setCurrentTheme}/>
+                                                       setCurrentTheme={setCurrentTheme} />
                         </Form.Group>
                     </div>
                 </>
@@ -340,16 +368,25 @@ const Sorting = ({type, setBankItems}) => {
                                 onChange={(e) => setSelectedFilter(e.target.value)}
                             >
                                 <option value="">Выберите {filterType === 'class' ? 'класс' : 'роль'}</option>
-                                {(filterType === 'class' ? classes : roles).map((item) => (
-                                    <option key={item.id} value={item.id}>
-                                        {filterType === 'class' ? `${item.letterDesignation}${item.numberOfInstitution}` : item.name}
-                                    </option>
-                                ))}
+                                {filterType === 'class' ? (
+                                    classes.map((cls) => (
+                                        <option key={cls.id} value={cls.id}>
+                                            {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                                        </option>
+                                    ))
+                                ) : (
+                                    Object.keys(roleMapping).map((roleName) => (
+                                        <option key={roleMapping[roleName]} value={roleMapping[roleName]}>
+                                            {roleName}
+                                        </option>
+                                    ))
+                                )}
                             </Form.Select>
                         </Form.Group>
                     </div>
                     <div className="button-containers-filter">
                         <Button variant="secondary" className="reset-button" onClick={resetFilters}>Сбросить фильтры</Button>
+                        <Button variant="primary" className="search-button" onClick={() => handleSearch(selectedFilter)}>Применить фильтр</Button>
                     </div>
                 </>
             )}
