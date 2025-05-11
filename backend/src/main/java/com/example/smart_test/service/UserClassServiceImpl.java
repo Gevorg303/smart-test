@@ -120,4 +120,16 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
         }
         return userDtoSet;
     }
+
+    @Override
+    public List<UserDto> findUserByClass(StudentClassDto studentClassDto) {
+        List<UserClass> userClasList = userClassRepositoryInterface.findByStudentClass(studentClassMapperInterface.toEntity(studentClassDto));
+        List<UserDto> userDtoList = new ArrayList<>();
+        if(userClasList!=null) {
+            for (UserClass userClass : userClasList) {
+                userDtoList.add(userMapper.toDTO(userClass.getUser()));
+            }
+        }
+        return userDtoList;
+    }
 }
