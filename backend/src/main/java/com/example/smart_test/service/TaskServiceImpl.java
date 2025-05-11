@@ -3,11 +3,9 @@ package com.example.smart_test.service;
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.UserRoleEnum;
-import com.example.smart_test.mapper.api.ResponseOptionMapperInterface;
-import com.example.smart_test.mapper.api.TaskMapperInterface;
-import com.example.smart_test.mapper.api.TestMapperInterface;
-import com.example.smart_test.mapper.api.UserMapperInterface;
+import com.example.smart_test.mapper.api.*;
 import com.example.smart_test.repository.TaskRepositoryInterface;
+import com.example.smart_test.request.EditingIndicatorRequest;
 import com.example.smart_test.request.EditingTaskRequest;
 import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -50,6 +48,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
     private UserMapperInterface userMapper;
     @Autowired
     private ResponseOptionMapperInterface responseOptionMapper;
+    @Autowired
+    private TaskOfIndicatorMapperInterface taskOfIndicatorMapper;
 
     @Override
     @Transactional
@@ -267,6 +267,19 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
         if (updatedTask.getEditingResponseOption() != null) {
             responseOptionService.editingResponseOption(updatedTask);
+        }
+
+        if (updatedTask.getEditingIndicatorRequestList() != null) {
+            for (EditingIndicatorRequest editingIndicatorRequest : updatedTask.getEditingIndicatorRequestList()) {
+                List<IndicatorDto> indicatorDtoList = taskOfIndicatorService.findIndicatorByTask(taskMapperInterface.toEntity(updatedTask.getTask()));
+                for (IndicatorDto indicatorDto1 : indicatorDtoList) {
+                   if (editingIndicatorRequest.getIndicator().getId().equals(indicatorDto1.getId()) && editingIndicatorRequest.isDeleted()) {
+                       taskOfIndicatorService.deleteTaskOfIndicator(null);
+                   } else if (!editingIndicatorRequest.getIndicator().getId().equals(indicatorDto1.getId()) && !editingIndicatorRequest.isDeleted()) {
+                       taskOfIndicatorService.addTaskOfIndicator(taskMapperInterface.toEntity(updatedTask.getTask()), null);
+                   }
+                }
+            }
         }
     }
 

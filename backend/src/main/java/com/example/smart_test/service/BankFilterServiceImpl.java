@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
+import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.service.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     private SubjectUserServiceInterface subjectUserService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    private SubjectMapperInterface subjectMapper;
 
     @Transactional
     @Override
@@ -47,7 +50,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         }
 
         if (subject != null) {
-            List<Theme> subjectThemes = themeService.findThemeByIdSubject(subject);
+            List<Theme> subjectThemes = themeService.findThemeByIdSubject(subjectMapper.toDTO(subject));
             List<TestDto> subjectFilteredList = new ArrayList<>();
 
             for (TestDto testDto : filteredList) {
@@ -112,7 +115,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         }
 
         if (subject != null) {
-            List<Theme> themesForSubject = themeService.findThemeByIdSubject(subject);
+            List<Theme> themesForSubject = themeService.findThemeByIdSubject(subjectMapper.toDTO(subject));
             Set<Long> taskIdsForSubject = new HashSet<>();
 
             for (Theme subjectTheme : themesForSubject) {

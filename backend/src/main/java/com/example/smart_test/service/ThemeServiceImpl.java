@@ -4,6 +4,7 @@ package com.example.smart_test.service;
 import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
@@ -93,7 +94,7 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
     }
 
     @Override
-    public List<Theme> findThemeByIdSubject(@NotNull Subject subject) {
+    public List<Theme> findThemeByIdSubject(@NotNull SubjectDto subject) {
        return themeRepository.findBySubjectId(subject.getId());
     }
 

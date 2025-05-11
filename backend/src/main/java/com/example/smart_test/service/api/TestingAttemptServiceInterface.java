@@ -17,5 +17,5 @@ public interface TestingAttemptServiceInterface {
 
     void deleteByTestId(TestDto test);
 
-    List<TestingAttempt> findByTest(Test test);
+    List<TestingAttemptDto> findByTest(TestDto test);
 }

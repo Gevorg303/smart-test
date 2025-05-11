@@ -165,13 +165,20 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     public void removeSubjectUserDto(SubjectClassRequest request) {
         try {
             Subject subject = subjectMapper.toEntity(request.getSubject());
+            Long subjectId = subject.getId();
+
+            if (subjectId == null) {
+                throw new IllegalArgumentException("ID предмета не может быть null при удалении связи.");
+            }
 
             for (StudentClassDto studentClassDto : request.getStudentClassDtoList()) {
                 Set<User> users = getUsersByClass(studentClassMapper.toEntity(studentClassDto));
 
                 for (User user : users) {
-                    if (Objects.equals(user.getRoles().getRole(), UserRoleEnum.STUDENT.getDescription())) {
-                        subjectUserRepositoryInterface.deleteBySubjectIdAndUserId(subject.getId(), user.getId());
+                    if (user.getRoles() != null &&
+                            Objects.equals(user.getRoles().getRole(), UserRoleEnum.STUDENT.getDescription())) {
+
+                        subjectUserRepositoryInterface.deleteBySubjectIdAndUserId(subjectId, user.getId());
                     }
                 }
             }
@@ -179,7 +186,6 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
             throw new RuntimeException("Ошибка при удалении связи 'Пользователь_предмет': " + e.getMessage(), e);
         }
     }
-
 
     private List<User> getUsersBySubject(Subject subject) {
         return subjectUserRepositoryInterface.findBySubject(subject)
