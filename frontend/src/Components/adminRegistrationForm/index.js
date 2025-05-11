@@ -461,6 +461,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                     <Toast
                         onClose={() => setShowErrorToast(false)}
                         show={showErrorToast}
+                        delay={3000}
+                        autohide
                         style={{
                             position: 'fixed',
                             bottom: '20px',
@@ -513,6 +515,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                     <Toast
                         onClose={() => setShowSuccessToast(false)}
                         show={showSuccessToast}
+                        delay={3000}
+                        autohide
                         style={{
                             position: 'fixed',
                             bottom: '20px',
@@ -535,6 +539,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                     <Toast
                         onClose={() => setShowErrorToast(false)}
                         show={showErrorToast}
+                        delay={3000}
+                        autohide
                         style={{
                             position: 'fixed',
                             bottom: '20px',

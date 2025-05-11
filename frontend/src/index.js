@@ -43,6 +43,7 @@ const App = () => {
                         <Route path="testresult" element={<RouterByRole rolesWithoutAccess={[]} element={<ViewTestResultsPage />} />} />
                         <Route path="theme" element={<RouterByRole rolesWithoutAccess={[]} element={<ThemePage />} />} />
                         <Route path="profile" element={<RouterByRole rolesWithoutAccess={[]} element={<ProfilePage />} />} />
+                        <Route path="result" element={<RouterByRole rolesWithoutAccess={[1,2]} element={<ResultsPage />} />} />
                         <Route path="results" element={<RouterByRole rolesWithoutAccess={[3]} element={<TeacherResultsPage />} />} />
                         <Route path="testbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"test"} />} />} />
                         <Route path="taskbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"task"} />} />} />
