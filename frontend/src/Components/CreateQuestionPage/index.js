@@ -181,7 +181,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
 
                             responseOption: currentAnswers
                             ,
-                           // indicator: indicators
+                            indicator: indicators
                         }
                     )
                 });

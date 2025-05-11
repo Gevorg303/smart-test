@@ -1,7 +1,9 @@
 package com.example.smart_test.controller;
 
 
+import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserClassDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.service.api.UserClassServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,4 +36,8 @@ public class UserClassController {
         return teacherClassService.getTeacherClassByClassAndTeacher(idClass, idTeacher);
     }
 
+    @PostMapping("/find-user-by-class")
+    public List<UserDto> findUserByClass(@RequestBody StudentClassDto studentClassDto) {
+        return teacherClassService.findUserByClass(studentClassDto);
+    }
 }

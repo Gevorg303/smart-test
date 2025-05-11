@@ -12,56 +12,47 @@ import CreateIndicatorPage from "../CreateIndicatorPage";
 import Sorting from "../Sorting";
 import { useOutletContext } from 'react-router-dom';
 import CreateStudentPage from "../CreateStudentPage";
-
+import CreateClassPage from "../CreateClassPage";
 
 const QuestionBankPage = ({type}) => {
-    //type -  тип объектов для банка
-
-    const [editItem, setEditItem] = useState(null); // объект который изменяется
-    const [bankItems, setBankItems] = useState([]); // объекты которые будут отображаться в банке
-    const [title, setTitle] = useState(); // заголовок банка
-    const [createModal, setCreateModal] = useState(); // компонент с модальным окном для создания объекта в банке
-    const [showCreateModal, setShowCreateModal] = useState(false); // переменная отвенчает за отображение модального окна на экране
-    const [showEditModal, setShowEditModal] = useState(false); // переменная для отображение модального окна создания когда происходит редактирование
+    const [editItem, setEditItem] = useState(null);
+    const [bankItems, setBankItems] = useState([]);
+    const [title, setTitle] = useState();
+    const [createModal, setCreateModal] = useState();
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const navigate = useNavigate();
-    const [showToast, setShowToast] = useState(false); // отображение тоста
-    const [toastText, setToastText] = useState(""); // текст тоста
+    const [showToast, setShowToast] = useState(false);
+    const [toastText, setToastText] = useState("");
     const [topText, setTopText] = useOutletContext();
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-
-    function EditFunc(item) { //открывает модальное окно для редактирования объекта
+    function EditFunc(item) {
         setEditItem(item)
         setShowEditModal(true)
     }
+
     const handleCreate = (message) => {
         setShowCreateModal(false);
         setShowEditModal(false)
-        console.log(toastText)
-        //setShowToast(true);
-        //setToastText(message);
         setShowSuccessToast(true);
         setShowErrorToast(true);
     };
+
     const ErrorToast = (message) => {
-        console.log('ошибка')
-        //setShowToast(true);
-        //setToastText(message);
-        //setShowSuccessToast(true);
         setErrorMessage(message);
         setShowSuccessToast(false);
         setShowErrorToast(true);
     };
-
 
     useEffect(() => {
         async function fetchTests() {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
+                const response1 = await fetch('http://localhost:8080/users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -71,12 +62,9 @@ const QuestionBankPage = ({type}) => {
                 switch (type) {
                     case "test":
                         localStorage.setItem('info', "На этой странице можно отсортировать все тесты по предмету, теме, типу теста и просмотреть");
-
                         setTopText("Банк тестов");
-                        //setTitle("Банк тестов");// задать заголовок на странице
-                        setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>); // задать модальное окно для создания на странице
-
-                        const response2 = await fetch('http://localhost:8080/test/get-user-tests', { // получить тесты пользователя
+                        setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
+                        const response2 = await fetch('http://localhost:8080/test/get-user-tests', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -87,17 +75,13 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения теста');
                         }
                         const tests = await response2.json();
-                        console.log(tests)
                         setBankItems(tests)
                         break;
                     case "task":
                         localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
-
                         setTopText("Банк заданий");
-                        //setTitle("Банк заданий"); // задать заголовок на странице
-                        setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);// задать модальное окно для создания на странице
-
-                        const response3 = await fetch('http://localhost:8080/task/get-user-tasks', { // получить задания пользователя
+                        setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
+                        const response3 = await fetch('http://localhost:8080/task/get-user-tasks', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -108,16 +92,12 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения заданий');
                         }
                         const questions = await response3.json();
-                        console.log(questions)
                         setBankItems(questions)
                         break;
                     case "subject":
                         localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
-
                         setTopText("Банк предметов");
-                        //setTitle("Банк предметов"); // задать заголовок на странице
                         setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-
                         const response4 = await fetch('http://localhost:8080/subject/print-user-subject', {
                             method: 'POST',
                             headers: {
@@ -129,16 +109,12 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения предметов');
                         }
                         const subjects = await response4.json();
-                        console.log(subjects)
                         setBankItems(subjects)
                         break;
                     case "theme":
                         localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
-
                         setTopText("Банк тем");
-                        //setTitle("Банк тем"); // задать заголовок на странице
                         setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-
                         const response5 = await fetch('http://localhost:8080/theme/get-theme-by-id-user', {
                             method: 'POST',
                             headers: {
@@ -150,16 +126,12 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения тем');
                         }
                         const theme = await response5.json();
-                        console.log(theme)
                         setBankItems(theme)
                         break;
                     case "indicator":
                         localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
-
                         setTopText("Банк индикаторов");
-                        //setTitle("Банк индикаторов"); // задать заголовок на странице
                         setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-
                         const response6 = await fetch('http://localhost:8080/indicator/indicator-by-user', {
                             method: 'POST',
                             headers: {
@@ -171,14 +143,12 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения индикаторов');
                         }
                         const indicator = await response6.json();
-                        console.log(indicator)
                         setBankItems(indicator)
                         break;
                     case "student":
                         localStorage.setItem('info', "На этой странице посмотреть список учеников");
                         setTopText("Банк учеников");
                         setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-
                         const response7 = await fetch('http://localhost:8080/users/all', {
                             method: 'POST',
                             headers: {
@@ -193,30 +163,47 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения индикаторов');
                         }
                         const students = await response7.json();
-                        console.log(students)
                         setBankItems(students)
+                        break;
+                    case "class":
+                        localStorage.setItem('info', "На этой странице можно отсортировать все классы и просмотреть");
+                        setTopText("Банк классов");
+                        setCreateModal(<CreateClassPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
+                        const response8 = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            },
+                            body: JSON.stringify(user)
+                        });
+                        if (!response8.ok) {
+                            throw new Error('Ошибка получения классов');
+                        }
+                        const classes = await response8.json();
+                        setBankItems(classes)
                         break;
                     default:
                         console.error('Неизвестный тип:', type);
                         break;
                 }
-
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
 
         fetchTests();
-    }, [type,editItem,showSuccessToast,setTopText]);
-    /* className="page-container-quest"*/
+    }, [type, editItem, showSuccessToast, setTopText]);
+
     return (
-        <div className="scrollable-container"> {/* Добавлена эта строка */}
+        <div className="scrollable-container">
             <div className="page-container-quest">
                 <div className="button-containers">
-                    <Sorting type={type} setBankItems={setBankItems} />
-                    <Button variant="success" className="create-button" onClick={() => {
-                        setShowCreateModal(true);
-                    }}>Создать</Button>
+                    {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
+                    {type !== "student" && (
+                        <Button variant="success" className="create-button" onClick={() => {
+                            setShowCreateModal(true);
+                        }}>Создать</Button>
+                    )}
                 </div>
                 <Modal
                     show={showCreateModal || showEditModal}
@@ -248,6 +235,8 @@ const QuestionBankPage = ({type}) => {
                 <Toast
                     onClose={() => setShowErrorToast(false)}
                     show={showErrorToast}
+                    delay={3000}
+                    autohide
                     style={{
                         position: 'fixed',
                         bottom: '20px',
@@ -260,32 +249,12 @@ const QuestionBankPage = ({type}) => {
                     <Toast.Header closeButton={false}>
                         <strong className="mr-auto">Успешно</strong>
                         <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
-                            {/*&times;*/} x
+                            x
                         </Button>
                     </Toast.Header>
                     <Toast.Body>{showSuccessToast ? 'Успешно': errorMessage}</Toast.Body>
                 </Toast>
             )}
-
-
-
-            {/*<ToastContainer
-                className="p-3"
-                position={'middle-center'}
-                style={{ zIndex: 1 }}
-            >
-                <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
-                    <Toast.Header closeButton={false}>
-                        <img
-                            src="holder.js/20x20?text=%20"
-                            className="rounded me-2"
-                            alt=""
-                        />
-                        <strong className="me-auto">Уведомление:</strong>
-                    </Toast.Header>
-                    <Toast.Body>{toastText}</Toast.Body>
-                </Toast>
-            </ToastContainer>*/}
         </div>
     );
 };

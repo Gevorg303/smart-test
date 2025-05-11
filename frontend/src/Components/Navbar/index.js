@@ -65,7 +65,7 @@ const Navbar = ({setShowHandbook,userRole}) => {
         <BootstrapNavbar.Collapse id="basic-navbar-nav" className="justify-content-between">
             <Nav className="navbar-links">
                 <Nav.Link as={Link} to="/home" className="navbar-link">Предметы</Nav.Link>
-                <Nav.Link as={Link} to="/results" className="navbar-link">Итоги</Nav.Link>
+                <Nav.Link as={Link} to="/result" className="navbar-link">Итоги</Nav.Link>
             </Nav>
             <Nav className="navbar-links right">
                 <Nav.Link className="navbar-link" onClick={()=>{setShowHandbook(true)}}>

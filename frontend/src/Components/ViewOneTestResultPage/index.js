@@ -63,6 +63,8 @@ const ViewTestResultsPage = (props) => {
                     throw new Error("Ошибка получения вопросов");
                 }
                 const questionsJson = await response2.json();
+                console.log(questionsJson)
+                console.log(validList)
                 setQuestions(questionsJson);
                 setCountOfQuestions(questionsJson.length);
                // setScore((rightAnswers / questionsJson.length) * 100);
@@ -120,7 +122,7 @@ const ViewTestResultsPage = (props) => {
                         {questions.map((item, index) => (
                             <Question
                                 key={index}
-                                qStatus={validList[index]!=undefined?(validList[index].taskScore==0?false:true):false}
+                                qStatus={validList.responseForTask!=undefined?(validList.responseForTask[index].taskScore==100?true:false):false}
                                 view
                                 id={index}
                                 item={questions[index]}

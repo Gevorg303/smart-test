@@ -20,6 +20,7 @@ import ResultsPage from "./Components/ResultsPage";
 import SubjectClassPage from "./Components/SubjectClassPage";
 import RouterByRole from "./utils/router/routerByRole";
 import AdminHome from "./Components/AdminHome";
+import TeacherResultsPage from "./Components/TeacherResultsPage";
 
 
 const App = () => {
@@ -30,7 +31,6 @@ const App = () => {
                 <Route path="/" element={<LoginPage />} />
                 {/* BetaPage без Layout, но с AdminNavbar */}
                 <Route path="bPage" element={<BetaPage />} />
-                <Route path="ClassBank" element={<ClassBank />} />
                 {/* Другие страницы с Layout */}
                 <Route element={<PrivateRoutes />}>
                     <Route element={<Layout />}>
@@ -43,13 +43,15 @@ const App = () => {
                         <Route path="testresult" element={<RouterByRole rolesWithoutAccess={[]} element={<ViewTestResultsPage />} />} />
                         <Route path="theme" element={<RouterByRole rolesWithoutAccess={[]} element={<ThemePage />} />} />
                         <Route path="profile" element={<RouterByRole rolesWithoutAccess={[]} element={<ProfilePage />} />} />
-                        <Route path="results" element={<RouterByRole rolesWithoutAccess={[1,2]} element={<ResultsPage />} />} />
+                        <Route path="result" element={<RouterByRole rolesWithoutAccess={[1,2]} element={<ResultsPage />} />} />
+                        <Route path="results" element={<RouterByRole rolesWithoutAccess={[3]} element={<TeacherResultsPage />} />} />
                         <Route path="testbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"test"} />} />} />
                         <Route path="taskbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"task"} />} />} />
                         <Route path="itembank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"subject"} />} />} />
                         <Route path="themebank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"theme"} />} />} />
                         <Route path="indicatorbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"indicator"} />} />} />
                         <Route path="studentbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"student"} />} />} />
+                        <Route path="ClassBank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"class"} />} />} />
                         <Route path="subjectclass" element={<RouterByRole rolesWithoutAccess={[3]} element={<SubjectClassPage />} />} />
                     </Route>
                 </Route>
