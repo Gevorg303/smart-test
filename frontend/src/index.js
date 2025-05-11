@@ -31,7 +31,6 @@ const App = () => {
                 <Route path="/" element={<LoginPage />} />
                 {/* BetaPage без Layout, но с AdminNavbar */}
                 <Route path="bPage" element={<BetaPage />} />
-                <Route path="ClassBank" element={<ClassBank />} />
                 {/* Другие страницы с Layout */}
                 <Route element={<PrivateRoutes />}>
                     <Route element={<Layout />}>
@@ -51,6 +50,7 @@ const App = () => {
                         <Route path="themebank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"theme"} />} />} />
                         <Route path="indicatorbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"indicator"} />} />} />
                         <Route path="studentbank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"student"} />} />} />
+                        <Route path="ClassBank" element={<RouterByRole rolesWithoutAccess={[3]} element={<QuestionBankPage type={"class"} />} />} />
                         <Route path="subjectclass" element={<RouterByRole rolesWithoutAccess={[3]} element={<SubjectClassPage />} />} />
                     </Route>
                 </Route>

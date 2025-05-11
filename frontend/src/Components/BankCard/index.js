@@ -8,9 +8,10 @@ import DisplaySubjectCard from "../DisplaySubjectCard";
 import DisplayThemeCard from "../DisplayThemeCard";
 import DisplayIndicatorCard from "../DisplayIndicatorCard";
 import DisplayStudentCard from "../DisplayStudentCard";
+import DisplayClassCard from "../DisplayClassCard";
 
 const BankCard = ({ id, objectItem, type, setEditItem }) => {
-    const [item, setItem] = useState(); // компонент отображения контента для карточек
+    const [item, setItem] = useState();
 
     const handleDelete = async (event) => {
         try {
@@ -35,6 +36,9 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                 case "student":
                     url = 'http://localhost:8080/users/delete';
                     break;
+                case "class":
+                    url = 'http://localhost:8080/teacherClass/delete';
+                    break;
                 default:
                     throw new Error("Неизвестный тип");
             }
@@ -55,19 +59,17 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
         }
-        // Уберите временно эту строку, чтобы успеть посмотреть логи
-        // window.location.reload();
     };
-
 
     const handleEdit = async (event) => {
         try {
-            console.log("редактировать: " + id + " (" + type + ")");
-            setEditItem(objectItem); // изменить изменяемый объект
+            console.log("Редактировать: " + id + " (" + type + ")");
+            setEditItem(objectItem);
         } catch (error) {
-            console.error('Ошибка удаления данных:', error);
+            console.error('Ошибка редактирования данных:', error);
         }
     };
+
 
     useEffect(() => {
         async function fetchQuestions() {
@@ -77,6 +79,7 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
             if (type === "theme") setItem(<DisplayThemeCard objectItem={objectItem} />);
             if (type === "indicator") setItem(<DisplayIndicatorCard objectItem={objectItem} />);
             if (type === "student") setItem(<DisplayStudentCard objectItem={objectItem} />);
+            if (type === "class") setItem(<DisplayClassCard objectItem={objectItem} />);
         }
 
         fetchQuestions();

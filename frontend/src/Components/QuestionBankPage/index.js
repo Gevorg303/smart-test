@@ -12,6 +12,7 @@ import CreateIndicatorPage from "../CreateIndicatorPage";
 import Sorting from "../Sorting";
 import { useOutletContext } from 'react-router-dom';
 import CreateStudentPage from "../CreateStudentPage";
+import CreateClassPage from "../CreateClassPage";
 
 const QuestionBankPage = ({type}) => {
     const [editItem, setEditItem] = useState(null);
@@ -164,6 +165,23 @@ const QuestionBankPage = ({type}) => {
                         const students = await response7.json();
                         setBankItems(students)
                         break;
+                    case "class":
+                        localStorage.setItem('info', "На этой странице можно отсортировать все классы и просмотреть");
+                        setTopText("Банк классов");
+                        setCreateModal(<CreateClassPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
+                        const response8 = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            },
+                            body: JSON.stringify(user)
+                        });
+                        if (!response8.ok) {
+                            throw new Error('Ошибка получения классов');
+                        }
+                        const classes = await response8.json();
+                        setBankItems(classes)
+                        break;
                     default:
                         console.error('Неизвестный тип:', type);
                         break;
@@ -180,7 +198,7 @@ const QuestionBankPage = ({type}) => {
         <div className="scrollable-container">
             <div className="page-container-quest">
                 <div className="button-containers">
-                    <Sorting type={type} setBankItems={setBankItems} />
+                    {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
                     {type !== "student" && (
                         <Button variant="success" className="create-button" onClick={() => {
                             setShowCreateModal(true);

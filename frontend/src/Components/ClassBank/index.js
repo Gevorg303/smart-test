@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../adminNavbar';
-import './styles.css'; // Подключаем CSS файл для стилей
+import './styles.css';
+import BankCard from '../BankCard';
+import CreateClassPage from '../CreateClassPage';
 
 const ClassBank = () => {
     const [classes, setClasses] = useState([]);
     const [error, setError] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
+    const [editItem, setEditItem] = useState(null);
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -31,8 +34,6 @@ const ClassBank = () => {
 
                 const user = await response.json();
                 setCurrentUser(user);
-                console.log('Текущий пользователь:', user);
-
                 return user;
             } catch (error) {
                 console.error('Ошибка получения данных о текущем пользователе:', error);
@@ -64,7 +65,6 @@ const ClassBank = () => {
                 }
 
                 const data = await response.json();
-                console.log('Полученные данные о классах:', data);
                 if (Array.isArray(data)) {
                     setClasses(data);
                 } else {
@@ -112,15 +112,18 @@ const ClassBank = () => {
                     {error && <div style={{ color: 'red' }}>{error}</div>}
                     <div className="class-list">
                         {classes.map(cls => (
-                            <div key={cls.id} className="class-item">
-                                <p>ID: {cls.id}</p>
-                                <p>Цифра: {cls.numberOfInstitution}</p>
-                                <p>Буква: {cls.letterDesignation}</p>
-                            </div>
+                            <BankCard
+                                key={cls.id}
+                                id={cls.id}
+                                objectItem={cls}
+                                type="class"
+                                setEditItem={setEditItem}
+                            />
                         ))}
                     </div>
                 </div>
             </div>
+            {editItem && <CreateClassPage editItem={editItem} onCreate={() => {}} onError={() => {}} />}
         </div>
     );
 };

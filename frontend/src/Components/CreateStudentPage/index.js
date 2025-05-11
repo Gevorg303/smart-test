@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 
-const CreateStudentPage = ({ editItem, onCreate, onError}) => {
+const CreateStudentPage = ({ editItem, onCreate, onError }) => {
+    const roleMapping = {
+        'Админ': 1,
+        'Учитель': 2,
+        'Ученик': 3
+    };
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
@@ -104,11 +110,17 @@ const CreateStudentPage = ({ editItem, onCreate, onError}) => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Роль</Form.Label>
-                    <Form.Control
-                        type="text"
+                    <Form.Select
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
-                    />
+                    >
+                        <option value="">Выберите роль</option>
+                        {Object.keys(roleMapping).map((roleName) => (
+                            <option key={roleMapping[roleName]} value={roleMapping[roleName]}>
+                                {roleName}
+                            </option>
+                        ))}
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Логин</Form.Label>
