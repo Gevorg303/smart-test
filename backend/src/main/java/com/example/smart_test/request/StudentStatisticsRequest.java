@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 public class StudentStatisticsRequest {
-    private List<SubjectDto> subject; //
-    private UserDto user;
+    private List<SubjectDto> subject; // Лист предметов
+    private UserDto user; //Текущий пользователь
 
     public StudentStatisticsRequest(List<SubjectDto> subject, UserDto user) {
         this.subject = subject;
