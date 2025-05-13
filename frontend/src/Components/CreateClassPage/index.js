@@ -18,7 +18,7 @@ const CreateClassPage = ({ editItem, onCreate, onError, currentUser }) => {
 
     const fetchClasses = async () => {
         try {
-            const response = await fetch('http://localhost:8080/student-class/find-all');
+            const response = await fetch('http://localhost:8081/student-class/find-all');
             if (!response.ok) {
                 throw new Error('Ошибка получения данных о классах');
             }
@@ -78,8 +78,8 @@ const CreateClassPage = ({ editItem, onCreate, onError, currentUser }) => {
             console.log('Отправляемые данные:', requestBody); // Логирование данных перед отправкой
 
             const url = editItem
-                ? 'http://localhost:8080/student-class/update'
-                : 'http://localhost:8080/student-class/add';
+                ? 'http://localhost:8081/student-class/update'
+                : 'http://localhost:8081/student-class/add';
             const method = editItem ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
@@ -108,7 +108,7 @@ const CreateClassPage = ({ editItem, onCreate, onError, currentUser }) => {
         try {
             const token = getTokenFromCookie(); // Получаем токен из куки
 
-            const response = await fetch('http://localhost:8080/student-class/delete', {
+            const response = await fetch('http://localhost:8081/student-class/delete', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',

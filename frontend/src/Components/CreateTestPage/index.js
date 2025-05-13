@@ -118,7 +118,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 taskDtoList: editItem==null?taskList:editedTaskList
             });
             if(editItem==null) {
-                const response = await fetch('http://localhost:8080/test/add', {
+                const response = await fetch('http://localhost:8081/test/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -154,7 +154,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 }
                 toastText = "Тест успешно создан.";
             } else {
-                const response = await fetch('http://localhost:8080/test/update-test', {
+                const response = await fetch('http://localhost:8081/test/update-test', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -202,7 +202,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch('http://localhost:8081/users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -210,7 +210,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch('http://localhost:8081/subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -224,7 +224,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 const subjectsJson = await response2.json();
                 setSubjects(subjectsJson)
 
-                const response3 = await fetch('http://localhost:8080/type-test/all');
+                const response3 = await fetch('http://localhost:8081/type-test/all');
                 if (!response3.ok) {
                     throw new Error('Ошибка получения типов тестов');
                 }
@@ -236,7 +236,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
 
                 let aveliabletaskrfortest = [];
                 if (currentTheme > 0) {
-                    const response4 = await fetch('http://localhost:8080/test/get-available-tasks', {
+                    const response4 = await fetch('http://localhost:8081/test/get-available-tasks', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -257,7 +257,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 }
 
                 if (editItem != null) {
-                    const response5 = await fetch('http://localhost:8080/test/get-tasks-test', {
+                    const response5 = await fetch('http://localhost:8081/test/get-tasks-test', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'

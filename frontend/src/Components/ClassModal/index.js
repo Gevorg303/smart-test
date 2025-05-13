@@ -36,7 +36,7 @@ const ClassModal = ({targetSubject, showModal, onCreate/*classes, setClasses*/})
         console.log("delete");
         try {
 
-            const response = await fetch('http://localhost:8080/user-subject/remove', {
+            const response = await fetch('http://localhost:8081/user-subject/remove', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8'
@@ -61,7 +61,7 @@ const ClassModal = ({targetSubject, showModal, onCreate/*classes, setClasses*/})
         console.log("add");
         try {
 
-            const response = await fetch('http://localhost:8080/user-subject/add', {
+            const response = await fetch('http://localhost:8081/user-subject/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8'
@@ -89,7 +89,7 @@ const ClassModal = ({targetSubject, showModal, onCreate/*classes, setClasses*/})
             try {
                 if (targetSubject != null) {
 
-                    const response = await fetch('http://localhost:8080/user-subject/find-class-by-subject', {
+                    const response = await fetch('http://localhost:8081/user-subject/find-class-by-subject', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'

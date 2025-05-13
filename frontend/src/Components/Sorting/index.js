@@ -31,7 +31,7 @@ const Sorting = ({ type, setBankItems }) => {
     useEffect(() => {
         async function fetchFilterOptions() {
             try {
-                const subjectsResponse = await fetch('http://localhost:8080/subject/all', {
+                const subjectsResponse = await fetch('http://localhost:8081/subject/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -43,7 +43,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const subjectsData = await subjectsResponse.json();
                 setSubjects(subjectsData);
 
-                const testTypesResponse = await fetch('http://localhost:8080/type-test/all', {
+                const testTypesResponse = await fetch('http://localhost:8081/type-test/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -55,7 +55,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const testTypesData = await testTypesResponse.json();
                 setTestTypes(testTypesData);
 
-                const currentUserResponse = await fetch('http://localhost:8080/users/current', {
+                const currentUserResponse = await fetch('http://localhost:8081/users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const Sorting = ({ type, setBankItems }) => {
 
                 const currentUser = await currentUserResponse.json();
 
-                const classesResponse = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                const classesResponse = await fetch('http://localhost:8081/users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const classesData = await classesResponse.json();
                 setClasses(classesData);
 
-                const rolesResponse = await fetch('http://localhost:8080/users/all', {
+                const rolesResponse = await fetch('http://localhost:8081/users/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -115,7 +115,7 @@ const Sorting = ({ type, setBankItems }) => {
 
     const handleSearch = async (roleId = null) => {
         try {
-            const userResponse = await fetch('http://localhost:8080/users/current', {
+            const userResponse = await fetch('http://localhost:8081/users/current', {
                 credentials: "include",
             });
             if (!userResponse.ok) {
@@ -133,7 +133,7 @@ const Sorting = ({ type, setBankItems }) => {
 
             switch (type) {
                 case 'test':
-                    url = 'http://localhost:8080/bank-filters/tests';
+                    url = 'http://localhost:8081/bank-filters/tests';
                     requestBody = {
                         user,
                         subject: subjectId > 0 ? { id: subjectId } : null,
@@ -142,7 +142,7 @@ const Sorting = ({ type, setBankItems }) => {
                     };
                     break;
                 case 'task':
-                    url = 'http://localhost:8080/bank-filters/tasks';
+                    url = 'http://localhost:8081/bank-filters/tasks';
                     requestBody = {
                         user,
                         subject: subjectId > 0 ? { id: subjectId } : null,
@@ -151,24 +151,24 @@ const Sorting = ({ type, setBankItems }) => {
                     };
                     break;
                 case 'subject':
-                    url = 'http://localhost:8080/bank-filters/subjects';
+                    url = 'http://localhost:8081/bank-filters/subjects';
                     requestBody = {
                         user,
                         class: classId > 0 ? { id: classId } : null,
                     };
                     break;
                 case 'theme':
-                    url = 'http://localhost:8080/theme/get-by-subject';
+                    url = 'http://localhost:8081/theme/get-by-subject';
                     requestBody = {
                         id: subjectId
                     };
                     break;
                 case 'indicator':
                     if (subjectId > 0 && themeId > 0) {
-                        url = 'http://localhost:8080/indicator/indicator-by-theme';
+                        url = 'http://localhost:8081/indicator/indicator-by-theme';
                         requestBody = { id: themeId }
                     } else {
-                        url = 'http://localhost:8080/bank-filters/indicators';
+                        url = 'http://localhost:8081/bank-filters/indicators';
                         requestBody = {
                             user,
                             subject: subjectId > 0 ? { id: subjectId } : null,
@@ -177,12 +177,12 @@ const Sorting = ({ type, setBankItems }) => {
                     break;
                 case 'student':
                     if (filterType === 'class') {
-                        url = 'http://localhost:8080/bank-filters/user';
+                        url = 'http://localhost:8081/bank-filters/user';
                         requestBody = {
                             id: classId
                         };
                     } else {
-                        url = 'http://localhost:8080/users/all';
+                        url = 'http://localhost:8081/users/all';
                         requestBody = {
                             userDto: user,
                             roleDto: roleId ? { id: roleId } : null

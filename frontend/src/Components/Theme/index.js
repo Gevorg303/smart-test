@@ -19,12 +19,12 @@ const Theme = (props) => {
             try {
                 sessionStorage.clear()
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response = await fetch(`http://localhost:8080/theme/id:${props.id}`);
+                const response = await fetch(`http://localhost:8081/theme/id:${props.id}`);
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
                 const theme = await response.json();
-                const response2 = await fetch('http://localhost:8080/test/get-test-id-theme', {
+                const response2 = await fetch('http://localhost:8081/test/get-test-id-theme', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

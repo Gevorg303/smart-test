@@ -27,7 +27,7 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
         async function fetchAnswers() {
             try {
 
-                const response = await fetch('http://localhost:8080/response-option/find-response-option-by-task', {
+                const response = await fetch('http://localhost:8081/response-option/find-response-option-by-task', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

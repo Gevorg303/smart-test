@@ -38,7 +38,7 @@ const RegistrationPage = () => {
     useEffect(() => {
         async function fetchClasses() {
             try {
-                const responseCurrent = await fetch('http://localhost:8080/users/current', {
+                const responseCurrent = await fetch('http://localhost:8081/users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ const RegistrationPage = () => {
                 const user = await responseCurrent.json();
                 console.log('ntreobq gjkmpjdfnktq:', user); // Проверьте, что данные получены
 
-                const responseAll = await fetch('http://localhost:8080/users/all', {
+                const responseAll = await fetch('http://localhost:8081/users/all', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -70,7 +70,7 @@ const RegistrationPage = () => {
                 console.log('Все пользователи:', data2);
                 setUsers(data2);
 
-                const response = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                const response = await fetch('http://localhost:8081/users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ const RegistrationPage = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/users/add', {
+            const response = await fetch('http://localhost:8081/users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -266,7 +266,7 @@ const RegistrationPage = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8080/users/add', {
+                const response = await fetch('http://localhost:8081/users/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -320,7 +320,7 @@ const RegistrationPage = () => {
 
     /* const fetchUsers = async () => {
          try {
-             const response = await fetch('http://localhost:8080/users/all', {
+             const response = await fetch('http://localhost:8081/users/all', {
                  method: 'POST',
                  headers: {
                      'Content-Type': 'application/json;charset=UTF-8'

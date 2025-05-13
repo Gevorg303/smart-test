@@ -49,7 +49,7 @@ const TestPage = () => {
         let min = Math.floor(parseInt(attemptDuration)/60%60) ;
         let hour= Math.floor(parseInt(attemptDuration)/3600) ;
 
-        const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
+        const response1 = await fetch('http://localhost:8081/users/current', { //получить пользователя
             credentials: "include",
         });
         if (!response1.ok) {
@@ -73,7 +73,7 @@ const TestPage = () => {
         console.log(sendData)
 
         try {
-            const response = await fetch('http://localhost:8080/test/end-testing', {
+            const response = await fetch('http://localhost:8081/test/end-testing', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8'
@@ -105,7 +105,7 @@ const TestPage = () => {
                 {
                     navigate(-1,{replace:true})
                 }
-                const response = await fetch('http://localhost:8080/test/id:' + testid);
+                const response = await fetch('http://localhost:8081/test/id:' + testid);
                 if (!response.ok) {
                     throw new Error('Ошибка получения теста');
                 }
@@ -119,7 +119,7 @@ const TestPage = () => {
                 }
 
 
-                const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
+                const response2 = await fetch('http://localhost:8081/test/get-tasks-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

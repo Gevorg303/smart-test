@@ -18,7 +18,7 @@ const Layout = () => {
 
         async function fetchUser() {
             try {
-                const response = await fetch('http://localhost:8080/users/current', {
+                const response = await fetch('http://localhost:8081/users/current', {
                     credentials: "include",
                 });
                 if (!response.ok) {

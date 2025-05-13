@@ -53,7 +53,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
              );*/
             let toastText;
             if(editItem==null){
-                const response = await fetch('http://localhost:8080/indicator/add', { // добавить индикатор
+                const response = await fetch('http://localhost:8081/indicator/add', { // добавить индикатор
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -75,7 +75,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
                 toastText = "Индикатор успешно создан.";
             }
             else{
-                const response = await fetch('http://localhost:8080/indicator/update-indicator', { // добавить индикатор
+                const response = await fetch('http://localhost:8081/indicator/update-indicator', { // добавить индикатор
                     method: 'PUt',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -108,7 +108,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
                 console.log("тема: "+currentTheme)
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch('http://localhost:8081/users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -116,7 +116,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch('http://localhost:8081/subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

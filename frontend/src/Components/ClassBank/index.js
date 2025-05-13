@@ -19,7 +19,7 @@ const ClassBank = () => {
                     return;
                 }
 
-                const response = await fetch('http://localhost:8080/users/current', {
+                const response = await fetch('http://localhost:8081/users/current', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -50,7 +50,7 @@ const ClassBank = () => {
                     return;
                 }
 
-                const response = await fetch('http://localhost:8080/users/find-student-class-by-user', {
+                const response = await fetch('http://localhost:8081/users/find-student-class-by-user', {
                     method: 'POST',
                     credentials: 'include',
                     headers: {

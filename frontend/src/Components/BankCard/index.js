@@ -19,25 +19,25 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
             let url;
             switch (type) {
                 case "test":
-                    url = 'http://localhost:8080/test/delete';
+                    url = 'http://localhost:8081/test/delete';
                     break;
                 case "task":
-                    url = 'http://localhost:8080/task/delete';
+                    url = 'http://localhost:8081/task/delete';
                     break;
                 case "indicator":
-                    url = 'http://localhost:8080/indicator/delete';
+                    url = 'http://localhost:8081/indicator/delete';
                     break;
                 case "theme":
-                    url = 'http://localhost:8080/theme/delete';
+                    url = 'http://localhost:8081/theme/delete';
                     break;
                 case "subject":
-                    url = 'http://localhost:8080/subject/delete';
+                    url = 'http://localhost:8081/subject/delete';
                     break;
                 case "student":
-                    url = 'http://localhost:8080/users/delete';
+                    url = 'http://localhost:8081/users/delete';
                     break;
                 case "class":
-                    url = 'http://localhost:8080/student-class/delete';
+                    url = 'http://localhost:8081/student-class/delete';
                     break;
                 default:
                     throw new Error("Неизвестный тип");

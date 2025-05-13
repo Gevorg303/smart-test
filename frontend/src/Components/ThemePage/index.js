@@ -27,7 +27,7 @@ const ThemePage = () => {
                 {
                     navigate(-1,{replace:true})
                 }
-                const response = await fetch('http://localhost:8080/subject/find-subject-by-id',{
+                const response = await fetch('http://localhost:8081/subject/find-subject-by-id',{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -52,7 +52,7 @@ const ThemePage = () => {
         async function fetchThemes() {
             try {
                 const subid = getCookie("sub");
-                const response = await fetch(`http://localhost:8080/theme/get-by-subject`,{
+                const response = await fetch(`http://localhost:8081/theme/get-by-subject`,{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

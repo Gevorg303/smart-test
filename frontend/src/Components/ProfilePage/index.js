@@ -36,7 +36,7 @@ const ProfilePage = () => {
     useEffect( () => {
         async function fetchUser() {
             try {
-                const response = await fetch('http://localhost:8080/users/current', {
+                const response = await fetch('http://localhost:8081/users/current', {
                     credentials: "include",
                 });
                 if (!response.ok) {
@@ -57,7 +57,7 @@ const ProfilePage = () => {
                     setPortraitUrl(avatarImage)
                 }
 
-                const response2 = await fetch(`http://localhost:8080/student-class/teacherid=${user.id}`, {
+                const response2 = await fetch(`http://localhost:8081/student-class/teacherid=${user.id}`, {
                     credentials: "include",
                 });
                 if (!response2.ok) {
