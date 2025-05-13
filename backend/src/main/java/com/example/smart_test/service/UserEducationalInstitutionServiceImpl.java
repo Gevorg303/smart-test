@@ -96,7 +96,7 @@ public class UserEducationalInstitutionServiceImpl implements UserEducationalIns
 
         List<User> users = userEducationalInstitutions.stream()
                 .map(UserEducationalInstitution::getUser)
-                .filter(user -> !user.getId().equals(userId))
+                //.filter(user -> !user.getId().equals(userId))
                 .collect(Collectors.toList());
 
         return users;
