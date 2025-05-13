@@ -35,9 +35,9 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
 
     @Transactional
     @Override
-    public List<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme) {
+    public Set<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme) {
         List<TestDto> testDtoList = testService.getUserTests(user);
-        List<TestDto> filteredList = new ArrayList<>();
+        Set<TestDto> filteredList = new HashSet<>();
 
         if (typeTest != null && typeTest.getId() != null) {
             for (TestDto testDto : testDtoList) {
@@ -51,7 +51,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
 
         if (subject != null) {
             List<Theme> subjectThemes = themeService.findThemeByIdSubject(subjectMapper.toDTO(subject));
-            List<TestDto> subjectFilteredList = new ArrayList<>();
+            Set<TestDto> subjectFilteredList = new HashSet<>();
 
             for (TestDto testDto : filteredList) {
                 for (Theme subjectTheme : subjectThemes) {
@@ -65,7 +65,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         }
 
         if (theme != null && theme.getId() != null) {
-            List<TestDto> themeFilteredList = new ArrayList<>();
+            Set<TestDto> themeFilteredList = new HashSet<>();
 
             for (TestDto testDto : filteredList) {
                 if (Objects.equals(testDto.getTheme().getId(), theme.getId())) {

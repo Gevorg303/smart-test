@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface BankFilterServiceInterface {
     @Transactional
-    List<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme);
+    Set<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme);
 
     List<TaskDto> getTasksFilter(User user, Subject subject, Theme theme, Indicator indicator);
 
