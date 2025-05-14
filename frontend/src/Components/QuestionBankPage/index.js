@@ -147,7 +147,7 @@ const QuestionBankPage = ({type}) => {
                         break;
                     case "student":
                         localStorage.setItem('info', "На этой странице посмотреть список учеников");
-                        setTopText("Банк учеников");
+                        setTopText("Банк пользователей");
                         setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
                         const response7 = await fetch('http://localhost:8081/users/all', {
                             method: 'POST',

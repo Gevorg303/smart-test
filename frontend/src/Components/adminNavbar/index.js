@@ -16,7 +16,7 @@ const AdminNavbar = ({ onFormSelect }) => {
                 "Темы",
                 "Предметы",
                 "Классы",
-                "Ученики"
+                "Пользователи"
             ]
         },
         {
@@ -59,7 +59,7 @@ const AdminNavbar = ({ onFormSelect }) => {
             navigate('/itembank');
         } else if (item === "Классы") {
             navigate('/ClassBank');
-        } else if (item === "Ученики") {
+        } else if (item === "Пользователи") {
             navigate('/StudentBank');
         } else if (item === "Личный кабинет") {
              navigate('/profile');
