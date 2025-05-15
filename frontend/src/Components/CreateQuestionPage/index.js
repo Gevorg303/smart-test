@@ -164,7 +164,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
 
             let toastText;
             if(editItem==null) {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/task/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'task/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -192,7 +192,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 }
                 toastText = "Задание создано";
             } else {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/task/update-task', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'task/update-task', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -297,7 +297,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -305,7 +305,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -320,7 +320,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 console.log(subjectsJson)
                 setSubjects(subjectsJson)
 
-                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'/TypeTask/all');
+                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'TypeTask/all');
                 if (!response3.ok) {
                     throw new Error('Ошибка получения типов заданий');
                 }
@@ -351,7 +351,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
 
                 setCurrentType(editItem.typeTask.id);
                 try {
-                    const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/task-of-indicator/find-indicator-by-task', {
+                    const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'task-of-indicator/find-indicator-by-task', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -384,7 +384,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 setText(editItem.taskText);
                 setExplanation(editItem.explanation);
                 try {
-                    const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/response-option/find-response-option-by-task', {
+                    const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'response-option/find-response-option-by-task', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'

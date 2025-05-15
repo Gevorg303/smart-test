@@ -52,7 +52,7 @@ const StartTestPage = () => {
                 if (!testid) {
                     navigate(-1, { replace: true })
                 }
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', { //получить пользователя
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', { //получить пользователя
                     credentials: "include",
                 });
                 if (!response.ok) {
@@ -61,14 +61,14 @@ const StartTestPage = () => {
                 const user = await response.json();
                 setCurrentUser(user);
 
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'/test/id:' + testid);
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'test/id:' + testid);
                 if (!response1.ok) {
                     throw new Error('Ошибка сети');
                 }
                 const test = await response1.json();
                 console.log(test);
 
-                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/test/find-testing-attempt-by-test', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'test/find-testing-attempt-by-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -91,7 +91,7 @@ const StartTestPage = () => {
                 console.log(attemptsJson);
                 setAttempts(attemptsJson)
 
-                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'/test/get-tasks-test', {
+                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-tasks-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -182,7 +182,7 @@ const StartTestPage = () => {
             user: currentUser,
             theme: testTheme
         }
-        const response = await fetch(process.env.REACT_APP_SERVER_URL+'/test/create-test-simulator', {
+        const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/create-test-simulator', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8'

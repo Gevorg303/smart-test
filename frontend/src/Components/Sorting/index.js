@@ -31,7 +31,7 @@ const Sorting = ({ type, setBankItems }) => {
     useEffect(() => {
         async function fetchFilterOptions() {
             try {
-                const subjectsResponse = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/all', {
+                const subjectsResponse = await fetch(process.env.REACT_APP_SERVER_URL+'subject/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -43,7 +43,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const subjectsData = await subjectsResponse.json();
                 setSubjects(subjectsData);
 
-                const testTypesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'/type-test/all', {
+                const testTypesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'type-test/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -55,7 +55,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const testTypesData = await testTypesResponse.json();
                 setTestTypes(testTypesData);
 
-                const currentUserResponse = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
+                const currentUserResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const Sorting = ({ type, setBankItems }) => {
 
                 const currentUser = await currentUserResponse.json();
 
-                const classesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'/users/find-student-class-by-user', {
+                const classesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const classesData = await classesResponse.json();
                 setClasses(classesData);
 
-                const rolesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'/users/all', {
+                const rolesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -115,7 +115,7 @@ const Sorting = ({ type, setBankItems }) => {
 
     const handleSearch = async (roleId = null) => {
         try {
-            const userResponse = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
+            const userResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                 credentials: "include",
             });
             if (!userResponse.ok) {
@@ -133,7 +133,7 @@ const Sorting = ({ type, setBankItems }) => {
 
             switch (type) {
                 case 'test':
-                    url = process.env.REACT_APP_SERVER_URL+'/bank-filters/tests';
+                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/tests';
                     requestBody = {
                         user,
                         subject: subjectId > 0 ? { id: subjectId } : null,
@@ -142,7 +142,7 @@ const Sorting = ({ type, setBankItems }) => {
                     };
                     break;
                 case 'task':
-                    url = process.env.REACT_APP_SERVER_URL+'/bank-filters/tasks';
+                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/tasks';
                     requestBody = {
                         user,
                         subject: subjectId > 0 ? { id: subjectId } : null,
@@ -151,24 +151,24 @@ const Sorting = ({ type, setBankItems }) => {
                     };
                     break;
                 case 'subject':
-                    url = process.env.REACT_APP_SERVER_URL+'/bank-filters/subjects';
+                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/subjects';
                     requestBody = {
                         user,
                         class: classId > 0 ? { id: classId } : null,
                     };
                     break;
                 case 'theme':
-                    url = process.env.REACT_APP_SERVER_URL+'/theme/get-by-subject';
+                    url = process.env.REACT_APP_SERVER_URL+'theme/get-by-subject';
                     requestBody = {
                         id: subjectId
                     };
                     break;
                 case 'indicator':
                     if (subjectId > 0 && themeId > 0) {
-                        url = process.env.REACT_APP_SERVER_URL+'/indicator/indicator-by-theme';
+                        url = process.env.REACT_APP_SERVER_URL+'indicator/indicator-by-theme';
                         requestBody = { id: themeId }
                     } else {
-                        url = process.env.REACT_APP_SERVER_URL+'/bank-filters/indicators';
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/indicators';
                         requestBody = {
                             user,
                             subject: subjectId > 0 ? { id: subjectId } : null,
@@ -177,12 +177,12 @@ const Sorting = ({ type, setBankItems }) => {
                     break;
                 case 'student':
                     if (filterType === 'class') {
-                        url = process.env.REACT_APP_SERVER_URL+'/bank-filters/user';
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/user';
                         requestBody = {
                             id: classId
                         };
                     } else {
-                        url = process.env.REACT_APP_SERVER_URL+'/users/all';
+                        url = process.env.REACT_APP_SERVER_URL+'users/all';
                         requestBody = {
                             userDto: user,
                             roleDto: roleId ? { id: roleId } : null

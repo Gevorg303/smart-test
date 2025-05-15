@@ -14,7 +14,7 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
         async function fetchUser() {
             try {
 
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response.ok) {

@@ -49,7 +49,7 @@ const SubjectClass = () => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', { //получить пользователя
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', { //получить пользователя
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -57,7 +57,7 @@ const SubjectClass = () => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

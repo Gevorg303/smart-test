@@ -52,7 +52,7 @@ const QuestionBankPage = ({type}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -64,7 +64,7 @@ const QuestionBankPage = ({type}) => {
                         localStorage.setItem('info', "На этой странице можно отсортировать все тесты по предмету, теме, типу теста и просмотреть");
                         setTopText("Банк тестов");
                         setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/test/get-user-tests', {
+                        const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-user-tests', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -81,7 +81,7 @@ const QuestionBankPage = ({type}) => {
                         localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
                         setTopText("Банк заданий");
                         setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'/task/get-user-tasks', {
+                        const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'task/get-user-tasks', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -98,7 +98,7 @@ const QuestionBankPage = ({type}) => {
                         localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
                         setTopText("Банк предметов");
                         setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response4 = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/print-user-subject', {
+                        const response4 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -115,7 +115,7 @@ const QuestionBankPage = ({type}) => {
                         localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
                         setTopText("Банк тем");
                         setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response5 = await fetch(process.env.REACT_APP_SERVER_URL+'/theme/get-theme-by-id-user', {
+                        const response5 = await fetch(process.env.REACT_APP_SERVER_URL+'theme/get-theme-by-id-user', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -132,7 +132,7 @@ const QuestionBankPage = ({type}) => {
                         localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
                         setTopText("Банк индикаторов");
                         setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response6 = await fetch(process.env.REACT_APP_SERVER_URL+'/indicator/indicator-by-user', {
+                        const response6 = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/indicator-by-user', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -149,7 +149,7 @@ const QuestionBankPage = ({type}) => {
                         localStorage.setItem('info', "На этой странице посмотреть список учеников");
                         setTopText("Банк пользователей");
                         setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response7 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/all', {
+                        const response7 = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -169,7 +169,7 @@ const QuestionBankPage = ({type}) => {
                         localStorage.setItem('info', "На этой странице можно отсортировать все классы и просмотреть");
                         setTopText("Банк классов");
                         setCreateModal(<CreateClassPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response8 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/find-student-class-by-user', {
+                        const response8 = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
