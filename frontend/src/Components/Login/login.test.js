@@ -48,7 +48,7 @@ test('Проверка отправки формы', async () => {
     fireEvent.click(submitButton);
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(global.fetch).toHaveBeenCalledWith(process.env.REACT_APP_SERVER_URL+'/api/login', {
+    expect(global.fetch).toHaveBeenCalledWith(process.env.REACT_APP_SERVER_URL+'api/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'

@@ -53,7 +53,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
              );*/
             let toastText;
             if(editItem==null){
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/indicator/add', { // добавить индикатор
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/add', { // добавить индикатор
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -75,7 +75,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
                 toastText = "Индикатор успешно создан.";
             }
             else{
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/indicator/update-indicator', { // добавить индикатор
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/update-indicator', { // добавить индикатор
                     method: 'PUt',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -108,7 +108,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
                 console.log("тема: "+currentTheme)
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -116,7 +116,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

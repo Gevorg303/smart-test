@@ -27,7 +27,7 @@ const ThemePage = () => {
                 {
                     navigate(-1,{replace:true})
                 }
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/find-subject-by-id',{
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'subject/find-subject-by-id',{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

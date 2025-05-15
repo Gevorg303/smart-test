@@ -24,7 +24,7 @@ const Theme = (props) => {
                     throw new Error('Ошибка сети');
                 }
                 const theme = await response.json();
-                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'/test/get-test-id-theme', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-test-id-theme', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

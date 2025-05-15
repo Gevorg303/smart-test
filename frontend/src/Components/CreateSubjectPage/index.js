@@ -61,7 +61,7 @@ const CreateSubjectPage = ({editItem, onCreate, onError}) => {
             let toastText;
 
             if(editItem==null){
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/add', { // добавить предмет
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'subject/add', { // добавить предмет
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -86,7 +86,7 @@ const CreateSubjectPage = ({editItem, onCreate, onError}) => {
                 toastText = "Предмет успешно создан.";
             }
             else {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/subject/update-subject', { // добавить предмет
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'subject/update-subject', { // добавить предмет
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -116,7 +116,7 @@ const CreateSubjectPage = ({editItem, onCreate, onError}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
