@@ -38,7 +38,7 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
             console.log("delete");
             try {
 
-                const response = await fetch('http://localhost:8081/user-subject/remove', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/user-subject/remove', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -69,7 +69,7 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
                 console.log(id)
                 console.log(classes)
 
-                const response = await fetch('http://localhost:8081/user-subject/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/user-subject/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -112,7 +112,7 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
                 if(targetSubject!=null) {
 
                     /*
-                    const response1 = await fetch('http://localhost:8081/users/current', { //получить пользователя
+                    const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', { //получить пользователя
                         credentials: "include",
                     });
                     if (!response1.ok) {
@@ -122,7 +122,7 @@ const ClassSelector = ({targetSubject, classes,setClasses}) => {
 
                     console.log(user)
 
-                    const response = await fetch('http://localhost:8081/users/find-student-class-by-user',{
+                    const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/find-student-class-by-user',{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
