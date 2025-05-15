@@ -31,7 +31,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
     useEffect(() => {
         async function fetchClasses() {
             try {
-                const responseCurrent = await fetch('http://localhost:8081/users/current', {
+                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 console.log('Текущий пользователь:', user);
                 setCurrentUser(user);
 
-                const responseAll = await fetch('http://localhost:8081/users/all', {
+                const responseAll = await fetch(process.env.REACT_APP_SERVER_URL+'/users/all', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -64,7 +64,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 console.log('Все пользователи:', data2);
                 setUsers(data2);
 
-                const response = await fetch('http://localhost:8081/users/find-student-class-by-user', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         console.log('Данные для регистрации одного пользователя:', userRequest);
 
         try {
-            const response = await fetch('http://localhost:8081/users/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -270,7 +270,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             }
 
             try {
-                const response = await fetch('http://localhost:8081/users/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -333,7 +333,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
     const fetchUsers = async () => {
         try {
             console.log('Fetching current user...');
-            const currentUserResponse = await fetch('http://localhost:8081/users/current', {
+            const currentUserResponse = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -346,7 +346,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             const currentUser = await currentUserResponse.json();
 
             console.log('Fetching users...');
-            const response = await fetch('http://localhost:8081/users/all', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/all', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -45,7 +45,7 @@ const BetaPage = () => {
 
     const fetchClasses = async () => {
         try {
-            const response = await fetch('http://localhost:8081/users/current-user-classes', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current-user-classes', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const BetaPage = () => {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('http://localhost:8081/roles', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'/roles', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ const BetaPage = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8081/users/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -257,7 +257,7 @@ const BetaPage = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8081/users/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -316,7 +316,7 @@ const BetaPage = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:8081/users/all', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/all', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

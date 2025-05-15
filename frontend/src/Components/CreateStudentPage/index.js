@@ -20,7 +20,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     useEffect(() => {
         async function fetchClasses() {
             try {
-                const responseCurrent = await fetch('http://localhost:8081/users/current', {
+                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL+'/users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                 const user = await responseCurrent.json();
                 console.log('Текущий пользователь:', user);
 
-                const response = await fetch('http://localhost:8081/users/find-student-class-by-user', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'/users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -118,8 +118,8 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             };
 
             const url = editItem
-                ? 'http://localhost:8081/users/update'
-                : 'http://localhost:8081/users/add';
+                ? process.env.REACT_APP_SERVER_URL+'/users/update'
+                : process.env.REACT_APP_SERVER_URL+'/users/add';
             const method = editItem ? 'PUT' : 'POST';
 
             const response = await fetch(url, {

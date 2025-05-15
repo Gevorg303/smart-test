@@ -19,25 +19,25 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
             let url;
             switch (type) {
                 case "test":
-                    url = 'http://localhost:8081/test/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'/test/delete';
                     break;
                 case "task":
-                    url = 'http://localhost:8081/task/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'/task/delete';
                     break;
                 case "indicator":
-                    url = 'http://localhost:8081/indicator/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'/indicator/delete';
                     break;
                 case "theme":
-                    url = 'http://localhost:8081/theme/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'/theme/delete';
                     break;
                 case "subject":
-                    url = 'http://localhost:8081/subject/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'/subject/delete';
                     break;
                 case "student":
-                    url = 'http://localhost:8081/users/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'/users/delete';
                     break;
                 case "class":
-                    url = 'http://localhost:8081/student-class/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'/student-class/delete';
                     break;
                 default:
                     throw new Error("Неизвестный тип");

@@ -34,7 +34,7 @@ class LoginPage extends React.Component {
        console.log('Sending request with:', JSON.stringify({ username, password }));
        errorlabel.innerHTML = "";
        try {
-           const response = await fetch('http://localhost:8081/api/login', {
+           const response = await fetch(process.env.REACT_APP_SERVER_URL+'/api/login', {
                method: 'POST',
                headers: {
                    'Content-Type': 'application/json;charset=UTF-8'

@@ -26,7 +26,7 @@ const StudentBank = () => {
         }
 
         // Получение классов
-        fetch('http://localhost:8081/users/current-user-classes', {
+        fetch(process.env.REACT_APP_SERVER_URL+'/users/current-user-classes', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -78,7 +78,7 @@ const StudentBank = () => {
         }
 
         try {
-            let url = 'http://localhost:8081/users/all';
+            let url = process.env.REACT_APP_SERVER_URL+'/users/all';
             let requestBody = {};
 
             if (filterType === 'class') {
