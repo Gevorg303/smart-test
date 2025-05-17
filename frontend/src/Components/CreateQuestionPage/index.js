@@ -274,7 +274,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
             case 3:
                 return  <>
                     <Form.Label >Ответ</Form.Label>
-                    <Form.Control key={0} type="text" onChange={(e) => {
+                    <Form.Control key={0} type="text" value={currentAnswers[0]?currentAnswers[0].response:""} onChange={(e) => {
                         const array = [...currentAnswers];
                         array[0] = {
                             question: "",
