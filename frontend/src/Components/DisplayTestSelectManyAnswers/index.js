@@ -43,11 +43,12 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
         console.log(currentAnswers)
     };
 
-    const onClick = () => {
+    const onClickNext = () => {
        /* const array = [...userAnswer];
         array[id] = !array[id]?true:undefined;
         setUserAnswer(array);*/
       //  console.log(array)
+       // console.log(answers)
         setAnswers(currentAnswers);
         setActive(prev => qsCount === prev + 1 ? prev : prev + 1);
     };
@@ -134,6 +135,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
 
     useEffect(() => {
         if (answers != undefined) {
+           // console.log(answers)
             const find = answers.find(el => el.task.id===item.id);
             if(find==undefined){
                 currentAnswers.push(
@@ -170,7 +172,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
             {view ? (
                 <></>
             ) : (
-                <Button className="answer-button" onClick={() => {onClick()}}>Ответить</Button>
+                <Button className="answer-button" onClick={onClickNext}>Ответить</Button>
             )}
         </>
     );
