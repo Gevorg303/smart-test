@@ -65,7 +65,25 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
         }
 
         try {
+
+
             const theme = parseInt(currentTheme, 10);
+
+            const responseTest = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-test-id-theme', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({id: theme})
+            });
+            if (!responseTest.ok) {
+                throw new Error('Ошибка получения тестов по теме');
+            }
+
+            const findSameType = await responseTest.json();
+
+            const findTest = findSameType.find((el) => el.typeTest.id == currentType)
+
             const taskList = [];
             for (var i = 0; i < currentTasks.length; i++) {
                // if (currentTasks[i] != undefined) {
@@ -118,6 +136,10 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 taskDtoList: editItem==null?taskList:editedTaskList
             });
             if(editItem==null) {
+                if(findTest !== undefined){
+                    onError(["Ошибка! Тест такого типа уже существует!"]);
+                    throw new Error('Тест такого типа уже существует');
+                }
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/add', {
                     method: 'POST',
                     headers: {
