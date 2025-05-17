@@ -2,55 +2,110 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useOutletContext } from "react-router-dom";
 import { Table } from "react-bootstrap";
 
-const AdminHome = ({ userId }) => {
+const AdminHome = () => {
     const [subjects, setSubjects] = useState([]);
-    const [roleCounts, setRoleCounts] = useState({});
+    const [roleCounts, setRoleCounts] = useState([]);
     const [totalUsers, setTotalUsers] = useState(0);
     const [classStudentCounts, setClassStudentCounts] = useState({});
     const [topText, setTopText] = useOutletContext();
     const canvasRef = useRef(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchUser = async () => {
             try {
-                setTopText("Домашняя страница админа");
-                // Пример данных, которые вы получите из БД
-                const mockData = [
-                    { name: "Илья", role: "Админ",  class: " " },
-                    { name: "Петя", role: "Админ",  class: " " },
-                    { name: "Максим", role: "Ученик",  class: "3 Б" },
-                    { name: "Саша", role: "Ученик",  class: "1 А"},
-                    { name: "Миша", role: "Ученик", class: "1 А" },
-                    { name: "Паша", role: "Учитель",  class: " " },
-                ];
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
+                    credentials: "include",
+                });
 
-                setSubjects(mockData);
+                if (!response.ok) {
+                    throw new Error('Ошибка получения пользователя');
+                }
 
-                // Подсчет количества пользователей каждой роли
-                const counts = mockData.reduce((acc, subject) => {
-                    acc[subject.role] = (acc[subject.role] || 0) + 1;
-                    return acc;
-                }, {});
-
-                setRoleCounts(counts);
-                setTotalUsers(mockData.length);
-
-                // Подсчет количества учеников в каждом классе
-                const classCounts = mockData.reduce((acc, subject) => {
-                    if (subject.role === "Ученик" && subject.class.trim() !== "") {
-                        acc[subject.class] = (acc[subject.class] || 0) + 1;
-                    }
-                    return acc;
-                }, {});
-
-                setClassStudentCounts(classCounts);
+                const userData = await response.json();
+                console.log("User data:", userData);
+                setUser(userData);
             } catch (error) {
-                console.error("Error fetching data: ", error);
+                console.error('Ошибка получения данных пользователя:', error);
             }
         };
 
-        fetchData();
-    }, [userId, setTopText]);
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            const fetchData = async () => {
+                try {
+                    setTopText("Домашняя страница админа");
+
+                    // Запрос на получение количества пользователей по ролям
+                    const userCountResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/admin-count-user', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(user) // Передаем весь объект пользователя
+                    });
+
+                    if (!userCountResponse.ok) {
+                        const errorData = await userCountResponse.json();
+                        throw new Error(`Ошибка получения данных пользователей: ${userCountResponse.status} - ${JSON.stringify(errorData)}`);
+                    }
+
+                    const userCountData = await userCountResponse.json();
+                    console.log("User count data:", userCountData);
+
+                    // Обновляем состояние roleCounts массивом строк в формате "[role.role]: [count]"
+                    const counts = userCountData.map(item => `${item.role.role}: ${item.count}`);
+                    setRoleCounts(counts);
+                    setTotalUsers(userCountData.reduce((sum, item) => sum + item.count, 0));
+
+                    // Запрос на получение количества учеников в классах
+                    const classCountResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/admin-count-student-class', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(user) // Передаем весь объект пользователя
+                    });
+
+                    if (!classCountResponse.ok) {
+                        const errorData = await classCountResponse.json();
+                        throw new Error(`Ошибка получения данных учеников: ${classCountResponse.status} - ${JSON.stringify(errorData)}`);
+                    }
+
+                    const classCountData = await classCountResponse.json();
+                    console.log("Class count data:", classCountData);
+
+                    const classCounts = classCountData.reduce((acc, item) => {
+                        const className = `${item.studentClassDtoList.numberOfInstitution} ${item.studentClassDtoList.letterDesignation}`;
+                        acc[className] = item.countStudentClass;
+                        return acc;
+                    }, {});
+
+                    setClassStudentCounts(classCounts);
+
+                    // Пример данных, которые вы получите из БД
+                    const mockData = [
+                        { name: "Илья", role: "Админ", class: " " },
+                        { name: "Петя", role: "Админ", class: " " },
+                        { name: "Максим", role: "Ученик", class: "3 Б" },
+                        { name: "Саша", role: "Ученик", class: "1 А"},
+                        { name: "Миша", role: "Ученик", class: "1 А" },
+                        { name: "Паша", role: "Учитель", class: " " },
+                    ];
+
+                    setSubjects(mockData);
+                } catch (error) {
+                    console.error("Error fetching data: ", error);
+                    alert("Ошибка при получении данных: " + error.message);
+                }
+            };
+
+            fetchData();
+        }
+    }, [user, setTopText]);
 
     useEffect(() => {
         if (Object.keys(classStudentCounts).length > 0) {
@@ -93,12 +148,12 @@ const AdminHome = ({ userId }) => {
             <div className="result-container">
                 <div className="container-wrapper-2">
                     <div className="container-home-2">
-                        <h2>Сведения об успеваемости</h2>
+                        <h2>Сведения о пользователях</h2>
                         <div>
                             <h3>Количество пользователей по ролям:</h3>
                             <ul>
-                                {Object.entries(roleCounts).map(([role, count]) => (
-                                    <li key={role}>{role}: {count}</li>
+                                {roleCounts.map((roleCount, index) => (
+                                    <li key={index}>{roleCount}</li>
                                 ))}
                             </ul>
                             <p>Общее количество пользователей: {totalUsers}</p>
@@ -107,22 +162,6 @@ const AdminHome = ({ userId }) => {
                             <h3>Количество учеников в классах</h3>
                             <canvas ref={canvasRef} width="400" height="300"></canvas>
                         </div>
-                        <Table className="result-table" striped bordered hover>
-                            <thead>
-                            <tr>
-                                <th>Имя</th>
-                                <th>Роль</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {subjects.map((subject, index) => (
-                                <tr key={index}>
-                                    <td>{subject.name}</td>
-                                    <td>{subject.role}</td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </Table>
                     </div>
                 </div>
             </div>
