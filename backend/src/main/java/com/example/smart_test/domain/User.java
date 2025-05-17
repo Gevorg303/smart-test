@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -36,6 +37,9 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "роль_пользователя")
     private Role roles;
+    @NotNull
+    @Column(name = "флаг_мягкого_удаления", nullable = false)
+    private Boolean isDelete  = false;
 
     @Override
     public String getPassword() {

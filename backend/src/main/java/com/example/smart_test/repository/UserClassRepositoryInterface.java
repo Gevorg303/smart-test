@@ -26,6 +26,7 @@ public interface UserClassRepositoryInterface extends JpaRepository<UserClass, L
     List<UserClass> findByStudentClass(StudentClass studentClass);
 
     // Получить количество пользователей в конкретном классе
-    @Query("SELECT COUNT(uc) FROM UserClass uc WHERE uc.studentClass.id = :classId")
+    @Query("SELECT COUNT(uc) FROM UserClass uc WHERE uc.studentClass.id = :classId AND uc.user.isDelete = false")
     int countUsersByClassId(@Param("classId") Long classId);
+
 }
