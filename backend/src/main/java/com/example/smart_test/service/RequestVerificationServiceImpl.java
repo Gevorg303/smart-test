@@ -1,6 +1,8 @@
 package com.example.smart_test.service;
 
+import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.ResponseOptionDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.TypeTaskEnum;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.response.ResponseForTask;
@@ -62,21 +64,33 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                         .collect(Collectors.toSet());
 
                 Set<String> userSet = userOptions.stream()
+                        .filter(ResponseOptionDto::isValidResponse)
                         .map(ResponseOptionDto::getResponse)
                         .collect(Collectors.toSet());
 
+                int counter = 0;
+                for (String correctOption : userSet) {
+                    if (correctSet.contains(correctOption)){
+                        counter++;
+                    }else {
+                        counter = 0;
+                        break;
+                    }
+                }
                 for (ResponseOptionDto userOption : userOptions) {
-
                    // boolean isCorrect = correctSet.contains(userOption.getResponse());
                     if (userOption.isValidResponse()) {
                         userOption.setValidResponse(true);
                     }
                     theUsersResponseOption.add(userOption);
                 }
-
                 // TODO: если хотя бы один лишний или пропущен правильный — оценка 0
-                boolean isFullyCorrect = userSet.equals(correctSet);
-                counterCorrectResponse = isFullyCorrect ? correctOptions.size() : 0;
+                boolean isFullyCorrect = false;
+                if (userSet.size() <= correctSet.size()) {
+                     isFullyCorrect = true;
+                }
+
+                counterCorrectResponse = isFullyCorrect ? counter : 0;
 
             } else if (TypeTaskEnum.INPUT_ANSWER.getDescription().equals(taskType)) {
                 // TODO: логика для заданий с вводом ответа
