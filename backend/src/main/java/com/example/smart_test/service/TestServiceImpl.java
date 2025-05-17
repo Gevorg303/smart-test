@@ -165,11 +165,25 @@ public class TestServiceImpl implements TestServiceInterface {
         return result;
     }
 
-
     @Override
     @Transactional
     public ResponseForTest endTesting(EndTestingRequest endTestingRequest) {
         TestDto testDto = getTestById(endTestingRequest.getTest().getId());
+
+        int totalScore = 0;
+        // Проверяем ответы пользователя
+        List<ResponseForTask> responseForTasks = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
+
+        // Получаем список заданий
+        List<TaskDto> taskList = taskService.findTasksTheTest(testDto);
+
+        // Суммируем баллы
+        for (ResponseForTask responseForTask : responseForTasks) {
+            totalScore += responseForTask.getTaskScore();
+        }
+
+        // Вычисляем итоговый балл
+        int testScore = taskList.isEmpty() ? 0 : totalScore / taskList.size();
 
         TestingAttemptDto testingAttemptDto = testingAttemptService.addTestingAttempt(
                 new TestingAttemptDto(
@@ -177,31 +191,21 @@ public class TestServiceImpl implements TestServiceInterface {
                         endTestingRequest.getAttemptDuration(),
                         endTestingRequest.getTest(),
                         endTestingRequest.getUser(),
-                        0
+                        testScore
                 )
         );
-        int totalScore = 0;
-        // TODO: проверяем ответы пользователя и получаем результаты по каждому заданию
-        List<ResponseForTask> responseForTasks = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
 
-        // TODO: сохраняем результаты по каждому заданию и суммируем баллы
         for (ResponseForTask responseForTask : responseForTasks) {
-            totalScore += responseForTask.getTaskScore();
             taskResultsService.addTaskResults(responseForTask.getTask(), responseForTask.getTaskScore(), testingAttemptDto);
         }
 
-        List<TaskDto> taskList = taskService.findTasksTheTest(testDto);
-
-        // TODO: вычисляем итоговый балл за тест
-        int testScore = taskList.isEmpty() ? 0 : totalScore / taskList.size();
-        testingAttemptDto.setTestResult(testScore);
-
-        // TODO: если это "тренировочный тест", удаляем задания из теста
+        // Удаляем задания, если тренировка
         if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.TRAINER.getDescription())) {
             for (TaskDto taskDto : taskList) {
                 taskService.removeTaskFromTest(taskDto);
             }
         }
+
         return new ResponseForTest(testDto, responseForTasks, testScore);
     }
 
