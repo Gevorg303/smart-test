@@ -1,35 +1,137 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './styles.css';
-import Navbar from "../Navbar";
-import Footer from "../Footer";
 import { useOutletContext } from 'react-router-dom';
 
-const ResultsPage = ({ userId }) => {
+const ResultsPage = () => {
     const [subjects, setSubjects] = useState([]);
     const [topText, setTopText] = useOutletContext();
     const canvasRef = useRef(null);
+    const [user, setUser] = useState(null);
+    const [excellentStudents, setExcellentStudents] = useState([]);
+    const [goodStudents, setGoodStudents] = useState([]);
+    const [averageStudents, setAverageStudents] = useState([]);
+    const [poorStudents, setPoorStudents] = useState([]);
+    const [subjectList, setSubjectList] = useState([]);
+    const [selectedSubject, setSelectedSubject] = useState('');
 
     localStorage.setItem('info', "Здесь вы можете увидеть вашу среднюю оценку за предмет");
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchUser = async () => {
             try {
-                setTopText("Итоги");
-                setSubjects([
-                    { name: "Илья", average: 4 },
-                    { name: "Петя", average: 5 },
-                    { name: "Максим", average: 4 },
-                    { name: "Саша", average: 3 },
-                    { name: "Миша", average: 3 },
-                    { name: "Паша", average: 4 }
-                ]);
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
+                    credentials: "include",
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка получения пользователя');
+                }
+
+                const userData = await response.json();
+                console.log("User data:", userData);
+                setUser(userData);
             } catch (error) {
-                console.error("Error fetching data: ", error);
+                console.error('Ошибка получения данных пользователя:', error);
             }
         };
 
-        fetchData();
-    }, [userId, setTopText]);
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            const fetchData = async () => {
+                try {
+                    setTopText("Итоги");
+
+                    // Запрос на получение статистики
+                    const response = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/student', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(user) // Передаем весь объект пользователя
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Ошибка получения данных об успеваемости');
+                    }
+
+                    const statisticsData = await response.json();
+                    console.log("Statistics data:", statisticsData);
+
+                    // Обновляем состояние subjects данными из сервера
+                    setSubjects(statisticsData);
+
+                    // Запрос на получение списка предметов
+                    const subjectsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify(user) // Передаем объект пользователя
+                    });
+
+                    if (!subjectsResponse.ok) {
+                        throw new Error('Ошибка получения списка предметов');
+                    }
+
+                    const subjectsData = await subjectsResponse.json();
+                    console.log("Subjects data:", subjectsData);
+
+                    // Обновляем состояние subjectList данными из сервера
+                    setSubjectList(subjectsData);
+
+                    // Устанавливаем первый элемент списка предметов как значение по умолчанию
+                    if (subjectsData.length > 0) {
+                        setSelectedSubject(subjectsData[0].id);
+                    }
+                } catch (error) {
+                    console.error("Error fetching data: ", error);
+                }
+            };
+
+            fetchData();
+        }
+    }, [user, setTopText]);
+
+    useEffect(() => {
+        if (selectedSubject && user) {
+            const fetchTeacherStats = async () => {
+                try {
+                    // Запрос на получение данных об отличниках и неуспевающих
+                    const teacherStatsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/teacher', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                            user: user,
+                            subject: subjectList.find(subject => subject.id === parseInt(selectedSubject))
+                        })
+                    });
+
+                    if (!teacherStatsResponse.ok) {
+                        throw new Error('Ошибка получения данных об отличниках и неуспевающих');
+                    }
+
+                    const teacherStatsData = await teacherStatsResponse.json();
+                    console.log("Teacher statistics data:", teacherStatsData);
+
+                    // Извлекаем данные из первого элемента массива
+                    const firstStat = teacherStatsData[0] || {};
+                    setExcellentStudents(firstStat.excellentStudents || []);
+                    setGoodStudents(firstStat.goodStudents || []);
+                    setAverageStudents(firstStat.averageStudents || []);
+                    setPoorStudents(firstStat.poorStudents || []);
+                } catch (error) {
+                    console.error("Error fetching teacher stats: ", error);
+                }
+            };
+
+            fetchTeacherStats();
+        }
+    }, [selectedSubject, user, subjectList]);
 
     useEffect(() => {
         if (subjects.length > 0) {
@@ -39,14 +141,24 @@ const ResultsPage = ({ userId }) => {
 
     const drawPieChart = () => {
         const canvas = canvasRef.current;
+        if (!canvas) {
+            console.error("Canvas element is not available");
+            return;
+        }
+
         const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            console.error("Could not get canvas context");
+            return;
+        }
+
         const centerX = canvas.width / 3; // Смещаем центр влево
         const centerY = canvas.height / 2;
         const radius = Math.min(centerX, centerY) - 10;
 
         // Группировка данных по оценкам
         const gradeCounts = subjects.reduce((acc, subject) => {
-            const grade = subject.average;
+            const grade = subject.score;
             acc[grade] = (acc[grade] || 0) + 1;
             return acc;
         }, {});
@@ -92,7 +204,7 @@ const ResultsPage = ({ userId }) => {
 
     const renderGradeLabels = () => {
         const gradeCounts = subjects.reduce((acc, subject) => {
-            const grade = subject.average;
+            const grade = subject.score;
             acc[grade] = (acc[grade] || 0) + 1;
             return acc;
         }, {});
@@ -108,18 +220,39 @@ const ResultsPage = ({ userId }) => {
         );
     };
 
-    const renderTopAndBottomStudents = () => {
-        const sortedStudents = [...subjects].sort((a, b) => b.average - a.average);
-        const topStudents = sortedStudents.slice(0, 5);
-        const bottomStudents = sortedStudents.slice(-5);
+    const renderStudentPerformance = () => {
+        console.log("Poor Students Data:", poorStudents); // Логируем данные poorStudents
+
+        // Получаем последние 5 элементов из poorStudents или все, если их меньше 5
+        const lastFivePoorStudents = poorStudents.length > 0
+            ? poorStudents.length > 5
+                ? poorStudents.slice(-5)
+                : [...poorStudents].reverse()
+            : [];
+
+        console.log("Last Five Poor Students:", lastFivePoorStudents); // Логируем последние 5 элементов
+
+        // Получаем первые 5 элементов из excellentStudents, goodStudents и averageStudents
+        const firstFiveExcellentStudents = excellentStudents.slice(0, 5);
+        const firstFiveGoodStudents = goodStudents.slice(0, 5);
+        const firstFiveAverageStudents = averageStudents.slice(0, 5);
 
         return (
             <div className="student-performance">
                 <div>
-                    <strong>Отличники:</strong> {topStudents.map(student => student.name).join(', ')}
+                    <strong>Отлично:</strong> {firstFiveExcellentStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
                 </div>
                 <div>
-                    <strong>Неуспевающие:</strong> {bottomStudents.map(student => student.name).join(', ')}
+                    <strong>Хорошо:</strong> {firstFiveGoodStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                </div>
+                <div>
+                    <strong>Удовлетворительно:</strong> {firstFiveAverageStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                </div>
+                <div>
+                    <strong>Неудовлетворительно:</strong>
+                    {lastFivePoorStudents.length > 0
+                        ? lastFivePoorStudents.map(student => `${student.name} ${student.surname}`).join(', ')
+                        : "Нет данных"}
                 </div>
             </div>
         );
@@ -132,23 +265,14 @@ const ResultsPage = ({ userId }) => {
                     <div className="container-home-2">
                         <h2>Сведения об успеваемости</h2>
                         <div className="dropdowns">
-                            <select>
-                                <option value="">Класс</option>
-                                <option value="class1">Класс 1</option>
-                                <option value="class2">Класс 2</option>
-                            </select>
-                            <select>
+                            <select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
                                 <option value="">Предмет</option>
-                                <option value="subject1">Предмет 1</option>
-                                <option value="subject2">Предмет 2</option>
-                            </select>
-                            <select>
-                                <option value="">Тема</option>
-                                <option value="topic1">Тема 1</option>
-                                <option value="topic2">Тема 2</option>
+                                {subjectList.map((subject, index) => (
+                                    <option key={index} value={subject.id}>{subject.subjectName}</option>
+                                ))}
                             </select>
                         </div>
-                        {renderTopAndBottomStudents()}
+                        {renderStudentPerformance()}
                         <div className="pie-chart-container">
                             <canvas ref={canvasRef} width="400" height="400"></canvas>
                             <div className="divider"></div>
