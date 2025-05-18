@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import './styles.css';
-import { useOutletContext } from 'react-router-dom';
 
 const ResultsPage = () => {
     const [subjects, setSubjects] = useState([]);
-    const [topText, setTopText] = useOutletContext();
-    const canvasRef = useRef(null);
     const [user, setUser] = useState(null);
     const [excellentStudents, setExcellentStudents] = useState([]);
     const [goodStudents, setGoodStudents] = useState([]);
@@ -13,10 +9,10 @@ const ResultsPage = () => {
     const [poorStudents, setPoorStudents] = useState([]);
     const [subjectList, setSubjectList] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState('');
-
-    localStorage.setItem('info', "Здесь вы можете увидеть вашу среднюю оценку за предмет");
+    const canvasRef = useRef(null);
 
     useEffect(() => {
+        // Fetch user data
         const fetchUser = async () => {
             try {
                 const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
@@ -28,7 +24,6 @@ const ResultsPage = () => {
                 }
 
                 const userData = await response.json();
-                console.log("User data:", userData);
                 setUser(userData);
             } catch (error) {
                 console.error('Ошибка получения данных пользователя:', error);
@@ -42,15 +37,13 @@ const ResultsPage = () => {
         if (user) {
             const fetchData = async () => {
                 try {
-                    setTopText("Итоги");
-
-                    // Запрос на получение статистики
+                    // Fetch student statistics
                     const response = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/student', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
                         },
-                        body: JSON.stringify(user) // Передаем весь объект пользователя
+                        body: JSON.stringify(user)
                     });
 
                     if (!response.ok) {
@@ -58,18 +51,15 @@ const ResultsPage = () => {
                     }
 
                     const statisticsData = await response.json();
-                    console.log("Statistics data:", statisticsData);
-
-                    // Обновляем состояние subjects данными из сервера
                     setSubjects(statisticsData);
 
-                    // Запрос на получение списка предметов
+                    // Fetch subject list
                     const subjectsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
                         },
-                        body: JSON.stringify(user) // Передаем объект пользователя
+                        body: JSON.stringify(user)
                     });
 
                     if (!subjectsResponse.ok) {
@@ -77,12 +67,8 @@ const ResultsPage = () => {
                     }
 
                     const subjectsData = await subjectsResponse.json();
-                    console.log("Subjects data:", subjectsData);
-
-                    // Обновляем состояние subjectList данными из сервера
                     setSubjectList(subjectsData);
 
-                    // Устанавливаем первый элемент списка предметов как значение по умолчанию
                     if (subjectsData.length > 0) {
                         setSelectedSubject(subjectsData[0].id);
                     }
@@ -93,13 +79,12 @@ const ResultsPage = () => {
 
             fetchData();
         }
-    }, [user, setTopText]);
+    }, [user]);
 
     useEffect(() => {
         if (selectedSubject && user) {
             const fetchTeacherStats = async () => {
                 try {
-                    // Запрос на получение данных об отличниках и неуспевающих
                     const teacherStatsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/teacher', {
                         method: 'POST',
                         headers: {
@@ -116,14 +101,17 @@ const ResultsPage = () => {
                     }
 
                     const teacherStatsData = await teacherStatsResponse.json();
-                    console.log("Teacher statistics data:", teacherStatsData);
-
-                    // Извлекаем данные из первого элемента массива
                     const firstStat = teacherStatsData[0] || {};
+
                     setExcellentStudents(firstStat.excellentStudents || []);
                     setGoodStudents(firstStat.goodStudents || []);
                     setAverageStudents(firstStat.averageStudents || []);
                     setPoorStudents(firstStat.poorStudents || []);
+
+                    console.log("Excellent Students:", firstStat.excellentStudents);
+                    console.log("Good Students:", firstStat.goodStudents);
+                    console.log("Average Students:", firstStat.averageStudents);
+                    console.log("Poor Students:", firstStat.poorStudents);
                 } catch (error) {
                     console.error("Error fetching teacher stats: ", error);
                 }
@@ -134,10 +122,11 @@ const ResultsPage = () => {
     }, [selectedSubject, user, subjectList]);
 
     useEffect(() => {
-        if (subjects.length > 0) {
+        // Call drawPieChart whenever the data changes
+        if (excellentStudents.length > 0 || goodStudents.length > 0 || averageStudents.length > 0 || poorStudents.length > 0) {
             drawPieChart();
         }
-    }, [subjects]);
+    }, [excellentStudents, goodStudents, averageStudents, poorStudents]);
 
     const drawPieChart = () => {
         const canvas = canvasRef.current;
@@ -152,87 +141,56 @@ const ResultsPage = () => {
             return;
         }
 
-        const centerX = canvas.width / 3; // Смещаем центр влево
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const centerX = canvas.width / 3;
         const centerY = canvas.height / 2;
         const radius = Math.min(centerX, centerY) - 10;
 
-        // Группировка данных по оценкам
-        const gradeCounts = subjects.reduce((acc, subject) => {
-            const grade = subject.score;
-            acc[grade] = (acc[grade] || 0) + 1;
-            return acc;
-        }, {});
+        // Calculate total number of students
+        const totalStudents = excellentStudents.length + goodStudents.length + averageStudents.length + poorStudents.length;
 
-        const totalStudents = subjects.length;
+        if (totalStudents === 0) {
+            console.error("No students data available");
+            return;
+        }
+
+        // Calculate percentages
+        const excellentPercentage = (excellentStudents.length / totalStudents) * 100;
+        const goodPercentage = (goodStudents.length / totalStudents) * 100;
+        const averagePercentage = (averageStudents.length / totalStudents) * 100;
+        const poorPercentage = (poorStudents.length / totalStudents) * 100;
+
+        const gradeData = [
+            { label: 'Отлично', percentage: excellentPercentage, color: '#8AC24A' },
+            { label: 'Хорошо', percentage: goodPercentage, color: '#9966FF' },
+            { label: 'Удовлетворительно', percentage: averagePercentage, color: '#FF9F40' },
+            { label: 'Неудовлетворительно', percentage: poorPercentage, color: '#FF6384' },
+        ];
+
         let startAngle = 0;
 
-        // Определение цветов для каждой оценки
-        const gradeColors = {
-            0: '#8AC24A',
-            1: '#9966FF',
-            2: '#FF9F40',
-            3: '#FFCE56',
-            4: '#FF6384',
-            5: '#36A2EB'
-        };
+        gradeData.forEach(grade => {
+            const sliceAngle = (grade.percentage / 100) * 2 * Math.PI;
 
-        // Рисуем диаграмму
-        Object.entries(gradeCounts).forEach(([grade, count]) => {
-            const sliceAngle = (count / totalStudents) * 2 * Math.PI;
-            const color = gradeColors[grade] || '#000000';
-
-            ctx.fillStyle = color;
+            ctx.fillStyle = grade.color;
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
             ctx.closePath();
             ctx.fill();
 
-            // Подпись на диаграмме
-            const middleAngle = startAngle + sliceAngle / 2;
-            const labelX = centerX + Math.cos(middleAngle) * radius * 0.6;
-            const labelY = centerY + Math.sin(middleAngle) * radius * 0.6;
-            ctx.fillStyle = '#000000';
-            ctx.font = '16px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(`${grade} - ${Math.round((count / totalStudents) * 100)}%`, labelX, labelY);
-
             startAngle += sliceAngle;
         });
     };
 
-    const renderGradeLabels = () => {
-        const gradeCounts = subjects.reduce((acc, subject) => {
-            const grade = subject.score;
-            acc[grade] = (acc[grade] || 0) + 1;
-            return acc;
-        }, {});
-
-        return (
-            <div className="grade-labels">
-                {Object.entries(gradeCounts).map(([grade, count]) => (
-                    <div key={grade}>
-                        Оценка {grade}: {count} человек
-                    </div>
-                ))}
-            </div>
-        );
-    };
-
     const renderStudentPerformance = () => {
-        console.log("Poor Students Data:", poorStudents); // Логируем данные poorStudents
-
-        // Получаем последние 5 элементов из poorStudents или все, если их меньше 5
         const lastFivePoorStudents = poorStudents.length > 0
             ? poorStudents.length > 5
                 ? poorStudents.slice(-5)
                 : [...poorStudents].reverse()
             : [];
 
-        console.log("Last Five Poor Students:", lastFivePoorStudents); // Логируем последние 5 элементов
-
-        // Получаем первые 5 элементов из excellentStudents, goodStudents и averageStudents
         const firstFiveExcellentStudents = excellentStudents.slice(0, 5);
         const firstFiveGoodStudents = goodStudents.slice(0, 5);
         const firstFiveAverageStudents = averageStudents.slice(0, 5);
@@ -258,6 +216,29 @@ const ResultsPage = () => {
         );
     };
 
+    const renderGradeLegend = () => {
+        return (
+            <div className="grade-legend">
+                <div>
+                    <span className="legend-color" style={{ backgroundColor: '#8AC24A' }}></span>
+                    <span>Отлично: {excellentStudents.length} человек</span>
+                </div>
+                <div>
+                    <span className="legend-color" style={{ backgroundColor: '#9966FF' }}></span>
+                    <span>Хорошо: {goodStudents.length} человек</span>
+                </div>
+                <div>
+                    <span className="legend-color" style={{ backgroundColor: '#FF9F40' }}></span>
+                    <span>Удовлетворительно: {averageStudents.length} человек</span>
+                </div>
+                <div>
+                    <span className="legend-color" style={{ backgroundColor: '#FF6384' }}></span>
+                    <span>Неудовлетворительно: {poorStudents.length} человек</span>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="page-container">
             <div className="result-container">
@@ -275,8 +256,7 @@ const ResultsPage = () => {
                         {renderStudentPerformance()}
                         <div className="pie-chart-container">
                             <canvas ref={canvasRef} width="400" height="400"></canvas>
-                            <div className="divider"></div>
-                            {renderGradeLabels()}
+                            {renderGradeLegend()}
                         </div>
                     </div>
                 </div>

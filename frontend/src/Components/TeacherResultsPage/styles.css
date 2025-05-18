@@ -71,9 +71,15 @@ html, body {
 
 .pie-chart-container {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-left: 20px; /* Отступ слева */
+    margin: 20px;
 }
+
+canvas {
+    border: 1px solid #000;
+}
+
 
 .divider {
     border-left: 1px solid #ccc;
@@ -98,4 +104,23 @@ html, body {
 
 .student-performance {
     margin-bottom: 20px;
+}
+.grade-legend {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.grade-legend div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
 }

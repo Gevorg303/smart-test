@@ -62,7 +62,6 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
         }
     };
 
-
     const handleEdit = async (event) => {
         try {
             console.log("Редактировать: " + id + " (" + type + ")");
@@ -71,7 +70,6 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
             console.error('Ошибка редактирования данных:', error);
         }
     };
-
 
     useEffect(() => {
         async function fetchQuestions() {
@@ -95,9 +93,11 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                 </Stack>
                 <Stack direction="vertical" gap={2}>
                     <div className="btn-right">
-                        <Button className={"bankbutton"} variant="danger" onClick={() => handleDelete()}>
-                            <i className="bi bi-trash-fill"></i>
-                        </Button>
+                        {type !== "class" && (
+                            <Button className={"bankbutton"} variant="danger" onClick={() => handleDelete()}>
+                                <i className="bi bi-trash-fill"></i>
+                            </Button>
+                        )}
                         <Button className={"bankbutton"} variant="warning" onClick={() => handleEdit()}>
                             <i className="bi bi-pencil-fill"></i>
                         </Button>
