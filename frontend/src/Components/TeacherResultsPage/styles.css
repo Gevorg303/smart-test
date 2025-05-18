@@ -1,0 +1,126 @@
+html, body {
+    height: 100%;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    /*min-height: 100vh; /* Занимает всю высоту окна просмотра */
+}
+
+.result-container {
+    margin: 0 !important;
+    display: flex;
+    justify-content: center; /* Центрирует элементы по горизонтали */
+    align-items: center; /* Центрирует элементы по вертикали, если нужно */
+    flex-direction: column; /* Располагает элементы в колонку */
+}
+
+.result-table {
+    width: 90%;
+}
+
+.result-title {
+    text-align: center;
+    font-size: 54px;
+    font-weight: normal;
+    color: #000000;
+}
+
+.result-button {
+    display: block;
+
+}
+.result-table th:nth-child(1),
+.result-table td:nth-child(1) {
+    width: 25%; /* Фиксированная ширина для первого столбца */
+}
+
+.result-table th:nth-child(2),
+.result-table td:nth-child(2) {
+    width: 75%; /* Фиксированная ширина для второго столбца */
+    padding-left: 5%;
+    text-align: left;
+}
+
+
+.container-wrapper-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Уменьшаем отступ между контейнером и кнопкой */
+    margin-bottom: 3%;
+    width: 100%;
+    max-width: 1600px;
+}
+
+.container-home-2 {
+    display: grid;
+    grid-template-columns: 1fr; /* Одна колонка */
+    gap: 16px; /* Увеличиваем отступы между карточками */
+    width: 100%;
+    max-width: 1600px; /* Ограничиваем максимальную ширину контейнера */
+    /*background: #f0f0f0;*/
+    margin-top: 0.5%; /* Уменьшаем отступ сверху */
+    /*border-radius: 15px; /* Скругление углов */
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшаем тень */
+    padding: 10px; /* Уменьшаем внутренние отступы */
+    overflow: hidden; /* Скрываем переполнение */
+}
+.container-wrapper-2 .container-home-2 h2 {text-align: left; padding-left: 5%;}
+
+.pie-chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+canvas {
+    border: 1px solid #000;
+}
+
+
+.divider {
+    border-left: 1px solid #ccc;
+    height: 300px;
+    margin: 0 20px;
+}
+
+.grade-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dropdowns {
+    margin-bottom: 20px;
+}
+
+.dropdowns select {
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.student-performance {
+    margin-bottom: 20px;
+}
+.grade-legend {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.grade-legend div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+}

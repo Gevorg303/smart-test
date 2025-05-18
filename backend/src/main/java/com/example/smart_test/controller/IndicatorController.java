@@ -53,7 +53,7 @@ public class IndicatorController {
      * Запрос для обновления данных индикатора
      * */
     @PutMapping("/update-indicator")
-    public ResponseEntity<Indicator> updateIndicator(@RequestBody Indicator updatedIndicator) {
+    public ResponseEntity<Indicator> updateIndicator(@RequestBody IndicatorDto updatedIndicator) {
         Indicator indicator = indicatorService.updateIndicator(updatedIndicator);
         return ResponseEntity.ok(indicator);
     }

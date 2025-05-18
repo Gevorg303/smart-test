@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
+import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.service.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,14 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     private SubjectUserServiceInterface subjectUserService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    private SubjectMapperInterface subjectMapper;
 
     @Transactional
     @Override
-    public List<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme) {
+    public Set<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme) {
         List<TestDto> testDtoList = testService.getUserTests(user);
-        List<TestDto> filteredList = new ArrayList<>();
+        Set<TestDto> filteredList = new HashSet<>();
 
         if (typeTest != null && typeTest.getId() != null) {
             for (TestDto testDto : testDtoList) {
@@ -47,8 +50,8 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         }
 
         if (subject != null) {
-            List<Theme> subjectThemes = themeService.findThemeByIdSubject(subject);
-            List<TestDto> subjectFilteredList = new ArrayList<>();
+            List<Theme> subjectThemes = themeService.findThemeByIdSubject(subjectMapper.toDTO(subject));
+            Set<TestDto> subjectFilteredList = new HashSet<>();
 
             for (TestDto testDto : filteredList) {
                 for (Theme subjectTheme : subjectThemes) {
@@ -62,7 +65,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         }
 
         if (theme != null && theme.getId() != null) {
-            List<TestDto> themeFilteredList = new ArrayList<>();
+            Set<TestDto> themeFilteredList = new HashSet<>();
 
             for (TestDto testDto : filteredList) {
                 if (Objects.equals(testDto.getTheme().getId(), theme.getId())) {
@@ -112,7 +115,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
         }
 
         if (subject != null) {
-            List<Theme> themesForSubject = themeService.findThemeByIdSubject(subject);
+            List<Theme> themesForSubject = themeService.findThemeByIdSubject(subjectMapper.toDTO(subject));
             Set<Long> taskIdsForSubject = new HashSet<>();
 
             for (Theme subjectTheme : themesForSubject) {

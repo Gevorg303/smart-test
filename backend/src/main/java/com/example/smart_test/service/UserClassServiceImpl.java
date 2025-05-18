@@ -106,7 +106,7 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     @Transactional
     @Override
     public List<User> getUsersByStudentClass(StudentClassDto request) {
-        return userClassRepositoryInterface.findByStudentClass_IdAndUser_Roles_Id(request.getId(), UserRoleEnum.STUDENT.getId())
+        return userClassRepositoryInterface.findByStudentClassIdAndUserRoles(request.getId(), UserRoleEnum.STUDENT.convertToRole(UserRoleEnum.STUDENT))
                 .stream()
                 .map(UserClass::getUser)
                 .collect(Collectors.toList());
@@ -119,5 +119,22 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
             userDtoSet.add(userMapper.toDTO(user));
         }
         return userDtoSet;
+    }
+
+    @Override
+    public int countUsersByClassId(StudentClassDto request) {
+        return userClassRepositoryInterface.countUsersByClassId(request.getId());
+    }
+
+    @Override
+    public List<UserDto> findUserByClass(StudentClassDto studentClassDto) {
+        List<UserClass> userClasList = userClassRepositoryInterface.findByStudentClass(studentClassMapperInterface.toEntity(studentClassDto));
+        List<UserDto> userDtoList = new ArrayList<>();
+        if(userClasList!=null) {
+            for (UserClass userClass : userClasList) {
+                userDtoList.add(userMapper.toDTO(userClass.getUser()));
+            }
+        }
+        return userDtoList;
     }
 }

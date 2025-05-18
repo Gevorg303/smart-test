@@ -3,7 +3,7 @@ import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import TaskForTestSelector from "../TaskForTestSelector";
 
-const CreateTestPage = ({ editItem, onCreate }) => {
+const CreateTestPage = ({ editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]);
     const [tasks, setTasks] = useState([]);
     const [targetSubject, setTargetSubject] = useState(0);
@@ -20,6 +20,8 @@ const CreateTestPage = ({ editItem, onCreate }) => {
     const [countOfTaskByError, setCountOfTaskByError] = useState(0);
     const [currentTheme, setCurrentTheme] = useState(-1);
     const [currentPassingScore, setCurrentPassingScore] = useState(60);
+
+    const [notEditedTasks, setNotEditedTasks] = useState([]);
 
     // Валидация описания
     const isValidDescription = (description) => {
@@ -57,24 +59,67 @@ const CreateTestPage = ({ editItem, onCreate }) => {
         }
 
         if (errors.length > 0) {
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }
 
         try {
+
+
             const theme = parseInt(currentTheme, 10);
+
+            const responseTest = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-test-id-theme', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({id: theme})
+            });
+            if (!responseTest.ok) {
+                throw new Error('Ошибка получения тестов по теме');
+            }
+
+            const findSameType = await responseTest.json();
+
+            const findTest = findSameType.find((el) => el.typeTest.id == currentType)
+
             const taskList = [];
             for (var i = 0; i < currentTasks.length; i++) {
                // if (currentTasks[i] != undefined) {
                     taskList.push(currentTasks[i])
               //  }
             }
+            console.log(currentTasks)
+            console.log(notEditedTasks)
+            const editedTaskList = [];
+            currentTasks.map((item,index)=>{
+
+                    editedTaskList.push({
+                        task: item,
+                        isDeleted: false
+                    })
+            })
+            notEditedTasks.map((item,index)=>{
+                const find = currentTasks.find(el => el.id===item.id);
+                if(find === undefined) {
+                    editedTaskList.push({
+                        task: item,
+                        isDeleted: true
+                    })
+                }
+            })
+            const array = []
+            editedTaskList.map((item,index) => {
+                array.push(item.task)
+            })
+            setNotEditedTasks(array);
             let toastText;
             console.log({
                 testDto: {
                     closingDateAndTime: timeEnd,
                     description: currentDescription,
-                    id: editItem.id,
+                    id: editItem === null ? null : editItem.id,
                     numberOfAttemptsToPass: countOfTry,
                     openingDateAndTime: timeStart,
                     passageTime: passingTime,
@@ -88,10 +133,14 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                         id: currentType
                     }
                 },
-                taskDtoList: taskList
+                taskDtoList: editItem==null?taskList:editedTaskList
             });
             if(editItem==null) {
-                const response = await fetch('http://localhost:8080/test/add', {
+                if(findTest !== undefined){
+                    onError(["Ошибка! Тест такого типа уже существует!"]);
+                    throw new Error('Тест такого типа уже существует');
+                }
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -127,7 +176,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                 }
                 toastText = "Тест успешно создан.";
             } else {
-                const response = await fetch('http://localhost:8080/test/update-test', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/update-test', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -152,7 +201,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                                 }
                             }
                             ,
-                            taskDtoList: taskList
+                            editingTaskRequests: editedTaskList
                         }
                     )
                 });
@@ -164,7 +213,6 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                 }
                 toastText = "Тест успешно отредактирован.";
             }
-
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -176,7 +224,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -184,7 +232,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -198,7 +246,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                 const subjectsJson = await response2.json();
                 setSubjects(subjectsJson)
 
-                const response3 = await fetch('http://localhost:8080/type-test/all');
+                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'type-test/all');
                 if (!response3.ok) {
                     throw new Error('Ошибка получения типов тестов');
                 }
@@ -210,7 +258,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
 
                 let aveliabletaskrfortest = [];
                 if (currentTheme > 0) {
-                    const response4 = await fetch('http://localhost:8080/test/get-available-tasks', {
+                    const response4 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-available-tasks', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -231,7 +279,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                 }
 
                 if (editItem != null) {
-                    const response5 = await fetch('http://localhost:8080/test/get-tasks-test', {
+                    const response5 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-tasks-test', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -250,6 +298,7 @@ const CreateTestPage = ({ editItem, onCreate }) => {
                     const array = [...currentTasks];
                     tasksFromTestJson.map((item, index) => { array.push({ id: item.id }); })
                     setCurrentTasks(array);
+                    setNotEditedTasks(array)
                 }
 
             } catch (error) {

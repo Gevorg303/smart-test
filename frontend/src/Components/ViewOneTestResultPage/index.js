@@ -44,7 +44,7 @@ const ViewTestResultsPage = (props) => {
                 {
                     navigate(-1,{replace:true})
                 }
-                const response = await fetch('http://localhost:8080/test/id:' + testid);
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/id:' + testid);
                 if (!response.ok) {
                     throw new Error('Ошибка получения теста');
                 }
@@ -52,7 +52,7 @@ const ViewTestResultsPage = (props) => {
                 setText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
                 setCurrentPassingScore(test.passThreshold);
                 //setCurrentPassingScore(test.passingScore); // проходной балл теста
-                const response2 = await fetch('http://localhost:8080/test/get-tasks-test', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-tasks-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -63,6 +63,8 @@ const ViewTestResultsPage = (props) => {
                     throw new Error("Ошибка получения вопросов");
                 }
                 const questionsJson = await response2.json();
+                console.log(questionsJson)
+                console.log(validList)
                 setQuestions(questionsJson);
                 setCountOfQuestions(questionsJson.length);
                // setScore((rightAnswers / questionsJson.length) * 100);
@@ -120,7 +122,7 @@ const ViewTestResultsPage = (props) => {
                         {questions.map((item, index) => (
                             <Question
                                 key={index}
-                                qStatus={validList[index]!=undefined?(validList[index].taskScore==0?false:true):false}
+                                qStatus={validList.responseForTask!=undefined?(validList.responseForTask[index].taskScore==100?true:false):false}
                                 view
                                 id={index}
                                 item={questions[index]}

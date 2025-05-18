@@ -7,6 +7,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
         const array = [...answers];
         array[id] = answer;
         setAnswers(array);
+        console.log(array)
     };
 
     return (
@@ -14,7 +15,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
             {
                 isMultiple?
                     <>
-                        <Form.Label>Текст:</Form.Label>
+                        <Form.Label>Вариант ответа:</Form.Label>
                         <Form.Control type="text" value={answers[id].response} onChange={(e)=>{
                             onClick(id,{
                                 question: "",
@@ -33,14 +34,16 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
                                 onClick(id,{
                                     question: "",
                                     response: answers[id].response,
-                                    validResponse: answers[id].validResponse
+                                    validResponse: !answers[id].validResponse
                                 });
                             }}
                         />
                     </>
                     :
                     <>
-                        <Form.Label>Текст:</Form.Label>
+                        <Form.Label>Вариант ответа:</Form.Label>
+                        <br></br>
+                        <Form.Label>Левая часть:</Form.Label>
                         <Form.Control type="text" value={answers[id].question} onChange={(e)=>{
                             onClick(id,{
                                 question: e.target.value,
@@ -48,7 +51,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
                                 validResponse: true
                             });
                         }}></Form.Control>
-                        <Form.Label>Вариант ответа: </Form.Label>
+                        <Form.Label>Правая часть:</Form.Label>
                         <Form.Control type="text" value={answers[id].response} onChange={(e)=>{
                             onClick(id,{
                                 question: answers[id].question,

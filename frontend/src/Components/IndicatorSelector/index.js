@@ -22,7 +22,7 @@ const IndicatorSelector = ({targetSubject, indicators,setIndicators}) => {
                         //
                         console.log("ts")
                         console.log(targetSubject)
-                        const response = await fetch('http://localhost:8080/indicator/indicator-by-theme',{
+                        const response = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/indicator-by-theme',{
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'

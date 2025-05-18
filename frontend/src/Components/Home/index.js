@@ -16,7 +16,7 @@ const HomePage = () => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                const response = await fetch('http://localhost:8080/users/current', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response.ok) {
@@ -29,7 +29,7 @@ const HomePage = () => {
                 const container = document.querySelector('.all-container');
                 container.classList.add('page-style-1');
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

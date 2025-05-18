@@ -15,7 +15,4 @@ public class Role {
     @Column(name = "название_роли")
     private String role;
 
-    public UserRoleEnum getRoleType() {
-        return UserRoleEnum.values()[(int) (id - 1)];
-    }
 }

@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
-    const [themes, setThemes] = useState([]); //все классы
+const ClassSelector = ({targetSubject, classes,setClasses}) => {
+    /*const [classes, setClasses] = useState([]);*/ //все классы //переименвать на классы
     const [ids, setIds] = useState([]); // связанные классы
-    let flag = false;
+    const [flag, setFlag] = useState(false)
+    //let flag = false;
 
     const onClick = async (id, value) => {
-        const newIds = [...ids];
-        const currentState = newIds[id];
+        classes.map((item, index) => {
+            if (id === item.studentClassDto.id){
+            const find = classes.find(el => el.studentClassDto.id===item.studentClassDto.id);
+            if (find!==undefined)
+            {
+                item.status = value;
+            }
+            }
+        })
+        //const newIds = [...ids];
+        //const currentState = newIds[id];
 
+        /*const subjectDto = {
+            id: targetSubject.id,
+            name: targetSubject.name,
+        };
+        const classesFind = classes.find(item => item.studentClassDto.id === id);
+        let studentClassDto;
+        if (classesFind != undefined)
+        {
+            studentClassDto = {
+                id: id,
+                numberOfInstitution: classes.find(item => item.studentClassDto.id === id).numberOfInstitution,
+                letterDesignation: classes.find(item => item.studentClassDto.id === id).letterDesignation,
+            };}
 
-        if (!value) {
+        /*if (!value) {
             console.log("delete");
             try {
-                const subjectDto = {
-                    id: targetSubject.id,
-                    name: targetSubject.name,
-                };
 
-                const themesFind = themes.find(item => item.id === id);
-                let studentClassDto;
-                if (themesFind != undefined)
-                {
-                    studentClassDto = {
-                        id: id,
-                        numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
-                        letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                    };}
-
-                const response = await fetch('http://localhost:8080/user-subject/remove', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'user-subject/remove', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -53,21 +62,14 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         } else {
             console.log("add");
             try {
-                const subjectDto = {
-                    id: targetSubject.id,
-                    name: targetSubject.name,
-                };
-                const themesFind = themes.find(item => item.id === id);
-                let studentClassDto;
-                if (themesFind != undefined)
-                {
-                    studentClassDto = {
-                    id: id,
-                    numberOfInstitution: themes.find(item => item.id === id).numberOfInstitution,
-                    letterDesignation: themes.find(item => item.id === id).letterDesignation,
-                };}
 
-                const response = await fetch('http://localhost:8080/user-subject/add', {
+
+                console.log(studentClassDto)
+                console.log(classesFind)
+                console.log(id)
+                console.log(classes)
+
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'user-subject/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -88,65 +90,29 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
             } catch (error) {
                 console.error('Ошибка:', error);
             }
-        }
+        }*/
 
-        newIds[id] = !currentState;
-        flag = !flag;
-        setIds(newIds);
+        //newIds[id] = !currentState;
+        setFlag(!flag);
+        //setIds(newIds);
 
         /*  const newClasses = [...classes];
           newClasses[id] = newIds[id];
           setClasses(newClasses);*/
 
-        console.log(newIds);
+        //console.log(newIds);
         // console.log(newClasses);
     };
 
 
-    useEffect(() => {
-        async function fetchQuestions() {
-            try {
-                if(targetSubject!=null) {
 
-                    const response = await fetch('http://localhost:8080/user-subject/find-class-by-subject', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify(targetSubject)
-                    });
-                    if (!response.ok) {
-                        throw new Error('Ошибка вывода предметов учителя');
-                    }
-                    const subjectsJson = await response.json();
-                    console.log(subjectsJson)
-                    //setThemes(subjectsJson)
-                    if(subjectsJson!=null)
-                    {
-                        /*const array = []
-                        subjectsJson.map((item, index) => array[item.id] = true)
-                        setIds(array)
-                        console.log(array)*/
-                        setThemes(subjectsJson);
-                    }
-                }
-                else
-                {
-                }
-            } catch (error) {
-                console.error('Ошибка получения данных:', error);
-            }
-        }
-        //console.log("prop changed: "+targetSubject.id)
-        fetchQuestions();
-    }, [targetSubject, flag]);
     /*useEffect(() => {
         async function fetchQuestions() {
             try {
                 if(targetSubject!=null) {
 
                     /*
-                    const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
+                    const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', { //получить пользователя
                         credentials: "include",
                     });
                     if (!response1.ok) {
@@ -156,7 +122,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
 
                     console.log(user)
 
-                    const response = await fetch('http://localhost:8080/users/find-student-class-by-user',{
+                    const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user',{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -167,7 +133,7 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
                     }
                     const thjson = await response.json();
                     console.log(thjson)
-                    setThemes(thjson)
+                    setClasses(thjson)
 
                 }
                 else
@@ -184,14 +150,14 @@ const ClassSelector = ({targetSubject, /*classes,setClasses*/}) => {
         <>
             <h3>Классы:</h3>
             {targetSubject != null ?
-                themes.map((item, index) => <Form.Check // prettier-ignore
+                classes.map((item, index) => <Form.Check // prettier-ignore
                         key={item.studentClassDto.id}
                         type={'checkbox'}
-                        checked={item.status}
+                        checked={item.status}/*{classes.find(el => el.studentClassDto.id===item.studentClassDto.id).status}*/
                         id={item.studentClassDto.id}
                         name="class"
                         label={item.studentClassDto.numberOfInstitution + item.studentClassDto.letterDesignation}
-                        onChange={(e) => onClick(item.studentClassDto.id, e.target.value)}
+                        onChange={(e) => onClick(item.studentClassDto.id, e.target.checked/*e.target.value*/)}
                     />
                     /*<p key={item.id} value={item.id} > {item.nameOfTheClass}  </p>*/)
                 :

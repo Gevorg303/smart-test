@@ -2,14 +2,13 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.TaskResults;
-import com.example.smart_test.domain.TestingAttempt;
 import com.example.smart_test.dto.TaskDto;
 import com.example.smart_test.dto.TestResultsDto;
 import com.example.smart_test.dto.TestingAttemptDto;
 import com.example.smart_test.mapper.api.TaskMapperInterface;
 import com.example.smart_test.mapper.api.TestResultsMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
-import com.example.smart_test.repository.TestResultsRepositoryInterface;
+import com.example.smart_test.repository.TaskResultsRepositoryInterface;
 import com.example.smart_test.service.api.TaskResultsServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
 
     @Autowired
-    private TestResultsRepositoryInterface testResultsRepositoryInterface;
+    private TaskResultsRepositoryInterface taskResultsRepositoryInterface;
     @Autowired
     private TestResultsMapperInterface testResultsMapperInterface;
     @Autowired
@@ -37,7 +36,7 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     @Transactional
     public void addTaskResults(TaskDto task, int assessmentTask, TestingAttemptDto testingAttempt) {
         try {
-            testResultsRepositoryInterface.save(new TaskResults(taskMapper.toEntity(task), true, testingAttemptMapper.toEntity(testingAttempt)));
+            taskResultsRepositoryInterface.save(new TaskResults(taskMapper.toEntity(task), true, testingAttemptMapper.toEntity(testingAttempt)));
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при создании сущности 'Результаты задания': " + e.getMessage(), e);
         }
@@ -45,9 +44,9 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteTestResultsDto(TestResultsDto dto) {
-        if (testResultsRepositoryInterface.findById(dto.getId()).isPresent()) {
+        if (taskResultsRepositoryInterface.findById(dto.getId()).isPresent()) {
             TaskResults testResults = testResultsMapperInterface.toEntity(dto);
-            testResultsRepositoryInterface.delete(testResults);
+            taskResultsRepositoryInterface.delete(testResults);
         } else {
             log.error("Индикатор с идентификатором " + dto.getId() + " не существует");
         }
@@ -57,7 +56,7 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<TestResultsDto> getAllTestResults() {
         try {
-            List<TaskResults> testResultss = testResultsRepositoryInterface.findAll();
+            List<TaskResults> testResultss = taskResultsRepositoryInterface.findAll();
             return testResultss.stream()
                     .map(testResultsMapperInterface::toDto)
                     .collect(Collectors.toList());
@@ -68,7 +67,11 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
 
     @Override
     public List<TaskResults> findTaskResultsByTestingAttempt(TestingAttemptDto testingAttempt) {
-        return testResultsRepositoryInterface.findByTestingAttemptAndResultOfTheIndicatorFalse(testingAttemptMapper.toEntity(testingAttempt));
+        return taskResultsRepositoryInterface.findByTestingAttemptAndResultOfTheIndicatorFalse(testingAttemptMapper.toEntity(testingAttempt));
     }
 
+    @Override
+    public void deleteByTestingAttemptId(TestingAttemptDto testingAttempt) {
+        taskResultsRepositoryInterface.deleteByTestingAttemptId(testingAttempt.getId());
+    }
 }

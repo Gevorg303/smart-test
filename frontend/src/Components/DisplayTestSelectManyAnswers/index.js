@@ -43,11 +43,12 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
         console.log(currentAnswers)
     };
 
-    const onClick = () => {
+    const onClickNext = () => {
        /* const array = [...userAnswer];
         array[id] = !array[id]?true:undefined;
         setUserAnswer(array);*/
       //  console.log(array)
+       // console.log(answers)
         setAnswers(currentAnswers);
         setActive(prev => qsCount === prev + 1 ? prev : prev + 1);
     };
@@ -56,7 +57,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
         async function fetchAnswers() {
             try {
 
-                const response = await fetch('http://localhost:8080/response-option/find-response-option-by-task', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'response-option/find-response-option-by-task', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -68,13 +69,14 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
                 setResponseOptions(responseOptions)
                 const find = currentAnswers.find(el => el.task.id===item.id);
                 if(!view){
+                    const array =[]
                     if(currentAnswers.length>0 && find != undefined){
                         responseOptions.map((item,index)=>{
                             const findAnsw = currentAnswers[currentAnswers.indexOf(find)].responseOption.find(el => el.id ===item.id)
                             if(findAnsw != undefined){
-                                userAnswer.push(findAnsw);
+                                array.push(findAnsw);
                             } else {
-                                userAnswer.push({
+                                array.push({
                                     id: item.id,
                                     question: null,
                                     response: item.response,
@@ -85,7 +87,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
                         })
                     } else {
                         responseOptions.map((item,index)=>{
-                            userAnswer.push({
+                            array.push({
                                 id: item.id,
                                 question: null,
                                 response: item.response,
@@ -93,6 +95,24 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
                             });
                         })
                     }
+                    setUserAnswer(array)
+
+                    const findCurAnsw = currentAnswers.find(el => el.task.id===item.id);
+                    if(findCurAnsw != undefined) {
+                        currentAnswers[currentAnswers.indexOf(findCurAnsw)] =
+                            {
+                                task:{id:item.id},
+                                responseOption:array
+                            }
+                    } else{
+                        currentAnswers.push(
+                            {
+                                task:{id:item.id},
+                                responseOption:array
+                            }
+                        );
+                    }
+
                 } else{
 
                     if(find != undefined){
@@ -115,6 +135,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
 
     useEffect(() => {
         if (answers != undefined) {
+           // console.log(answers)
             const find = answers.find(el => el.task.id===item.id);
             if(find==undefined){
                 currentAnswers.push(
@@ -141,7 +162,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
                             name="responseOption"
                             label={item.response}
                             disabled={view}
-                            checked={userAnswer[index].validResponse}
+                            checked={userAnswer[index] !== undefined?userAnswer[index].validResponse:false}
                             onChange={(e) => {handleInputChange(item.id,item.response,e.target.checked)}}
                         />
                     )
@@ -151,7 +172,7 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
             {view ? (
                 <></>
             ) : (
-                <Button className="answer-button" onClick={() => {onClick()}}>Ответить</Button>
+                <Button className="answer-button" onClick={onClickNext}>Ответить</Button>
             )}
         </>
     );

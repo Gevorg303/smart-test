@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 
-const CreateThemePage = ({editItem, onCreate}) => {
+const CreateThemePage = ({editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]); // предметы
     const [targetSubject, setTargetSubject] = useState(0); // id выбранного предмета
     //const [show, setShow] = useState(false); // отображение тоста
@@ -28,6 +28,7 @@ const CreateThemePage = ({editItem, onCreate}) => {
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }
@@ -51,7 +52,7 @@ const CreateThemePage = ({editItem, onCreate}) => {
             let toastText;
 
             if(editItem==null){
-                const response = await fetch('http://localhost:8080/theme/add', { // добавить тему
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'theme/add', { // добавить тему
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -74,7 +75,7 @@ const CreateThemePage = ({editItem, onCreate}) => {
                 toastText = "Тема успешно создана.";
             }
             else{
-                const response = await fetch('http://localhost:8080/theme/update-theme', { // добавить тему
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'theme/update-theme', { // добавить тему
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -107,7 +108,7 @@ const CreateThemePage = ({editItem, onCreate}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -115,7 +116,7 @@ const CreateThemePage = ({editItem, onCreate}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

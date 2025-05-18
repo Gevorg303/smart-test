@@ -1,6 +1,8 @@
 package com.example.smart_test.service;
 
+import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.ResponseOptionDto;
+import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.TypeTaskEnum;
 import com.example.smart_test.request.RequestForTask;
 import com.example.smart_test.response.ResponseForTask;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestVerificationServiceImpl implements RequestVerificationServiceInterface {
@@ -19,24 +22,26 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
     @Override
     public List<ResponseForTask> checkingResponse(List<RequestForTask> requestForTaskList) {
         List<ResponseForTask> responseForTaskList = new ArrayList<>();
+
         for (RequestForTask requestForTask : requestForTaskList) {
             int counterCorrectResponse = 0;
             List<ResponseOptionDto> theUsersResponseOption = new ArrayList<>();
+
             // TODO: получаем правильные варианты ответов на конкретное задание
-            List<ResponseOptionDto> correctOptions = responseOptionServiceInterface.getResponseOptionsByTask(requestForTask.getTask());
+            List<ResponseOptionDto> correctOptions = responseOptionServiceInterface.getResponseOptionsByTaskTrue(requestForTask.getTask());
 
             // TODO: получаем пользовательские ответы на задание
             List<ResponseOptionDto> userOptions = requestForTask.getResponseOption();
             String taskType = requestForTask.getTask().getTypeTask().getTaskTypeName();
 
             // TODO: перебираем пользовательские ответы
-            for (ResponseOptionDto userOption : userOptions) {
-                boolean isCorrect = false;
+            if (TypeTaskEnum.MATCHING_TASK.getDescription().equals(taskType)) {
+                for (ResponseOptionDto userOption : userOptions) {
+                    boolean isCorrect = false;
 
-                // TODO: сравниваем каждый пользовательский ответ с правильными
-                for (ResponseOptionDto correctOption : correctOptions) {
-                    // TODO: логика для заданий на сопоставление
-                    if (TypeTaskEnum.MATCHING_TASK.getDescription().equals(taskType)) {
+                    // TODO: сравниваем каждый пользовательский ответ с правильными
+                    for (ResponseOptionDto correctOption : correctOptions) {
+                        // TODO: логика для заданий на сопоставление
                         if (userOption.getQuestion() != null && correctOption.getQuestion() != null &&
                                 userOption.getQuestion().equals(correctOption.getQuestion()) &&
                                 userOption.getResponse().equals(correctOption.getResponse())) {
@@ -44,27 +49,80 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
                             break;
                         }
                     }
-                    // TODO: логика для заданий с выбором ответа или c одним ответом
-                    else if (TypeTaskEnum.MULTIPLE_CHOICE.getDescription().equals(taskType)
-                            || TypeTaskEnum.INPUT_ANSWER.name().equals(taskType)) {
-                        if (userOption.getQuestion() == null && correctOption.getQuestion() == null &&
+
+                    userOption.setValidResponse(isCorrect);
+                    if (isCorrect) {
+                        counterCorrectResponse++;
+                    }
+                    theUsersResponseOption.add(userOption);
+                }
+
+            } else if (TypeTaskEnum.MULTIPLE_CHOICE.getDescription().equals(taskType)) {
+                // TODO: логика для заданий с выбором ответа (несколько вариантов)
+                Set<String> correctSet = correctOptions.stream()
+                        .map(ResponseOptionDto::getResponse)
+                        .collect(Collectors.toSet());
+
+                Set<String> userSet = userOptions.stream()
+                        .filter(ResponseOptionDto::isValidResponse)
+                        .map(ResponseOptionDto::getResponse)
+                        .collect(Collectors.toSet());
+
+                int counter = 0;
+                for (String correctOption : userSet) {
+                    if (correctSet.contains(correctOption)){
+                        counter++;
+                    }else {
+                        counter = 0;
+                        break;
+                    }
+                }
+                for (ResponseOptionDto userOption : userOptions) {
+                   // boolean isCorrect = correctSet.contains(userOption.getResponse());
+                    if (userOption.isValidResponse()) {
+                        userOption.setValidResponse(true);
+                    }
+                    theUsersResponseOption.add(userOption);
+                }
+                // TODO: если хотя бы один лишний или пропущен правильный — оценка 0
+                boolean isFullyCorrect = false;
+                if (userSet.size() <= correctSet.size()) {
+                     isFullyCorrect = true;
+                }
+
+                counterCorrectResponse = isFullyCorrect ? counter : 0;
+
+            } else if (TypeTaskEnum.INPUT_ANSWER.getDescription().equals(taskType)) {
+                // TODO: логика для заданий с вводом ответа
+                for (ResponseOptionDto userOption : userOptions) {
+                    boolean isCorrect = false;
+
+                    // TODO: сравниваем каждый пользовательский ответ с правильными
+                    for (ResponseOptionDto correctOption : correctOptions) {
+                        if (userOption.getQuestion() == null &&
+                                (correctOption.getQuestion() == null || correctOption.getQuestion().isBlank()) &&
                                 userOption.getResponse().equals(correctOption.getResponse())) {
                             isCorrect = true;
                             break;
                         }
                     }
+
+                    userOption.setValidResponse(isCorrect);
+                    if (isCorrect) {
+                        counterCorrectResponse++;
+                    }
+                    theUsersResponseOption.add(userOption);
                 }
-                userOption.setValidResponse(isCorrect);
-                if (isCorrect) {
-                    counterCorrectResponse++;
-                }
-                theUsersResponseOption.add(userOption);
             }
             // TODO: вычисляем оценку по заданию
             int assessmentTask = correctOptions.isEmpty() ? 0
                     : (int) ((counterCorrectResponse * 100.0) / correctOptions.size());
 
-            responseForTaskList.add(new ResponseForTask(requestForTask.getTask(), theUsersResponseOption, assessmentTask));
+            responseForTaskList.add(new ResponseForTask(
+                    requestForTask.getTask(),
+                    theUsersResponseOption,
+                    assessmentTask
+            ));
         }
         return responseForTaskList;
     }

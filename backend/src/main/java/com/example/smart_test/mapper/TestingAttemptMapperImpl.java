@@ -15,6 +15,7 @@ public class TestingAttemptMapperImpl implements TestingAttemptMapperInterface {
         dto.setUser(entity.getUser());
         dto.setAttemptDuration(entity.getAttemptDuration());
         dto.setStartDateTime(entity.getStartDateTime());
+        dto.setTestResult(entity.getTestResult());
         return dto;
     }
 
@@ -26,6 +27,7 @@ public class TestingAttemptMapperImpl implements TestingAttemptMapperInterface {
         entity.setUser(dto.getUser());
         entity.setAttemptDuration(dto.getAttemptDuration());
         entity.setStartDateTime(dto.getStartDateTime());
+        entity.setTestResult(dto.getTestResult());
         return entity;
     }
 }

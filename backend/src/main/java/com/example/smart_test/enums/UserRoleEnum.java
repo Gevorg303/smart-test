@@ -1,16 +1,35 @@
 package com.example.smart_test.enums;
 
+import com.example.smart_test.domain.Role;
 import lombok.Getter;
 
 @Getter
 public enum UserRoleEnum {
-    ADMIN(1L),
-    TEACHER(2L),
-    STUDENT(3L);
+    ADMIN("Админ"),
+    TEACHER("Учитель"),
+    STUDENT("Ученик");
 
-    private final Long id;
+    private final String description;
 
-    UserRoleEnum(Long id) {
-        this.id = id;
+    UserRoleEnum(String description) {
+        this.description = description;
+    }
+
+    public Role convertToRole(UserRoleEnum userRoleEnum) {
+        Role role = new Role();
+        switch (userRoleEnum) {
+            case ADMIN:
+                role.setRole("Админ");
+                break;
+            case TEACHER:
+                role.setRole("Учитель");
+                break;
+            case STUDENT:
+                role.setRole("Ученик");
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown role: " + userRoleEnum);
+        }
+        return role;
     }
 }

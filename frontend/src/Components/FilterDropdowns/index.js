@@ -12,7 +12,7 @@ const FilterDropdowns = ({ onFilterChange }) => {
         const fetchClasses = async () => {
             try {
                 console.log('Fetching classes...'); // Логирование запроса
-                const response = await fetch('http://localhost:8080/users/current-user-classes', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current-user-classes', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -37,7 +37,7 @@ const FilterDropdowns = ({ onFilterChange }) => {
         const fetchRoles = async () => {
             try {
                 console.log('Fetching roles...'); // Логирование запроса
-                const response = await fetch('http://localhost:8080/role/all', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'role/all', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {

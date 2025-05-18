@@ -8,10 +8,7 @@ import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
-import com.example.smart_test.request.EditingTheTestRequest;
-import com.example.smart_test.request.EndTestingRequest;
-import com.example.smart_test.request.TestSimulatorRequest;
-import com.example.smart_test.request.TestingAttemptAndTest;
+import com.example.smart_test.request.*;
 import com.example.smart_test.response.ResponseForTask;
 import com.example.smart_test.response.ResponseForTest;
 import com.example.smart_test.service.api.*;
@@ -55,6 +52,8 @@ public class TestServiceImpl implements TestServiceInterface {
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    private IndicatorServiceInterface indicatorService;
 
     @Override
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
@@ -71,13 +70,17 @@ public class TestServiceImpl implements TestServiceInterface {
     @Override
     @Transactional
     public void deleteTestDto(TestDto testDto) {
-        for (TaskDto taskDto : taskService.getAllTasks()) {
+        for (TaskDto taskDto : taskService.findTasksTheTest(testDto)) {
             if (taskDto.getTest() != null) {
                 if (taskDto.getTest().getId().equals(testDto.getId())) {
                     taskService.removeTaskFromTest(taskDto);
                 }
             }
         }
+        for (TestingAttemptDto testingAttempt : testingAttemptService.findByTest(testDto)) {
+            taskResultsService.deleteByTestingAttemptId(testingAttempt);
+        }
+        testingAttemptService.deleteByTestId(testDto);
         testRepository.deleteById(testDto.getId());
     }
 
@@ -126,7 +129,7 @@ public class TestServiceImpl implements TestServiceInterface {
         // TODO: Фильтруем по текущему пользователю
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
         List<User> userList = new ArrayList<>();
-        if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+        if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
             userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
         } else {
             userList.add(userMapper.toEntity(user));
@@ -162,11 +165,25 @@ public class TestServiceImpl implements TestServiceInterface {
         return result;
     }
 
-
     @Override
     @Transactional
     public ResponseForTest endTesting(EndTestingRequest endTestingRequest) {
         TestDto testDto = getTestById(endTestingRequest.getTest().getId());
+
+        int totalScore = 0;
+        // Проверяем ответы пользователя
+        List<ResponseForTask> responseForTasks = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
+
+        // Получаем список заданий
+        List<TaskDto> taskList = taskService.findTasksTheTest(testDto);
+
+        // Суммируем баллы
+        for (ResponseForTask responseForTask : responseForTasks) {
+            totalScore += responseForTask.getTaskScore();
+        }
+
+        // Вычисляем итоговый балл
+        int testScore = taskList.isEmpty() ? 0 : totalScore / taskList.size();
 
         TestingAttemptDto testingAttemptDto = testingAttemptService.addTestingAttempt(
                 new TestingAttemptDto(
@@ -174,31 +191,21 @@ public class TestServiceImpl implements TestServiceInterface {
                         endTestingRequest.getAttemptDuration(),
                         endTestingRequest.getTest(),
                         endTestingRequest.getUser(),
-                        0
+                        testScore
                 )
         );
-        int totalScore = 0;
-        // TODO: проверяем ответы пользователя и получаем результаты по каждому заданию
-        List<ResponseForTask> responseForTasks = requestVerificationService.checkingResponse(endTestingRequest.getRequestForTaskList());
 
-        // TODO: сохраняем результаты по каждому заданию и суммируем баллы
         for (ResponseForTask responseForTask : responseForTasks) {
-            totalScore += responseForTask.getTaskScore();
             taskResultsService.addTaskResults(responseForTask.getTask(), responseForTask.getTaskScore(), testingAttemptDto);
         }
 
-        List<TaskDto> taskList = taskService.findTasksTheTest(testDto);
-
-        // TODO: вычисляем итоговый балл за тест
-        int testScore = taskList.isEmpty() ? 0 : totalScore / taskList.size();
-        testingAttemptDto.setTestResult(testScore);
-
-        // TODO: если это "тренировочный тест", удаляем задания из теста
-        if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.TRAINER.getId())) {
+        // Удаляем задания, если тренировка
+        if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.TRAINER.getDescription())) {
             for (TaskDto taskDto : taskList) {
                 taskService.removeTaskFromTest(taskDto);
             }
         }
+
         return new ResponseForTest(testDto, responseForTasks, testScore);
     }
 
@@ -211,13 +218,13 @@ public class TestServiceImpl implements TestServiceInterface {
 
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
-                if (testDto.getTypeTest() != null && testDto.getTypeTest().getId().equals(TypeTestEnum.TRAINER.getId())) {
+                if (testDto.getTypeTest() != null && testDto.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
                     trainerTest = findTestByENTRY_TESTType(request.getUser());
                     taskSet.addAll(testGeneratorService.generatorTasks(userMapper.toEntity(request.getUser()), trainerTest, testDto.getNumberOfTasksPerError()));
                     trainerTest = testDto;
                 }
             }
-            if (trainerTest != null && trainerTest.getTypeTest().getId().equals(TypeTestEnum.TRAINER.getId())) {
+            if (trainerTest != null && trainerTest.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
                 List<Task> taskList = new ArrayList<>(taskSet);
                 addTestDto(trainerTest, taskList);
                 return taskService.findTasksTheTest(trainerTest);
@@ -229,7 +236,7 @@ public class TestServiceImpl implements TestServiceInterface {
     private TestDto findTestByENTRY_TESTType(UserDto user) {
         List<TestDto> testDtoList = getUserTests(user);
         for (TestDto testDto : testDtoList) {
-            if (Objects.equals(testDto.getTypeTest().getId(), TypeTestEnum.ENTRY_TEST.getId())) {
+            if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.ENTRY_TEST.getDescription())) {
                 return testDto;
             }
         }
@@ -265,9 +272,13 @@ public class TestServiceImpl implements TestServiceInterface {
                 testRepository.save(test);
             }
         }
-        if (request.getTaskDtoList() != null) {
-            for (TaskDto taskDto : request.getTaskDtoList()) {
-                taskService.removeTaskFromTest(taskDto);
+        if (request.getEditingTaskRequests() != null) {
+            for (EditingTaskRequest editingTaskRequests : request.getEditingTaskRequests()) {
+                if (editingTaskRequests.isDeleted()) {
+                    taskService.removeTaskFromTest(editingTaskRequests.getTask());
+                } else {
+                    taskService.addTaskToTest(request.getTestDto() != null ? request.getTestDto().getId() : null, editingTaskRequests.getTask().getId());
+                }
             }
         }
     }

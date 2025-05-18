@@ -2,10 +2,7 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.*;
-import com.example.smart_test.dto.StudentClassDto;
-import com.example.smart_test.dto.SubjectDto;
-import com.example.smart_test.dto.SubjectUserDto;
-import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
@@ -16,7 +13,9 @@ import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.repository.UserClassRepositoryInterface;
 import com.example.smart_test.request.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
+import com.example.smart_test.service.api.StudentClassServiceInterface;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
+import com.example.smart_test.service.api.UserEducationalInstitutionServiceInterface;
 import com.example.smart_test.service.api.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,20 +41,21 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     @Autowired
     private UserClassRepositoryInterface userClassRepository;
     @Autowired
-    private UserServiceInterface userService;
-    @Autowired
     private UserMapperInterface userMapper;
     @Autowired
     private StudentClassRepositoryInterface studentClassRepository;
+    @Autowired
+    private StudentClassServiceInterface studentClassService;
+    @Autowired
+    private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
 
     @Override
     @Transactional
     public void addSubjectUserDto(SubjectClassRequest request) {
         try {
-            Subject subject = subjectMapper.toEntity(request.getSubject());
-            Set<Long> existingUserIds = getUsersBySubject(subject)
+            Set<Long> existingUserIds = getUsersBySubject(request.getSubject())
                     .stream()
-                    .map(User::getId)
+                    .map(UserDto::getId)
                     .collect(Collectors.toSet());
 
             for (StudentClassDto studentClassDto : request.getStudentClassDtoList()) {
@@ -63,7 +63,7 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
 
                 for (User user : users) {
                     if (!existingUserIds.contains(user.getId())) {
-                        subjectUserRepositoryInterface.save(new SubjectUser(subject, user));
+                        subjectUserRepositoryInterface.save(new SubjectUser(subjectMapper.toEntity(request.getSubject()), user));
                         existingUserIds.add(user.getId());
                     }
                 }
@@ -116,24 +116,45 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     @Override
     @Transactional
     public Set<ClassStatusResponse> findClassBySubject(SubjectDto dto) {
-        List<User> userList = getUsersBySubject(subjectMapper.toEntity(dto));
-        Set<ClassStatusResponse> studentClassDtoSet = new HashSet<>();
-        if (userList != null) {
-            for (User user : userList) {
-                List<StudentClassDto> studentClassDtoList = userService.findStudentClassByUser(userMapper.toDTO(user));
-                for (StudentClassDto studentClassDto : studentClassDtoList) {
-                    for (StudentClass studentClass1 : studentClassRepository.findByUserId(user.getId())) {
-                        if (Objects.equals(studentClassDto.getId(), studentClass1.getId())) {
-                            studentClassDtoSet.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass1), true));
-                        } else {
-                            studentClassDtoSet.add(new ClassStatusResponse(studentClassDto, false));
-                        }
-                    }
-                }
+        Set<ClassStatusResponse> result = new HashSet<>();
 
+        List<UserDto> userList = getUsersBySubject(dto);
+        if (userList == null || userList.isEmpty()) {
+            return result;
+        }
+
+        EducationalInstitutionDto institution = null;
+        for (UserDto user : userList) {
+            if (user.getRole().getRole().equals(UserRoleEnum.TEACHER.getDescription())) {
+                institution = userEducationalInstitutionService.findEducationalInstitutionByUser(user);
+                break;
             }
         }
-        return studentClassDtoSet;
+
+        if (institution == null) {
+            return result;
+        }
+
+        List<StudentClass> allInstitutionClasses = studentClassService.findClassByEducationalInstitution(institution);
+
+        Set<Long> subscribedClassIds = new HashSet<>();
+        for (UserDto user : userList) {
+            List<StudentClass> userClasses = studentClassRepository.findByUserId(user.getId());
+            if (userClasses != null) {
+                for (StudentClass studentClass : userClasses) {
+                    if (studentClass != null && studentClass.getId() != null) {
+                        subscribedClassIds.add(studentClass.getId());
+                    }
+                }
+            }
+        }
+
+        for (StudentClass studentClass : allInstitutionClasses) {
+            boolean isSubscribed = subscribedClassIds.contains(studentClass.getId());
+            result.add(new ClassStatusResponse(studentClassMapper.toDTO(studentClass), isSubscribed));
+        }
+
+        return result;
     }
 
     @Override
@@ -141,13 +162,20 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
     public void removeSubjectUserDto(SubjectClassRequest request) {
         try {
             Subject subject = subjectMapper.toEntity(request.getSubject());
+            Long subjectId = subject.getId();
+
+            if (subjectId == null) {
+                throw new IllegalArgumentException("ID предмета не может быть null при удалении связи.");
+            }
 
             for (StudentClassDto studentClassDto : request.getStudentClassDtoList()) {
                 Set<User> users = getUsersByClass(studentClassMapper.toEntity(studentClassDto));
 
                 for (User user : users) {
-                    if (Objects.equals(user.getRoles().getId(), UserRoleEnum.STUDENT.getId())) {
-                        subjectUserRepositoryInterface.deleteBySubjectIdAndUserId(subject.getId(), user.getId());
+                    if (user.getRoles() != null &&
+                            Objects.equals(user.getRoles().getRole(), UserRoleEnum.STUDENT.getDescription())) {
+
+                        subjectUserRepositoryInterface.deleteBySubjectIdAndUserId(subjectId, user.getId());
                     }
                 }
             }
@@ -156,12 +184,14 @@ public class SubjectUserServiceImpl implements SubjectUserServiceInterface {
         }
     }
 
-
-    private List<User> getUsersBySubject(Subject subject) {
-        return subjectUserRepositoryInterface.findBySubject(subject)
-                .stream()
-                .map(SubjectUser::getUser)
-                .collect(Collectors.toList());
+    @Override
+    public List<UserDto> getUsersBySubject(SubjectDto subject) {
+        List<SubjectUser> subjectUsers = subjectUserRepositoryInterface.findBySubject(subjectMapper.toEntity(subject));
+        List<UserDto> userDto = new ArrayList<>();
+        for (SubjectUser  subjectUser  : subjectUsers) {
+            userDto.add(userMapper.toDTO(subjectUser.getUser()));
+        }
+        return userDto;
     }
 
     @Override

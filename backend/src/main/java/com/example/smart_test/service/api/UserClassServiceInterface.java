@@ -31,4 +31,8 @@ public interface UserClassServiceInterface {
     List<User> getUsersByStudentClass(StudentClassDto studentClass);
 
     Set<UserDto> getUserFilter(StudentClassDto request);
+
+    int countUsersByClassId(StudentClassDto request);
+
+    List<UserDto> findUserByClass(StudentClassDto studentClassDto);
 }

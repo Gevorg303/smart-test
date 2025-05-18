@@ -8,38 +8,42 @@ import DisplaySubjectCard from "../DisplaySubjectCard";
 import DisplayThemeCard from "../DisplayThemeCard";
 import DisplayIndicatorCard from "../DisplayIndicatorCard";
 import DisplayStudentCard from "../DisplayStudentCard";
+import DisplayClassCard from "../DisplayClassCard";
 
 const BankCard = ({ id, objectItem, type, setEditItem }) => {
-    console.log('BankCard props:', { id, objectItem, type, setEditItem }); // Проверка пропсов
-    const [item, setItem] = useState(); // компонент отображения контента для карточек
+    const [item, setItem] = useState();
 
     const handleDelete = async (event) => {
         try {
-            console.log("удалить задание: " + id);
+            console.log("Попытка удалить объект с id: " + id + " и типом: " + type);
             let url;
             switch (type) {
                 case "test":
-                    url = 'http://localhost:8080/test/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'test/delete';
                     break;
                 case "task":
-                    url = 'http://localhost:8080/task/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'task/delete';
                     break;
                 case "indicator":
-                    url = 'http://localhost:8080/indicator/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'indicator/delete';
                     break;
                 case "theme":
-                    url = 'http://localhost:8080/theme/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'theme/delete';
                     break;
                 case "subject":
-                    url = 'http://localhost:8080/subject/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'subject/delete';
                     break;
                 case "student":
-                    url = 'http://localhost:8080/users/delete';
+                    url = process.env.REACT_APP_SERVER_URL+'users/delete';
+                    break;
+                case "class":
+                    url = process.env.REACT_APP_SERVER_URL+'student-class/delete';
                     break;
                 default:
                     throw new Error("Неизвестный тип");
             }
 
+            console.log("Отправка запроса на URL: " + url + " с id: " + id);
             const response = await fetch(url, {
                 method: 'DELETE',
                 headers: {
@@ -47,33 +51,35 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                 },
                 body: JSON.stringify({ id: id })
             });
+
             if (!response.ok) {
-                throw new Error("Ошибка удаления задания");
+                throw new Error("Ошибка удаления объекта");
             }
+            console.log("Объект успешно удалён");
+            window.location.reload();
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
         }
-        window.location.reload();
     };
 
     const handleEdit = async (event) => {
         try {
-            console.log("редактировать: " + id + " (" + type + ")");
-            setEditItem(objectItem); // изменить изменяемый объект
+            console.log("Редактировать: " + id + " (" + type + ")");
+            setEditItem(objectItem);
         } catch (error) {
-            console.error('Ошибка удаления данных:', error);
+            console.error('Ошибка редактирования данных:', error);
         }
     };
 
     useEffect(() => {
         async function fetchQuestions() {
-            console.log(objectItem); // Проверка objectItem
             if (type === "test") setItem(<DisplayTestCard objectItem={objectItem} />);
             if (type === "task") setItem(<DisplayTaskCard objectItem={objectItem} />);
             if (type === "subject") setItem(<DisplaySubjectCard objectItem={objectItem} />);
             if (type === "theme") setItem(<DisplayThemeCard objectItem={objectItem} />);
             if (type === "indicator") setItem(<DisplayIndicatorCard objectItem={objectItem} />);
             if (type === "student") setItem(<DisplayStudentCard objectItem={objectItem} />);
+            if (type === "class") setItem(<DisplayClassCard objectItem={objectItem} />);
         }
 
         fetchQuestions();
@@ -87,9 +93,11 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                 </Stack>
                 <Stack direction="vertical" gap={2}>
                     <div className="btn-right">
-                        <Button className={"bankbutton"} variant="danger" onClick={() => handleDelete()}>
-                            <i className="bi bi-trash-fill"></i>
-                        </Button>
+                        {type !== "class" && (
+                            <Button className={"bankbutton"} variant="danger" onClick={() => handleDelete()}>
+                                <i className="bi bi-trash-fill"></i>
+                            </Button>
+                        )}
                         <Button className={"bankbutton"} variant="warning" onClick={() => handleEdit()}>
                             <i className="bi bi-pencil-fill"></i>
                         </Button>

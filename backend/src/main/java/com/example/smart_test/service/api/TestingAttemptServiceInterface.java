@@ -14,4 +14,8 @@ public interface TestingAttemptServiceInterface {
     TestingAttemptDto findTopByUserAndTest_IdOrderByStartDateTimeDesc(User user, TestDto test);
 
     List<TestingAttempt> findTestingAttemptByTest(User user, Test test);
+
+    void deleteByTestId(TestDto test);
+
+    List<TestingAttemptDto> findByTest(TestDto test);
 }

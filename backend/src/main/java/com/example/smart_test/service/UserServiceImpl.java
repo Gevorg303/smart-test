@@ -1,6 +1,7 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
+import com.example.smart_test.dto.RoleDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
@@ -126,7 +127,9 @@ public class UserServiceImpl implements UserServiceInterface {
     @Override
     @Transactional
     public void deleteUser(UserDto userDto) {
-        userRepository.deleteById(userDto.getId());
+        User user = userRepository.getReferenceById(userDto.getId());
+        user.setIsDelete(true);
+        userRepository.save(user);
     }
 
     @Override
@@ -188,23 +191,18 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public List<UserDto> getUser(UserBiRoleRequest request) {
-        List<User> userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(request.getUserDto().getId());
+    public List<UserDto> getUser(UserDto userDto, RoleDto roleDto) {
+        List<User> userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId());
 
-        if (request.getRoleDto() != null && request.getRoleDto().getId() != null) {
-            Long roleId = request.getRoleDto().getId();
+        if (roleDto != null && roleDto.getId() != null) {
+            Long roleId = roleDto.getId();
             userList = userList.stream()
-                    .filter(user -> user.getRoles() != null && user.getRoles().getId().equals(roleId))
+                    .filter(user -> user.getRoles() != null && user.getRoles().getId().equals(roleId) && !user.getIsDelete())
                     .collect(Collectors.toList());
         }
 
         return userList.stream()
-                .map(userMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-    public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
+                .filter(user -> !user.getIsDelete())
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }

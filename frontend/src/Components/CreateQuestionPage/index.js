@@ -5,7 +5,7 @@ import FormSelectAnswer from "../FormSelectAnswer";
 
 
 
-const CreateQuestionPage = ({editItem, onCreate}) => {
+const CreateQuestionPage = ({editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]);
     const [types, setTypes] = useState([]);
     const [targetSubject, setTargetSubject] = useState(0);
@@ -19,6 +19,9 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
     const [currentText, setText] = useState();
     const [currentExplanation, setExplanation] = useState();
     const [currentAnswers,setCurrentAnswers] = useState([]);
+
+    const [notEditedAnswers, setNotEditedAnswers] = useState([])
+    const [notEditedIndicatros, setNotEditedIndicatros] = useState([])
 
 
     // Валидация задания и пояснения
@@ -68,6 +71,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }
@@ -83,6 +87,62 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 }
             }
 
+            const editedIndicators=[];
+            currentIndicators.map((item,index) => {
+                if(item !== undefined){
+                    const isDelteted = notEditedIndicatros[index] !== undefined && currentIndicators[index] !== notEditedIndicatros[index]
+                    editedIndicators.push({
+                        editingResponseOption: {id: index},
+                        isDeleted: isDelteted
+                    })
+                }
+            })
+            console.log(currentIndicators)
+            console.log(notEditedIndicatros)
+            console.log(editedIndicators)
+            console.log("---")
+
+            const editedAnswers = [];
+            currentAnswers.map((item,index) => {
+                editedAnswers.push({
+                    responseOptionDto:item,
+                    isDeleted: false
+                })
+            })
+
+            console.log(notEditedAnswers)
+            console.log(editedAnswers)
+            if(editItem !=null){
+                editedAnswers.map((item,index) => {
+                    const find = notEditedAnswers.find(el => el.id===item.responseOptionDto.id);
+                    // console.log(find)
+                    if(find  !== undefined){
+                        item.isDeleted = false;
+                    } else {
+                        if(item.responseOptionDto.id !== undefined){
+                            item.isDeleted = true;
+                        } else {
+                            item.isDeleted = false;
+                        }
+                    }
+                })
+
+            }
+            notEditedAnswers.map((item,index) => {
+                const find = editedAnswers.find(el => el.responseOptionDto.id !== undefined && el.responseOptionDto.id===item.id);
+                // console.log(find)
+                if(find  === undefined){
+                    editedAnswers.push({
+                        responseOptionDto:item,
+                        isDeleted: true
+                    })
+                }
+            })
+            const array = []
+            editedAnswers.map((item,index) => {
+                array.push(item.responseOptionDto)
+            })
+            setNotEditedAnswers(array);
             console.log(
                 {
                     task: {
@@ -94,15 +154,17 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                         explanation: currentExplanation
                     },
 
-                    responseOption: currentAnswers
+                    responseOption: editItem==null?currentAnswers:editedAnswers
                     ,
-                    indicator: indicators
+                    indicator: editItem==null?indicators:editedIndicators
                 }
 
             );
+
+
             let toastText;
             if(editItem==null) {
-                const response = await fetch('http://localhost:8080/task/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'task/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -130,7 +192,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 }
                 toastText = "Задание создано";
             } else {
-                const response = await fetch('http://localhost:8080/task/update-task', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'task/update-task', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -144,9 +206,9 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                                 explanation: currentExplanation
                             },
 
-                        responseOption: currentAnswers
+                        editingResponseOption: editedAnswers
                             ,
-                           // indicator: indicators
+                        editingIndicator: editedIndicators
                         }
                     )
                 });
@@ -157,6 +219,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 }
                 toastText = "Задание создано";
             }
+
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -164,17 +227,15 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
     }
 
     const renderAnswers = () => {
-        switch (currentType) {
-           /* case "1":
+        console.log("Current type : "+currentType)
+        let type = parseInt(currentType)
+        switch (type) {
+            case 1:
                 return <>
-                    <Form.Label>Ответы</Form.Label>
-                    <Form.Control type="text"/>
-                </>;*/
-            case "2":
-                return  <>
-                    <Form.Label>Ответы для выбора:</Form.Label>
+                    <Form.Label>Ответы для сопоставления:</Form.Label>
+                    <br></br>
                     {currentAnswers.map((item, index) =>
-                        <FormSelectAnswer key={index} id={index} isMultiple={true} answers={currentAnswers} setAnswers={setCurrentAnswers}/>
+                        <FormSelectAnswer key={index} id={index} isMultiple={false} answers={currentAnswers} setAnswers={setCurrentAnswers}/>
                     )}
                     <Button onClick={()=>{
                         onClick(currentAnswers.length,{
@@ -189,10 +250,31 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                         console.log(currentAnswers)
                     }}>Убрать последний вариант ответа</Button>
                 </>;
-            case "3":
+            case 2:
+                return <>
+                    <Form.Label>Ответы для выбора:</Form.Label>
+                    <br></br>
+                    {currentAnswers.map((item, index) =>
+                        <FormSelectAnswer key={index} id={index} isMultiple={true} answers={currentAnswers}
+                                          setAnswers={setCurrentAnswers}/>
+                    )}
+                    <Button onClick={() => {
+                        onClick(currentAnswers.length, {
+                            question: "",
+                            response: "",
+                            validResponse: false
+                        });
+                        console.log(currentAnswers)
+                    }}>Добавить вариант ответа</Button>
+                    <Button onClick={() => {
+                        onClickDel();
+                        console.log(currentAnswers)
+                    }}>Убрать последний вариант ответа</Button>
+                </>;
+            case 3:
                 return  <>
                     <Form.Label >Ответ</Form.Label>
-                    <Form.Control key={0} type="text" onChange={(e) => {
+                    <Form.Control key={0} type="text" value={currentAnswers[0]?currentAnswers[0].response:""} onChange={(e) => {
                         const array = [...currentAnswers];
                         array[0] = {
                             question: "",
@@ -205,22 +287,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 </>;
             default:
                 return <>
-                    <Form.Label>Ответы для сопоставления:</Form.Label>
-                    {currentAnswers.map((item, index) =>
-                    <FormSelectAnswer key={index} id={index} isMultiple={false} answers={currentAnswers} setAnswers={setCurrentAnswers}/>
-                    )}
-                    <Button onClick={()=>{
-                        onClick(currentAnswers.length,{
-                            question: "",
-                            response: "",
-                            validResponse: false
-                        });
-                        console.log(currentAnswers)
-                    }}>Добавить вариант ответа</Button>
-                    <Button onClick={()=>{
-                        onClickDel();
-                        console.log(currentAnswers)
-                    }}>Убрать последний вариант ответа</Button>
+                    <Form.Label>Выберите тип теста чтобы создавать варианты ответов</Form.Label>
                 </>;
         }
     };
@@ -230,7 +297,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -238,7 +305,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -253,7 +320,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 console.log(subjectsJson)
                 setSubjects(subjectsJson)
 
-                const response3 = await fetch('http://localhost:8080/TypeTask/all');
+                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'TypeTask/all');
                 if (!response3.ok) {
                     throw new Error('Ошибка получения типов заданий');
                 }
@@ -280,10 +347,11 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                     setTargetSubject(-1);
                     setCurrentTheme(-1);
                 }
+                console.log(editItem.test);
 
                 setCurrentType(editItem.typeTask.id);
                 try {
-                    const response2 = await fetch('http://localhost:8080/task-of-indicator/find-indicator-by-task', {
+                    const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'task-of-indicator/find-indicator-by-task', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -298,7 +366,13 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                     console.log(indicatorsJson)
                     indicatorsJson.map((item,index) => {
                         currentIndicators[item.id]=true;
+                        notEditedIndicatros[item.id]=true;
                     })
+                    if(indicatorsJson.length > 0){
+                        setCurrentTheme(indicatorsJson[0].theme.id)
+                        setTargetSubject(indicatorsJson[0].theme.subject.id)
+                    }
+                   // setNotEditedIndicatros(indicatorsJson);
                    // setIndicators(indicatorsJson)
 
 
@@ -310,7 +384,7 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 setText(editItem.taskText);
                 setExplanation(editItem.explanation);
                 try {
-                    const response2 = await fetch('http://localhost:8080/response-option/find-response-option-by-task', {
+                    const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'response-option/find-response-option-by-task', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
@@ -322,8 +396,9 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                     }
 
                     const responseOptionsJson = await response2.json();
-                    console.log(responseOptionsJson)
+                    console.log( responseOptionsJson)
                     setCurrentAnswers(responseOptionsJson)
+                    setNotEditedAnswers(responseOptionsJson)
 
 
                 } catch (error) {
@@ -332,13 +407,13 @@ const CreateQuestionPage = ({editItem, onCreate}) => {
                 // setCurrentAnswers([]);
             } else {
                 setTargetSubject(-1);
-                setCurrentType(-1);
+               // setCurrentType(-1);
                 setCurrentTheme(-1);
                 setIndicators([]);
                 setText("");
                 setExplanation("");
                 setCurrentAnswers([]);
-                setCurrentType(-1);
+               // setCurrentType(-1);
             }
         }
         fetchSubjects();

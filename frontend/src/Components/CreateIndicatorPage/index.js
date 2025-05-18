@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 
-const CreateIndicatorPage = ({editItem, onCreate}) => {
+const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]); // предметы
     const [targetSubject, setTargetSubject] = useState(0); // id выбранного предмета
     //const [show, setShow] = useState(false); // отображение тоста
@@ -29,6 +29,7 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }
@@ -52,7 +53,7 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
              );*/
             let toastText;
             if(editItem==null){
-                const response = await fetch('http://localhost:8080/indicator/add', { // добавить индикатор
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/add', { // добавить индикатор
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -74,7 +75,7 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
                 toastText = "Индикатор успешно создан.";
             }
             else{
-                const response = await fetch('http://localhost:8080/indicator/update-indicator', { // добавить индикатор
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/update-indicator', { // добавить индикатор
                     method: 'PUt',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -107,7 +108,7 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
                 console.log("тема: "+currentTheme)
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -115,7 +116,7 @@ const CreateIndicatorPage = ({editItem, onCreate}) => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'

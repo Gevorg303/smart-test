@@ -29,6 +29,7 @@ const RegistrationPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
+
     const isValidName = (name) => {
         const nameRegex = /^[a-zA-Zа-яА-ЯёЁ'-]{2,50}$/;
         return nameRegex.test(name);
@@ -37,12 +38,45 @@ const RegistrationPage = () => {
     useEffect(() => {
         async function fetchClasses() {
             try {
-                const response = await fetch('http://localhost:8080/users/current-user-classes', {
+                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include',
+                });
+
+                if (!responseCurrent.ok) {
+                    throw new Error('Ошибка получения данных о классах');
+                }
+
+                const user = await responseCurrent.json();
+                console.log('ntreobq gjkmpjdfnktq:', user); // Проверьте, что данные получены
+
+                const responseAll = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        userDto: user,
+                        roleDto: null
+                    })
+                });
+                if (!responseAll.ok) {
+                    throw new Error('Ошибка получения данных о пользователях');
+                }
+                const data2 = await responseAll.json();
+                console.log('Все пользователи:', data2);
+                setUsers(data2);
+
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(user)
                 });
 
                 if (!response.ok) {
@@ -63,7 +97,7 @@ const RegistrationPage = () => {
         }
 
         fetchClasses();
-        fetchUsers();
+        // fetchUsers();
     }, []);
 
     useEffect(() => {
@@ -133,7 +167,7 @@ const RegistrationPage = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/users/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,7 +180,7 @@ const RegistrationPage = () => {
                 setShowSuccessToast(true);
                 form.reset();
                 setSelectedClass(null); // Очистить выбранный класс
-                await fetchUsers();
+                // await fetchUsers();
                 // Сгенерировать и скачать XLS файл
                 const userDetails = answers.map((item, index) => ({
                     ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
@@ -232,7 +266,7 @@ const RegistrationPage = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8080/users/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -244,7 +278,7 @@ const RegistrationPage = () => {
                     const answers = await response.json();
                     setShowSuccessToast(true);
                     setSelectedClass(null); // Clear selected class
-                    await fetchUsers();
+                    // await fetchUsers();
 
                     // Generate and download XLS file
                     const userDetails = answers.map((item, index) => ({
@@ -284,19 +318,28 @@ const RegistrationPage = () => {
         return emailRegex.test(email);
     };
 
-    const fetchUsers = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/users/all');
-            if (!response.ok) {
-                throw new Error('Ошибка получения данных о пользователях');
-            }
-            const data = await response.json();
-            console.log('Все пользователи:', data);
-            setUsers(data);
-        } catch (error) {
-            console.error('Ошибка получения данных о пользователях:', error);
-        }
-    };
+    /* const fetchUsers = async () => {
+         try {
+             const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json;charset=UTF-8'
+                 },
+                 body: JSON.stringify({
+                     userDto: currentUser,
+                     roleDto: null
+                 })
+             });
+             if (!response.ok) {
+                 throw new Error('Ошибка получения данных о пользователях');
+             }
+             const data = await response.json();
+             console.log('Все пользователи:', data);
+             setUsers(data);
+         } catch (error) {
+             console.error('Ошибка получения данных о пользователях:', error);
+         }
+     };*/
 
     const downloadXLS = (data, filename) => {
         const worksheet = XLSX.utils.json_to_sheet(data);
@@ -388,6 +431,8 @@ const RegistrationPage = () => {
                     <Toast
                         onClose={() => setShowSuccessToast(false)}
                         show={showSuccessToast}
+                        delay={3000}
+                        autohide
                         style={{
                             position: 'fixed',
                             bottom: '20px',
@@ -399,8 +444,8 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Успешно</strong>
-                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
+                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
+                                {/*&times;*/}x
                             </Button>
                         </Toast.Header>
                         <Toast.Body>Вы успешно зарегистрировали пользователя</Toast.Body>
@@ -411,6 +456,8 @@ const RegistrationPage = () => {
                     <Toast
                         onClose={() => setShowErrorToast(false)}
                         show={showErrorToast}
+                        delay={3000}
+                        autohide
                         style={{
                             position: 'fixed',
                             bottom: '20px',
@@ -422,17 +469,14 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Ошибка</strong>
-                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
+                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
+                                {/*&times;*/}x
                             </Button>
                         </Toast.Header>
                         <Toast.Body>{errorMessage}</Toast.Body>
                     </Toast>
                 )}
             </div>
-            <Button className="mt-3 custom-button full-width-button">
-                Справка
-            </Button>
         </Container>
     );
 };

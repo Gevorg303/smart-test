@@ -120,8 +120,8 @@ public class BankFiltersController {
      * }
      */
     @PostMapping("/tests")
-    public ResponseEntity<List<TestDto>> getTestsFilter(@RequestBody TestFilterRequest request) {
-        List<TestDto> sortedTests = bankFilterService.getTestsFilter(request.getTestType(), request.getUser(), request.getSubject(), request.getTheme());
+    public ResponseEntity<Set<TestDto>> getTestsFilter(@RequestBody TestFilterRequest request) {
+        Set<TestDto> sortedTests = bankFilterService.getTestsFilter(request.getTestType(), request.getUser(), request.getSubject(), request.getTheme());
         return ResponseEntity.ok(sortedTests);
     }
 

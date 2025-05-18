@@ -13,7 +13,7 @@ const SingleIndicatorSelector = ({targetTheme,currentIndicator,setCurrentIndicat
             try {
                 if(targetTheme>0)
                 {
-                    const response = await fetch(`http://localhost:8080/indicator/indicator-by-theme`, {
+                    const response = await fetch(`http://localhost:8081/indicator/indicator-by-theme`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'

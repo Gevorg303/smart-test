@@ -13,7 +13,7 @@ const SubjectClass = () => {
 
     localStorage.setItem('info', "Здесь вы можете подписать классы на предметы");
 
-    const [createModal, setCreateModal] = useState(); // компонент с модальным окном для создания объекта в банке
+    //const [createModal, setCreateModal] = useState(); // компонент с модальным окном для создания объекта в банке
     const [showModal, setShowModal] = useState(false); // переменная отвенчает за отображение модального окна на экране
     const [showToast, setShowToast] = useState(false); // отображение тоста
     const [toastText, setToastText] = useState(""); // текст тоста
@@ -24,11 +24,24 @@ const SubjectClass = () => {
     const containerRef = useRef(null);
     const [topText, setTopText] = useOutletContext();
 
+    const [showErrorToast, setShowErrorToast] = useState(false);
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     const handleCreate = (message) => {
         setShowModal(false);
         setShowToast(true);
         setToastText(message);
+        setShowSuccessToast(true);
+        setShowErrorToast(true);
+    };
+
+    const ErrorToast = (message) => {
+        console.log('ошибка')
+        setErrorMessage(message);
+        setShowSuccessToast(false);
+        setShowErrorToast(true);
     };
 
     useEffect(() => {
@@ -36,7 +49,7 @@ const SubjectClass = () => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', { //получить пользователя
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', { //получить пользователя
                     credentials: "include",
                 });
                 if (!response1.ok) {
@@ -44,7 +57,7 @@ const SubjectClass = () => {
                 }
                 const user = await response1.json();
 
-                const response2 = await fetch('http://localhost:8080/subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -59,12 +72,12 @@ const SubjectClass = () => {
                 const array = [];
                 subjectsJson.forEach(subject => {
                     array.push(
-                        <SubjectCardForClass key={subject.id} setCurrentSubject = {setCurrentSubject} /*setCurrentClasses = {setCurrentClasses}*/ item={subject} setShowCreateModal={setShowModal} />
+                        <SubjectCardForClass key={subject.id} setCurrentSubject = {setCurrentSubject} showModal = {showModal}/*setCurrentClasses = {setCurrentClasses}*/ item={subject} setShowCreateModal={setShowModal} />
                     );
                 });
                 setSubjects(array);
 
-                setCreateModal(<ClassModal targetSubject={currentSubject} /*classes={currentClasses} setClasses={setCurrentClasses}*//>)
+                //setCreateModal(<ClassModal targetSubject={currentSubject} showModal={showModal} /*classes={currentClasses} setClasses={setCurrentClasses}*//>)
                 setTopText("Класс предметов");
 
             } catch (error) {
@@ -73,7 +86,7 @@ const SubjectClass = () => {
         }
 
         fetchTests();
-    }, [toastText, currentSubject,setTopText]);
+    }, [toastText, currentSubject,setTopText,showSuccessToast]);
 
 
     return (
@@ -99,31 +112,39 @@ const SubjectClass = () => {
                     </Modal.Header>
                     <Modal.Body>
 
-                        {createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
+                        <ClassModal targetSubject={currentSubject} showModal={showModal} onCreate={handleCreate} onError={ErrorToast}/*classes={currentClasses} setClasses={setCurrentClasses}*//>
+                        {/*createModal/*showCreateModal?(!isTests? <CreateQuestionPage/>:<CreateTestPage/>):<>delete</>*/}
 
                     </Modal.Body>
                 </Modal>
 
 
             </div>
-            <ToastContainer
-                className="p-3"
-                position={'middle-center'}
-                style={{zIndex: 1}}
-            >
-                <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
-                    <Toast.Header closeButton={false}>
-                        <img
-                            src="holder.js/20x20?text=%20"
-                            className="rounded me-2"
-                            alt=""
-                        />
-                        <strong className="me-auto">Уведомление:</strong>
-                    </Toast.Header>
-                    <Toast.Body>{toastText}</Toast.Body>
-                </Toast>
-            </ToastContainer>
             {/*<Footer/>*/}
+            {showErrorToast && (
+                <Toast
+                    onClose={() => setShowErrorToast(false)}
+                    show={showErrorToast}
+                    delay={3000}
+                    autohide
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        zIndex: 100000,
+                        backgroundColor: showSuccessToast ? 'green':'red',
+                        color: 'white'
+                    }}
+                >
+                    <Toast.Header closeButton={false}>
+                        <strong className="mr-auto">Успешно</strong>
+                        <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
+                            {/*&times;*/} x
+                        </Button>
+                    </Toast.Header>
+                    <Toast.Body>{showSuccessToast ? 'Успешно': errorMessage}</Toast.Body>
+                </Toast>
+            )}
         </div>
     )
         ;

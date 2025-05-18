@@ -105,7 +105,7 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
             throw new IllegalArgumentException("User not found");
         }
         List<UserDto> userList = new ArrayList<>();
-        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.name())) {
+        if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
             for (User user : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
                 userList.add(userMapper.toDTO(user));
             }
@@ -142,14 +142,17 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
 
     @Override
-    public Indicator updateIndicator(Indicator updatedIndicator) {
-        return indicatorRepositoryInterface.findById(updatedIndicator.getId())
-                .map(indicator -> {
-                    indicator.setTheme(updatedIndicator.getTheme());
-                    indicator.setNameOfTheIndicator(updatedIndicator.getNameOfTheIndicator());
-                    return indicatorRepositoryInterface.save(indicator);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Индикатор с ID " + updatedIndicator.getId() + " не найден"));
+    public Indicator updateIndicator(IndicatorDto updatedIndicator) {
+        Optional<Indicator> optionalIndicator = indicatorRepositoryInterface.findById(updatedIndicator.getId());
+
+        if (optionalIndicator.isPresent()) {
+            Indicator indicator = optionalIndicator.get();
+            indicator.setTheme(updatedIndicator.getTheme());
+            indicator.setNameOfTheIndicator(updatedIndicator.getNameOfTheIndicator());
+            return indicatorRepositoryInterface.save(indicator);
+        } else {
+            throw new EntityNotFoundException("Индикатор с ID " + updatedIndicator.getId() + " не найден");
+        }
     }
 
 }

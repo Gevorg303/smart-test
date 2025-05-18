@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 
-const CreateSubjectPage = ({editItem, onCreate}) => {
+const CreateSubjectPage = ({editItem, onCreate, onError}) => {
 
     //const [show, setShow] = useState(false); // отображение тоста
     // [toastText, setToastText] = useState(""); // текст тоста
@@ -38,6 +38,7 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
+            onError(errors);
             console.error('Ошибки валидации:', errors.join(', '));
             return;
         }
@@ -60,7 +61,7 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
             let toastText;
 
             if(editItem==null){
-                const response = await fetch('http://localhost:8080/subject/add', { // добавить предмет
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'subject/add', { // добавить предмет
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -85,7 +86,7 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
                 toastText = "Предмет успешно создан.";
             }
             else {
-                const response = await fetch('http://localhost:8080/subject/update-subject', { // добавить предмет
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'subject/update-subject', { // добавить предмет
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -105,7 +106,6 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
                 toastText = "Предмет успешно редактирован.";
             }
 
-
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -116,7 +116,7 @@ const CreateSubjectPage = ({editItem, onCreate}) => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch('http://localhost:8080/users/current', {
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {

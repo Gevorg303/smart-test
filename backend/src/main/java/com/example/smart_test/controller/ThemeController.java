@@ -3,6 +3,7 @@ package com.example.smart_test.controller;
 import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.service.api.ThemeServiceInterface;
@@ -37,11 +38,11 @@ public class ThemeController {
      * Метод выводит все темы по предмету
      * */
     @GetMapping("/find-theme-by-id-subject")
-    public List<Theme> findThemeByIdSubject(@RequestBody Subject subject) {
+    public List<Theme> findThemeByIdSubject(@RequestBody SubjectDto subject) {
         return themeService.findThemeByIdSubject(subject);
     }
     @PostMapping("/get-by-subject")
-    public List<Theme> getAllThemesBySubjectIdNoCookie(@RequestBody Subject subject) {
+    public List<Theme> getAllThemesBySubjectIdNoCookie(@RequestBody SubjectDto subject) {
         return themeService.findThemeByIdSubject(subject);
     }
 

@@ -5,8 +5,10 @@ import com.example.smart_test.domain.EducationalInstitution;
 import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.UserEducationalInstitution;
+import com.example.smart_test.dto.EducationalInstitutionDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.dto.UserEducationalInstitutionDto;
+import com.example.smart_test.mapper.api.EducationalInstitutionMapperInterface;
 import com.example.smart_test.mapper.api.UserEducationalInstitutionMapperInterface;
 import com.example.smart_test.repository.StudentClassRepositoryInterface;
 import com.example.smart_test.repository.UserEducationalInstitutionRepositoryInterface;
@@ -31,6 +33,8 @@ public class UserEducationalInstitutionServiceImpl implements UserEducationalIns
     private UserEducationalInstitutionMapperInterface userEducationalInstitutionMapperInterface;
     @Autowired
     private StudentClassRepositoryInterface studentClassRepository;
+    @Autowired
+    private EducationalInstitutionMapperInterface educationalInstitutionMapper;
 
     @Transactional
     @Override
@@ -92,9 +96,15 @@ public class UserEducationalInstitutionServiceImpl implements UserEducationalIns
 
         List<User> users = userEducationalInstitutions.stream()
                 .map(UserEducationalInstitution::getUser)
-                .filter(user -> !user.getId().equals(userId))
+                //.filter(user -> !user.getId().equals(userId))
                 .collect(Collectors.toList());
 
         return users;
+    }
+
+    @Override
+    public EducationalInstitutionDto findEducationalInstitutionByUser(UserDto userDto) {
+        UserEducationalInstitution userEducationalInstitution = userEducationalInstitutionRepositoryInterface.findByUserId(userDto.getId());
+        return educationalInstitutionMapper.toDTO(userEducationalInstitution.getEducationalInstitution());
     }
 }
