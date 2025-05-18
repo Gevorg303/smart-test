@@ -184,7 +184,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                     >
-                        <option value="">Выберите роль</option>
+                        <option value="">{role.role}</option>
                         {Object.keys(roleMapping).map((roleName) => (
                             <option key={roleMapping[roleName]} value={roleMapping[roleName]}>
                                 {roleName}
@@ -214,7 +214,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         onChange={(e) => setLogin(e.target.value)}
                     />
                 </Form.Group>
-
 
                 <Button variant="primary" type="submit">
                     {editItem ? "Редактировать" : "Создать"}
