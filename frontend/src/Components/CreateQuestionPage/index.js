@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import FormSelectAnswer from "../FormSelectAnswer";
-
+import './styles.css';
 
 
 const CreateQuestionPage = ({editItem, onCreate, onError}) => {
@@ -494,9 +494,9 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 <Form.Group className="mb-3">
                     {renderAnswers()}
                 </Form.Group>
-                <Button variant="primary" type="submit" onClick={() => {
+                <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
-                }}>
+                }} >
                     {editItem==null?"Создать":"Редактировать"}
                 </Button>
             </Form>

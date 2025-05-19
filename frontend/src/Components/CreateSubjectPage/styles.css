@@ -1,0 +1,19 @@
+.custom-button-create-window {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.custom-button-create-window:hover {
+    background-color: #388E3C ;
+    border-color: #388E3C;
+}
+
+.custom-button-create-window:active {
+    background-color: #388E3C !important;
+    border-color: #388E3C !important;
+}

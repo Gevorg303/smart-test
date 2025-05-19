@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import TaskForTestSelector from "../TaskForTestSelector";
+import './styles.css';
 
 const CreateTestPage = ({ editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]);
@@ -478,7 +479,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                         :
                         <></>
                 }
-                <Button variant="primary" type="submit" onClick={() => {
+                <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     {editItem==null?"Создать":"Редактировать"}
