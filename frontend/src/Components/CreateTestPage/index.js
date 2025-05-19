@@ -43,6 +43,10 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        console.log("passingTime:", passingTime);
+        console.log("timeStart:", timeStart);
+        console.log("timeEnd:", timeEnd);
+
         // Проверка поля Описание
         if (currentDescription && !isValidDescription(currentDescription)) {
             errors.push('Описание должно содержать от 10 до 500 символов.');
@@ -57,6 +61,32 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
         if (!isValidDateRange(timeStart, timeEnd)) {
             errors.push('Дата начала не может быть позже даты окончания.');
         }
+
+        // Проверка обязательных полей
+        if (targetSubject <= 0) {
+            errors.push('Предмет должен быть выбран.');
+        }
+
+        if (currentTheme <= 0) {
+            errors.push('Тема должна быть выбрана.');
+        }
+
+        if (!currentType) {
+            errors.push('Тип теста должен быть выбран.');
+        }
+
+        if (!passingTime || passingTime === "00:00:00") {
+            errors.push('Время прохождения теста должно быть указано.');
+        }
+
+        if (timeStart > 1000000000000) {
+            errors.push('Дата начала теста должна быть указана.');
+        }
+
+        if (timeEnd > 1000000000000) {
+            errors.push('Дата окончания теста должна быть указана.');
+        }
+
 
         if (errors.length > 0) {
             onError(errors);

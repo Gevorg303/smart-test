@@ -52,6 +52,11 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        // Проверка поля Задание на пустоту
+        if (!currentText || currentText.trim() === "") {
+            errors.push('Текст задания не должен быть пустым.');
+        }
+
         // Проверка поля Задание
         if (!isValidTaskOrExplanation(currentText)) {
             errors.push('Текст задания превышает 500 символов.');
@@ -68,6 +73,25 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 errors.push(`Ответ ${index + 1} превышает 50 символов.`);
             }
         });
+
+        if (targetSubject <= 0) {
+            errors.push('Предмет должен быть выбран.');
+        }
+
+        if (currentTheme <= 0) {
+            errors.push('Тема должна быть выбрана.');
+        }
+
+        if (!currentType) {
+            errors.push('Тип задания должен быть выбран.');
+        }
+
+
+        // Проверка на наличие хотя бы одного выбранного индикатора
+        if (!currentIndicators.some(indicator => indicator !== undefined && indicator)) {
+            errors.push('Хотя бы один индикатор должен быть выбран.');
+        }
+
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке

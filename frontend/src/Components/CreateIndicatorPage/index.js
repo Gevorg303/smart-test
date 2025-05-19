@@ -22,10 +22,23 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        if (!currentName || currentName.trim() === "") {
+            errors.push('Название индикатора не должно быть пустым.');
+        }
+
         // Проверка поля Название индикатора
         if (!isValidIndicatorName(currentName)) {
             errors.push('Название индикатора превышает 100 символов.');
         }
+
+        if (targetSubject <= 0) {
+            errors.push('Предмет должен быть выбран.');
+        }
+
+        if (currentTheme <= 0) {
+            errors.push('Тема должна быть выбрана.');
+        }
+
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке

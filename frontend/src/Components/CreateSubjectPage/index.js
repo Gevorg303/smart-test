@@ -26,6 +26,10 @@ const CreateSubjectPage = ({editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        if (!currentName || currentName.trim() === "") {
+            errors.push('Название предмета не должно быть пустым.');
+        }
+
         // Проверка поля Название предмета
         if (!isValidSubjectName(currentName)) {
             errors.push('Название предмета превышает 100 символов.');

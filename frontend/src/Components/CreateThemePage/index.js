@@ -21,6 +21,14 @@ const CreateThemePage = ({editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        if (!currentName || currentName.trim() === "") {
+            errors.push('Название темы не должно быть пустым.');
+        }
+
+        if (targetSubject <= 0) {
+            errors.push('Предмет должен быть выбран.');
+        }
+
         // Проверка поля Название темы
         if (!isValidThemeName(currentName)) {
             errors.push('Название темы превышает 100 символов.');
