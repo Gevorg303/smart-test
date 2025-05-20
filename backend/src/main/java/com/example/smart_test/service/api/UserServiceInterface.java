@@ -1,6 +1,7 @@
 package com.example.smart_test.service.api;
 
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.EducationalInstitutionDto;
 import com.example.smart_test.dto.RoleDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
@@ -31,4 +32,6 @@ public interface UserServiceInterface {
     List<StudentClassDto> findStudentClassByUser(UserDto userDto);
 
     List<UserDto> getUser(UserDto userDto, RoleDto roleDto);
+
+    EducationalInstitutionDto findEducationalInstitutionByUser(UserDto userDto);
 }

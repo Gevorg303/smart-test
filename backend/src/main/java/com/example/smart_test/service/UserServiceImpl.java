@@ -1,6 +1,7 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
+import com.example.smart_test.dto.EducationalInstitutionDto;
 import com.example.smart_test.dto.RoleDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
@@ -209,4 +210,8 @@ public class UserServiceImpl implements UserServiceInterface {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public EducationalInstitutionDto findEducationalInstitutionByUser(UserDto userDto) {
+        return userEducationalInstitutionService.findEducationalInstitutionByUser(userDto);
+    }
 }

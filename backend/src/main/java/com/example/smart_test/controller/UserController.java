@@ -1,6 +1,7 @@
 package com.example.smart_test.controller;
 
 import com.example.smart_test.domain.User;
+import com.example.smart_test.dto.EducationalInstitutionDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
@@ -9,6 +10,7 @@ import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.security.JWTUtils;
 import com.example.smart_test.service.UserServiceImpl;
+import com.example.smart_test.service.api.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,7 @@ import java.util.List;
 @CrossOrigin
 public class UserController {
     @Autowired
-    private UserServiceImpl userService;
+    private UserServiceInterface userService;
 
     @Autowired
     private UserMapperInterface userMapper;
@@ -62,5 +64,13 @@ public class UserController {
     @PostMapping("/find-student-class-by-user")
     public List<StudentClassDto> findStudentClassByUser(@RequestBody UserDto userDto){
         return userService.findStudentClassByUser(userDto);
+    }
+
+    /**
+     * Вывод образовательного учреждения по пользователю
+     * */
+    @PostMapping("/find-educational-institution-by-user")
+    public EducationalInstitutionDto findEducationalInstitutionByUser(@RequestBody UserDto userDto) {
+        return userService.findEducationalInstitutionByUser(userDto);
     }
 }
