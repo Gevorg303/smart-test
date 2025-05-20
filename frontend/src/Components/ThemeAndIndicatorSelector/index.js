@@ -14,7 +14,7 @@ const ThemeAndIndicatorSelector = ({targetSubject, needIndicators, indicators,se
                     if(targetSubject>0)
                     {
 
-                            const response = await fetch(`http://localhost:8081/theme/get-by-subject`, {
+                            const response = await fetch(process.env.REACT_APP_SERVER_URL+`theme/get-by-subject`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json;charset=UTF-8'

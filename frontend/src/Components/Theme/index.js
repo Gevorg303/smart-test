@@ -19,7 +19,7 @@ const Theme = (props) => {
             try {
                 sessionStorage.clear()
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response = await fetch(`http://localhost:8081/theme/id:${props.id}`);
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+`theme/id:${props.id}`);
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
