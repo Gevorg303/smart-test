@@ -49,12 +49,14 @@ const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,answers
     };
 
     useEffect(() => {
-        if (view) {
-            const find = currentAnswers.find(el => el.task.id===item.id);
-            setUserAnswer(currentAnswers[currentAnswers.indexOf(find)].responseOption[0].response);
+        if (view && Array.isArray(currentAnswers) && item && item.id) {
+            const find = currentAnswers.find(el => el.task && el.task.id === item.id);
+            if (find) {
+                setUserAnswer(currentAnswers[currentAnswers.indexOf(find)].responseOption[0].response);
+            }
         }
+    }, [view, currentAnswers, id, item]);
 
-    }, [view, currentAnswers, id]);
 
     useEffect(() => {
         if (answers != undefined) {

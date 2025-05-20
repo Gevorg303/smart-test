@@ -92,7 +92,7 @@ const ViewTestResultsPage = (props) => {
     }, [navigate, setTopText]);
 
     function ViewResultsEnd() {
-        sessionStorage.clear();
+        //sessionStorage.clear();
         navigate("/theme");
     }
 
