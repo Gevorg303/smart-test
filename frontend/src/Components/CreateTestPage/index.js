@@ -171,6 +171,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                     onError(["Ошибка! Тест такого типа уже существует!"]);
                     throw new Error('Тест такого типа уже существует');
                 }
+
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/add', {
                     method: 'POST',
                     headers: {
