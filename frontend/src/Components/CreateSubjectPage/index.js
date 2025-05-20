@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
+import './styles.css';
 
 const CreateSubjectPage = ({editItem, onCreate, onError}) => {
 
@@ -25,6 +26,10 @@ const CreateSubjectPage = ({editItem, onCreate, onError}) => {
         event.preventDefault();
 
         const errors = [];
+
+        if (!currentName || currentName.trim() === "") {
+            errors.push('Название предмета не должно быть пустым.');
+        }
 
         // Проверка поля Название предмета
         if (!isValidSubjectName(currentName)) {
@@ -159,7 +164,7 @@ const CreateSubjectPage = ({editItem, onCreate, onError}) => {
                         setCurrentDescription(e.target.value);
                     }}/>
                 </Form.Group>
-                <Button variant="primary" type="submit" onClick={() => {
+                <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     {editItem==null?"Создать":"Редактировать"}

@@ -56,6 +56,11 @@
     background-color: darkgoldenrod;
     border-color: darkgoldenrod;
 }
+.create-button:active{
+    color: #f0f0f0;
+    background-color: darkgoldenrod !important;
+    border-color: darkgoldenrod !important;
+}
 
 
 .button-container-quest {

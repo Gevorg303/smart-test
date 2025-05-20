@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import {useOutletContext} from "react-router-dom";
 
 const ResultsPage = () => {
     const [subjects, setSubjects] = useState([]);
@@ -10,6 +11,10 @@ const ResultsPage = () => {
     const [subjectList, setSubjectList] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState('');
     const canvasRef = useRef(null);
+
+    const [topText, setTopText] = useOutletContext();
+
+    localStorage.setItem('info', "На этой странице отображается статистика учеников. Тут можно посмотреть за успеваемостью учеников по различным предметам.");
 
     useEffect(() => {
         // Fetch user data
@@ -85,6 +90,9 @@ const ResultsPage = () => {
         if (selectedSubject && user) {
             const fetchTeacherStats = async () => {
                 try {
+
+                    setTopText("Результаты");
+
                     const teacherStatsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/teacher', {
                         method: 'POST',
                         headers: {
@@ -119,7 +127,7 @@ const ResultsPage = () => {
 
             fetchTeacherStats();
         }
-    }, [selectedSubject, user, subjectList]);
+    }, [selectedSubject, user, subjectList, setTopText]);
 
     useEffect(() => {
         // Call drawPieChart whenever the data changes
@@ -244,7 +252,7 @@ const ResultsPage = () => {
             <div className="result-container">
                 <div className="container-wrapper-2">
                     <div className="container-home-2">
-                        <h2>Сведения об успеваемости</h2>
+                        {/*<h2>Сведения об успеваемости</h2>*/}
                         <div className="dropdowns">
                             <select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
                                 <option value="">Предмет</option>

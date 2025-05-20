@@ -57,7 +57,7 @@ const ProfilePage = () => {
                     setPortraitUrl(avatarImage)
                 }
 
-                const response2 = await fetch(`http://localhost:8081/student-class/teacherid=${user.id}`, {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+`student-class/teacherid=${user.id}`, {
                     credentials: "include",
                 });
                 if (!response2.ok) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import TaskForTestSelector from "../TaskForTestSelector";
+import './styles.css';
 
 const CreateTestPage = ({ editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]);
@@ -43,6 +44,10 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        console.log("passingTime:", passingTime);
+        console.log("timeStart:", timeStart);
+        console.log("timeEnd:", timeEnd);
+
         // Проверка поля Описание
         if (currentDescription && !isValidDescription(currentDescription)) {
             errors.push('Описание должно содержать от 10 до 500 символов.');
@@ -57,6 +62,32 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
         if (!isValidDateRange(timeStart, timeEnd)) {
             errors.push('Дата начала не может быть позже даты окончания.');
         }
+
+        // Проверка обязательных полей
+        if (targetSubject <= 0) {
+            errors.push('Предмет должен быть выбран.');
+        }
+
+        if (currentTheme <= 0) {
+            errors.push('Тема должна быть выбрана.');
+        }
+
+        if (!currentType) {
+            errors.push('Тип теста должен быть выбран.');
+        }
+
+        if (!passingTime || passingTime === "00:00:00") {
+            errors.push('Время прохождения теста должно быть указано.');
+        }
+
+        if (timeStart > 1000000000000) {
+            errors.push('Дата начала теста должна быть указана.');
+        }
+
+        if (timeEnd > 1000000000000) {
+            errors.push('Дата окончания теста должна быть указана.');
+        }
+
 
         if (errors.length > 0) {
             onError(errors);
@@ -140,6 +171,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                     onError(["Ошибка! Тест такого типа уже существует!"]);
                     throw new Error('Тест такого типа уже существует');
                 }
+
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/add', {
                     method: 'POST',
                     headers: {
@@ -448,7 +480,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                         :
                         <></>
                 }
-                <Button variant="primary" type="submit" onClick={() => {
+                <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     {editItem==null?"Создать":"Редактировать"}

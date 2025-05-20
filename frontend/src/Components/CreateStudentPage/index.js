@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
+import './styles.css';
 
 const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     const roleMapping = {
@@ -215,7 +216,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
+                <Button variant="primary" className="custom-button-create-window" type="submit">
                     {editItem ? "Редактировать" : "Создать"}
                 </Button>
             </Form>

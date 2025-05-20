@@ -18,3 +18,8 @@
     background-color: #388E3C;
     border-color: #388E3C;
 }
+.search-button:active {
+    color: #f0f0f0;
+    background-color: #388E3C !important;
+    border-color: #388E3C !important;
+}
