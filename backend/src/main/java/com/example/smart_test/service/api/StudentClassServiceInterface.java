@@ -23,4 +23,6 @@ public interface StudentClassServiceInterface {
 
     @Transactional
     void incrementClassNumbers();
+
+    void updateClass(StudentClassDto studentClassDto);
 }

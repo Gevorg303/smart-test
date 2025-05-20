@@ -119,7 +119,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         if (!data.middleName || !isValidName(data.middleName)) {
             errors.push('Отчество');
         }
-        if (!data.class) {
+        if (data.role !== 'Админ' && !data.class) {
             errors.push('Класс');
         }
         if (!data.email || !isValidEmail(data.email)) {
@@ -134,15 +134,19 @@ const AdminRegistrationForm = ({ selectedForm }) => {
 
         const userRequest = {
             user: {
-                surname: formData.lastName,
-                name: formData.firstName,
-                patronymic: formData.middleName,
-                role: { id: roleMapping[formData.role] },
-                email: formData.email,
-                educationalInstitution: { id: parseInt(formData.class, 10) }
-            },
-            studentClass: { id: parseInt(formData.class, 10) }
+                surname: data.lastName || 'Фамилия',
+                name: data.firstName || 'Имя',
+                patronymic: data.middleName || 'Отчество',
+                role: { id: roleMapping[data.role] },
+                email: data.email,
+                educationalInstitution: { id: currentUser?.educationalInstitution?.id || 23 }
+            }
         };
+
+// Добавляем studentClass только если роль не "Админ" и не "Учитель"
+        if (data.role !== 'Админ' && data.role !== 'Учитель') {
+            userRequest.studentClass = { id: parseInt(data.class, 10) };
+        }
 
         console.log('Данные для регистрации одного пользователя:', userRequest);
 
@@ -185,6 +189,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             setShowErrorToast(true);
         }
     };
+
+
 
     const handleMultipleRegistration = async (e) => {
         e.preventDefault();
@@ -413,33 +419,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 </div>
                 <div className="form-group">
                     <select
-                        id="class"
-                        name="class"
-                        value={formData.class}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="" disabled>Выберите класс</option>
-                        {classes.map(cls => (
-                            <option key={cls.id} value={cls.id}>
-                                {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Почта"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <select
                         id="role"
                         name="role"
                         value={formData.role}
@@ -453,6 +432,35 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                             </option>
                         ))}
                     </select>
+                </div>
+                {formData.role !== 'Админ' && formData.role !== 'Учитель' && (
+                    <div className="form-group">
+                        <select
+                            id="class"
+                            name="class"
+                            value={formData.class}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="" disabled>Выберите класс</option>
+                            {classes.map(cls => (
+                                <option key={cls.id} value={cls.id}>
+                                    {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+                <div className="form-group">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Почта"
+                        required
+                    />
                 </div>
                 <button type="submit" className="single-user-submit-button">
                     Зарегистрировать

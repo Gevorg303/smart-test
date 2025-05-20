@@ -1,5 +1,6 @@
 package com.example.smart_test.controller;
 
+import com.example.smart_test.request.EditingTaskRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.dto.EducationalInstitutionDto;
@@ -37,5 +38,13 @@ public class StudentClassController {
     @GetMapping("/teacherid={id}")
     public List<StudentClassDto> getAllStudentClassByTeacherId(@PathVariable Long id) {
         return serviceInterface.getStudentClassByUserId(id);
+    }
+
+    /**
+     * Запрос для редактирования класса
+     * */
+    @PutMapping("/update-class")
+    public void updateClass(@RequestBody StudentClassDto studentClassDto) {
+        serviceInterface.updateClass(studentClassDto);
     }
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
+import './styles.css';
 
 const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]); // предметы
@@ -22,10 +23,23 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        if (!currentName || currentName.trim() === "") {
+            errors.push('Название индикатора не должно быть пустым.');
+        }
+
         // Проверка поля Название индикатора
         if (!isValidIndicatorName(currentName)) {
             errors.push('Название индикатора превышает 100 символов.');
         }
+
+        if (targetSubject <= 0) {
+            errors.push('Предмет должен быть выбран.');
+        }
+
+        if (currentTheme <= 0) {
+            errors.push('Тема должна быть выбрана.');
+        }
+
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
@@ -180,7 +194,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
                     }}/>
                 </Form.Group>
 
-                <Button variant="primary" type="submit" onClick={() => {
+                <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     {editItem==null?"Создать":"Редактировать"}

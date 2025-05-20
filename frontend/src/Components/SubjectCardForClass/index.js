@@ -51,7 +51,8 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject, showMo
                             <Button
                                 variant="success"
                                 className="custom-button"
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.stopPropagation();
                                     setShowCreateModal(true);
                                     setCurrentSubject(item);
                                     console.log(item);
@@ -66,6 +67,7 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject, showMo
                             </div>
                         </Accordion.Body>
                     </Accordion.Item>
+
                 </Accordion>
             </div>
         </div>

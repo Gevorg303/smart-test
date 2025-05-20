@@ -24,5 +24,7 @@ public interface ResponseOptionServiceInterface {
 
     List<ResponseOptionDto> getResponseOptionsByTask(TaskDto taskDto);
 
+    List<ResponseOptionDto> getResponseOptionsByTaskTrue(TaskDto taskDto);
+
     void editingResponseOption(EditingTaskRequest updatedTask);
 }

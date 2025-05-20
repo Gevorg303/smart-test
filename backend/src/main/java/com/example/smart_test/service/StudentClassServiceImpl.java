@@ -117,4 +117,13 @@ public class StudentClassServiceImpl implements StudentClassServiceInterface {
         studentClassRepository.saveAll(classes);
     }
 
+    @Override
+    public void updateClass(StudentClassDto studentClassDto) {
+        if (studentClassDto.getId() != null) {
+            StudentClass studentClass = studentClassRepository.getReferenceById(studentClassDto.getId());
+            studentClass.setNumberOfInstitution(studentClassDto.getNumberOfInstitution());
+            studentClass.setLetterDesignation(studentClassDto.getLetterDesignation());
+            studentClassRepository.save(studentClass);
+        }
+    }
 }

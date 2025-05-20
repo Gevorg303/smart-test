@@ -127,7 +127,9 @@ public class UserServiceImpl implements UserServiceInterface {
     @Override
     @Transactional
     public void deleteUser(UserDto userDto) {
-        userRepository.deleteById(userDto.getId());
+        User user = userRepository.getReferenceById(userDto.getId());
+        user.setIsDelete(true);
+        userRepository.save(user);
     }
 
     @Override
@@ -195,11 +197,12 @@ public class UserServiceImpl implements UserServiceInterface {
         if (roleDto != null && roleDto.getId() != null) {
             Long roleId = roleDto.getId();
             userList = userList.stream()
-                    .filter(user -> user.getRoles() != null && user.getRoles().getId().equals(roleId))
+                    .filter(user -> user.getRoles() != null && user.getRoles().getId().equals(roleId) && !user.getIsDelete())
                     .collect(Collectors.toList());
         }
 
         return userList.stream()
+                .filter(user -> !user.getIsDelete())
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }

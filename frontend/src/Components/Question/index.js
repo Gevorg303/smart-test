@@ -20,7 +20,7 @@ const Question = ({ id, item, qStatus, view, answers, setAnswers, setActive, qsC
                     break;
                 case 2:
                     setDisplay(<DisplayTestSelectManyAnswers id={id} item={item} view={view} setAnswers={setAnswers} answers={answers}
-                                                             qsCount={qsCount} currentAnswers={currentAnswers}  setActive={setAnswers} />)
+                                                             qsCount={qsCount} currentAnswers={currentAnswers}  setActive={setActive} />)
                     break;
                 case 1:
                     setDisplay(<DisplayTestComparisonAnswers id={id} item={item} view={view} setAnswers={setAnswers} answers={answers}

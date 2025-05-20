@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import FormSelectAnswer from "../FormSelectAnswer";
-
+import './styles.css';
 
 
 const CreateQuestionPage = ({editItem, onCreate, onError}) => {
@@ -52,6 +52,11 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
 
         const errors = [];
 
+        // Проверка поля Задание на пустоту
+        if (!currentText || currentText.trim() === "") {
+            errors.push('Текст задания не должен быть пустым.');
+        }
+
         // Проверка поля Задание
         if (!isValidTaskOrExplanation(currentText)) {
             errors.push('Текст задания превышает 500 символов.');
@@ -68,6 +73,25 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 errors.push(`Ответ ${index + 1} превышает 50 символов.`);
             }
         });
+
+        if (targetSubject <= 0) {
+            errors.push('Предмет должен быть выбран.');
+        }
+
+        if (currentTheme <= 0) {
+            errors.push('Тема должна быть выбрана.');
+        }
+
+        if (!currentType) {
+            errors.push('Тип задания должен быть выбран.');
+        }
+
+
+        // Проверка на наличие хотя бы одного выбранного индикатора
+        if (!currentIndicators.some(indicator => indicator !== undefined && indicator)) {
+            errors.push('Хотя бы один индикатор должен быть выбран.');
+        }
+
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
@@ -274,7 +298,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
             case 3:
                 return  <>
                     <Form.Label >Ответ</Form.Label>
-                    <Form.Control key={0} type="text" onChange={(e) => {
+                    <Form.Control key={0} type="text" value={currentAnswers[0]?currentAnswers[0].response:""} onChange={(e) => {
                         const array = [...currentAnswers];
                         array[0] = {
                             question: "",
@@ -470,9 +494,9 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 <Form.Group className="mb-3">
                     {renderAnswers()}
                 </Form.Group>
-                <Button variant="primary" type="submit" onClick={() => {
+                <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
-                }}>
+                }} >
                     {editItem==null?"Создать":"Редактировать"}
                 </Button>
             </Form>

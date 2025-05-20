@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
+import './styles.css';
 
 const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     const roleMapping = {
@@ -184,7 +185,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                     >
-                        <option value="">Выберите роль</option>
+                        <option value="">{role.role}</option>
                         {Object.keys(roleMapping).map((roleName) => (
                             <option key={roleMapping[roleName]} value={roleMapping[roleName]}>
                                 {roleName}
@@ -215,8 +216,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     />
                 </Form.Group>
 
-
-                <Button variant="primary" type="submit">
+                <Button variant="primary" className="custom-button-create-window" type="submit">
                     {editItem ? "Редактировать" : "Создать"}
                 </Button>
             </Form>

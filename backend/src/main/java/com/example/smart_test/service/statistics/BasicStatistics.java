@@ -43,7 +43,7 @@ public abstract class BasicStatistics {
             List<TestDto> tests = getFinalTestsForTheme(theme);
             for (TestDto test : tests) {
                 Integer bestScore = getBestScoreForTest(test, user);
-                if (bestScore != null && bestScore > 0) {
+                if (bestScore != null && bestScore >= 0) {
                     bestScores.add(bestScore);
                 }
             }

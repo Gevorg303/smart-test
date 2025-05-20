@@ -19,5 +19,6 @@ public class UserDto {
     private Role role;
     private String password;
     private String portraitUrl;
+    private Boolean isDelete  = false;
     // private Set<Role> roles;
 }

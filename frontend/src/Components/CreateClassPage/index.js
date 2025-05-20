@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, ListGroup, Modal } from 'react-bootstrap';
+import './styles.css';
 
 const CreateClassPage = ({ editItem, onCreate, onError, currentUser }) => {
     const [numberOfInstitution, setNumberOfInstitution] = useState("");
@@ -149,7 +150,7 @@ const CreateClassPage = ({ editItem, onCreate, onError, currentUser }) => {
                         onChange={(e) => setLetterDesignation(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" className="custom-button-create-window" type="submit">
                     {editItem ? "Редактировать" : "Создать"}
                 </Button>
             </Form>

@@ -19,6 +19,7 @@ public class UserMapperInterfaceImpl implements UserMapperInterface {
         dto.setSurname(entity.getSurname());
         dto.setRole(entity.getRoles());
         dto.setPortraitUrl(entity.getPortraitUrl());
+        dto.setIsDelete(entity.getIsDelete());
         return dto;
     }
 
@@ -34,6 +35,7 @@ public class UserMapperInterfaceImpl implements UserMapperInterface {
         entity.setSurname(dto.getSurname());
         entity.setRoles(dto.getRole());
         entity.setPortraitUrl(dto.getPortraitUrl());
+        entity.setIsDelete(dto.getIsDelete());
         return entity;
     }
 }

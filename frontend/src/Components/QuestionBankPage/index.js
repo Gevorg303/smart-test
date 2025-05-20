@@ -41,8 +41,12 @@ const QuestionBankPage = ({type}) => {
         setShowErrorToast(true);
     };
 
-    const ErrorToast = (message) => {
-        setErrorMessage(message);
+    const ErrorToast = (messages) => {
+        if (Array.isArray(messages)) {
+            setErrorMessage(messages.join('\n'));
+        } else {
+            setErrorMessage(messages);
+        }
         setShowSuccessToast(false);
         setShowErrorToast(true);
     };
@@ -247,7 +251,7 @@ const QuestionBankPage = ({type}) => {
                     }}
                 >
                     <Toast.Header closeButton={false}>
-                        <strong className="mr-auto">Успешно</strong>
+                        <strong className="mr-auto">Уведомление</strong>
                         <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
                             x
                         </Button>
