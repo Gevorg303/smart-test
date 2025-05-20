@@ -4,6 +4,7 @@ import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.RoleDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
@@ -66,8 +67,9 @@ public class UserServiceImpl implements UserServiceInterface {
                 String rawPassword = userWithPassword.getRight();
 
                 linkUserToEducationalInstitution(userRequest, newUser);
-                linkUserToStudentClass(userRequest, newUser);
-
+                if (UserRoleEnum.STUDENT.getDescription().equals(newUser.getRoles().getRole())) {
+                    linkUserToStudentClass(userRequest, newUser);
+                }
                 registeredUsers.add(new UserResponse(
                         newUser.getLogin(),
                         rawPassword,

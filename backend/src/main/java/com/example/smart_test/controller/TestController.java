@@ -58,7 +58,7 @@ public class TestController {
      * Выводит тесты конкретного пользователя
      */
     @PostMapping("/get-user-tests")
-    public List<TestDto> getUserTests(@RequestBody UserDto user) {
+    public Set<TestDto> getUserTests(@RequestBody UserDto user) {
         return testService.getUserTests(user);
     }
 

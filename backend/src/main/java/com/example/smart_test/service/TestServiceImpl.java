@@ -120,14 +120,14 @@ public class TestServiceImpl implements TestServiceInterface {
 
     @Override
     @Transactional
-    public List<TestDto> getUserTests(UserDto user) {
+    public Set<TestDto> getUserTests(UserDto user) {
         if (userService.getUserByLogin(userMapper.toEntity(user)) == null) {
             throw new IllegalArgumentException("User not found");
         }
         List<SubjectUserDto> allSubjectTeachers = subjectUserService.getAllSubjectTeachers();
 
         // TODO: Фильтруем по текущему пользователю
-        List<SubjectUserDto> subjectTeachers = new ArrayList<>();
+        Set<SubjectUserDto> subjectTeachers = new HashSet<>();
         List<User> userList = new ArrayList<>();
         if (user.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
             userList = userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(user.getId());
@@ -145,7 +145,7 @@ public class TestServiceImpl implements TestServiceInterface {
         List<ThemeDto> allThemes = themeService.getAllTheme();
         List<TestDto> allTests = getAllTestDto();
 
-        List<TestDto> result = new ArrayList<>();
+        Set<TestDto> result = new HashSet<>();
 
         for (SubjectUserDto subjectTeacher : subjectTeachers) {
             // TODO: Ищем темы, соответствующие предмету
@@ -212,7 +212,7 @@ public class TestServiceImpl implements TestServiceInterface {
     @Override
     @Transactional
     public List<TaskDto> createTestSimulator(TestSimulatorRequest request) {
-        List<TestDto> testDtoList = getUserTests(request.getUser());
+        Set<TestDto> testDtoList = getUserTests(request.getUser());
         Set<Task> taskSet = new HashSet<>();
         TestDto trainerTest = null;
 
@@ -234,7 +234,7 @@ public class TestServiceImpl implements TestServiceInterface {
     }
 
     private TestDto findTestByENTRY_TESTType(UserDto user) {
-        List<TestDto> testDtoList = getUserTests(user);
+        Set<TestDto> testDtoList = getUserTests(user);
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.ENTRY_TEST.getDescription())) {
                 return testDto;

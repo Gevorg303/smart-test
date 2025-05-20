@@ -36,7 +36,7 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     @Transactional
     @Override
     public Set<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme) {
-        List<TestDto> testDtoList = testService.getUserTests(user);
+        Set<TestDto> testDtoList = testService.getUserTests(user);
         Set<TestDto> filteredList = new HashSet<>();
 
         if (typeTest != null && typeTest.getId() != null) {
