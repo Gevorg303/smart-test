@@ -52,7 +52,7 @@ const ThemePage = () => {
         async function fetchThemes() {
             try {
                 const subid = getCookie("sub");
-                const response = await fetch(`http://localhost:8081/theme/get-by-subject`,{
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'theme/get-by-subject`,{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
