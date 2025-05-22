@@ -116,7 +116,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 if(item !== undefined){
                     const isDelteted = notEditedIndicatros[index] !== undefined && currentIndicators[index] !== notEditedIndicatros[index]
                     editedIndicators.push({
-                        indicator: {id: index},
+                        indicator: {id: index, theme:{id:currentTheme}},
                         isDeleted: isDelteted
                     })
                 }
