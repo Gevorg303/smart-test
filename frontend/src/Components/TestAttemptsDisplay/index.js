@@ -23,13 +23,15 @@ const TestAttemptsDisplay = ({attempts}) => {
                             <th>Попытка</th>
                             <th>Дата окончания</th>
                             <th>Длительность попытки</th>
+                            <th>Результат</th>
                         </tr>
                         </thead>
                         <tbody>
                         {attempts.map((item, index) => <tr>
-                            <td>{index+1}</td>
+                            <td>{index + 1}</td>
                             <td>{new Date(item.startDateTime).toLocaleString("ru", options)}</td>
                             <td>{item.attemptDuration}</td>
+                            <td>{item.testResult}/100</td>
                         </tr>)}
                         </tbody>
                     </Table>
