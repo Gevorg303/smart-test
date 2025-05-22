@@ -21,7 +21,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     useEffect(() => {
         async function fetchClasses() {
             try {
-                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
+                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                 const user = await responseCurrent.json();
                 console.log('Текущий пользователь:', user);
 
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -62,7 +62,49 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             }
         }
 
+        async function fetchDefaultClass() {
+            if (editItem) {
+                try {
+                    const response = await fetch(process.env.REACT_APP_SERVER_URL + `student-class/teacherid=${editItem.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Ошибка получения данных о классе по умолчанию');
+                    }
+
+                    const defaultClassArray = await response.json();
+                    console.log('Класс по умолчанию:', defaultClassArray);
+
+                    if (defaultClassArray && defaultClassArray.length > 0) {
+                        const defaultClass = defaultClassArray[0]; // Извлекаем первый элемент массива
+                        console.log('numberOfInstitution:', defaultClass.numberOfInstitution);
+                        console.log('letterDesignation:', defaultClass.letterDesignation);
+
+                        if (defaultClass.numberOfInstitution && defaultClass.letterDesignation) {
+                            const defaultClassValue = `${defaultClass.numberOfInstitution} ${defaultClass.letterDesignation}`;
+                            console.log('Устанавливаем класс по умолчанию:', defaultClassValue);
+                            setSelectedClass(defaultClassValue);
+                        } else {
+                            console.error('Класс по умолчанию не содержит ожидаемых полей numberOfInstitution и letterDesignation');
+                        }
+                    } else {
+                        console.error('Массив классов по умолчанию пуст или не определен');
+                    }
+                } catch (error) {
+                    console.error('Ошибка получения данных о классе по умолчанию:', error);
+                }
+            }
+        }
+
+
+
         fetchClasses();
+        fetchDefaultClass();
 
         if (editItem) {
             setName(editItem.name);
@@ -71,7 +113,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             setRole(editItem.role);
             setLogin(editItem.login);
             setPatronymic(editItem.patronymic);
-            setSelectedClass(editItem.class);
         }
     }, [editItem]);
 
@@ -119,8 +160,8 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             };
 
             const url = editItem
-                ? process.env.REACT_APP_SERVER_URL+'users/update'
-                : process.env.REACT_APP_SERVER_URL+'users/add';
+                ? process.env.REACT_APP_SERVER_URL + 'users/update'
+                : process.env.REACT_APP_SERVER_URL + 'users/add';
             const method = editItem ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
@@ -201,7 +242,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     >
                         <option value="">Выберите класс</option>
                         {classes.map(cls => (
-                            <option key={cls.id} value={cls.id}>
+                            <option key={cls.id} value={`${cls.numberOfInstitution} ${cls.letterDesignation}`}>
                                 {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
                             </option>
                         ))}
