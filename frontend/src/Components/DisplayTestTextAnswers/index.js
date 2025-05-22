@@ -79,7 +79,7 @@ const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,answers
 
         }
 
-    }, [answers]);
+    }, [id,answers]);
     return (
         <>
             <Form.Group className="answer-group">
