@@ -406,7 +406,7 @@ const Sorting = ({ type, setBankItems }) => {
                     </div>
                 </>
             )}
-            {type !== 'student' && (
+            {type !== 'student' && type !== 'subject' && (
                 <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
             )}
             {mainBlock}

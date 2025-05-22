@@ -51,6 +51,11 @@ const QuestionBankPage = ({type}) => {
         setShowErrorToast(true);
     };
 
+    const sortById = (items) => {
+        return [...items].sort((a, b) => b.id - a.id);
+    };
+
+
     useEffect(() => {
         async function fetchTests() {
             try {
@@ -79,7 +84,7 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения теста');
                         }
                         const tests = await response2.json();
-                        setBankItems(tests)
+                        setBankItems(sortById(tests));
                         break;
                     case "task":
                         localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
@@ -96,7 +101,7 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения заданий');
                         }
                         const questions = await response3.json();
-                        setBankItems(questions)
+                        setBankItems(sortById(questions));
                         break;
                     case "subject":
                         localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
@@ -113,7 +118,7 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения предметов');
                         }
                         const subjects = await response4.json();
-                        setBankItems(subjects)
+                        setBankItems(sortById(subjects));
                         break;
                     case "theme":
                         localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
@@ -130,7 +135,7 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения тем');
                         }
                         const theme = await response5.json();
-                        setBankItems(theme)
+                        setBankItems(sortById(theme));
                         break;
                     case "indicator":
                         localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
@@ -147,7 +152,7 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения индикаторов');
                         }
                         const indicator = await response6.json();
-                        setBankItems(indicator)
+                        setBankItems(sortById(indicator));
                         break;
                     case "student":
                         localStorage.setItem('info', "На этой странице посмотреть список учеников");
@@ -167,7 +172,7 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения индикаторов');
                         }
                         const students = await response7.json();
-                        setBankItems(students)
+                        setBankItems(sortById(students));
                         break;
                     case "class":
                         localStorage.setItem('info', "На этой странице можно отсортировать все классы и просмотреть");
@@ -184,7 +189,7 @@ const QuestionBankPage = ({type}) => {
                             throw new Error('Ошибка получения классов');
                         }
                         const classes = await response8.json();
-                        setBankItems(classes)
+                        setBankItems(sortById(classes));
                         break;
                     default:
                         console.error('Неизвестный тип:', type);
