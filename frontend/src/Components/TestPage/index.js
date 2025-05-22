@@ -11,7 +11,6 @@ import { useOutletContext } from 'react-router-dom';
 const TestPage = () => {
     let navigate = useNavigate();
 
-   // const startDateTime =  new Date();
     const [active, setActive] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [questions, setQuestions] = useState([]);
@@ -45,9 +44,9 @@ const TestPage = () => {
 
         })
 
-        let sec = attemptDuration % 60;
-        let min = Math.floor(parseInt(attemptDuration)/60%60) ;
-        let hour= Math.floor(parseInt(attemptDuration)/3600) ;
+        let sec = attemptDuration.getSeconds();
+        let min = attemptDuration.getMinutes();//Math.floor(parseInt(attemptDuration)/60%60) ;
+        let hour= attemptDuration.getHours();//Math.floor(parseInt(attemptDuration)/3600) ;
 
         const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', { //получить пользователя
             credentials: "include",
@@ -115,7 +114,13 @@ const TestPage = () => {
                 console.log(passTime);
 
                 if(passTime != null ){
-                    setTimer(<TestTimer durationHour={parseInt(passTime[0])} durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])} functionOnEnd={TestEnd} start={true} timeFromStart={setAttemptDuration}/>)
+                    const endDateTime = new Date(startDateTime)
+                    endDateTime.setHours(endDateTime.getHours() + parseInt(passTime[0]));
+                    endDateTime.setMinutes(endDateTime.getMinutes() + parseInt(passTime[1]));
+                    endDateTime.setSeconds(endDateTime.getSeconds() + parseInt(passTime[2]));
+                    console.log(startDateTime)
+                    console.log(endDateTime)
+                    setTimer(<TestTimer /*durationHour={parseInt(passTime[0])} durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])}*/endTime={endDateTime} functionOnEnd={TestEnd} start={true} timeFromStart={setAttemptDuration}/>)
                 }
 
 
