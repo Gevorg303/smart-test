@@ -116,7 +116,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                 if(item !== undefined){
                     const isDelteted = notEditedIndicatros[index] !== undefined && currentIndicators[index] !== notEditedIndicatros[index]
                     editedIndicators.push({
-                        editingResponseOption: {id: index},
+                        indicator: {id: index},
                         isDeleted: isDelteted
                     })
                 }
@@ -232,7 +232,7 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
 
                         editingResponseOption: editedAnswers
                             ,
-                        editingIndicator: editedIndicators
+                        editingIndicatorRequestList: editedIndicators
                         }
                     )
                 });
