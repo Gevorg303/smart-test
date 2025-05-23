@@ -143,7 +143,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             }
         };
 
-// Добавляем studentClass только если роль не "Админ" и не "Учитель"
         if (data.role !== 'Админ' && data.role !== 'Учитель') {
             userRequest.studentClass = { id: parseInt(data.class, 10) };
         }
@@ -189,6 +188,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             setShowErrorToast(true);
         }
     };
+
+
 
 
 
@@ -307,6 +308,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         };
         reader.readAsArrayBuffer(file);
     };
+
 
     const handleDownloadTemplate = (templateName) => {
         const link = document.createElement('a');

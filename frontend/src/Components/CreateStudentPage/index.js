@@ -101,8 +101,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             }
         }
 
-
-
         fetchClasses();
         fetchDefaultClass();
 
@@ -115,6 +113,10 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             setPatronymic(editItem.patronymic);
         }
     }, [editItem]);
+
+    useEffect(() => {
+        console.log('Current role:', role);
+    }, [role]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -137,7 +139,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         if (!patronymic) {
             errors.push('Отчество не может быть пустым.');
         }
-        if (!selectedClass) {
+        if (!selectedClass && role === roleMapping['Ученик']) {
             errors.push('Класс не может быть пустым.');
         }
 
@@ -234,20 +236,22 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         ))}
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Класс</Form.Label>
-                    <Form.Select
-                        value={selectedClass}
-                        onChange={(e) => setSelectedClass(e.target.value)}
-                    >
-                        <option value="">Выберите класс</option>
-                        {classes.map(cls => (
-                            <option key={cls.id} value={`${cls.numberOfInstitution} ${cls.letterDesignation}`}>
-                                {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
-                            </option>
-                        ))}
-                    </Form.Select>
-                </Form.Group>
+                {role.role ==='Ученик' && (
+                    <Form.Group className="mb-3">
+                        <Form.Label>Класс</Form.Label>
+                        <Form.Select
+                            value={selectedClass}
+                            onChange={(e) => setSelectedClass(e.target.value)}
+                        >
+                            <option value="">Выберите класс</option>
+                            {classes.map(cls => (
+                                <option key={cls.id} value={`${cls.numberOfInstitution} ${cls.letterDesignation}`}>
+                                    {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                                </option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+                )}
                 <Form.Group className="mb-3">
                     <Form.Label>Логин</Form.Label>
                     <Form.Control
