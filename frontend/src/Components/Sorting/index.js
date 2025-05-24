@@ -95,7 +95,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const classesData = await classesResponse.json();
                 setClasses(classesData);
 
-                const rolesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+              /*  const rolesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -108,7 +108,7 @@ const Sorting = ({ type, setBankItems }) => {
                 }
 
                 const rolesData = await rolesResponse.json();
-                setRoles(rolesData);
+                setRoles(rolesData);*/
             } catch (error) {
                 console.error('Ошибка получения данных для фильтрации:', error);
             }
