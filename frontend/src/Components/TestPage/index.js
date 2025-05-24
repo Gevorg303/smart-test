@@ -26,7 +26,6 @@ const TestPage = () => {
 
     localStorage.setItem('info', "Это тест с последовательным порядком выведения заданий. Можно пропускать и возвращаться к пропущенным заданиям. По выполнению всех заданий завершите тест");
 
-
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -34,7 +33,7 @@ const TestPage = () => {
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
-    async function TestEnd() {
+    async function TestEnd(attemptDurationTime) {
         console.log(questions)
         console.log(answers)
        // let requestForTaskList =[];
@@ -43,10 +42,10 @@ const TestPage = () => {
             item.task = questions.find(elem => elem.id === item.task.id);
 
         })
-
-        let sec = attemptDuration.getSeconds();
-        let min = attemptDuration.getMinutes();//Math.floor(parseInt(attemptDuration)/60%60) ;
-        let hour= attemptDuration.getHours();//Math.floor(parseInt(attemptDuration)/3600) ;
+        console.log(attemptDurationTime)
+        let sec = attemptDurationTime.getSeconds();
+        let min = attemptDurationTime.getMinutes();//Math.floor(parseInt(attemptDuration)/60%60) ;
+        let hour= attemptDurationTime.getHours();//Math.floor(parseInt(attemptDuration)/3600) ;
 
         const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', { //получить пользователя
             credentials: "include",
@@ -120,7 +119,7 @@ const TestPage = () => {
                     endDateTime.setSeconds(endDateTime.getSeconds() + parseInt(passTime[2]));
                     console.log(startDateTime)
                     console.log(endDateTime)
-                    setTimer(<TestTimer /*durationHour={parseInt(passTime[0])} durationMin={parseInt(passTime[1])} durationSec={parseInt(passTime[2])}*/endTime={endDateTime} functionOnEnd={TestEnd} start={true} timeFromStart={setAttemptDuration}/>)
+                    setTimer(<TestTimer startTime={startDateTime} endTime={endDateTime} functionOnEnd={TestEnd} timeFromStart={setAttemptDuration}/>)
                 }
 
 
@@ -144,7 +143,7 @@ const TestPage = () => {
         }
 
         fetchTest();
-    }, [setTopText]);
+    }, [topText]);
 
     //console.log(answers)
     return (
@@ -166,7 +165,7 @@ const TestPage = () => {
                         if (active < questions.length - 1) setActive(active + 1)
                     }} />
                 </Pagination>
-                <Button hidden={active+1!=questions.length?"hidden":""}  className="end-button" onClick={() => TestEnd()}>Завершить тест</Button>
+                <Button hidden={active+1!=questions.length?"hidden":""}  className="end-button" onClick={() => TestEnd(attemptDuration)}>Завершить тест</Button>
 
             </div>
             {/*<Footer />*/}
