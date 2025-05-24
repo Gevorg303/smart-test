@@ -34,9 +34,9 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
 
     @Override
     @Transactional
-    public void addTaskResults(TaskDto task, int assessmentTask, TestingAttemptDto testingAttempt) {
+    public void addTaskResults(TaskDto task, int assessmentTask, TestingAttemptDto testingAttempt, boolean flag) {
         try {
-            taskResultsRepositoryInterface.save(new TaskResults(taskMapper.toEntity(task), true, testingAttemptMapper.toEntity(testingAttempt)));
+            taskResultsRepositoryInterface.save(new TaskResults(taskMapper.toEntity(task), flag, testingAttemptMapper.toEntity(testingAttempt)));
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при создании сущности 'Результаты задания': " + e.getMessage(), e);
         }

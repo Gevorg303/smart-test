@@ -6,6 +6,7 @@ import com.example.smart_test.enums.TypeTestEnum;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
+import com.example.smart_test.mapper.api.ThemeMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.request.*;
@@ -53,7 +54,7 @@ public class TestServiceImpl implements TestServiceInterface {
     @Autowired
     private UserMapperInterface userMapper;
     @Autowired
-    private IndicatorServiceInterface indicatorService;
+    private ThemeMapperInterface themeMapper;
 
     @Override
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
@@ -196,7 +197,11 @@ public class TestServiceImpl implements TestServiceInterface {
         );
 
         for (ResponseForTask responseForTask : responseForTasks) {
-            taskResultsService.addTaskResults(responseForTask.getTask(), responseForTask.getTaskScore(), testingAttemptDto);
+            boolean flag = false;
+            if (responseForTask.getTaskScore() == 100) {
+                flag = true;
+            }
+            taskResultsService.addTaskResults(responseForTask.getTask(), responseForTask.getTaskScore(), testingAttemptDto, flag);
         }
 
         // Удаляем задания, если тренировка
@@ -212,14 +217,14 @@ public class TestServiceImpl implements TestServiceInterface {
     @Override
     @Transactional
     public List<TaskDto> createTestSimulator(TestSimulatorRequest request) {
-        Set<TestDto> testDtoList = getUserTests(request.getUser());
+        List<TestDto> testDtoList = outputTestsByIDTheme(themeMapper.toDTO(request.getTheme()));
         Set<Task> taskSet = new HashSet<>();
         TestDto trainerTest = null;
 
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
                 if (testDto.getTypeTest() != null && testDto.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
-                    trainerTest = findTestByENTRY_TESTType(request.getUser());
+                    trainerTest = findTestByENTRY_TESTType(request.getTheme());
                     taskSet.addAll(testGeneratorService.generatorTasks(userMapper.toEntity(request.getUser()), trainerTest, testDto.getNumberOfTasksPerError()));
                     trainerTest = testDto;
                 }
@@ -233,8 +238,8 @@ public class TestServiceImpl implements TestServiceInterface {
         return Collections.emptyList();
     }
 
-    private TestDto findTestByENTRY_TESTType(UserDto user) {
-        Set<TestDto> testDtoList = getUserTests(user);
+    private TestDto findTestByENTRY_TESTType(Theme theme) {
+        List<TestDto> testDtoList = outputTestsByIDTheme(themeMapper.toDTO(theme));
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.ENTRY_TEST.getDescription())) {
                 return testDto;

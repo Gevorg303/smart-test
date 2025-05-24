@@ -46,11 +46,7 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
     @Override
     @Transactional
     public void deleteTaskOfIndicator(TaskOfIndicator taskOfIndicator) {
-        if (findTaskOfIndicatorById(taskOfIndicator.getId())) {
-            taskOfIndicatorRepositoryInterface.delete(taskOfIndicator);
-        } else {
-            log.error("Связь задание с индикатором " + taskOfIndicator.getId() + " не найден");
-        }
+        taskOfIndicatorRepositoryInterface.deleteByTaskIdAndIndicatorId(taskOfIndicator.getTask().getId(), taskOfIndicator.getIndicator().getId());
     }
 
     @Override

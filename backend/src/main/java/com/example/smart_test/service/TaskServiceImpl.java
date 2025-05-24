@@ -50,6 +50,8 @@ public class TaskServiceImpl implements TaskServiceInterface {
     private ResponseOptionMapperInterface responseOptionMapper;
     @Autowired
     private TaskOfIndicatorMapperInterface taskOfIndicatorMapper;
+    @Autowired
+    private IndicatorMapperInterface indicatorMapper;
 
     @Override
     @Transactional
@@ -165,7 +167,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
         List<SubjectUserDto> subjectTeachers = new ArrayList<>();
         List<UserDto> userList = new ArrayList<>();
         if (userDto.getRole().getRole().equals(UserRoleEnum.ADMIN.getDescription())) {
-            for (User user :  userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
+            for (User user : userEducationalInstitutionService.getUsersByEducationalInstitutionExcludingSelf(userDto.getId())) {
                 userList.add(userMapper.toDTO(user));
             }
         } else {
@@ -215,7 +217,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
         }
         return new ArrayList<>(uniqueTasks);
     }
-
 
 
     @Override
@@ -270,14 +271,32 @@ public class TaskServiceImpl implements TaskServiceInterface {
         }
 
         if (updatedTask.getEditingIndicatorRequestList() != null) {
+            List<Indicator> indicatorDtoList = indicatorService.findIndicatorByIdTheme(
+                    updatedTask.getEditingIndicatorRequestList().get(0).getIndicator().getTheme()
+            );
+
             for (EditingIndicatorRequest editingIndicatorRequest : updatedTask.getEditingIndicatorRequestList()) {
-                List<IndicatorDto> indicatorDtoList = taskOfIndicatorService.findIndicatorByTask(taskMapperInterface.toEntity(updatedTask.getTask()));
-                for (IndicatorDto indicatorDto1 : indicatorDtoList) {
-                   if (editingIndicatorRequest.getIndicator().getId().equals(indicatorDto1.getId()) && editingIndicatorRequest.isDeleted()) {
-                       taskOfIndicatorService.deleteTaskOfIndicator(null);
-                   } else if (!editingIndicatorRequest.getIndicator().getId().equals(indicatorDto1.getId()) && !editingIndicatorRequest.isDeleted()) {
-                       taskOfIndicatorService.addTaskOfIndicator(taskMapperInterface.toEntity(updatedTask.getTask()), null);
-                   }
+                IndicatorDto indicator = editingIndicatorRequest.getIndicator();
+                if (indicator != null && !editingIndicatorRequest.isDeleted() && !indicatorDtoList.contains(indicator)) {
+                    taskOfIndicatorService.addTaskOfIndicator(
+                            taskMapperInterface.toEntity(updatedTask.getTask()), indicatorMapper.toEntity(indicator)
+                    );
+                }
+            }
+
+
+            for (EditingIndicatorRequest editingIndicatorRequest : updatedTask.getEditingIndicatorRequestList()) {
+                IndicatorDto indicator = editingIndicatorRequest.getIndicator();
+                if (indicator != null && indicator.getId() != null && editingIndicatorRequest.isDeleted()) {
+                    Optional<Indicator> matchedIndicator = indicatorDtoList.stream()
+                            .filter(i -> i.getId().equals(indicator.getId()))
+                            .findFirst();
+
+                    matchedIndicator.ifPresent(i ->
+                            taskOfIndicatorService.deleteTaskOfIndicator(
+                                    new TaskOfIndicator(taskMapperInterface.toEntity(updatedTask.getTask()), i)
+                            )
+                    );
                 }
             }
         }

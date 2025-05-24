@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface TaskResultsServiceInterface {
-    void addTaskResults(TaskDto task, int assessmentTask, TestingAttemptDto testingAttempt);
+    void addTaskResults(TaskDto task, int assessmentTask, TestingAttemptDto testingAttempt, boolean flag);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void deleteTestResultsDto(TestResultsDto dto);
