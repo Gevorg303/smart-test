@@ -36,9 +36,7 @@ public class TestingAttemptServiceImpl implements TestingAttemptServiceInterface
 
     @Override
     public TestingAttemptDto findTopByUserAndTest_IdOrderByStartDateTimeDesc(User user, TestDto test) {
-        TestingAttempt attempt = testingAttemptRepository
-                .findLatestAttempt(user.getId(), test.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Попытка тестирования не найдена"));
+        TestingAttempt attempt = testingAttemptRepository.findTopByUserIdAndTestIdOrderByStartDateTimeDesc(user.getId(), test.getId());
 
         return testingAttemptMapper.toDto(attempt);
     }

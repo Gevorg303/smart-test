@@ -66,8 +66,9 @@ public class TestController {
      * Выводит список заданий в тесте
      */
     @PostMapping("/get-tasks-test")
-    public List<TaskDto> findTasksTheTest(@RequestBody TestDto dto) {
-        return taskService.findTasksTheTest(dto);
+    public ResponseEntity<List<TaskDto>> findTasksTheTest(@RequestBody TestDto dto) {
+        List<TaskDto> taskDtoList = taskService.findTasksTheTest(dto);
+        return ResponseEntity.ok(taskDtoList);
     }
 
     /**

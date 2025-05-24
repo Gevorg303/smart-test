@@ -13,8 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface TestingAttemptRepositoryInterface extends JpaRepository<TestingAttempt, Long> {
-    @Query("SELECT ta FROM TestingAttempt ta WHERE ta.user.id = :userId AND ta.test.id = :testId ORDER BY ta.startDateTime DESC")
-    Optional<TestingAttempt> findLatestAttempt(@Param("userId") Long userId, @Param("testId") Long testId);
+    TestingAttempt findTopByUserIdAndTestIdOrderByStartDateTimeDesc(Long userId, Long testId);
     List<TestingAttempt> findByTestAndUser(Test test, User user);
     void deleteByTestId(Long testId);
     List<TestingAttempt> findByTest(Test test);
