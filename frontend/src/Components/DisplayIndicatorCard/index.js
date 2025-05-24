@@ -6,14 +6,16 @@ const DisplayIndicatorCard = (objectItem) => {
     const [display, setDisplay] = useState()
     useEffect(() => {
         try{
-            setDisplay(
-                <>
-                    <h2>Индикатор №{objectItem.objectItem.id}</h2>
-                    <p> Имя индикатора: {objectItem.objectItem.nameOfTheIndicator}</p>
-                    <p> Тема индикатора: {objectItem.objectItem.theme.themeName}</p>
-                </>
-            )
-            setLoadSuccess(true);
+            if(objectItem.objectItem.nameOfTheIndicator !== undefined && objectItem.objectItem.theme !== undefined) {
+                setDisplay(
+                    <>
+                        <h2>Индикатор №{objectItem.objectItem.id}</h2>
+                        <p> Имя индикатора: {objectItem.objectItem.nameOfTheIndicator}</p>
+                        <p> Тема индикатора: {objectItem.objectItem.theme.themeName}</p>
+                    </>
+                )
+                setLoadSuccess(true);
+            }
         } catch (error) {
             setLoadSuccess(false);
         }

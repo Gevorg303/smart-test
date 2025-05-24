@@ -6,14 +6,16 @@ const DisplayTestCard = (objectItem) => {
     const [display, setDisplay] = useState()
     useEffect(() => {
         try{
-            setDisplay(
-                <>
-                    <p>Тест №{objectItem.objectItem.id}</p>
-                    <h2>{objectItem.objectItem.theme.subject.subjectName} > {objectItem.objectItem.theme.themeName}: {objectItem.objectItem.typeTest.nameOfTestType}</h2>
-                    <p>{objectItem.objectItem.description}</p>
-                </>
-            )
-            setLoadSuccess(true);
+            if(objectItem.objectItem.theme !== undefined && objectItem.objectItem.description !==undefined){
+                setDisplay(
+                    <>
+                        <p>Тест №{objectItem.objectItem.id}</p>
+                        <h2>{objectItem.objectItem.theme.subject.subjectName} > {objectItem.objectItem.theme.themeName}: {objectItem.objectItem.typeTest.nameOfTestType}</h2>
+                        <p>{objectItem.objectItem.description}</p>
+                    </>
+                )
+                setLoadSuccess(true);
+            }
         }catch (error){
             setLoadSuccess(false);
         }
