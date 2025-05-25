@@ -246,7 +246,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
 
                 console.log(`Роль для пользователя ${email}: ${role}`);
 
-                const studentClass = { id: 23 };
+                const studentClass = role !== 'Админ' && role !== 'Учитель' ? { id: 23 } : null;
                 const educationalInstitution = { id: currentUser?.educationalInstitution?.id || 23 };
 
                 userRequests.push({
