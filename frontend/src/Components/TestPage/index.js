@@ -40,7 +40,15 @@ const TestPage = () => {
 
         answers.map((item, index) => {
             item.task = questions.find(elem => elem.id === item.task.id);
-
+        })
+        questions.map((item, index) => {
+            const findAnswer = answers.find(elem => elem.task.id === item.id);
+            if(findAnswer == undefined){
+                answers.push({
+                    responseOption:[],
+                    task: item
+                });
+            }
         })
         console.log(attemptDurationTime)
         let sec = attemptDurationTime.getSeconds();

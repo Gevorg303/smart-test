@@ -52,7 +52,7 @@ const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,answers
         if (view && Array.isArray(currentAnswers) && item && item.id) {
             const find = currentAnswers.find(el => el.task && el.task.id === item.id);
             if (find) {
-                setUserAnswer(currentAnswers[currentAnswers.indexOf(find)].responseOption[0].response);
+                setUserAnswer(currentAnswers[currentAnswers.indexOf(find)].responseOption[0]!==undefined?currentAnswers[currentAnswers.indexOf(find)].responseOption[0].response:"");
             }
         }
     }, [view, currentAnswers, id, item]);
@@ -87,7 +87,7 @@ const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,answers
                 <Form.Control
                     type="text"
                     placeholder="Ответ"
-                    value={view ? userAnswer : (currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))]!=undefined?currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))].responseOption[0].response:"" || "")}
+                    value={view ? userAnswer : (currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))]!=undefined?currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))].responseOption[0]!==undefined?currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))].responseOption[0].response:"":"" || "")}
                     onChange={(e) => handleInputChange( e.target.value)}
                     required
                     readOnly={view}
