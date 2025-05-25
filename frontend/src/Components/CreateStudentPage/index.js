@@ -243,7 +243,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                             value={selectedClass}
                             onChange={(e) => setSelectedClass(e.target.value)}
                         >
-                            <option value="">Выберите класс</option>
                             {classes.map(cls => (
                                 <option key={cls.id} value={`${cls.numberOfInstitution} ${cls.letterDesignation}`}>
                                     {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
