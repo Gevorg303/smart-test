@@ -119,7 +119,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         if (!data.middleName || !isValidName(data.middleName)) {
             errors.push('Отчество');
         }
-        if (data.role !== 'Админ' && !data.class) {
+        if (data.role !== 'Админ' && data.role !== 'Учитель' && !data.class) {
             errors.push('Класс');
         }
         if (!data.email || !isValidEmail(data.email)) {
