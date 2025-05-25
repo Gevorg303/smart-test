@@ -23,7 +23,6 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
     const [currentPassingScore, setCurrentPassingScore] = useState(60);
 
     const [notEditedTasks, setNotEditedTasks] = useState([]);
-
     // Валидация описания
     const isValidDescription = (description) => {
         return description === "" || (description.length >= 10 && description.length <= 500);
@@ -350,7 +349,8 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
             setTimeEnd(editItem.closingDateAndTime ? editItem.closingDateAndTime : "");
             setTimeStart(editItem.openingDateAndTime ? editItem.openingDateAndTime : "");
             setCurrentTasks([]);
-            setCurrentPassingScore(editItem.numberOfTasksPerError ? editItem.numberOfTasksPerError : 0);
+            setCurrentPassingScore(editItem.passThreshold ? editItem.passThreshold : 0);
+            setCountOfTaskByError(editItem.numberOfTasksPerError ? editItem.numberOfTasksPerError : 0);
         } else if (targetSubject < 0) {
             setTasks([])
             setTargetSubject(-1)
