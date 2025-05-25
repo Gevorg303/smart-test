@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "тест")
@@ -42,9 +40,4 @@ public class Test {
     private Integer numberOfTasksPerError;
     @Column(name = "порог_прохождения_теста")
     private Integer passThreshold;
-    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks = new ArrayList<>();
-    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TestingAttempt> attempts = new ArrayList<>();
-
 }
