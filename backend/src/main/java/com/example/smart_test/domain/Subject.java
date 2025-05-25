@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "предмет")
 @Data
@@ -19,4 +22,9 @@ public class Subject {
     private String subjectName;
     @Column(name = "описание_предмета")
     private String description;
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubjectUser> subjectUsers = new ArrayList<>();
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Theme> themes = new ArrayList<>();
+
 }
