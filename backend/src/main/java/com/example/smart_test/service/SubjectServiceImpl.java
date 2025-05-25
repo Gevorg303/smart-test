@@ -153,7 +153,7 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
     @Transactional
     public void deleteSubjectDto(SubjectDto dto) {
         try {
-            subjectUserRepository.deleteBySubjectId(dto.getId());
+            //subjectUserRepository.deleteBySubjectId(dto.getId());
             subjectRepository.delete(subjectMapper.toEntity(dto));
         } catch (Exception e) {
             throw new RuntimeException("Не удалось удалить предмет" + e.getMessage(), e);

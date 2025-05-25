@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,4 +23,7 @@ public class Indicator {
     private Theme theme;
     @Column(name = "наименование_индикатора")
     private String nameOfTheIndicator;
+    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskOfIndicator> taskOfIndicators = new ArrayList<>();
+
 }

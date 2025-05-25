@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "задание")
 @Data
@@ -25,4 +28,10 @@ public class Task {
     private String explanation;
     @Column(name = "текст_задания")
     private String taskText;
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskResults> results = new ArrayList<>();
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskOfIndicator> taskOfIndicators = new ArrayList<>();
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ResponseOption> responseOptions = new ArrayList<>();
 }
