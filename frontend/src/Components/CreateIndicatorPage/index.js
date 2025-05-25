@@ -166,7 +166,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
         }
 
         fetchSubjects();
-    }, [currentTheme,editItem]);
+    }, [/*currentTheme,*/editItem]);
     return (
         <div>
             <h1>{editItem ? "Редактирование индикатора" : "Создание индикатора"}</h1>

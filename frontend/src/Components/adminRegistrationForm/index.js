@@ -119,7 +119,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         if (!data.middleName || !isValidName(data.middleName)) {
             errors.push('Отчество');
         }
-        if (data.role !== 'Админ' && !data.class) {
+        if (data.role !== 'Админ' && data.role !== 'Учитель' && !data.class) {
             errors.push('Класс');
         }
         if (!data.email || !isValidEmail(data.email)) {
@@ -143,7 +143,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             }
         };
 
-// Добавляем studentClass только если роль не "Админ" и не "Учитель"
         if (data.role !== 'Админ' && data.role !== 'Учитель') {
             userRequest.studentClass = { id: parseInt(data.class, 10) };
         }
@@ -151,12 +150,15 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         console.log('Данные для регистрации одного пользователя:', userRequest);
 
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/admin/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify([userRequest]),
+                body: JSON.stringify({
+                    userRequestList: [userRequest],
+                    user: currentUser
+                }),
             });
 
             if (response.ok) {
@@ -189,7 +191,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             setShowErrorToast(true);
         }
     };
-
 
 
     const handleMultipleRegistration = async (e) => {

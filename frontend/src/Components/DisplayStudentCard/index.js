@@ -6,15 +6,18 @@ const DisplayStudentCard = ({ objectItem }) => {
     const [display, setDisplay] = useState()
     useEffect(() => {
         try{
-            setDisplay(
-                <>
-                    <h3>Пользователь №: {objectItem.id}</h3>
-                    <p>Имя: {objectItem.name}</p>
-                    <p>Фамилия: {objectItem.surname}</p>
-                    <p>Отчество: {objectItem.patronymic}</p>
-                </>
-            )
-            setLoadSuccess(true);
+            if(objectItem.surname !== undefined && objectItem.patronymic !== undefined) {
+                setDisplay(
+                    <>
+                        <h3>Пользователь №: {objectItem.id}</h3>
+                        <p>Имя: {objectItem.name}</p>
+                        <p>Фамилия: {objectItem.surname}</p>
+                        <p>Отчество: {objectItem.patronymic}</p>
+                    </>
+                )
+                setLoadSuccess(true);
+            }
+
         } catch (error) {
             setLoadSuccess(false);
         }

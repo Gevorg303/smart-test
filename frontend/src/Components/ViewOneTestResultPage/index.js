@@ -92,7 +92,7 @@ const ViewTestResultsPage = (props) => {
     }, [navigate, setTopText]);
 
     function ViewResultsEnd() {
-        sessionStorage.clear();
+        //sessionStorage.clear();
         navigate("/theme");
     }
 
@@ -122,7 +122,7 @@ const ViewTestResultsPage = (props) => {
                         {questions.map((item, index) => (
                             <Question
                                 key={index}
-                                qStatus={validList.responseForTask!=undefined?(validList.responseForTask[index].taskScore==100?true:false):false}
+                                qStatus={validList.responseForTask!=undefined?(validList.responseForTask[index].taskScore!== undefined?validList.responseForTask[index].taskScore==100?true:false:false):false}
                                 view
                                 id={index}
                                 item={questions[index]}

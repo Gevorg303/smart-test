@@ -40,11 +40,11 @@ public class TeacherStatisticsServiceImpl extends BasicStatistics implements Tea
                         if (userDto != null && UserRoleEnum.STUDENT.getDescription().equals(userDto.getRole().getRole())) {
                             double scope = calculateFinalGrade(subjectDto, userDto);
 
-                            if (scope >= 4.5) {
+                            if (scope >= 90.0) {
                                 excellentStudents.add(userDto);
-                            } else if (scope >= 3.5) {
+                            } else if (scope >= 70.0) {
                                 goodStudents.add(userDto);
-                            } else if (scope >= 2.5) {
+                            } else if (scope >= 50.0) {
                                 averageStudents.add(userDto);
                             } else {
                                 poorStudents.add(userDto);

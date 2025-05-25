@@ -6,14 +6,17 @@ const DisplaySubjectCard = (objectItem) => {
     const [display, setDisplay] = useState()
     useEffect(() => {
         try{
-            setDisplay(
-                <>
-                    <h2>Предмет №{objectItem.objectItem.id}</h2>
-                    <h3>{objectItem.objectItem.subjectName} {/*objectItem.objectItem.teacherClass.studentClass.numberOfInstitution}{objectItem.objectItem.teacherClass.studentClass.letterDesignation*/}</h3>
-                    <p>{objectItem.objectItem.description}</p>
-                </>
-            )
-            setLoadSuccess(true);
+            if(objectItem.objectItem.subjectName !== undefined && objectItem.objectItem.description !== undefined){
+                setDisplay(
+                    <>
+                        <h2>Предмет №{objectItem.objectItem.id}</h2>
+                        <h3>{objectItem.objectItem.subjectName} {/*objectItem.objectItem.teacherClass.studentClass.numberOfInstitution}{objectItem.objectItem.teacherClass.studentClass.letterDesignation*/}</h3>
+                        <p>{objectItem.objectItem.description}</p>
+                    </>
+                )
+                setLoadSuccess(true);
+            }
+
         }catch (error){
             setLoadSuccess(false);
         }

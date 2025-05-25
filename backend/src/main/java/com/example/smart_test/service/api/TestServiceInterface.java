@@ -6,6 +6,7 @@ import com.example.smart_test.request.*;
 import com.example.smart_test.response.ResponseForTest;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TestServiceInterface {
 
@@ -19,7 +20,7 @@ public interface TestServiceInterface {
 
     List<TestDto> outputTestsByIDTheme(ThemeDto themeDto);
 
-    List<TestDto> getUserTests(UserDto user);
+    Set<TestDto> getUserTests(UserDto user);
 
     ResponseForTest endTesting(EndTestingRequest endTestingRequest);
 

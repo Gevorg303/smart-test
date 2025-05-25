@@ -6,13 +6,15 @@ const DisplayTaskCard = (objectItem) => {
     const [display, setDisplay] = useState()
     useEffect(() => {
         try{
-            setDisplay(
-                <>
+            if(objectItem.objectItem.taskText !== undefined){
+                setDisplay(
+                    <>
                         <h2>Задача №{objectItem.objectItem.id}</h2>
                         <p>{objectItem.objectItem.taskText}</p>
-                </>
-            )
-            setLoadSuccess(true);
+                    </>
+                )
+                setLoadSuccess(true);
+            }
         }catch (error){
             setLoadSuccess(false);
         }

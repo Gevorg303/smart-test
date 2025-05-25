@@ -94,7 +94,11 @@ const SubjectClass = () => {
                 {/*<h1>Классы предметов</h1>*/}
                 <div className="container-home-subject-class" id="subjects-container" ref={containerRef}
                      data-count={subjects.length}>
-                    {subjects}
+                    {subjects.length > 0 ? (
+                        subjects
+                    ) : (
+                        <p className="no-items-message">Нет доступных элементов</p>
+                    )}
                 </div>
 
                 <Modal

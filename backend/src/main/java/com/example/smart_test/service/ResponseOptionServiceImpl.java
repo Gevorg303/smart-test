@@ -103,24 +103,25 @@ public class ResponseOptionServiceImpl implements ResponseOptionServiceInterface
     @Override
     @Transactional
     public void editingResponseOption(EditingTaskRequest editingTaskRequest) {
-        for (ResponseOption responseOption : responseOptionRepositoryInterface.findByTaskId(editingTaskRequest.getTask().getId())) {
-            if (responseOption != null) {
-                for (EditingResponseOptionRequest request : editingTaskRequest.getEditingResponseOption()) {
-                    if (request.getResponseOptionDto().getId() != null
-                            && request.getResponseOptionDto().getId().equals(responseOption.getId())
-                            && !request.isDeleted()) {
-                        responseOption.setQuestion(request.getResponseOptionDto().getQuestion());
-                        responseOption.setResponse(request.getResponseOptionDto().getResponse());
-                        responseOption.setValidResponse(request.getResponseOptionDto().isValidResponse());
-                        responseOptionRepositoryInterface.save(responseOption);
-                        break;
-                    } else if (request.getResponseOptionDto().getId() == null && !request.isDeleted()) {
-                        addResponseOption(taskMapper.toEntity(editingTaskRequest.getTask()), responseOptionMapperInterface.toEntity(request.getResponseOptionDto()));
-                    } else if (request.getResponseOptionDto().getId() != null && request.isDeleted()) {
-                        deleteResponseOption(request.getResponseOptionDto());
-                    }
+        for (EditingResponseOptionRequest request : editingTaskRequest.getEditingResponseOption()) {
+            for (ResponseOption responseOption : responseOptionRepositoryInterface.findByTaskId(editingTaskRequest.getTask().getId())) {
+                if (request.getResponseOptionDto().getId() != null
+                        && request.getResponseOptionDto().getId().equals(responseOption.getId())
+                        && !request.isDeleted()) {
+                    responseOption.setQuestion(request.getResponseOptionDto().getQuestion());
+                    responseOption.setResponse(request.getResponseOptionDto().getResponse());
+                    responseOption.setValidResponse(request.getResponseOptionDto().isValidResponse());
+                    responseOptionRepositoryInterface.save(responseOption);
+                    break;
                 }
             }
+            if (request.getResponseOptionDto().getId() == null && !request.isDeleted()) {
+                addResponseOption(taskMapper.toEntity(editingTaskRequest.getTask()), responseOptionMapperInterface.toEntity(request.getResponseOptionDto()));
+            } else if (request.getResponseOptionDto().getId() != null && request.isDeleted()) {
+                deleteResponseOption(request.getResponseOptionDto());
+            }
+
         }
     }
 }
+

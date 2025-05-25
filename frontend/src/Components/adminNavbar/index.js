@@ -31,10 +31,6 @@ const AdminNavbar = ({ onFormSelect }) => {
             subItems: []
         },
         {
-            title: "Результаты",
-            subItems: []
-        },
-        {
             title: "Главная",
             subItems: []
         }

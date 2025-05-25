@@ -31,11 +31,21 @@ const Sorting = ({ type, setBankItems }) => {
     useEffect(() => {
         async function fetchFilterOptions() {
             try {
-                const subjectsResponse = await fetch(process.env.REACT_APP_SERVER_URL+'subject/all', {
-                    method: 'GET',
+                document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
+                    credentials: "include",
+                });
+                if (!response1.ok) {
+                    throw new Error('Ошибка сети');
+                }
+                const user = await response1.json();
+                const subjectsResponse = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
-                    }
+                    },
+                    body: JSON.stringify(user)
                 });
                 if (!subjectsResponse.ok) {
                     throw new Error('Ошибка получения предметов');
@@ -85,7 +95,7 @@ const Sorting = ({ type, setBankItems }) => {
                 const classesData = await classesResponse.json();
                 setClasses(classesData);
 
-                const rolesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+              /*  const rolesResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -98,7 +108,7 @@ const Sorting = ({ type, setBankItems }) => {
                 }
 
                 const rolesData = await rolesResponse.json();
-                setRoles(rolesData);
+                setRoles(rolesData);*/
             } catch (error) {
                 console.error('Ошибка получения данных для фильтрации:', error);
             }
@@ -396,7 +406,7 @@ const Sorting = ({ type, setBankItems }) => {
                     </div>
                 </>
             )}
-            {type !== 'student' && (
+            {type !== 'student' && type !== 'subject' && (
                 <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
             )}
             {mainBlock}
