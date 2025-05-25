@@ -141,7 +141,7 @@ const CreateClassPage = ({ editItem, onCreate, onError }) => {
             }
 
             const url = editItem
-                ? process.env.REACT_APP_SERVER_URL+'student-class/update'
+                ? process.env.REACT_APP_SERVER_URL+'student-class/update-class'
                 : process.env.REACT_APP_SERVER_URL+'student-class/add';
             const method = editItem ? 'PUT' : 'POST';
 
@@ -154,8 +154,10 @@ const CreateClassPage = ({ editItem, onCreate, onError }) => {
             });
 
             if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Ошибка ответа сервера:', errorText); // Логирование текста ошибки
                 toastText = editItem ? "Ошибка редактирования класса" : "Ошибка создания класса";
-                throw new Error();
+                throw new Error(toastText);
             }
 
             toastText = editItem ? "Класс успешно отредактирован." : "Класс успешно создан.";
@@ -163,6 +165,7 @@ const CreateClassPage = ({ editItem, onCreate, onError }) => {
             fetchClasses(); // Обновляем список классов после добавления/редактирования
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
+            onError([error.message]);
         }
     };
 
