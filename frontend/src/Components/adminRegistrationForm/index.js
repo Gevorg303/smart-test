@@ -150,12 +150,15 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         console.log('Данные для регистрации одного пользователя:', userRequest);
 
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/admin/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify([userRequest]),
+                body: JSON.stringify({
+                    userRequestList: [userRequest],
+                    user: currentUser
+                }),
             });
 
             if (response.ok) {
@@ -188,9 +191,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             setShowErrorToast(true);
         }
     };
-
-
-
 
 
     const handleMultipleRegistration = async (e) => {
@@ -308,7 +308,6 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         };
         reader.readAsArrayBuffer(file);
     };
-
 
     const handleDownloadTemplate = (templateName) => {
         const link = document.createElement('a');
