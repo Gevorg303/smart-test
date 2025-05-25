@@ -6,6 +6,7 @@ import com.example.smart_test.dto.RoleDto;
 import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
+import com.example.smart_test.mapper.api.EducationalInstitutionMapperInterface;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
@@ -53,10 +54,12 @@ public class UserServiceImpl implements UserServiceInterface {
     private UserClassServiceInterface userClassService;
     @Autowired
     private StudentClassMapperInterface studentClassMapper;
+    @Autowired
+    private EducationalInstitutionMapperInterface educationalInstitutionMapper;
 
     @Transactional
     @Override
-    public List<UserResponse> addUser(List<UserRequest> userRequestList) {
+    public List<UserResponse> addUser(List<UserRequest> userRequestList, UserDto admin) {
         List<UserResponse> registeredUsers = new ArrayList<>();
 
         for (UserRequest userRequest : userRequestList) {
@@ -67,7 +70,7 @@ public class UserServiceImpl implements UserServiceInterface {
                 User newUser = userRepository.save(userWithPassword.getLeft());
                 String rawPassword = userWithPassword.getRight();
 
-                linkUserToEducationalInstitution(userRequest, newUser);
+                linkUserToEducationalInstitution(userRequest, newUser, admin);
                 if (UserRoleEnum.STUDENT.getDescription().equals(newUser.getRoles().getRole())) {
                     linkUserToStudentClass(userRequest, newUser);
                 }
@@ -111,12 +114,17 @@ public class UserServiceImpl implements UserServiceInterface {
         return Pair.of(userEntity, rawPassword);
     }
 
-    private void linkUserToEducationalInstitution(UserRequest userRequest, User newUser) {
-        StudentClass studentClass = studentClassRepository.findById(userRequest.getStudentClass().getId()).orElse(null);
-        assert studentClass != null;
-        EducationalInstitution educationalInstitution = educationalInstitutionRepository.findById(studentClass.getEducationalInstitution().getId())
-                .orElseThrow(() -> new RuntimeException("Учебное заведение не найдено"));
-        userEducationalInstitutionService.addUserEducationalInstitution(new UserEducationalInstitution(newUser, educationalInstitution));
+    private void linkUserToEducationalInstitution(UserRequest userRequest, User newUser, UserDto admin) {
+        if (userRequest.getStudentClass() != null) {
+            StudentClass studentClass = studentClassRepository.findById(userRequest.getStudentClass().getId()).orElse(null);
+            assert studentClass != null;
+            EducationalInstitution educationalInstitution = educationalInstitutionRepository.findById(studentClass.getEducationalInstitution().getId())
+                    .orElseThrow(() -> new RuntimeException("Учебное заведение не найдено"));
+            userEducationalInstitutionService.addUserEducationalInstitution(new UserEducationalInstitution(newUser, educationalInstitution));
+        } else if (admin != null) {
+            EducationalInstitutionDto educationalInstitution = findEducationalInstitutionByUser(admin);
+            userEducationalInstitutionService.addUserEducationalInstitution(new UserEducationalInstitution(newUser, educationalInstitutionMapper.toEntity(educationalInstitution)));
+        }
     }
 
     private void linkUserToStudentClass(UserRequest userRequest, User newUser) {

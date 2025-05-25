@@ -6,6 +6,7 @@ import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.request.UserBiRoleRequest;
+import com.example.smart_test.request.UserRegistrationRequest;
 import com.example.smart_test.request.UserRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.security.JWTUtils;
@@ -31,7 +32,12 @@ public class UserController {
 
     @PostMapping("/add")
     public List<UserResponse> addUser(@RequestBody List<UserRequest> userRequestList) {
-        return userService.addUser(userRequestList);
+        return userService.addUser(userRequestList, null);
+    }
+
+    @PostMapping("/admin/add")
+    public List<UserResponse> addUserAdmin(@RequestBody UserRegistrationRequest request) {
+        return userService.addUser(request.getUserRequestList(), request.getUser());
     }
 
     @DeleteMapping("/delete")

@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserServiceInterface {
 
     @Transactional
-    List<UserResponse> addUser(List<UserRequest> userRequestList);
+    List<UserResponse> addUser(List<UserRequest> userRequestList, UserDto user);
 
     @Transactional
     void deleteUser(UserDto userDto);
