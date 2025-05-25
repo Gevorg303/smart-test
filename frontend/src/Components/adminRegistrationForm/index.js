@@ -234,13 +234,13 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 }
 
                 if (rowErrors.length > 0) {
-                    errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
+                    errors.push(...rowErrors);
                     return;
                 }
 
                 const isEmailRegistered = users.some(user => user.email === email);
                 if (isEmailRegistered) {
-                    errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
+                    errors.push(`Пользователь с почтой ${email} уже зарегистрирован`);
                     return;
                 }
 
@@ -265,7 +265,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             console.log('Данные для регистрации из файла:', userRequests);
 
             if (errors.length > 0) {
-                setErrorMessage(errors.join('\n'));
+                setErrorMessage(`Следующие поля заполнены некорректно: ${[...new Set(errors)].join(', ')}`);
                 setShowErrorToast(true);
                 return;
             }
@@ -308,6 +308,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         };
         reader.readAsArrayBuffer(file);
     };
+
 
     const handleDownloadTemplate = (templateName) => {
         const link = document.createElement('a');
