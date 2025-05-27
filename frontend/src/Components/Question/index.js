@@ -5,7 +5,7 @@ import DisplayTestTextAnswers from "../DisplayTestTextAnswers";
 import DisplayTestSelectManyAnswers from "../DisplayTestSelectManyAnswers";
 import DisplayTestComparisonAnswers from "../DisplayTestComparisonAnswers"; // Импорт CSS файла для стилей компонента
 
-const Question = ({ id, item, qStatus, view, answers, setAnswers, setActive, qsCount }) => {
+const Question = ({ id, item, qStatus, view, isTraining, answers, setAnswers, setActive, qsCount }) => {
     const [currentAnswers, setCurrentAnswers] = useState(answers);
     const [display, setDisplay] = useState();
 
@@ -38,14 +38,29 @@ const Question = ({ id, item, qStatus, view, answers, setAnswers, setActive, qsC
     return (
         <div className={`question-container ${view ? (qStatus ? 'correct' : 'incorrect') : ''}`}>
             <div className="question-content">
-                <h2 className="question-title">{item?item.taskName:""}</h2>
-                <h3 className="question-text">{item?item.taskText:""}</h3>
+                <h2 className="question-title">{item ? item.taskName : ""}</h2>
+                <h3 className="question-text">{item ? item.taskText : ""}</h3>
             </div>
             <div className={`answer-section ${view ? (qStatus ? 'correct' : 'incorrect') : ''}`}>
                 <Form>
                     {display}
                 </Form>
             </div>
+            {view && isTraining && item
+                ?
+                (
+                    item.explanation != ""
+                        ?
+                    <div className={`answer-section ${view ? (qStatus ? 'correct' : 'incorrect') : ''}`}>
+                        { "Пояснение: " + item.explanation }
+                    </div>
+                        :
+                    <></>
+                )
+                :
+                <></>
+            }
+
         </div>
     );
 };

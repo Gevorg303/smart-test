@@ -65,8 +65,14 @@ const ViewTestResultsPage = (props) => {
                 const questionsJson = await response2.json();
                 console.log(questionsJson)
                 console.log(validList)
-                setQuestions(questionsJson);
-                setCountOfQuestions(questionsJson.length);
+                const questionsArray =[]
+                validList.responseForTask.map((item,index)=>{
+                    questionsArray.push(item.task)
+                })
+                // setQuestions(questionsJson);
+                // setCountOfQuestions(questionsJson.length);
+                setQuestions(questionsArray);
+                setCountOfQuestions(questionsArray.length);
                // setScore((rightAnswers / questionsJson.length) * 100);
                 setScore(validList.testScore);
                 setTopText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
@@ -128,6 +134,7 @@ const ViewTestResultsPage = (props) => {
                                 item={questions[index]}
                                 answers={answers}
                                 setAnswers={setAnswers}
+                                isTraining={validList.test.typeTest.id === 2}
                             />
                         ))}
                         <Button className="result-button" onClick={ViewResultsEnd}>Закончить обзор</Button>
