@@ -12,3 +12,43 @@
     padding: 20px;
     background-color: transparent;
 }
+.registration-box-one {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin-left: 25%;
+}
+.registration-box-one button {
+    background-color: #aacf51;
+    color: #000; /* Изменяем цвет текста на черный */
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    height: 5%;
+    border-radius: 15px;
+    font-size: 1em;
+    box-shadow: none !important;
+}
+
+.registration-box-one button:hover {
+    background-color: #99c242;
+}
+
+.registration-box-one button:active {
+    background-color: #99c242 !important;
+}.registration-box-one h2 {
+     margin-bottom: 20px;
+ }
+
+.registration-box-one input, .registration-box-one select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

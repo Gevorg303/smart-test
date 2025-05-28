@@ -11,7 +11,7 @@ const RegistrationPage = () => {
     const [topText, setTopText] = useOutletContext();
     let selectedOption;
     if (location.pathname.includes('multiple')) {
-        setTopText("Регистрация нескольких учеников");
+        setTopText("Регистрация");
         localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
         selectedOption = 'multiple';
     } else {
@@ -349,20 +349,22 @@ const RegistrationPage = () => {
     };
 
     return (
-        <Container className="container-registration">
+        <Container>
+
             <div className="registration-box">
+                <h2>Регистрация учеников</h2>
                 {selectedOption === 'single' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>
                         <Form.Group controlId="formLastName">
-                            <Form.Control type="text" name="lastName" placeholder="Фамилия" />
+                            <Form.Control type="text" name="lastName" placeholder="Фамилия"/>
                         </Form.Group>
 
                         <Form.Group controlId="formFirstName">
-                            <Form.Control type="text" name="firstName" placeholder="Имя" />
+                            <Form.Control type="text" name="firstName" placeholder="Имя"/>
                         </Form.Group>
 
                         <Form.Group controlId="formMiddleName">
-                            <Form.Control type="text" name="middleName" placeholder="Отчество" />
+                            <Form.Control type="text" name="middleName" placeholder="Отчество"/>
                         </Form.Group>
 
                         <Form.Group controlId="formClass">
@@ -383,7 +385,7 @@ const RegistrationPage = () => {
                         </Form.Group>
 
                         <Form.Group controlId="formEmail">
-                            <Form.Control type="email" name="email" placeholder="Эл. почта" />
+                            <Form.Control type="email" name="email" placeholder="Эл. почта"/>
                         </Form.Group>
 
                         <Button type="submit" className="custom-button">
@@ -412,7 +414,8 @@ const RegistrationPage = () => {
                         </Form.Group>
 
                         <Form.Group controlId="formFile">
-                            <Form.Control type="file" name="file" placeholder="Прикрепить файл" onChange={handleFileChange} />
+                            <Form.Control type="file" name="file" placeholder="Прикрепить файл"
+                                          onChange={handleFileChange}/>
                             {fileName && <div>Выбранный файл: {fileName}</div>}
                         </Form.Group>
 
@@ -444,7 +447,8 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Успешно</strong>
-                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
+                            <Button variant="light" onClick={() => setShowSuccessToast(false)}
+                                    style={{marginLeft: 'auto', width: 50}}>
                                 {/*&times;*/}x
                             </Button>
                         </Toast.Header>
@@ -469,7 +473,8 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Ошибка</strong>
-                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
+                            <Button variant="light" onClick={() => setShowErrorToast(false)}
+                                    style={{marginLeft: 'auto', width: 50}}>
                                 {/*&times;*/}x
                             </Button>
                         </Toast.Header>

@@ -1,104 +1,115 @@
-.beta-page-container {
-    display: flex;
-    height: 100vh;
-}
+.admin-registration-form {
 
-.registration-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: transparent;
-}
+    .beta-page-container {
+        display: flex;
+        height: 100vh;
+    }
 
-.registration-form {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 600px; /* Увеличено в 1.5 раза */
-    width: 100%;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
-}
+    .registration-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background-color: transparent;
+    }
 
-.form-title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-}
 
-.form-group {
-    margin-bottom: 15px;
-}
 
-.form-group label {
-    display: block;
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-}
+    .registration-form {
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px; /* Увеличено в 1.5 раза */
+        width: 100%;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+        box-sizing: border-box;
+    }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
+    .container{
 
-/* Стили для кнопки регистрации одного пользователя */
-.single-user-submit-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    max-width: 300px; /* Ограничиваем максимальную ширину кнопки */
-    margin: 0 auto; /* Центрируем кнопку */
-    display: block; /* Делаем кнопку блочным элементом */
-    transition: background-color 0.3s;
-}
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-.single-user-submit-button:hover {
-    background-color: #0056b3;
-}
+    .form-title {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
 
-/* Стили для кнопок регистрации нескольких учеников */
-.multiple-users-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+    .form-group {
+        margin-bottom: 15px;
+    }
 
-.multiple-users-button:hover {
-    background-color: #0056b3;
-}
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+    }
 
-.template-button {
-    background-color: #28a745;
-}
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
 
-.template-button:hover {
-    background-color: #218838;
-}
+    /* Стили для кнопки регистрации одного пользователя */
 
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+    .single-user-submit-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+        max-width: 300px; /* Ограничиваем максимальную ширину кнопки */
+        margin: 0 auto; /* Центрируем кнопку */
+        display: block; /* Делаем кнопку блочным элементом */
+        transition: background-color 0.3s;
+    }
+
+    .single-user-submit-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Стили для кнопок регистрации нескольких учеников */
+
+    .multiple-users-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .multiple-users-button:hover {
+        background-color: #0056b3;
+    }
+
+    .template-button {
+        background-color: #28a745;
+    }
+
+    .template-button:hover {
+        background-color: #218838;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
 }
