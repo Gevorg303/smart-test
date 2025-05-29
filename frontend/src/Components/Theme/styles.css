@@ -27,7 +27,11 @@
     cursor: pointer;
     white-space: nowrap; /* Предотвращает перенос текста на новую строку */
 }
-
+.buttons-container button:disabled {
+    background-color: grey;
+    border-color: black;
+    color: white;
+}
 
 
 
