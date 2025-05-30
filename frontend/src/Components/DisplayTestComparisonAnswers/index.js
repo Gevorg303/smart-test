@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button,Badge,Stack } from 'react-bootstrap';
 import './styles.css';
 import {
     DndContext,
@@ -27,19 +27,28 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
         async function fetchAnswers() {
             try {
 
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'response-option/find-response-option-by-task', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify({id:item.id})
-                });
-                const responseOptions = await response.json();
-                console.log(responseOptions)
+                if(!view){
+                    const response = await fetch(process.env.REACT_APP_SERVER_URL+'response-option/find-response-option-by-task', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({id:item.id})
+                    });
+                    const responseOptions = await response.json();
+                    console.log(responseOptions)
+                    setResponseOptions(responseOptions)
+                } else {
+                    const find = answers.find(el => el.task.id===item.id);
+                    console.log(find)
+                    setResponseOptions(find.responseOption)
+                }
+
               //  setItems(responseOptions)
-                setResponseOptions(responseOptions)
+
                 const find = currentAnswers.find(el => el.task.id===item.id);
                 console.log(find);
+
                 if(currentAnswers.length>0 && find != undefined && find.responseOption.length > 0){
                     const array =[];
                     find.responseOption.map((item,index)=>{array.push(item.response)})
@@ -63,41 +72,45 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
         })
     );
     useEffect(() => {   //после перетаскивания объектов
-        if(items.length >0){
-            console.log(items)
+        if(!view){
+            if(items.length >0){
+                console.log(items)
 
-            const array = [];
-            items.map((item,index)=>{
-                array.push(
-                    {
-                        id: responseOptions[index].id,
-                        question: responseOptions[index].question,
-                        response: item
-                    }
-                )
-            })
-            console.log(array)
+                const array = [];
+                items.map((item,index)=>{
+                    array.push(
+                        {
+                            id: responseOptions[index].id,
+                            question: responseOptions[index].question,
+                            response: item
+                        }
+                    )
+                })
+                console.log(array)
 
 
-            const find = currentAnswers.find(el => el.task.id===item.id);
-            if(find != undefined) {
-                currentAnswers[currentAnswers.indexOf(find)] =
-                    {
-                        task:{id:item.id},
-                        responseOption:array
-                    }
-            } else{
-                currentAnswers.push(
-                    {
-                        task:{id:item.id},
-                        responseOption:array
-                    }
-                );
+                const find = currentAnswers.find(el => el.task.id===item.id);
+                if(find != undefined) {
+                    currentAnswers[currentAnswers.indexOf(find)] =
+                        {
+                            task:{id:item.id},
+                            responseOption:array
+                        }
+                } else{
+                    currentAnswers.push(
+                        {
+                            task:{id:item.id},
+                            responseOption:array
+                        }
+                    );
+                }
+
+                console.log(currentAnswers)
             }
-
-            console.log(currentAnswers)
         }
 
+        console.log(answers)
+        console.log(responseOptions)
     }, [items]);
     const onClickNext = () => {
         console.log(answers)
@@ -107,11 +120,26 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
 
     return (
         <>
-            <div className={'comparison-container'} style={{display: 'flex'}}>
-                <div className={'comparison-container-question'} style={{display: 'flex', flexDirection: 'column'}}>
-                    {responseOptions.map((item,index) => <p>{item.question}</p>)}
-                </div>
-                <div className={'comparison-container-response'} style={{display: 'flex', flexDirection: 'column'}}>
+            <Stack direction="horizontal" className={'comparison-container'} gap={1}>
+                {/*<div className={'comparison-container'} style={{display: 'flex'}}>*/}
+                <Stack direction="vertical"className={'comparison-container-question'} style={{display: 'flex', flexDirection: 'column'}} gap={1}>
+                    {/* <div className={'comparison-container-question'} style={{display: 'flex', flexDirection: 'column'}}>*/}
+                    {view
+                        ?
+                        responseOptions.map((item,index) => <Stack direction="horizontal" gap={1}>
+                            <Badge className={"response-option-badge"}
+                                bg={item.validResponse ? "success" : "danger"}>{item.validResponse ? "Верно" : "Неверно"}</Badge>
+                            <p className={"response-option-badge"}> {item.question}</p>
+                        </Stack>)
+
+                        :
+                        responseOptions.map((item,index) => <p>{item.question}</p>)
+                    }
+                </Stack>
+                    { /*</div>
+
+                <div className={'comparison-container-response'} style={{display: 'flex', flexDirection: 'column'}}>*/}
+                <Stack direction="vertical"  alignItems={"center"} className={'comparison-container-response'} style={{display: 'flex', flexDirection: 'column'}} gap={1}>
                     <DndContext
                         sensors={sensors}
                         collisionDetection={closestCenter}
@@ -123,22 +151,23 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
                     >
                         {view
                             ?
-                            items.map((item,id) => <p key={id} id={id} >{item}</p>)
+                            items.map((item,id) =>  <p className="drag-drop-card-view" key={id} id={id} >{item}</p>)
                             :
                             items.map((id) => <DragDropCardForComparisonAnswers key={id} id={id} />)
                         }
 
                     </SortableContext>
                     </DndContext>
-                </div>
-            </div>
+                </Stack>
+                {/*  </div>*/}
+            </Stack>
+                {/*</div>*/}
             {view ? (
                 <></>
             ) : (
                 <Button className="answer-button" onClick={onClickNext}>Ответить</Button>
             )}
         </>
-
     );
 
     function handleDragEnd(event) {

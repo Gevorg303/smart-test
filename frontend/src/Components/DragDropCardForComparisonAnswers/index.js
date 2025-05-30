@@ -1,6 +1,7 @@
 import React from 'react';
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
+import './styles.css';
 
 export function DragDropCardForComparisonAnswers(props) {
     const {
@@ -17,7 +18,7 @@ export function DragDropCardForComparisonAnswers(props) {
     };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+        <div className="drag-drop-card" ref={setNodeRef} style={style} {...attributes} {...listeners}>
             {props.id}
         </div>
     );

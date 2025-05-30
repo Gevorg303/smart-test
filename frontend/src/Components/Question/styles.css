@@ -8,7 +8,7 @@
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 75%; /* Увеличиваем ширину контейнера на 50% */
+    width: 80%; /* Увеличиваем ширину контейнера на 50% */
     margin: 20px auto; /* Добавляем отступы между вопросами и центрируем контейнер по горизонтали */
 }
 
@@ -31,6 +31,17 @@
     align-items: flex-start; /* Выравниваем элементы по левому краю */
     margin-top: auto; /* Перемещаем вниз */
     padding: 1rem;
+    background-color: white;
+    border-top: 1px solid #ddd;
+    width: 100%; /* Убедимся, что контейнер занимает всю ширину */
+}
+.answer-section-addition-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Выравниваем элементы по левому краю */
+    margin-top: auto; /* Перемещаем вниз */
+    padding: 1rem;
+    font-size: 1.5rem;
     background-color: white;
     border-top: 1px solid #ddd;
     width: 100%; /* Убедимся, что контейнер занимает всю ширину */
