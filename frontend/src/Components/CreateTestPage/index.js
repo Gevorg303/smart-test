@@ -284,53 +284,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
 
                 const typeJson = await response3.json();
                 setTypes(typeJson)
-
-                /*const intTheme = parseInt(currentTheme, 10);
-
-                let aveliabletaskrfortest = [];
-                if (currentTheme > 0) {
-                    const response4 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-available-tasks', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify({
-                            id: intTheme,
-                        })
-                    });
-                    if (!response4.ok) {
-                        throw new Error('Ошибка получения доступных заданий');
-                    }
-
-                    const taskJson = await response4.json();
-                    setTasks(taskJson)
-                    aveliabletaskrfortest = taskJson;
-                } else {
-                    setTasks([])
-                }
-
-                if (editItem != null) {
-                    const response5 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-tasks-test', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify({
-                            id: editItem.id,
-                        })
-                    });
-                    if (!response5.ok) {
-                        throw new Error('Ошибка получения заданий из теста');
-                    }
-
-                    const tasksFromTestJson = await response5.json();
-                    setTasks(aveliabletaskrfortest.concat(tasksFromTestJson))
-
-                    const array = [...currentTasks];
-                    tasksFromTestJson.map((item, index) => { array.push({ id: item.id }); })
-                    setCurrentTasks(array);
-                    setNotEditedTasks(array)
-                }*/
+                
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -525,13 +479,12 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                     }} />
                 </Form.Group>
                 {
-                    currentType != 2 ?
+
                         <Form.Group className="mb-3">
                             <Form.Label>Задания в тесте:</Form.Label>
                             {tasks.map((item, index) => <TaskForTestSelector key={item.id} id={item.id} task={{ id: item.id, taskText: item.taskText }} answers={currentTasks} setAnswers={setCurrentTasks} />)}
                         </Form.Group>
-                        :
-                        <></>
+
                 }
                 <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/

@@ -130,7 +130,7 @@ const TestPage = () => {
                     setTimer(<TestTimer startTime={startDateTime} endTime={endDateTime} functionOnEnd={TestEnd} timeFromStart={setAttemptDuration}/>)
                 }
 
-
+/*
                 const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-tasks-test', {
                     method: 'POST',
                     headers: {
@@ -142,6 +142,8 @@ const TestPage = () => {
                     throw new Error("Ошибка получения вопросов");
                 }
                 const questionsJson = await response2.json();
+                setQuestions(questionsJson)*/
+                const questionsJson = JSON.parse(sessionStorage.getItem("tasksForTest"))||[]
                 setQuestions(questionsJson)
                 console.log(questionsJson)
                 setTopText("Контрольный тест");
