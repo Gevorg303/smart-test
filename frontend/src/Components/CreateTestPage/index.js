@@ -113,6 +113,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
             const findSameType = await responseTest.json();
 
             const findTest = findSameType.find((el) => el.typeTest.id == currentType)
+            const findEnterTest = findSameType.find((el) => el.typeTest.id == 1)
 
             const taskList = [];
             for (var i = 0; i < currentTasks.length; i++) {
@@ -166,10 +167,16 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 taskDtoList: editItem==null?taskList:editedTaskList
             });
             if(editItem==null) {
+
                 if(findTest !== undefined){
                     onError(["Ошибка! Тест такого типа уже существует!"]);
                     throw new Error('Тест такого типа уже существует');
                 }
+                if(findEnterTest === undefined){
+                    onError(["Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!"]);
+                    throw new Error("Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!");
+                }
+
 
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/add', {
                     method: 'POST',

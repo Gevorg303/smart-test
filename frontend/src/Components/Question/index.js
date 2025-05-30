@@ -42,8 +42,8 @@ const Question = ({ id, item, taskScore, view, isTraining, answers, setAnswers, 
     return (
         <div className={`question-container ${view ? (qStatus ? 'correct' : 'incorrect') : ''}`}>
             <div className="question-content">
-                <h2 className="question-title">{item ? item.taskName : ""}</h2>
-                <h3 className="question-text">{item ? item.taskText : ""}</h3>
+                <h2  onCopy={e => e.preventDefault()} className="question-title">{item ? item.taskName : ""}</h2>
+                <h3  onCopy={e => e.preventDefault()} className="question-text">{item ? item.taskText : ""}</h3>
             </div>
             <div className={`answer-section ${view ? (qStatus ? 'correct' : 'incorrect') : ''}`}>
                 <Form>

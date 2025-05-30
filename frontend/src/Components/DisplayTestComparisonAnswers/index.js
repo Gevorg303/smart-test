@@ -127,11 +127,11 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
                     {view
                         ?
                         responseOptions.map((item,index) => <Stack direction="horizontal" gap={1}>
-                            <p className={"response-option-badge"}> {item.question}</p>
+                            <p onCopy={e => e.preventDefault()} className={"response-option-badge"}> {item.question}</p>
                         </Stack>)
 
                         :
-                        responseOptions.map((item,index) => <p>{item.question}</p>)
+                        responseOptions.map((item,index) => <p onCopy={e => e.preventDefault()} > {item.question}</p>)
                     }
                 </Stack>
                     { /*</div>
@@ -149,7 +149,7 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
                     >
                         {view
                             ?
-                            items.map((item,id) =>  <p className="drag-drop-card-view" key={id} id={id} >{item}</p>)
+                            items.map((item,id) =>  <p onCopy={e => e.preventDefault()} className="drag-drop-card-view" key={id} id={id} >{item}</p>)
                             :
                             items.map((id) => <DragDropCardForComparisonAnswers key={id} id={id} />)
                         }

@@ -201,7 +201,7 @@ const QuestionBankPage = ({type}) => {
         }
 
         fetchTests();
-    }, [type, editItem, showSuccessToast, setTopText]);
+    }, [type, editItem, showSuccessToast, ]);
 
     return (
         <div className="scrollable-container">

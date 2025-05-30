@@ -18,7 +18,7 @@ export function DragDropCardForComparisonAnswers(props) {
     };
 
     return (
-        <div className="drag-drop-card" ref={setNodeRef} style={style} {...attributes} {...listeners}>
+        <div onCopy={e => e.preventDefault()} className="drag-drop-card" ref={setNodeRef} style={style} {...attributes} {...listeners}>
             {props.id}
         </div>
     );
