@@ -166,17 +166,15 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 },
                 taskDtoList: editItem==null?taskList:editedTaskList
             });
+            if(findTest !== undefined){
+                onError(["Ошибка! Тест такого типа уже существует!"]);
+                throw new Error('Тест такого типа уже существует');
+            }
+            if(findEnterTest === undefined && currentType === 2 || findEnterTest && editItem.id === findEnterTest.id){
+                onError(["Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!"]);
+                throw new Error("Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!");
+            }
             if(editItem==null) {
-
-                if(findTest !== undefined){
-                    onError(["Ошибка! Тест такого типа уже существует!"]);
-                    throw new Error('Тест такого типа уже существует');
-                }
-                if(findEnterTest === undefined){
-                    onError(["Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!"]);
-                    throw new Error("Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!");
-                }
-
 
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/add', {
                     method: 'POST',
@@ -251,6 +249,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 }
                 toastText = "Тест успешно отредактирован.";
             }
+
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);

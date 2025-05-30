@@ -39,6 +39,7 @@ const QuestionBankPage = ({type}) => {
         setShowEditModal(false)
         setShowSuccessToast(true);
         setShowErrorToast(true);
+        setEditItem(null)
     };
 
     const ErrorToast = (messages) => {
