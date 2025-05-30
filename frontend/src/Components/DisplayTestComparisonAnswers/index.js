@@ -127,8 +127,6 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
                     {view
                         ?
                         responseOptions.map((item,index) => <Stack direction="horizontal" gap={1}>
-                            <Badge className={"response-option-badge"}
-                                bg={item.validResponse ? "success" : "danger"}>{item.validResponse ? "Верно" : "Неверно"}</Badge>
                             <p className={"response-option-badge"}> {item.question}</p>
                         </Stack>)
 
