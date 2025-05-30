@@ -85,6 +85,7 @@ const Theme = (props) => {
                     'Итоговый тест': 3
                 };
 
+
                 const sortedTests = testsjson.sort((a, b) => {
                     return testOrder[a.typeTest.nameOfTestType] - testOrder[b.typeTest.nameOfTestType];
                 });
@@ -107,14 +108,14 @@ const Theme = (props) => {
                             break;
                     }
                 }
-                //console.log('Scores:', arrayScoresForTest);
+                console.log('Scores:', arrayScoresForTest);
                 const array = sortedTests.map((test, index) => {
                     const testType = test.typeTest.nameOfTestType;
                     const isDisabled =
-                        (testType === 'Тренажер' && arrayScoresForTest[0] === 0) ||
-                        (testType === 'Итоговый тест' && (arrayScoresForTest[1] === 0 || arrayScoresForTest[1] < test.passThreshold));
+                        ((testType === 'Тренажер' && arrayScoresForTest[0] === 0) || (testType === 'Тренажер' && arrayScoresForTest[0] === 100)) ||
+                        (testType === 'Итоговый тест' && arrayScoresForTest[0] !== 100 && (arrayScoresForTest[1] === 0 || arrayScoresForTest[1] < test.passThreshold));
 
-                    //console.log(`Test Type: ${testType}, Scores: ${arrayScoresForTest}, Is Disabled: ${isDisabled}`); // Логирование логики
+                    console.log(`Test Type: ${testType}, Scores: ${arrayScoresForTest}, Is Disabled: ${isDisabled}`); // Логирование логики
 
                     return (
                         <Button
