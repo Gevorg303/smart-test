@@ -1,5 +1,6 @@
 import {Reactm, useState,useEffect }from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Stack } from 'react-bootstrap';
+import "./styles.css";
 
 const TaskForTestSelector = ({id,task,answers, setAnswers}) => {
 
@@ -40,30 +41,33 @@ const TaskForTestSelector = ({id,task,answers, setAnswers}) => {
     }, [answers]);
 
     return (
-        <>
-            <Form.Check // prettier-ignore
-                key={id}
-                type={'checkbox'}
-                id={id}
-                name="task"
-                checked={currentCheck}
-                onChange={(e)=>{
-                   // if(!currentCheck){
+        <div className={"task-for-test-selector-card"}>
+            <Stack direction={"horizontal"} gap={3}>
+                <Form.Check // prettier-ignore
+                    key={id}
+                    type={'checkbox'}
+                    id={id}
+                    name="task"
+                    checked={currentCheck}
+                    onChange={(e)=>{
+                        // if(!currentCheck){
 
-                       onClick(id,true);
-                  /* }
-                   else {
-                       onClick(id,false);
-                   }*/
-                    setCurrentCheck(!currentCheck)
-                }}
-            />
-            <Form.Check.Label>
-                <h2>Задание №{task.id}</h2>
-                <h3>{task.taskText}</h3>
+                        onClick(id,true);
+                        /* }
+                         else {
+                             onClick(id,false);
+                         }*/
+                        setCurrentCheck(!currentCheck)
+                    }}
+                />
+                <Form.Check.Label>
+                    <h2>Задание №{task.id}</h2>
+                    <h3>{task.taskText}</h3>
                 </Form.Check.Label>
 
-        </>
+            </Stack>
+
+        </div>
     );
 };
 

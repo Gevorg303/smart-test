@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
+import { Form, Button,Toast,ToastContainer,Stack } from 'react-bootstrap';
 import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
 import FormSelectAnswer from "../FormSelectAnswer";
 import './styles.css';
@@ -261,18 +261,21 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                     {currentAnswers.map((item, index) =>
                         <FormSelectAnswer key={index} id={index} isMultiple={false} answers={currentAnswers} setAnswers={setCurrentAnswers}/>
                     )}
-                    <Button onClick={()=>{
-                        onClick(currentAnswers.length,{
-                            question: "",
-                            response: "",
-                            validResponse: false
-                        });
-                        console.log(currentAnswers)
-                    }}>Добавить вариант ответа</Button>
-                    <Button onClick={()=>{
-                        onClickDel();
-                        console.log(currentAnswers)
-                    }}>Убрать последний вариант ответа</Button>
+                    <Stack direction={"horizontal"} gap={2}>
+                        <Button onClick={()=>{
+                            onClick(currentAnswers.length,{
+                                question: "",
+                                response: "",
+                                validResponse: false
+                            });
+                            console.log(currentAnswers)
+                        }}>Добавить вариант ответа</Button>
+                        <Button onClick={()=>{
+                            onClickDel();
+                            console.log(currentAnswers)
+                        }}>Убрать последний вариант ответа</Button>
+                    </Stack>
+
                 </>;
             case 2:
                 return <>
@@ -282,18 +285,21 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                         <FormSelectAnswer key={index} id={index} isMultiple={true} answers={currentAnswers}
                                           setAnswers={setCurrentAnswers}/>
                     )}
-                    <Button onClick={() => {
-                        onClick(currentAnswers.length, {
-                            question: "",
-                            response: "",
-                            validResponse: false
-                        });
-                        console.log(currentAnswers)
-                    }}>Добавить вариант ответа</Button>
-                    <Button onClick={() => {
-                        onClickDel();
-                        console.log(currentAnswers)
-                    }}>Убрать последний вариант ответа</Button>
+                    <Stack direction={"horizontal"} gap={2}>
+                        <Button onClick={() => {
+                            onClick(currentAnswers.length, {
+                                question: "",
+                                response: "",
+                                validResponse: false
+                            });
+                            console.log(currentAnswers)
+                        }}>Добавить вариант ответа</Button>
+                        <Button onClick={() => {
+                            onClickDel();
+                            console.log(currentAnswers)
+                        }}>Убрать последний вариант ответа</Button>
+                    </Stack>
+
                 </>;
             case 3:
                 return  <>

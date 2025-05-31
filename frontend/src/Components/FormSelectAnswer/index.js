@@ -11,7 +11,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
     };
 
     return (
-        <>
+        <div className={"task-for-test-selector-card"}>
             {
                 isMultiple?
                     <>
@@ -63,7 +63,7 @@ const FormSelectAnswer = ({id,isMultiple,answers, setAnswers }) => {
 
             }
 
-        </>
+        </div>
     );
 };
 
