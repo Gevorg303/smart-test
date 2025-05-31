@@ -166,11 +166,11 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 },
                 taskDtoList: editItem==null?taskList:editedTaskList
             });
-            if(findTest !== undefined){
+            if(findTest !== undefined && editItem && editItem.id !== findTest.id){
                 onError(["Ошибка! Тест такого типа уже существует!"]);
                 throw new Error('Тест такого типа уже существует');
             }
-            if(findEnterTest === undefined && currentType === 2 || findEnterTest && editItem && editItem.id === findEnterTest.id){
+            if(findEnterTest === undefined && currentType === 2 || (findEnterTest && editItem) && (currentType === 2 && editItem.id === findEnterTest.id) ){
                 onError(["Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!"]);
                 throw new Error("Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!");
             }
