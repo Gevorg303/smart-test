@@ -24,7 +24,7 @@ public interface TestServiceInterface {
 
     ResponseForTest endTesting(EndTestingRequest endTestingRequest);
 
-    List<TaskDto> createTestSimulator(TestSimulatorRequest testSimulatorRequest);
+    Set<TaskDto> createTestSimulator(TestSimulatorRequest testSimulatorRequest);
 
     List<TestingAttemptDto> findTestingAttemptByTest(TestingAttemptAndTest request);
 

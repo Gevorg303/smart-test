@@ -4,10 +4,7 @@ import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.TypeTestEnum;
 import com.example.smart_test.enums.UserRoleEnum;
-import com.example.smart_test.mapper.api.TestMapperInterface;
-import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
-import com.example.smart_test.mapper.api.ThemeMapperInterface;
-import com.example.smart_test.mapper.api.UserMapperInterface;
+import com.example.smart_test.mapper.api.*;
 import com.example.smart_test.repository.TestRepositoryInterface;
 import com.example.smart_test.request.*;
 import com.example.smart_test.response.ResponseForTask;
@@ -55,6 +52,8 @@ public class TestServiceImpl implements TestServiceInterface {
     private UserMapperInterface userMapper;
     @Autowired
     private ThemeMapperInterface themeMapper;
+    @Autowired
+    private TaskMapperInterface taskMapper;
 
     @Override
     public TestDto addTestDto(TestDto testDto, List<Task> taskList) {
@@ -216,26 +215,30 @@ public class TestServiceImpl implements TestServiceInterface {
 
     @Override
     @Transactional
-    public List<TaskDto> createTestSimulator(TestSimulatorRequest request) {
+    public Set<TaskDto> createTestSimulator(TestSimulatorRequest request) {
         List<TestDto> testDtoList = outputTestsByIDTheme(themeMapper.toDTO(request.getTheme()));
         Set<Task> taskSet = new HashSet<>();
-        TestDto trainerTest = null;
+        TestDto trainerTest = null;//входной контроль
 
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
                 if (testDto.getTypeTest() != null && testDto.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
                     trainerTest = findTestByENTRY_TESTType(request.getTheme());
                     taskSet.addAll(testGeneratorService.generatorTasks(userMapper.toEntity(request.getUser()), trainerTest, testDto.getNumberOfTasksPerError()));
-                    trainerTest = testDto;
+                    //trainerTest = testDto;
                 }
             }
-            if (trainerTest != null && trainerTest.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
-                List<Task> taskList = new ArrayList<>(taskSet);
-                addTestDto(trainerTest, taskList);
-                return taskService.findTasksTheTest(trainerTest);
-            }
+//            if (trainerTest != null && trainerTest.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
+//                List<Task> taskList = new ArrayList<>(taskSet);
+//                addTestDto(trainerTest, taskList);
+//                return taskService.findTasksTheTest(trainerTest);
+//            }
         }
-        return Collections.emptyList();
+        Set<TaskDto> result = new HashSet<>();
+        for (Task task : taskSet) {
+            result.add(taskMapper.toDto(task));
+        }
+        return result;
     }
 
     private TestDto findTestByENTRY_TESTType(Theme theme) {

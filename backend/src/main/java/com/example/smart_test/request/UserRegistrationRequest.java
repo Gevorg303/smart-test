@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class UserRegistrationRequest {
     private UserDto user;
-    List<UserRequest> userRequestList;
+    private List<UserRequest> userRequestList;
 
     public UserRegistrationRequest(UserDto user, List<UserRequest> userRequestList) {
         this.user = user;
