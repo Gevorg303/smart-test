@@ -11,7 +11,7 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject, showMo
 
     useEffect(() => {
         async function fetchClasses() {
-            if (!showModal) {
+          //  if (!showModal) {
                 console.log(item)
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'user-subject/find-class-by-subject', {
                     method: 'POST',
@@ -35,7 +35,7 @@ const SubjectCardForClass = ({item,setShowCreateModal, setCurrentSubject, showMo
                     );
                 });
                 setClasses(array);
-            }
+           // }
         }
         fetchClasses();
     }, [showModal]);

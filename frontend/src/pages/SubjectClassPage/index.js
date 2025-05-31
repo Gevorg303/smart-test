@@ -85,7 +85,7 @@ const SubjectClass = () => {
         }
 
         fetchTests();
-    }, [toastText, currentSubject,setTopText,showSuccessToast]);
+    }, [toastText, currentSubject,setTopText,showModal]);
 
 
     return (
