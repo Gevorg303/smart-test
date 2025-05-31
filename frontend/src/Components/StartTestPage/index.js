@@ -194,9 +194,14 @@ const StartTestPage = () => {
             throw new Error('Ошибка сети');
         }
         const resJson = await response.json();
-        console.log(resJson);
-        sessionStorage.setItem("tasksForTest",JSON.stringify(resJson))
-        navigate("/test");
+        if(resJson.length > 0){
+            console.log(resJson);
+            sessionStorage.setItem("tasksForTest",JSON.stringify(resJson))
+            navigate("/test");
+        } else {
+            ErrorToast("Отсутсвуют задания для тренировки!");
+        }
+
     }
 
     return (
