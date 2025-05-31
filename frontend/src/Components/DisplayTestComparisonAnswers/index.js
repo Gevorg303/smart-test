@@ -65,6 +65,29 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
 
         fetchAnswers();
     }, [item]);
+    useEffect(() => {
+        async function fetchAnswers() {
+            try {
+
+                const find = currentAnswers.find(el => el.task.id===item.id);
+                console.log(find);
+
+                if(currentAnswers.length>0 && find != undefined && find.responseOption.length > 0){
+                    const array =[];
+                    find.responseOption.map((item,index)=>{array.push(item.response)})
+                    setItems(array);
+                } else {
+                    setItems( responseOptions.map((item,index) => item.response).map(value => ({ value, sort: Math.random() }))
+                        .sort((a, b) => a.sort - b.sort)
+                        .map(({ value }) => value));
+                }
+            } catch (error) {
+                console.error('Ошибка получения данных:', error);
+            }
+        }
+
+        fetchAnswers();
+    }, [item,responseOptions]);
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
@@ -137,7 +160,7 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
                     { /*</div>
 
                 <div className={'comparison-container-response'} style={{display: 'flex', flexDirection: 'column'}}>*/}
-                <Stack direction="vertical"  alignItems={"center"} className={'comparison-container-response'} style={{display: 'flex', flexDirection: 'column'}} gap={1}>
+                <div  className={'comparison-container-response'} style={{display: 'flex', flexDirection: 'column'}} >
                     <DndContext
                         sensors={sensors}
                         collisionDetection={closestCenter}
@@ -146,17 +169,18 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
                     <SortableContext
                         items={items}
                         strategy={verticalListSortingStrategy}
+                        handle
                     >
                         {view
                             ?
-                            items.map((item,id) =>  <p onCopy={e => e.preventDefault()} className="drag-drop-card-view" key={id} id={id} >{item}</p>)
+                            items.map((item,id) =>  <DragDropCardForComparisonAnswers onCopy={e => e.preventDefault()} className="drag-drop-card-view" key={id} id={id} text={item} view={view} ></DragDropCardForComparisonAnswers>)
                             :
-                            items.map((id) => <DragDropCardForComparisonAnswers key={id} id={id} />)
+                            items.map((id) => <DragDropCardForComparisonAnswers key={id} id={id} text={id} view={view}/>)
                         }
 
                     </SortableContext>
                     </DndContext>
-                </Stack>
+                </div>
                 {/*  </div>*/}
             </Stack>
                 {/*</div>*/}

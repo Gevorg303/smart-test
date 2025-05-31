@@ -18,8 +18,8 @@ export function DragDropCardForComparisonAnswers(props) {
     };
 
     return (
-        <div onCopy={e => e.preventDefault()} className="drag-drop-card" ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            {props.id}
+        <div onCopy={e => e.preventDefault()} className={props.view?"drag-drop-card-view":"drag-drop-card"} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+            {props.text}
         </div>
     );
 }
