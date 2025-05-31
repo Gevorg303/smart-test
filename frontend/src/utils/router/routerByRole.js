@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Navigate, Outlet, useOutletContext} from "react-router-dom";
 import { useLocation } from 'react-router'
 import SubjectCard from "../../Components/SubjectCard";
+import TokenEndModal from "../../Components/TokenEndModal";
 
 const RouterByRole = ({rolesWithoutAccess, element}) => {
 
@@ -18,7 +19,9 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
                     credentials: "include",
                 });
                 if (!response.ok) {
+                    setPage(<TokenEndModal/>)
                     throw new Error('Ошибка сети');
+
                 }
                 const user = await response.json();
                 console.log(user);
