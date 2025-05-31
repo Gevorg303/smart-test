@@ -15,6 +15,7 @@ const ProfilePage = () => {
     localStorage.setItem('info', "Здесь вы можете увидеть ваши данные личного кабинета");
 
     const navigate = useNavigate();
+    const [userState, setUserState] = useState()
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [patronymic, setPatronymic] = useState("");
@@ -44,6 +45,7 @@ const ProfilePage = () => {
                 }
                 const user = await response.json();
                 console.log(user);
+                setUserState(user)
                 setName(user.name);
                 setSurname(user.surname);
                 setPatronymic(user.patronymic);
@@ -68,8 +70,8 @@ const ProfilePage = () => {
                 let result = "";
                 let result_sch = "";
                 studentClass.forEach(sc => {
-                   result += sc.numberOfInstitution + " " + sc.letterDesignation + "; "
-                   result_sch+= sc.educationalInstitution.nameOfTheInstitution + "; "
+                   result += sc.numberOfInstitution + " " + sc.letterDesignation + " "
+                   result_sch+= sc.educationalInstitution.nameOfTheInstitution + " "
                 });
                 setStudentClass(result);
                 setStudentSchool(result_sch);
@@ -95,7 +97,7 @@ const ProfilePage = () => {
                             <p><strong>Логин:</strong> {login} </p>
                             <p><strong>Статус:</strong> {role} </p>
                             <p><strong>Образовательное учреждение:</strong> {studentSchool} </p>
-                            <p><strong>Класс:</strong> {studentClass} </p>
+                            {role !== "Ученик" ?<></> : <p><strong>Класс:</strong> {studentClass} </p>}
                             <p><strong>Электронная почта:</strong> {email} </p>
                         </div>
                     </div>
