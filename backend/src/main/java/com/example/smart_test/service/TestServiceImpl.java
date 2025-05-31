@@ -183,7 +183,7 @@ public class TestServiceImpl implements TestServiceInterface {
         }
 
         // Вычисляем итоговый балл
-        int testScore = taskList.isEmpty() ? 0 : totalScore / taskList.size();
+        int testScore = taskList.isEmpty() ? 0 : totalScore / endTestingRequest.getRequestForTaskList().size();
 
         TestingAttemptDto testingAttemptDto = testingAttemptService.addTestingAttempt(
                 new TestingAttemptDto(
@@ -204,11 +204,11 @@ public class TestServiceImpl implements TestServiceInterface {
         }
 
         // Удаляем задания, если тренировка
-        if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.TRAINER.getDescription())) {
-            for (TaskDto taskDto : taskList) {
-                taskService.removeTaskFromTest(taskDto);
-            }
-        }
+//        if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.TRAINER.getDescription())) {
+//            for (TaskDto taskDto : taskList) {
+//                taskService.removeTaskFromTest(taskDto);
+//            }
+//        }
 
         return new ResponseForTest(testDto, responseForTasks, testScore);
     }
@@ -218,21 +218,16 @@ public class TestServiceImpl implements TestServiceInterface {
     public Set<TaskDto> createTestSimulator(TestSimulatorRequest request) {
         List<TestDto> testDtoList = outputTestsByIDTheme(themeMapper.toDTO(request.getTheme()));
         Set<Task> taskSet = new HashSet<>();
-        TestDto trainerTest = null;//входной контроль
+        TestDto entryTest = null;
 
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTheme().getId(), request.getTheme().getId())) {
                 if (testDto.getTypeTest() != null && testDto.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
-                    trainerTest = findTestByENTRY_TESTType(request.getTheme());
-                    taskSet.addAll(testGeneratorService.generatorTasks(userMapper.toEntity(request.getUser()), trainerTest, testDto.getNumberOfTasksPerError()));
-                    //trainerTest = testDto;
+                    entryTest = findTestByEntryTestType(request.getTheme());
+                    taskSet.addAll(testGeneratorService.generatorTasks(userMapper.toEntity(request.getUser()), entryTest, testDto, testDto.getNumberOfTasksPerError()));
+
                 }
             }
-//            if (trainerTest != null && trainerTest.getTypeTest().getNameOfTestType().equals(TypeTestEnum.TRAINER.getDescription())) {
-//                List<Task> taskList = new ArrayList<>(taskSet);
-//                addTestDto(trainerTest, taskList);
-//                return taskService.findTasksTheTest(trainerTest);
-//            }
         }
         Set<TaskDto> result = new HashSet<>();
         for (Task task : taskSet) {
@@ -241,7 +236,7 @@ public class TestServiceImpl implements TestServiceInterface {
         return result;
     }
 
-    private TestDto findTestByENTRY_TESTType(Theme theme) {
+    private TestDto findTestByEntryTestType(Theme theme) {
         List<TestDto> testDtoList = outputTestsByIDTheme(themeMapper.toDTO(theme));
         for (TestDto testDto : testDtoList) {
             if (Objects.equals(testDto.getTypeTest().getNameOfTestType(), TypeTestEnum.ENTRY_TEST.getDescription())) {

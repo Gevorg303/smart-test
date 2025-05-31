@@ -10,5 +10,5 @@ import java.util.Set;
 public interface TestGeneratorServiceInterface {
 
     @Transactional
-    Set<Task> generatorTasks(User user, TestDto test, int numberOfTasks);
+    Set<Task> generatorTasks(User user, TestDto entryTest, TestDto trainerTest, int numberOfTasks);
 }
