@@ -46,7 +46,7 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
 
               //  setItems(responseOptions)
 
-                const find = currentAnswers.find(el => el.task.id===item.id);
+          /*      const find = currentAnswers.find(el => el.task.id===item.id);
                 console.log(find);
 
                 if(currentAnswers.length>0 && find != undefined && find.responseOption.length > 0){
@@ -57,7 +57,7 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
                     setItems( responseOptions.map((item,index) => item.response).map(value => ({ value, sort: Math.random() }))
                         .sort((a, b) => a.sort - b.sort)
                         .map(({ value }) => value));
-                }
+                }*/
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -87,7 +87,7 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
         }
 
         fetchAnswers();
-    }, [item,responseOptions]);
+    }, [responseOptions]);
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
@@ -96,9 +96,8 @@ const DisplayTestComparisonAnswers = ({id, item,view,currentAnswers,answers,setA
     );
     useEffect(() => {   //после перетаскивания объектов
         if(!view){
-            if(items.length >0){
+            if(items.length >0 && responseOptions.length > 0){
                 console.log(items)
-
                 const array = [];
                 items.map((item,index)=>{
                     array.push(
