@@ -170,7 +170,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 onError(["Ошибка! Тест такого типа уже существует!"]);
                 throw new Error('Тест такого типа уже существует');
             }
-            if(findEnterTest === undefined && currentType === 2 || findEnterTest && editItem.id === findEnterTest.id){
+            if(findEnterTest === undefined && currentType === 2 || findEnterTest && editItem && editItem.id === findEnterTest.id){
                 onError(["Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!"]);
                 throw new Error("Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!");
             }
