@@ -23,31 +23,22 @@ body {
     position: relative;
 }
 
-.all-container {
-    background: #fff;
-    /*border: 1px solid #ccc;
-    border-radius: 8px;*/
-    /*padding: 15px;*/
-
-   /* margin-bottom: 15px;*/
-    /*margin-bottom: 20vh;*/
+body :not(.admin-registration-form) .all-container {
+    background: #f2f2f2;
     width: 80%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /*margin-top: 5%;*/
-    /*background-color: rgba(255, 255, 255, 0);*/
-    /*width: auto;*/
-    /*padding: 20px;*/
     box-sizing: border-box;
     min-width: 40%;
-    /*overflow-y: auto; /* Добавляет прокрутку, если содержимое превышает высоту */
     height: auto;
     max-height: 20%;
     flex: 1;
-    /*padding: 20px;*/
-    border: none; /* Убирает рамки */
-    /*box-shadow: none; /* Убирает тени */
-    /*border-radius: 15px; /* Скругление углов */
+    border: none;
     border-radius: 15px;
+}
+.all-container
+{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 .all-content {

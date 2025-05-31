@@ -39,6 +39,7 @@ const QuestionBankPage = ({type}) => {
         setShowEditModal(false)
         setShowSuccessToast(true);
         setShowErrorToast(true);
+        setEditItem(null)
     };
 
     const ErrorToast = (messages) => {
@@ -201,7 +202,7 @@ const QuestionBankPage = ({type}) => {
         }
 
         fetchTests();
-    }, [type, editItem, showSuccessToast, setTopText]);
+    }, [type, editItem, showSuccessToast, ]);
 
     return (
         <div className="scrollable-container">

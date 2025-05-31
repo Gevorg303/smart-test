@@ -3,7 +3,7 @@ import './style.css';
 import * as XLSX from 'xlsx';
 import { Toast, Button } from 'react-bootstrap';
 
-const AdminRegistrationForm = ({ selectedForm }) => {
+const AdminRegistrationForm = ({ selectedForm }) =>  {
     const [formData, setFormData] = useState({
         lastName: '',
         firstName: '',
@@ -234,19 +234,19 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                 }
 
                 if (rowErrors.length > 0) {
-                    errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
+                    errors.push(...rowErrors);
                     return;
                 }
 
                 const isEmailRegistered = users.some(user => user.email === email);
                 if (isEmailRegistered) {
-                    errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
+                    errors.push(`Пользователь с почтой ${email} уже зарегистрирован`);
                     return;
                 }
 
                 console.log(`Роль для пользователя ${email}: ${role}`);
 
-                const studentClass = { id: 23 };
+                const studentClass = role !== 'Админ' && role !== 'Учитель' ? { id: 23 } : null;
                 const educationalInstitution = { id: currentUser?.educationalInstitution?.id || 23 };
 
                 userRequests.push({
@@ -265,7 +265,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             console.log('Данные для регистрации из файла:', userRequests);
 
             if (errors.length > 0) {
-                setErrorMessage(errors.join('\n'));
+                setErrorMessage(`Следующие поля заполнены некорректно: ${[...new Set(errors)].join(', ')}`);
                 setShowErrorToast(true);
                 return;
             }
@@ -308,6 +308,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
         };
         reader.readAsArrayBuffer(file);
     };
+
 
     const handleDownloadTemplate = (templateName) => {
         const link = document.createElement('a');
@@ -383,192 +384,194 @@ const AdminRegistrationForm = ({ selectedForm }) => {
 
     if (selectedForm === 'singleUser') {
         return (
-            <form className="registration-form" onSubmit={handleSubmit}>
-                <h2 className="form-title">Регистрация</h2>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        placeholder="Фамилия"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        placeholder="Имя"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        id="middleName"
-                        name="middleName"
-                        value={formData.middleName}
-                        onChange={handleChange}
-                        placeholder="Отчество"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <select
-                        id="role"
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="" disabled>Выберите роль</option>
-                        {Object.keys(roleMapping).map(roleName => (
-                            <option key={roleMapping[roleName]} value={roleName}>
-                                {roleName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                {formData.role !== 'Админ' && formData.role !== 'Учитель' && (
-                    <div className="form-group">
+                <div className="registration-box-one" onSubmit={handleSubmit}>
+                    <h2>Регистрация</h2>
+                    <div className="admin-form-group">
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            placeholder="Фамилия"
+                            required
+                        />
+                    </div>
+                    <div className="admin-form-group">
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            placeholder="Имя"
+                            required
+                        />
+                    </div>
+                    <div className="admin-form-group">
+                        <input
+                            type="text"
+                            id="middleName"
+                            name="middleName"
+                            value={formData.middleName}
+                            onChange={handleChange}
+                            placeholder="Отчество"
+                            required
+                        />
+                    </div>
+                    <div className="admin-form-group">
                         <select
-                            id="class"
-                            name="class"
-                            value={formData.class}
+                            id="role"
+                            name="role"
+                            value={formData.role}
                             onChange={handleChange}
                             required
                         >
-                            <option value="" disabled>Выберите класс</option>
-                            {classes.map(cls => (
-                                <option key={cls.id} value={cls.id}>
-                                    {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                            <option value="" disabled>Выберите роль</option>
+                            {Object.keys(roleMapping).map(roleName => (
+                                <option key={roleMapping[roleName]} value={roleName}>
+                                    {roleName}
                                 </option>
                             ))}
                         </select>
                     </div>
-                )}
-                <div className="form-group">
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Почта"
-                        required
-                    />
+                    {formData.role !== 'Админ' && formData.role !== 'Учитель' && (
+                        <div className="admin-form-group">
+                            <select
+                                id="class"
+                                name="class"
+                                value={formData.class}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="" disabled>Выберите класс</option>
+                                {classes.map(cls => (
+                                    <option key={cls.id} value={cls.id}>
+                                        {`${cls.numberOfInstitution} ${cls.letterDesignation}`}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+                    <div className="admin-form-group">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Почта"
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="custom-button">
+                        Зарегистрировать
+                    </button>
+                    {showErrorToast && (
+                        <Toast
+                            onClose={() => setShowErrorToast(false)}
+                            show={showErrorToast}
+                            delay={3000}
+                            autohide
+                            style={{
+                                position: 'fixed',
+                                bottom: '20px',
+                                right: '20px',
+                                zIndex: 100000,
+                                backgroundColor: 'red',
+                                color: 'white'
+                            }}
+                        >
+                            <Toast.Header closeButton={false}>
+                                <strong className="mr-auto">Ошибка</strong>
+                                <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
+                                    x
+                                </Button>
+                            </Toast.Header>
+                            <Toast.Body>{errorMessage}</Toast.Body>
+                        </Toast>
+                    )}
                 </div>
-                <button type="submit" className="single-user-submit-button">
-                    Зарегистрировать
-                </button>
-                {showErrorToast && (
-                    <Toast
-                        onClose={() => setShowErrorToast(false)}
-                        show={showErrorToast}
-                        delay={3000}
-                        autohide
-                        style={{
-                            position: 'fixed',
-                            bottom: '20px',
-                            right: '20px',
-                            zIndex: 100000,
-                            backgroundColor: 'red',
-                            color: 'white'
-                        }}
-                    >
-                        <Toast.Header closeButton={false}>
-                            <strong className="mr-auto">Ошибка</strong>
-                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
-                                x
-                            </Button>
-                        </Toast.Header>
-                        <Toast.Body>{errorMessage}</Toast.Body>
-                    </Toast>
-                )}
-            </form>
         );
     }
 
     if (selectedForm === 'multipleStudents' || selectedForm === 'multipleUsers') {
         return (
-            <form className="registration-form" onSubmit={handleMultipleRegistration}>
-                <h2 className="form-title">
-                    {selectedForm === 'multipleStudents' ? 'Регистрация нескольких учеников' : 'Регистрация нескольких пользователей'}
-                </h2>
-                <div className="form-group file-input-container">
-                    <input
-                        type="file"
-                        className="file-input"
-                        onChange={handleFileChange}
-                    />
-                    {fileName && <span className="file-input-display">Выбранный файл: {fileName}</span>}
-                </div>
-                <div className="button-container">
-                    <button type="submit" className="multiple-users-button">
-                        Зарегистрировать
-                    </button>
-                    <button
-                        type="button"
-                        className="multiple-users-button template-button"
-                        onClick={() => handleDownloadTemplate(selectedForm === 'multipleStudents' ? 'Ученики' : 'Пользователи')}
-                    >
-                        Выгрузить шаблон
-                    </button>
-                </div>
-                {showSuccessToast && (
-                    <Toast
-                        onClose={() => setShowSuccessToast(false)}
-                        show={showSuccessToast}
-                        delay={3000}
-                        autohide
-                        style={{
-                            position: 'fixed',
-                            bottom: '20px',
-                            right: '20px',
-                            zIndex: 1000,
-                            backgroundColor: 'green',
-                            color: 'white'
-                        }}
-                    >
-                        <Toast.Header closeButton={false}>
-                            <strong className="mr-auto">Успешно</strong>
-                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
-                            </Button>
-                        </Toast.Header>
-                        <Toast.Body>Вы успешно зарегистрировали пользователей</Toast.Body>
-                    </Toast>
-                )}
-                {showErrorToast && (
-                    <Toast
-                        onClose={() => setShowErrorToast(false)}
-                        show={showErrorToast}
-                        delay={3000}
-                        autohide
-                        style={{
-                            position: 'fixed',
-                            bottom: '20px',
-                            right: '20px',
-                            zIndex: 1000,
-                            backgroundColor: 'red',
-                            color: 'white'
-                        }}
-                    >
-                        <Toast.Header closeButton={false}>
-                            <strong className="mr-auto">Ошибка</strong>
-                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
-                            </Button>
-                        </Toast.Header>
-                        <Toast.Body>{errorMessage}</Toast.Body>
-                    </Toast>
-                )}
-            </form>
+            <div className="admin-registration-form">
+                <form className="registration-box-one" onSubmit={handleMultipleRegistration}>
+                    <h2>
+                        {selectedForm === 'multipleStudents' ? 'Регистрация нескольких пользователей' : 'Регистрация нескольких пользователей'}
+                    </h2>
+                    <div className="admin-form-group file-input-container">
+                        <input
+                            type="file"
+                            className="file-input"
+                            onChange={handleFileChange}
+                        />
+                        {fileName && <span className="file-input-display">Выбранный файл: {fileName}</span>}
+                    </div>
+                    <div className="button-container">
+                        <button type="submit" className="custom-button">
+                            Зарегистрировать
+                        </button>
+                        <button
+                            type="button"
+                            className="custom-button"
+                            onClick={() => handleDownloadTemplate(selectedForm === 'multipleStudents' ? 'Ученики' : 'Пользователи')}
+                        >
+                            Выгрузить шаблон
+                        </button>
+                    </div>
+                    {showSuccessToast && (
+                        <Toast
+                            onClose={() => setShowSuccessToast(false)}
+                            show={showSuccessToast}
+                            delay={3000}
+                            autohide
+                            style={{
+                                position: 'fixed',
+                                bottom: '20px',
+                                right: '20px',
+                                zIndex: 1000,
+                                backgroundColor: 'green',
+                                color: 'white'
+                            }}
+                        >
+                            <Toast.Header closeButton={false}>
+                                <strong className="mr-auto">Успешно</strong>
+                                <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
+                                    &times;
+                                </Button>
+                            </Toast.Header>
+                            <Toast.Body>Вы успешно зарегистрировали пользователей</Toast.Body>
+                        </Toast>
+                    )}
+                    {showErrorToast && (
+                        <Toast
+                            onClose={() => setShowErrorToast(false)}
+                            show={showErrorToast}
+                            delay={3000}
+                            autohide
+                            style={{
+                                position: 'fixed',
+                                bottom: '20px',
+                                right: '20px',
+                                zIndex: 1000,
+                                backgroundColor: 'red',
+                                color: 'white'
+                            }}
+                        >
+                            <Toast.Header closeButton={false}>
+                                <strong className="mr-auto">Ошибка</strong>
+                                <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
+                                    &times;
+                                </Button>
+                            </Toast.Header>
+                            <Toast.Body>{errorMessage}</Toast.Body>
+                        </Toast>
+                    )}
+                </form>
+            </div>
         );
     }
 

@@ -31,7 +31,7 @@ const BetaPage = () => {
         }
 
         if (location.pathname.includes('multiple')) {
-            setTopText("Регистрация нескольких учеников");
+            setTopText("Регистрация");
             localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
         } else {
             setTopText("Регистрация");
@@ -341,9 +341,9 @@ const BetaPage = () => {
     };
 
     return (
-        <div className="beta-page-container">
+        <div className={"cont"}>
             <AdminNavbar onFormSelect={setSelectedForm} />
-            <div className="registration-container">
+
                 <AdminRegistrationForm
                     selectedForm={selectedForm}
                     classes={classes}
@@ -407,7 +407,7 @@ const BetaPage = () => {
                         <Toast.Body>{errorMessage}</Toast.Body>
                     </Toast>
                 )}
-            </div>
+
         </div>
     );
 };

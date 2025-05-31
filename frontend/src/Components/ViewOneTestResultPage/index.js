@@ -65,8 +65,14 @@ const ViewTestResultsPage = (props) => {
                 const questionsJson = await response2.json();
                 console.log(questionsJson)
                 console.log(validList)
-                setQuestions(questionsJson);
-                setCountOfQuestions(questionsJson.length);
+                const questionsArray =[]
+                validList.responseForTask.map((item,index)=>{
+                    questionsArray.push(item)
+                })
+                // setQuestions(questionsJson);
+                // setCountOfQuestions(questionsJson.length);
+                setQuestions(questionsArray);
+                setCountOfQuestions(questionsArray.length);
                // setScore((rightAnswers / questionsJson.length) * 100);
                 setScore(validList.testScore);
                 setTopText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
@@ -101,14 +107,18 @@ const ViewTestResultsPage = (props) => {
             <div className="content-container"> {/* Добавляем контейнер для контента */}
                 <div className="result-container">
                     {/*<h1>{text}</h1>*/}
-                    <div>
+                    <>
                         <h2 className="result-title">Ваш результат:</h2>
-                        <Table className="result-table">
-                            <tbody>
+
+                        <Table striped bordered hover>
+                            <thead>
                             <tr>
-                                <td>Всего вопросов:</td>
-                                <td>{countOfQuestions}</td>
+                                <th>Всего вопросов:</th>
+                            <th>{countOfQuestions}</th>
                             </tr>
+
+                            </thead>
+                            <tbody>
                             <tr>
                                 <td>Баллов:</td>
                                 <td> {score} из 100</td>
@@ -119,19 +129,21 @@ const ViewTestResultsPage = (props) => {
                             </tr>
                             </tbody>
                         </Table>
+
                         {questions.map((item, index) => (
                             <Question
                                 key={index}
-                                qStatus={validList.responseForTask!=undefined?(validList.responseForTask[index].taskScore!== undefined?validList.responseForTask[index].taskScore==100?true:false:false):false}
                                 view
+                                taskScore={questions[index].taskScore}
                                 id={index}
-                                item={questions[index]}
+                                item={questions[index].task}
                                 answers={answers}
-                                setAnswers={setAnswers}
+                               /* setAnswers={setAnswers}*/
+                                isTraining={validList.test.typeTest.id === 2}
                             />
                         ))}
                         <Button className="result-button" onClick={ViewResultsEnd}>Закончить обзор</Button>
-                    </div>
+                    </>
                 </div>
             </div>
             {/*<Footer />*/}

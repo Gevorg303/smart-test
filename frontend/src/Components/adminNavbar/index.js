@@ -23,7 +23,8 @@ const AdminNavbar = ({ onFormSelect }) => {
             title: "Регистрация",
             subItems: [
                 "Одного пользователя",
-                "Несколько пользователей",
+                "Нескольких пользователей",
+                "Нескольких учеников"
             ]
         },
         {
@@ -39,9 +40,9 @@ const AdminNavbar = ({ onFormSelect }) => {
     const handleClick = (item) => {
         if (item === "Одного пользователя") {
             navigate('/bPage?form=singleUser');
-        } else if (item === "Несколько учеников") {
+        } else if (item === "Нескольких учеников") {
             navigate('/register/multiple');
-        } else if (item === "Несколько пользователей") {
+        } else if (item === "Нескольких пользователей") {
             navigate('/bPage?form=multipleUsers');
         }  else if (item === "Тесты") {
             navigate('/testbank');

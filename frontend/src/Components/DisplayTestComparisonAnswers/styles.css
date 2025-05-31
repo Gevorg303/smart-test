@@ -18,3 +18,13 @@
     min-width: 3vw;
     text-align: center;
 }
+.comparison-question-correct{
+    background-color: #0f5132;
+}
+.comparison-question-incorrect{
+    background-color: #58151c;
+}
+.response-option-badge{
+    font-size: 1rem;
+    min-width: 5vw;
+}

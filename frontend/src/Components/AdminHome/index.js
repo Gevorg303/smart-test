@@ -144,23 +144,29 @@ const AdminHome = () => {
     };
 
     return (
-        <div className="page-container">
-            <div className="result-container">
-                <div className="container-wrapper-2">
-                    <div className="container-home-2">
-                        <h2>Сведения о пользователях</h2>
-                        <div>
-                            <h3>Количество пользователей по ролям:</h3>
-                            <ul>
-                                {roleCounts.map((roleCount, index) => (
-                                    <li key={index}>{roleCount}</li>
-                                ))}
-                            </ul>
-                            <p>Общее количество пользователей: {totalUsers}</p>
-                        </div>
-                        <div className="bar-chart-container">
-                            <h3>Количество учеников в классах</h3>
-                            <canvas ref={canvasRef} width="400" height="300"></canvas>
+        <div className={"all-container-admin"}>
+            <div className="page-container">
+                <div className="result-container">
+                    <div className="container-wrapper-2">
+                        <div className="container-home-2">
+                            <h2>Сведения о пользователях</h2>
+                            <div>
+                                <h3>Количество пользователей по ролям:</h3>
+                                <ul>
+                                    {roleCounts.map((roleCount, index) => (
+                                        <li key={index}>{roleCount}</li>
+                                    ))}
+                                </ul>
+                                <p>Общее количество пользователей: {totalUsers}</p>
+                            </div>
+                            <div className="bar-chart-container">
+                                <h3>Количество учеников в классах</h3>
+                                <div className="scroll-container">
+                                    <div className="chart-wrapper">
+                                        <canvas ref={canvasRef} width={Object.keys(classStudentCounts).length * 70} height="300"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

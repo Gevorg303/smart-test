@@ -1,4 +1,3 @@
-// Layout.js
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar';
@@ -11,11 +10,9 @@ const Layout = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [topText, setTopText] = useState();
     const location = useLocation();
-
     const [userRole, setUserRole] = useState();
 
     useEffect(() => {
-
         async function fetchUser() {
             try {
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
@@ -62,17 +59,25 @@ const Layout = () => {
                 container_top.classList.remove('page-style-top-1', 'page-style-top-2');
             }
         };
-        }, [location.pathname]);
+    }, [location.pathname]);
+
+    // Проверяем, является ли текущий маршрут AdminRegistrationForm
+    const isAdminRegistrationForm = location.pathname.includes('adminRegistrationForm');
 
     return (
         <div className={userRole == 1 ? "admin-body" : "body"}>
             {userRole == 1 ? <AdminNavbar/> : <Navbar setShowHandbook={setIsModalOpen} userRole={userRole} />}
 
-            <div  className={userRole == 1 ? "all-content-admin" : "all-content"}>
+            <div className={userRole == 1 ? "all-content-admin" : "all-content"}>
                 <div className="top-text">{topText}</div>
-                <div  className="all-container">
+                {/* Применяем класс .all-container только если это не AdminRegistrationForm */}
+                {!isAdminRegistrationForm ? (
+                    <div className="all-container">
+                        <Outlet context={[topText, setTopText]} />
+                    </div>
+                ) : (
                     <Outlet context={[topText, setTopText]} />
-                </div>
+                )}
             </div>
             <Handbook isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
             <footer className="footer">
@@ -82,4 +87,4 @@ const Layout = () => {
     );
 };
 
-            export default Layout;
+export default Layout;

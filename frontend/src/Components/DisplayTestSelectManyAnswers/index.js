@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Stack} from 'react-bootstrap';
 
 const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAnswers,setActive,qsCount}) => {
     const [responseOptions,setResponseOptions] = useState([]);
@@ -155,16 +155,23 @@ const DisplayTestSelectManyAnswers =({id, item,view,currentAnswers,answers,setAn
     return (
         <>
                 {responseOptions.length > 0 ?
-                    responseOptions.map((item, index) => <Form.Check // prettier-ignore
+                    responseOptions.map((item, index) => <Stack direction="horizontal" gap={1}>
+
+                        <Form.Check // prettier-ignore
                             key={item.id}
                             type={'checkbox'}
                             id={item.id}
                             name="responseOption"
-                            label={item.response}
+                            /*label={item.response}*/
                             disabled={view}
-                            checked={userAnswer[index] !== undefined?userAnswer[index].validResponse:false}
-                            onChange={(e) => {handleInputChange(item.id,item.response,e.target.checked)}}
+                            onCopy={e => e.preventDefault()}
+                            checked={userAnswer[index] !== undefined ? userAnswer[index].validResponse : false}
+                            onChange={(e) => {
+                                handleInputChange(item.id, item.response, e.target.checked)
+                            }}
                         />
+                            <label onCopy={e => e.preventDefault()}>{item.response}</label>
+                    </Stack>
                     )
                     :
                     <h5> Нет вариантов ответа</h5>

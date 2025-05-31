@@ -1,0 +1,6 @@
+.comparison-question-correct{
+    !important background-color: #0f5132;
+}
+.comparison-question-incorrect{
+    !important background-color: #58151c;
+}

@@ -9,7 +9,6 @@ const ThemeAndIndicatorSelector = ({targetSubject, needIndicators, indicators,se
 
     useEffect(() => {
         async function fetchQuestions() {
-
                 try {
                     if(targetSubject>0)
                     {
@@ -31,18 +30,22 @@ const ThemeAndIndicatorSelector = ({targetSubject, needIndicators, indicators,se
                             const thjson = await response.json();
                             console.log(thjson)
                             setThemes(thjson)
+                            const find = thjson.find((el)=>currentTheme === el.id)
+                            if(find==undefined){
+                                setCurrentTheme(-1)
+                            }
                     }
                     else
                     {
                         setThemes([])
                     }
 
-
                 } catch (error) {
                     console.error('Ошибка получения данных:', error);
                 }
         }
         console.log("prop changed: "+targetSubject)
+        console.log(currentTheme)
         fetchQuestions();
     }, [targetSubject]);
     return (

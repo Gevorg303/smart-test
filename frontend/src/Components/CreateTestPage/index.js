@@ -113,6 +113,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
             const findSameType = await responseTest.json();
 
             const findTest = findSameType.find((el) => el.typeTest.id == currentType)
+            const findEnterTest = findSameType.find((el) => el.typeTest.id == 1)
 
             const taskList = [];
             for (var i = 0; i < currentTasks.length; i++) {
@@ -165,11 +166,15 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 },
                 taskDtoList: editItem==null?taskList:editedTaskList
             });
+            if(findTest !== undefined && editItem && editItem.id !== findTest.id){
+                onError(["Ошибка! Тест такого типа уже существует!"]);
+                throw new Error('Тест такого типа уже существует');
+            }
+            if(findEnterTest === undefined && currentType === 2 || (findEnterTest && editItem) && (currentType === 2 && editItem.id === findEnterTest.id) ){
+                onError(["Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!"]);
+                throw new Error("Ошибка! Входной тест в теме отсутсвует! Необходимо создать входной тест!");
+            }
             if(editItem==null) {
-                if(findTest !== undefined){
-                    onError(["Ошибка! Тест такого типа уже существует!"]);
-                    throw new Error('Тест такого типа уже существует');
-                }
 
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/add', {
                     method: 'POST',
@@ -244,6 +249,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                 }
                 toastText = "Тест успешно отредактирован.";
             }
+
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
@@ -284,53 +290,7 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
 
                 const typeJson = await response3.json();
                 setTypes(typeJson)
-
-                /*const intTheme = parseInt(currentTheme, 10);
-
-                let aveliabletaskrfortest = [];
-                if (currentTheme > 0) {
-                    const response4 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-available-tasks', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify({
-                            id: intTheme,
-                        })
-                    });
-                    if (!response4.ok) {
-                        throw new Error('Ошибка получения доступных заданий');
-                    }
-
-                    const taskJson = await response4.json();
-                    setTasks(taskJson)
-                    aveliabletaskrfortest = taskJson;
-                } else {
-                    setTasks([])
-                }
-
-                if (editItem != null) {
-                    const response5 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-tasks-test', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify({
-                            id: editItem.id,
-                        })
-                    });
-                    if (!response5.ok) {
-                        throw new Error('Ошибка получения заданий из теста');
-                    }
-
-                    const tasksFromTestJson = await response5.json();
-                    setTasks(aveliabletaskrfortest.concat(tasksFromTestJson))
-
-                    const array = [...currentTasks];
-                    tasksFromTestJson.map((item, index) => { array.push({ id: item.id }); })
-                    setCurrentTasks(array);
-                    setNotEditedTasks(array)
-                }*/
+                
 
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
@@ -525,13 +485,12 @@ const CreateTestPage = ({ editItem, onCreate, onError}) => {
                     }} />
                 </Form.Group>
                 {
-                    currentType != 2 ?
+
                         <Form.Group className="mb-3">
                             <Form.Label>Задания в тесте:</Form.Label>
                             {tasks.map((item, index) => <TaskForTestSelector key={item.id} id={item.id} task={{ id: item.id, taskText: item.taskText }} answers={currentTasks} setAnswers={setCurrentTasks} />)}
                         </Form.Group>
-                        :
-                        <></>
+
                 }
                 <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/

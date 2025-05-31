@@ -21,7 +21,7 @@ const StartTestPage = () => {
     const [testTheme, setTestTheme] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
     const [topText, setTopText] = useOutletContext();
-    const [testTaskCount, setTestTaskCount] = useState(0);
+    const [testTask, setTestTaskCount] = useState([]);
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -38,7 +38,6 @@ const StartTestPage = () => {
     };
 
     localStorage.setItem('info', "На этой странице вы сможете просмотреть всю информацию по тесту, а также о пройденных попытках");
-
     useEffect(() => {
         function getCookie(name) {
             let matches = document.cookie.match(new RegExp(
@@ -102,7 +101,7 @@ const StartTestPage = () => {
                     throw new Error("Ошибка получения вопросов");
                 }
                 const questionsJson = await response3.json();
-                setTestTaskCount(questionsJson.length)
+                setTestTaskCount(questionsJson)
                 // console.log(questionsJson.length)
 
                 setTypeTest(test.typeTest.id);
@@ -151,7 +150,7 @@ const StartTestPage = () => {
         // Проверка, что количество попыток больше или равно количеству сделанных попыток
         if (attempts.length < testTryCount) {
             // Проверка наличия заданий в тесте
-            if (testTaskCount != 0 || (typeTest == 2 && testTaskCount == 0)) {
+            if (testTask.length != 0 || (typeTest == 2 && testTask.length == 0)) {
                 const now = new Date();
                 // Проверка, что тест уже начался
                 if (testDateStartValue <= now) {
@@ -161,6 +160,8 @@ const StartTestPage = () => {
                         if (typeTest === 2) {
                             StartTrainingTest();
                         } else {
+                            sessionStorage.setItem("tasksForTest",JSON.stringify(testTask))
+                            console.log(testTask)
                             navigate("/test");
                         }
                     } else {
@@ -194,6 +195,7 @@ const StartTestPage = () => {
         }
         const resJson = await response.json();
         console.log(resJson);
+        sessionStorage.setItem("tasksForTest",JSON.stringify(resJson))
         navigate("/test");
     }
 

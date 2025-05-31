@@ -100,7 +100,7 @@ public class TestController {
      * Необходимо вызывать этот метод при нажатии на "Начать тестирование" у ТРЕНАЖЕРА!!!
      * */
     @PostMapping("/create-test-simulator")
-    public List<TaskDto> createTestSimulator(@RequestBody TestSimulatorRequest testSimulatorRequest) {
+    public Set<TaskDto> createTestSimulator(@RequestBody TestSimulatorRequest testSimulatorRequest) {
         return testService.createTestSimulator(testSimulatorRequest);
     }
 

@@ -90,6 +90,8 @@ const DisplayTestTextAnswers = ({id, item,view,currentAnswers,setAnswers,answers
                     value={view ? userAnswer : (currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))]!=undefined?currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))].responseOption[0]!==undefined?currentAnswers[currentAnswers.indexOf(currentAnswers.find(el => el.task.id===item.id))].responseOption[0].response:"":"" || "")}
                     onChange={(e) => handleInputChange( e.target.value)}
                     required
+                    onPaste={(e) => {e.preventDefault();}}
+                    onCopy={(e) => {e.preventDefault(); }}
                     readOnly={view}
                 />
             </Form.Group>

@@ -11,11 +11,15 @@
 .result-container {
     margin: 20px;
     text-align: center; /* Центрирование текста */
+    align-content: center;
 }
 
 .result-table {
-    margin: 20px auto; /* Центрирование таблицы */
-    width: 50%; /* Ширина таблицы 50% */
+    /*margin: 1vh auto; /* Центрирование таблицы */
+    /*width: 100%; /* Ширина таблицы 50% */
+    /*padding-top: 60px; /* Отступ сверху, равный высоте навбара */
+    width: 75%;
+    align-content: center;
 }
 
 .result-button {
@@ -25,6 +29,8 @@
 
 .content-container {
     padding-top: 60px; /* Отступ сверху, равный высоте навбара */
+    padding-right: 5rem;
+    padding-left: 5rem;
 }
 /* Question.css */
 .question {

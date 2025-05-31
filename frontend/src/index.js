@@ -30,12 +30,13 @@ const App = () => {
                 {/* Страница входа без Layout и AdminNavbar */}
                 <Route path="/" element={<LoginPage />} />
                 {/* BetaPage без Layout, но с AdminNavbar */}
-                <Route path="bPage" element={<BetaPage />} />
+
                 {/* Другие страницы с Layout */}
                 <Route element={<PrivateRoutes />}>
                     <Route element={<Layout />}>
                         <Route path="admin-home" element={<RouterByRole rolesWithoutAccess={[2,3]} element={<AdminHome />} />} />
                         <Route path="home" element={<RouterByRole rolesWithoutAccess={[1]} element={<HomePage />} />} />
+                        <Route path="bPage" element={<BetaPage />} />
                         <Route path="start-test" element={<RouterByRole rolesWithoutAccess={[]} element={<StartTestPage />} />} />
                         <Route path="test" element={<RouterByRole rolesWithoutAccess={[]} element={<TestPage />} />} />
                         <Route path="register/single" element={<RouterByRole rolesWithoutAccess={[3]} element={<RegistrationPage />} />} />
