@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Toast } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import Footer from "../Footer";
-import Navbar from "../Navbar";
+import Footer from "../../Components/Footer";
+import Navbar from "../../Components/Navbar";
 import './styles.css';
-import TestAttemptsDisplay from "../TestAttemptsDisplay"; // Импорт CSS файла
+import TestAttemptsDisplay from "../../Components/TestAttemptsDisplay"; // Импорт CSS файла
 import { useOutletContext } from 'react-router-dom';
 
 const StartTestPage = () => {

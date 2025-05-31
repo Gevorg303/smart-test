@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {Form, Button, Toast, ToastContainer} from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
-import BankCard from "../BankCard";
+import BankCard from "../../Components/BankCard";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
-import CreateQuestionPage from "../CreateQuestionPage";
-import CreateTestPage from "../CreateTestPage";
-import CreateSubjectPage from "../CreateSubjectPage";
-import CreateThemePage from "../CreateThemePage";
-import CreateIndicatorPage from "../CreateIndicatorPage";
-import Sorting from "../Sorting";
+import CreateQuestionPage from "../../Components/CreateQuestionPage";
+import CreateTestPage from "../../Components/CreateTestPage";
+import CreateSubjectPage from "../../Components/CreateSubjectPage";
+import CreateThemePage from "../../Components/CreateThemePage";
+import CreateIndicatorPage from "../../Components/CreateIndicatorPage";
+import Sorting from "../../Components/Sorting";
 import { useOutletContext } from 'react-router-dom';
-import CreateStudentPage from "../CreateStudentPage";
-import CreateClassPage from "../CreateClassPage";
+import CreateStudentPage from "../../Components/CreateStudentPage";
+import CreateClassPage from "../../Components/CreateClassPage";
 
 const QuestionBankPage = ({type}) => {
     const [editItem, setEditItem] = useState(null);

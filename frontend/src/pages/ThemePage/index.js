@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from "../Navbar";
+import Navbar from "../../Components/Navbar";
 import Theme from "../Theme";
-import Footer from "../Footer";
+import Footer from "../../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import './styles.css'; // Импортируйте стили
 import { useOutletContext } from 'react-router-dom';

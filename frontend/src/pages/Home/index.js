@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import SubjectCard from "../SubjectCard";
-import "../Home/styles.css";
+import SubjectCard from "../../Components/SubjectCard";
+import "./styles.css";
 import { useOutletContext } from 'react-router-dom';
 
 const HomePage = () => {

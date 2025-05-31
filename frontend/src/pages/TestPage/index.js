@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Question from "../Question";
+import Question from "../../Components/Question";
 import { useNavigate } from "react-router-dom";
 import { Pagination, Button } from 'react-bootstrap';
 import './styles.css';
-import Navbar from "../Navbar";
-import Footer from "../Footer";
-import TestTimer from "../TestTimer";
+import Navbar from "../../Components/Navbar";
+import Footer from "../../Components/Footer";
+import TestTimer from "../../Components/TestTimer";
 import { useOutletContext } from 'react-router-dom';
 
 const TestPage = () => {

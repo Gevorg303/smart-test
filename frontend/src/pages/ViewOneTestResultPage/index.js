@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import Question from "../Question";
+import Question from "../../Components/Question";
 import { useNavigate } from "react-router-dom";
 import './styles.css'; // Импортируем CSS-файл
-import Navbar from '../Navbar'; // Импортируем компонент Navbar
-import Footer from '../Footer'; // Импортируем компонент Footer
+import Navbar from '../../Components/Navbar'; // Импортируем компонент Navbar
+import Footer from '../../Components/Footer'; // Импортируем компонент Footer
 import { useOutletContext } from 'react-router-dom';
 
 const ViewTestResultsPage = (props) => {

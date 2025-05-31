@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminNavbar from '../adminNavbar';
+import AdminNavbar from '../../Components/adminNavbar';
 import AdminRegistrationForm from '../adminRegistrationForm';
 import { useLocation } from 'react-router-dom';
 import { Container, Form, Button, Toast } from 'react-bootstrap';

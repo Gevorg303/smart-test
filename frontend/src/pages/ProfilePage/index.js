@@ -3,12 +3,12 @@ import { Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import avatarImage from '../../images/аватар.jpg'; // Исправленный путь к изображению
 import './styles.css';
-import Navbar from "../Navbar";
-import Footer from "../Footer";
-import Question from "../Question";
-import SubjectCard from "../SubjectCard"; // Импортируем файл стилей
+import Navbar from "../../Components/Navbar";
+import Footer from "../../Components/Footer";
+import Question from "../../Components/Question";
+import SubjectCard from "../../Components/SubjectCard"; // Импортируем файл стилей
 import { useOutletContext } from 'react-router-dom';
-import subjectCardForClass from "../SubjectCardForClass";
+import subjectCardForClass from "../../Components/SubjectCardForClass";
 
 const ProfilePage = () => {
 
@@ -68,13 +68,25 @@ const ProfilePage = () => {
                 const studentClass = await response2.json();
                 console.log(studentClass);
                 let result = "";
-                let result_sch = "";
+                //let result_sch = "";
                 studentClass.forEach(sc => {
                    result += sc.numberOfInstitution + " " + sc.letterDesignation + " "
-                   result_sch+= sc.educationalInstitution.nameOfTheInstitution + " "
+                  // result_sch+= sc.educationalInstitution.nameOfTheInstitution + " "
                 });
                 setStudentClass(result);
-                setStudentSchool(result_sch);
+                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-educational-institution-by-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(user)
+                });
+                if (!response.ok) {
+                    throw new Error('Ошибка получения данных об образовательном учреждении');
+                }
+                const schoolJson = await response3.json();
+                //console.log(schoolJson)
+                setStudentSchool(schoolJson.nameOfTheInstitution);
                 //setStudentClass(studentClass);
                 setTopText("Личный кабинет");
             } catch (error) {

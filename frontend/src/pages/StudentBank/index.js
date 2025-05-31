@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminNavbar from '../adminNavbar';
+import AdminNavbar from '../../Components/adminNavbar';
 import './styles.css'; // Подключаем CSS файл для стилей
 
 const StudentBank = () => {

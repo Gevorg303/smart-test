@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import AdminNavbar from '../adminNavbar';
+import AdminNavbar from '../../Components/adminNavbar';
 import './styles.css';
-import BankCard from '../BankCard';
-import CreateClassPage from '../CreateClassPage';
+import BankCard from '../../Components/BankCard';
+import CreateClassPage from '../../Components/CreateClassPage';
 
 const ClassBank = () => {
     const [classes, setClasses] = useState([]);
