@@ -232,7 +232,7 @@ public class UserServiceImpl implements UserServiceInterface {
                 user.setPatronymic(userDto.getPatronymic());
                 user.setEmail(userDto.getEmail());
                 user.setPatronymic(userDto.getPatronymic());
-                user.setRoles(userDto.getRole());
+                //user.setRoles(request.getRole());
                 userRepository.save(user);
             }
             if (request.getStudentClass() != null && request.getStudentClass().getId() != null && request.getUser() != null && request.getUser().getId() != null) {
