@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 import './styles.css';
 
 const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     const roleMapping = {
-        'Админ': { id: 1, role: 'Админ' },
-        'Учитель': { id: 2, role: 'Учитель' },
-        'Ученик': { id: 3, role: 'Ученик' }
+        'Админ': 1,
+        'Учитель': 2,
+        'Ученик': 3
     };
 
     const [name, setName] = useState("");
@@ -81,7 +81,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     console.log('Класс по умолчанию:', defaultClassArray);
 
                     if (defaultClassArray && defaultClassArray.length > 0) {
-                        const defaultClass = defaultClassArray[0];
+                        const defaultClass = defaultClassArray[0]; // Извлекаем первый элемент массива
                         console.log('numberOfInstitution:', defaultClass.numberOfInstitution);
                         console.log('letterDesignation:', defaultClass.letterDesignation);
 
@@ -114,11 +114,16 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         }
     }, [editItem]);
 
+    useEffect(() => {
+        console.log('Current role:', role);
+    }, [role]);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         const errors = [];
 
+        // Проверка полей
         if (!name) {
             errors.push('Имя не может быть пустым.');
         }
@@ -134,7 +139,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         if (!patronymic) {
             errors.push('Отчество не может быть пустым.');
         }
-        if (role === 'Ученик' && !selectedClass) {
+        if (!selectedClass && role === roleMapping['Ученик']) {
             errors.push('Класс не может быть пустым.');
         }
 
@@ -146,30 +151,20 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
         try {
             let toastText;
-            const selectedRole = roleMapping[role];
             const requestBody = {
-                user: {
-                    id: editItem ? editItem.id : null,
-                    name,
-                    surname,
-                    email,
-                    login,
-                    patronymic
-                },
-                role: {
-                    id: selectedRole.id,
-                    role: selectedRole.role
-                },
-                studentClass: selectedClass ? {
-                    numberOfInstitution: selectedClass.split(' ')[0],
-                    letterDesignation: selectedClass.split(' ')[1]
-                } : null
+                name,
+                email,
+                role,
+                login,
+                patronymic,
+                class: selectedClass,
+                id: editItem ? editItem.id : null
             };
 
-            console.log('Отправляемый запрос:', JSON.stringify(requestBody, null, 2));
-
-            const url = process.env.REACT_APP_SERVER_URL + 'users/user/update';
-            const method = 'POST';
+            const url = editItem
+                ? process.env.REACT_APP_SERVER_URL + 'users/update'
+                : process.env.REACT_APP_SERVER_URL + 'users/add';
+            const method = editItem ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
                 method,
@@ -180,17 +175,14 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Ошибка сервера:', errorData);
                 toastText = editItem ? "Ошибка редактирования ученика" : "Ошибка создания ученика";
-                throw new Error(toastText);
+                throw new Error();
             }
 
             toastText = editItem ? "Ученик успешно отредактирован." : "Ученик успешно создан.";
             onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
-            onError([error.message]);
         }
     };
 
@@ -236,15 +228,15 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                     >
-                        <option value="">Выберите роль</option>
+                        <option value="">{role.role}</option>
                         {Object.keys(roleMapping).map((roleName) => (
-                            <option key={roleMapping[roleName].id} value={roleName}>
+                            <option key={roleMapping[roleName]} value={roleMapping[roleName]}>
                                 {roleName}
                             </option>
                         ))}
                     </Form.Select>
                 </Form.Group>
-                {role === 'Ученик' && (
+                {role.role ==='Ученик' && (
                     <Form.Group className="mb-3">
                         <Form.Label>Класс</Form.Label>
                         <Form.Select
