@@ -157,23 +157,28 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
         try {
             let toastText;
+            // Найти выбранный класс по значению selectedClass
+            const selectedClassObj = classes.find(cls => `${cls.numberOfInstitution} ${cls.letterDesignation}` === selectedClass);
+
             const requestBody = {
                 user: {
+                    id: editItem ? editItem.id : null,
                     surname: surname,
                     name: name,
                     email: email,
                     login: login,
                     patronymic: patronymic,
                     roleId: role,
-                    id: editItem ? editItem.id :null,
                 },
                 role: {
                     id: role,
                     role: getRoleName(role)
                 },
                 studentClass: role == roleMapping['Ученик'] ? {
-                    numberOfInstitution: selectedClass.split(' ')[0],
-                    letterDesignation: selectedClass.split(' ')[1]
+                    id: selectedClassObj ? selectedClassObj.id : null, // id класса
+                    institutionId: selectedClassObj ? selectedClassObj.institutionId : null, // id учебного заведения
+                    numberOfInstitution: selectedClassObj ? selectedClassObj.numberOfInstitution : null,
+                    letterDesignation: selectedClassObj ? selectedClassObj.letterDesignation : null
                 } : null
             };
 
@@ -187,7 +192,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             const response = await fetch(url, {
                 method,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(requestBody)
             });
@@ -206,6 +211,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             console.error('Ошибка отправки данных:', error);
         }
     };
+
 
     return (
         <div>
