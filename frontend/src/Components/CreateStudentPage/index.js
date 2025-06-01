@@ -152,13 +152,14 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         try {
             let toastText;
             const requestBody = {
-                name,
-                email,
-                role,
-                login,
-                patronymic,
-                class: selectedClass,
-                id: editItem ? editItem.id : null
+                user:{name: name,
+                    email: email,
+                    role: role,
+                    login:login,
+                    patronymic:patronymic,},
+                studentClass: selectedClass,
+                role:role,
+               // id: editItem ? editItem.id : null
             };
 
             console.log('Отправляемые данные:', requestBody); // Логируем данные перед отправкой
@@ -175,7 +176,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                 },
                 body: JSON.stringify(requestBody)
             });
-
             const responseData = await response.json(); // Получаем данные ответа
             console.log('Ответ сервера:', responseData); // Логируем ответ сервера
 
