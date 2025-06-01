@@ -3,7 +3,7 @@ import './style.css';
 import * as XLSX from 'xlsx';
 import { Toast, Button } from 'react-bootstrap';
 
-const AdminRegistrationForm = ({ selectedForm }) =>  {
+const AdminRegistrationForm = ({ selectedForm }) => {
     const [formData, setFormData] = useState({
         lastName: '',
         firstName: '',
@@ -31,7 +31,7 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
     useEffect(() => {
         async function fetchClasses() {
             try {
-                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
+                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
                 console.log('Текущий пользователь:', user);
                 setCurrentUser(user);
 
-                const responseAll = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+                const responseAll = await fetch(process.env.REACT_APP_SERVER_URL + 'users/all', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -64,7 +64,7 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
                 console.log('Все пользователи:', data2);
                 setUsers(data2);
 
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -103,10 +103,13 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setShowSuccessToast(false);
+        console.log('Submit button clicked'); // Логирование нажатия кнопки
+
         const form = e.target;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
+
+        console.log('Form data:', data); // Логирование данных формы
 
         const errors = [];
 
@@ -150,7 +153,7 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
         console.log('Данные для регистрации одного пользователя:', userRequest);
 
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/admin/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/admin/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -162,6 +165,8 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
             });
 
             if (response.ok) {
+                const answers = await response.json();
+                console.log('Registration successful:', answers); // Логирование успешной регистрации
                 setShowSuccessToast(true);
                 setFormData({
                     lastName: '',
@@ -172,9 +177,7 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
                     role: ''
                 });
                 await fetchUsers();
-                const answers = await response.json();
-                setShowSuccessToast(true);
-                const userDetails = answers.map((item, index) => ({
+                const userDetails = answers.map((item) => ({
                     ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
                     Логин: item.login,
                     Пароль: item.rawPassword
@@ -191,7 +194,6 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
             setShowErrorToast(true);
         }
     };
-
 
     const handleMultipleRegistration = async (e) => {
         e.preventDefault();
@@ -210,8 +212,20 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-            const userRequests = [];
+            const userRequestList = [];
             const errors = [];
+
+            // Создаем объект user с данными текущего пользователя
+            const user = {
+                id: currentUser?.id,
+                email: currentUser?.email,
+                name: currentUser?.name,
+                login: currentUser?.login,
+                patronymic: currentUser?.patronymic,
+                surname: currentUser?.surname,
+                role: { id: roleMapping[currentUser?.role] },
+                educationalInstitution: { id: currentUser?.educationalInstitution?.id || 23 }
+            };
 
             jsonData.slice(1).forEach((row, index) => {
                 const [lastName, firstName, middleName, email, role] = row;
@@ -234,63 +248,65 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
                 }
 
                 if (rowErrors.length > 0) {
-                    errors.push(...rowErrors);
+                    errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
                     return;
                 }
 
-                const isEmailRegistered = users.some(user => user.email === email);
+                const isEmailRegistered = users.some(u => u.email === email);
                 if (isEmailRegistered) {
-                    errors.push(`Пользователь с почтой ${email} уже зарегистрирован`);
+                    errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
                     return;
                 }
-
-                console.log(`Роль для пользователя ${email}: ${role}`);
 
                 const studentClass = role !== 'Админ' && role !== 'Учитель' ? { id: 23 } : null;
-                const educationalInstitution = { id: currentUser?.educationalInstitution?.id || 23 };
 
-                userRequests.push({
+                userRequestList.push({
                     user: {
-                        surname: lastName || currentUser?.surname || 'Фамилия',
-                        name: firstName || currentUser?.name || 'Имя',
-                        patronymic: middleName || currentUser?.patronymic || 'Отчество',
+                        surname: lastName || 'Фамилия',
+                        name: firstName || 'Имя',
+                        patronymic: middleName || 'Отчество',
                         role: { id: roleMapping[role] },
-                        email: email || currentUser?.email || 'email@example.com',
-                        educationalInstitution: educationalInstitution
+                        email: email || 'email@example.com',
+                        educationalInstitution: { id: currentUser?.educationalInstitution?.id || 23 }
                     },
                     studentClass: studentClass
                 });
             });
 
-            console.log('Данные для регистрации из файла:', userRequests);
+            console.log('Текущий пользователь:', user);
+            console.log('Данные для регистрации из файла:', userRequestList);
 
             if (errors.length > 0) {
-                setErrorMessage(`Следующие поля заполнены некорректно: ${[...new Set(errors)].join(', ')}`);
+                setErrorMessage(errors.join('\n'));
                 setShowErrorToast(true);
                 return;
             }
 
-            if (userRequests.length === 0) {
+            if (userRequestList.length === 0) {
                 setErrorMessage('Строки в файле заполнены некорректно, либо пользователь был ранее зарегистрирован');
                 setShowErrorToast(true);
                 return;
             }
 
             try {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/admin/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(userRequests),
+                    body: JSON.stringify({
+                        user: user,
+                        userRequestList: userRequestList
+                    }),
                 });
 
                 if (response.ok) {
                     const answers = await response.json();
+                    console.log('Multiple registration successful:', answers);
                     setShowSuccessToast(true);
                     await fetchUsers();
 
-                    const userDetails = answers.map((item, index) => ({
+                    const userDetails = answers.map((item) => ({
                         ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
                         Логин: item.login,
                         Пароль: item.rawPassword
@@ -308,6 +324,8 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
         };
         reader.readAsArrayBuffer(file);
     };
+
+
 
 
     const handleDownloadTemplate = (templateName) => {
@@ -341,7 +359,7 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
     const fetchUsers = async () => {
         try {
             console.log('Fetching current user...');
-            const currentUserResponse = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
+            const currentUserResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -354,7 +372,7 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
             const currentUser = await currentUserResponse.json();
 
             console.log('Fetching users...');
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/all', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -384,8 +402,9 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
 
     if (selectedForm === 'singleUser') {
         return (
-                <div className="registration-box-one" onSubmit={handleSubmit}>
-                    <h2>Регистрация</h2>
+            <div className="registration-box-one">
+                <h2>Регистрация</h2>
+                <form onSubmit={handleSubmit}>
                     <div className="admin-form-group">
                         <input
                             type="text"
@@ -491,7 +510,8 @@ const AdminRegistrationForm = ({ selectedForm }) =>  {
                             <Toast.Body>{errorMessage}</Toast.Body>
                         </Toast>
                     )}
-                </div>
+                </form>
+            </div>
         );
     }
 
