@@ -1,20 +1,16 @@
 package com.example.smart_test.service;
 
-import com.example.smart_test.domain.Subject;
-import com.example.smart_test.domain.SubjectUser;
-import com.example.smart_test.domain.Theme;
-import com.example.smart_test.domain.User;
+import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
+import com.example.smart_test.mapper.api.ThemeMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.SubjectRepositoryInterface;
 import com.example.smart_test.repository.SubjectUserRepositoryInterface;
 import com.example.smart_test.request.AddSubjectRequest;
-import com.example.smart_test.service.api.SubjectServiceInterface;
-import com.example.smart_test.service.api.SubjectUserServiceInterface;
-import com.example.smart_test.service.api.UserEducationalInstitutionServiceInterface;
+import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +37,18 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    private ThemeServiceInterface themeService;
+    @Autowired
+    private ThemeMapperInterface themeMapper;
+    @Autowired
+    private IndicatorServiceInterface indicatorService;
+    @Autowired
+    private TaskOfIndicatorServiceInterface taskOfIndicatorService;
+    @Autowired
+    private TaskServiceInterface taskService;
+    @Autowired
+    private TestServiceInterface testService;
 
     @Override
     @Transactional
@@ -143,7 +151,6 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
         }
     }
 
-
     @Override
     public Subject findSubjectById(Long id) {
         return subjectRepository.findById(id).orElse(null);
@@ -154,6 +161,20 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
     public void deleteSubjectDto(SubjectDto dto) {
         try {
             subjectUserRepository.deleteBySubjectId(dto.getId());
+            List<Theme> themeList = themeService.findThemeByIdSubject(dto);
+            for (Theme theme : themeList) {
+                List<Indicator> indicatorList = indicatorService.findIndicatorByIdTheme(theme);
+                for (Indicator indicator : indicatorList) {
+                    List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdIndicator(indicator);
+                    taskOfIndicatorService.deleteByIndicatorId(indicator.getId());
+                    for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
+                        taskService.deleteTask(taskOfIndicator.getTask());
+                    }
+                    testService.deleteByThemeId(theme.getId());
+                    indicatorService.deleteByThemeId(theme.getId());
+                }
+                themeService.deleteThemeDto(themeMapper.toDTO(theme));
+            }
             subjectRepository.delete(subjectMapper.toEntity(dto));
         } catch (Exception e) {
             throw new RuntimeException("Не удалось удалить предмет" + e.getMessage(), e);

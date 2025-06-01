@@ -106,4 +106,9 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
         }
         return indicatorDtoList;
     }
+
+    @Override
+    public void deleteByIndicatorId(Long id) {
+        taskOfIndicatorRepositoryInterface.deleteByIndicatorId(id);
+    }
 }

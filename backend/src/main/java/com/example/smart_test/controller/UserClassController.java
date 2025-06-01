@@ -23,7 +23,7 @@ public class UserClassController {
 
     @DeleteMapping("/delete")
     public void deleteTeacherClassDto(@RequestBody UserClassDto teacherClassDto) {
-        teacherClassService.deleteTeacherClassDto(teacherClassDto);
+        teacherClassService.deleteUserClassDto(teacherClassDto);
     }
 
     @GetMapping("/all")

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -73,5 +74,24 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     @Override
     public void deleteByTestingAttemptId(TestingAttemptDto testingAttempt) {
         taskResultsRepositoryInterface.deleteByTestingAttemptId(testingAttempt.getId());
+    }
+
+    @Override
+    public void deleteByTaskId(Long taskId) {
+        taskResultsRepositoryInterface.deleteByTaskId(taskId);
+    }
+
+    @Override
+    public List<TaskResults> findByTaskId(Long taskId) {
+        return taskResultsRepositoryInterface.findByTaskId(taskId);
+    }
+
+    @Override
+    public void updateTaskResults(TaskResults taskResults) {
+        if (taskResults != null && taskResults.getId() != null) {
+            TaskResults oldTaskResults = taskResultsRepositoryInterface.findById(taskResults.getId()).orElse(null);
+            Objects.requireNonNull(oldTaskResults).setTask(null);
+            taskResultsRepositoryInterface.save(oldTaskResults);
+        }
     }
 }

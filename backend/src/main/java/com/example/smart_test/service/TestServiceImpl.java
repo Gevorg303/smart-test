@@ -285,4 +285,9 @@ public class TestServiceImpl implements TestServiceInterface {
             }
         }
     }
+
+    @Override
+    public void deleteByThemeId(Long themeId) {
+        testRepository.deleteByThemeId(themeId);
+    }
 }

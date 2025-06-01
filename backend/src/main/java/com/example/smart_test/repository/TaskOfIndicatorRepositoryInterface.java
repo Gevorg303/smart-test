@@ -21,4 +21,5 @@ public interface TaskOfIndicatorRepositoryInterface extends JpaRepository<TaskOf
     @Modifying
     @Query("DELETE FROM TaskOfIndicator t WHERE t.task.id = :taskId AND t.indicator.id = :indicatorId")
     void deleteByTaskIdAndIndicatorId(@Param("taskId") Long taskId, @Param("indicatorId") Long indicatorId);
+    void deleteByIndicatorId(Long indicatorId);
 }

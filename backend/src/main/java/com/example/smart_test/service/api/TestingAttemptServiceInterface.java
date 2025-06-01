@@ -18,4 +18,6 @@ public interface TestingAttemptServiceInterface {
     void deleteByTestId(TestDto test);
 
     List<TestingAttemptDto> findByTest(TestDto test);
+
+    void deleteTestingAttempt(Long id);
 }

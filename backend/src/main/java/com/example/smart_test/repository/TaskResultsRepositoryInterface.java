@@ -19,4 +19,6 @@ public interface TaskResultsRepositoryInterface extends JpaRepository<TaskResult
     @Transactional
     @Query("DELETE FROM TaskResults tr WHERE tr.testingAttempt.id = :testingAttemptId")
     void deleteByTestingAttemptId(@Param("testingAttemptId") Long testingAttemptId);
+    void deleteByTaskId(Long taskId);
+    List<TaskResults> findByTaskId(Long taskId);
 }
