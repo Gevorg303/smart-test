@@ -45,7 +45,7 @@ const BetaPage = () => {
 
     const fetchClasses = async () => {
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current-user-classes', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current-user-classes', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const BetaPage = () => {
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'roles', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + 'roles', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,12 +95,17 @@ const BetaPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log('Submit button clicked'); // Логирование нажатия кнопки
+
         setErrorMessage('');
         setShowErrorToast(false);
         setShowSuccessToast(false);
+
         if (selectedForm === 'single') {
+            console.log('Handling single registration'); // Логирование начала обработки одиночной регистрации
             await handleSingleRegistration(event);
         } else if (selectedForm === 'multiple' && file) {
+            console.log('Handling multiple registration'); // Логирование начала обработки множественной регистрации
             await handleMultipleRegistration();
         }
     };
@@ -109,6 +114,8 @@ const BetaPage = () => {
         const form = event.target;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
+
+        console.log('Form data:', data); // Логирование данных формы
 
         const errors = [];
 
@@ -148,6 +155,8 @@ const BetaPage = () => {
             studentClass: selectedClass
         };
 
+        console.log('User request:', userRequest); // Логирование запроса пользователя
+
         const userRequestList = [userRequest];
 
         const isEmailRegistered = users.some(user => user.email === data.email);
@@ -158,7 +167,7 @@ const BetaPage = () => {
         }
 
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -168,16 +177,18 @@ const BetaPage = () => {
 
             if (response.ok) {
                 const answers = await response.json();
+                console.log('Registration successful:', answers); // Логирование успешной регистрации
                 setShowSuccessToast(true);
                 form.reset();
                 setSelectedClass(null);
                 setSelectedRole(null);
                 await fetchUsers();
-                const userDetails = answers.map((item, index) => ({
+
+                const userDetails = answers.map((item) => ({
                     ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
                     Логин: item.login,
                     Пароль: item.rawPassword
-                }))
+                }));
 
                 downloadXLS(userDetails, 'UserDetails');
             }
@@ -257,7 +268,7 @@ const BetaPage = () => {
             }
 
             try {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -267,16 +278,17 @@ const BetaPage = () => {
 
                 if (response.ok) {
                     const answers = await response.json();
+                    console.log('Multiple registration successful:', answers); // Логирование успешной множественной регистрации
                     setShowSuccessToast(true);
                     setSelectedClass(null);
                     setSelectedRole(null);
                     await fetchUsers();
 
-                    const userDetails = answers.map((item, index) => ({
+                    const userDetails = answers.map((item) => ({
                         ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
                         Логин: item.login,
                         Пароль: item.rawPassword
-                    }))
+                    }));
                     downloadXLS(userDetails, 'UserDetails');
                 }
             } catch (error) {
@@ -299,7 +311,7 @@ const BetaPage = () => {
 
     const handleDownloadTemplate = () => {
         const link = document.createElement('a');
-        link.href = '/Ученики.xlsx'; // Убедитесь, что путь к файлу корректен
+        link.href = '/Ученики.xlsx';
         link.download = 'Ученики.xlsx';
         link.click();
     };
@@ -316,12 +328,12 @@ const BetaPage = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/all', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ role: null }) // Запрашиваем всех пользователей
+                body: JSON.stringify({ role: null })
             });
             if (!response.ok) {
                 throw new Error('Ошибка получения данных о пользователях');
@@ -341,73 +353,70 @@ const BetaPage = () => {
     };
 
     return (
-        <div className={"cont"}>
+        <div className="cont">
             <AdminNavbar onFormSelect={setSelectedForm} />
-
-                <AdminRegistrationForm
-                    selectedForm={selectedForm}
-                    classes={classes}
-                    roles={roles}
-                    selectedClass={selectedClass}
-                    setSelectedClass={setSelectedClass}
-                    selectedRole={selectedRole}
-                    setSelectedRole={setSelectedRole}
-                    handleSubmit={handleSubmit}
-                    handleFileChange={handleFileChange}
-                    fileName={fileName}
-                    handleDownloadTemplate={handleDownloadTemplate}
-                    showSuccessToast={showSuccessToast}
-                    setShowSuccessToast={setShowSuccessToast}
-                    showErrorToast={showErrorToast}
-                    setShowErrorToast={setShowErrorToast}
-                    errorMessage={errorMessage}
-                />
-                {showSuccessToast && (
-                    <Toast
-                        onClose={() => setShowSuccessToast(false)}
-                        show={showSuccessToast}
-                        style={{
-                            position: 'fixed',
-                            bottom: '20px',
-                            right: '20px',
-                            zIndex: 1000,
-                            backgroundColor: 'green',
-                            color: 'white'
-                        }}
-                    >
-                        <Toast.Header closeButton={false}>
-                            <strong className="mr-auto">Успешно</strong>
-                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
-                            </Button>
-                        </Toast.Header>
-                        <Toast.Body>Вы успешно зарегистрировали пользователя</Toast.Body>
-                    </Toast>
-                )}
-
-                {showErrorToast && (
-                    <Toast
-                        onClose={() => setShowErrorToast(false)}
-                        show={showErrorToast}
-                        style={{
-                            position: 'fixed',
-                            bottom: '20px',
-                            right: '20px',
-                            zIndex: 1000,
-                            backgroundColor: 'red',
-                            color: 'white'
-                        }}
-                    >
-                        <Toast.Header closeButton={false}>
-                            <strong className="mr-auto">Ошибка</strong>
-                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
-                                &times;
-                            </Button>
-                        </Toast.Header>
-                        <Toast.Body>{errorMessage}</Toast.Body>
-                    </Toast>
-                )}
-
+            <AdminRegistrationForm
+                selectedForm={selectedForm}
+                classes={classes}
+                roles={roles}
+                selectedClass={selectedClass}
+                setSelectedClass={setSelectedClass}
+                selectedRole={selectedRole}
+                setSelectedRole={setSelectedRole}
+                handleSubmit={handleSubmit}
+                handleFileChange={handleFileChange}
+                fileName={fileName}
+                handleDownloadTemplate={handleDownloadTemplate}
+                showSuccessToast={showSuccessToast}
+                setShowSuccessToast={setShowSuccessToast}
+                showErrorToast={showErrorToast}
+                setShowErrorToast={setShowErrorToast}
+                errorMessage={errorMessage}
+            />
+            {showSuccessToast && (
+                <Toast
+                    onClose={() => setShowSuccessToast(false)}
+                    show={showSuccessToast}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        zIndex: 1000,
+                        backgroundColor: 'green',
+                        color: 'white'
+                    }}
+                >
+                    <Toast.Header closeButton={false}>
+                        <strong className="mr-auto">Успешно</strong>
+                        <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
+                            &times;
+                        </Button>
+                    </Toast.Header>
+                    <Toast.Body>Вы успешно зарегистрировали пользователя</Toast.Body>
+                </Toast>
+            )}
+            {showErrorToast && (
+                <Toast
+                    onClose={() => setShowErrorToast(false)}
+                    show={showErrorToast}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        zIndex: 1000,
+                        backgroundColor: 'red',
+                        color: 'white'
+                    }}
+                >
+                    <Toast.Header closeButton={false}>
+                        <strong className="mr-auto">Ошибка</strong>
+                        <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
+                            &times;
+                        </Button>
+                    </Toast.Header>
+                    <Toast.Body>{errorMessage}</Toast.Body>
+                </Toast>
+            )}
         </div>
     );
 };
