@@ -165,7 +165,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     login: login,
                     patronymic: patronymic,
                     roleId: role,
-                    id: editItem ? editItem.id : null,
+                    id: editItem ? editItem.id :null,
                 },
                 role: {
                     id: role,
