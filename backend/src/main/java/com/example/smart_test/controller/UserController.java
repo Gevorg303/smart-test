@@ -8,6 +8,7 @@ import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRegistrationRequest;
 import com.example.smart_test.request.UserRequest;
+import com.example.smart_test.request.UserUpdateRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.security.JWTUtils;
 import com.example.smart_test.service.UserServiceImpl;
@@ -78,5 +79,10 @@ public class UserController {
     @PostMapping("/find-educational-institution-by-user")
     public EducationalInstitutionDto findEducationalInstitutionByUser(@RequestBody UserDto userDto) {
         return userService.findEducationalInstitutionByUser(userDto);
+    }
+
+    @PostMapping("/user/update")
+    public void updateUser(@RequestBody UserUpdateRequest request) {
+        userService.updateUser(request);
     }
 }

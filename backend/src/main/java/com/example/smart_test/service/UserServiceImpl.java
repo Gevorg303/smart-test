@@ -1,17 +1,14 @@
 package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
-import com.example.smart_test.dto.EducationalInstitutionDto;
-import com.example.smart_test.dto.RoleDto;
-import com.example.smart_test.dto.StudentClassDto;
-import com.example.smart_test.dto.UserDto;
+import com.example.smart_test.dto.*;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.EducationalInstitutionMapperInterface;
 import com.example.smart_test.mapper.api.StudentClassMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.*;
-import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRequest;
+import com.example.smart_test.request.UserUpdateRequest;
 import com.example.smart_test.response.UserResponse;
 import com.example.smart_test.service.api.UserClassServiceInterface;
 import com.example.smart_test.service.api.UserEducationalInstitutionServiceInterface;
@@ -221,5 +218,27 @@ public class UserServiceImpl implements UserServiceInterface {
     @Override
     public EducationalInstitutionDto findEducationalInstitutionByUser(UserDto userDto) {
         return userEducationalInstitutionService.findEducationalInstitutionByUser(userDto);
+    }
+
+    @Override
+    @Transactional
+    public void updateUser(UserUpdateRequest request) {
+        if (request != null) {
+            if (request.getUser() != null && request.getUser().getId() != null) {
+                User user = userRepository.getReferenceById(request.getUser().getId());
+                UserDto userDto = request.getUser();
+                user.setSurname(userDto.getSurname());
+                user.setName(userDto.getName());
+                user.setPatronymic(userDto.getPatronymic());
+                user.setEmail(userDto.getEmail());
+                user.setPatronymic(userDto.getPatronymic());
+                user.setRoles(userDto.getRole());
+                userRepository.save(user);
+            }
+            if (request.getStudentClass() != null && request.getStudentClass().getId() != null && request.getUser() != null && request.getUser().getId() != null) {
+                userClassService.deleteUserClassByUserId(request.getUser().getId());
+                userClassService.addUserClass(new UserClass(studentClassMapper.toEntity(request.getStudentClass()), userMapper.toEntity(request.getUser())));
+            }
+        }
     }
 }
