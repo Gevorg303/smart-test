@@ -139,7 +139,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         if (!patronymic) {
             errors.push('Отчество не может быть пустым.');
         }
-        if (!selectedClass && role === roleMapping['Ученик']) {
+        if (!selectedClass && role == roleMapping['Ученик']) {
             errors.push('Класс не может быть пустым.');
         }
 
@@ -161,6 +161,8 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                 id: editItem ? editItem.id : null
             };
 
+            console.log('Отправляемые данные:', requestBody); // Логируем данные перед отправкой
+
             const url = editItem
                 ? process.env.REACT_APP_SERVER_URL + 'users/update'
                 : process.env.REACT_APP_SERVER_URL + 'users/add';
@@ -174,6 +176,9 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                 body: JSON.stringify(requestBody)
             });
 
+            const responseData = await response.json(); // Получаем данные ответа
+            console.log('Ответ сервера:', responseData); // Логируем ответ сервера
+
             if (!response.ok) {
                 toastText = editItem ? "Ошибка редактирования ученика" : "Ошибка создания ученика";
                 throw new Error();
@@ -185,6 +190,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             console.error('Ошибка отправки данных:', error);
         }
     };
+
 
     return (
         <div>
