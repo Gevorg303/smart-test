@@ -81,7 +81,7 @@ public class UserController {
         return userService.findEducationalInstitutionByUser(userDto);
     }
 
-    @PostMapping("/user/update")
+    @PutMapping("/update")
     public void updateUser(@RequestBody UserUpdateRequest request) {
         userService.updateUser(request);
     }
