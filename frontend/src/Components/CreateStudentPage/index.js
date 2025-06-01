@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
-import './styles.css';
+import { Form, Button } from 'react-bootstrap';
 
 const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     const roleMapping = {
         'Админ': 1,
         'Учитель': 2,
         'Ученик': 3
+    };
+
+    const getRoleName = (roleId) => {
+        const roleMap = {
+            1: 'Админ',
+            2: 'Учитель',
+            3: 'Ученик'
+        };
+        return roleMap[roleId] || '';
     };
 
     const [name, setName] = useState("");
@@ -81,7 +89,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     console.log('Класс по умолчанию:', defaultClassArray);
 
                     if (defaultClassArray && defaultClassArray.length > 0) {
-                        const defaultClass = defaultClassArray[0]; // Извлекаем первый элемент массива
+                        const defaultClass = defaultClassArray[0];
                         console.log('numberOfInstitution:', defaultClass.numberOfInstitution);
                         console.log('letterDesignation:', defaultClass.letterDesignation);
 
@@ -123,7 +131,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
         const errors = [];
 
-        // Проверка полей
         if (!name) {
             errors.push('Имя не может быть пустым.');
         }
@@ -152,17 +159,25 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         try {
             let toastText;
             const requestBody = {
-                user:{name: name,
+                user: {
+                    surname: surname,
+                    name: name,
                     email: email,
-                    role: role,
-                    login:login,
-                    patronymic:patronymic,},
-                studentClass: selectedClass,
-                role:role,
-               // id: editItem ? editItem.id : null
+                    login: login,
+                    patronymic: patronymic,
+                    roleId: role,
+                },
+                role: {
+                    id: role,
+                    role: getRoleName(role)
+                },
+                studentClass: role == roleMapping['Ученик'] ? {
+                    numberOfInstitution: selectedClass.split(' ')[0],
+                    letterDesignation: selectedClass.split(' ')[1]
+                } : null
             };
 
-            console.log('Отправляемые данные:', requestBody); // Логируем данные перед отправкой
+            console.log('Отправляемые данные:', requestBody);
 
             const url = editItem
                 ? process.env.REACT_APP_SERVER_URL + 'users/update'
@@ -176,8 +191,9 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                 },
                 body: JSON.stringify(requestBody)
             });
-            const responseData = await response.json(); // Получаем данные ответа
-            console.log('Ответ сервера:', responseData); // Логируем ответ сервера
+
+            const responseData = await response.json();
+            console.log('Ответ сервера:', responseData);
 
             if (!response.ok) {
                 toastText = editItem ? "Ошибка редактирования ученика" : "Ошибка создания ученика";
@@ -190,7 +206,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             console.error('Ошибка отправки данных:', error);
         }
     };
-
 
     return (
         <div>
@@ -234,7 +249,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                     >
-                        <option value="">{role.role}</option>
+                        <option value="">{getRoleName(role)}</option>
                         {Object.keys(roleMapping).map((roleName) => (
                             <option key={roleMapping[roleName]} value={roleMapping[roleName]}>
                                 {roleName}
@@ -242,7 +257,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         ))}
                     </Form.Select>
                 </Form.Group>
-                {role.role ==='Ученик' && (
+                {role == roleMapping['Ученик'] && (
                     <Form.Group className="mb-3">
                         <Form.Label>Класс</Form.Label>
                         <Form.Select
