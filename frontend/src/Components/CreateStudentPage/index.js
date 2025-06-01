@@ -174,12 +174,11 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     id: role,
                     role: getRoleName(role)
                 },
-                studentClass: role == roleMapping['Ученик'] ? {
+                studentClass:{
                     id: selectedClassObj ? selectedClassObj.id : null, // id класса
-                    institutionId: selectedClassObj ? selectedClassObj.institutionId : null, // id учебного заведения
                     numberOfInstitution: selectedClassObj ? selectedClassObj.numberOfInstitution : null,
                     letterDesignation: selectedClassObj ? selectedClassObj.letterDesignation : null
-                } : null
+                }
             };
 
             console.log('Отправляемые данные:', requestBody);
