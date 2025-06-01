@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Toast } from 'react-bootstrap';
+import { Button, Toast, Modal, Form } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import Footer from "../../Components/Footer";
-import Navbar from "../../Components/Navbar";
 import './styles.css';
-import TestAttemptsDisplay from "../../Components/TestAttemptsDisplay"; // Импорт CSS файла
+import TestAttemptsDisplay from "../../Components/TestAttemptsDisplay";
 import { useOutletContext } from 'react-router-dom';
 
 const StartTestPage = () => {
     const [testName, setTestName] = useState("");
     const [testDescription, setTestDescription] = useState("");
     const [testTryCount, setTestTryCount] = useState(0);
-    const [testDateStart, setTestDateStart] = useState(""); // строковое значение
-    const [testDateEnd, setTestDateEnd] = useState("");     // строковое значение
+    const [testDateStart, setTestDateStart] = useState("");
+    const [testDateEnd, setTestDateEnd] = useState("");
     const [testTime, setTestTime] = useState("");
     const [attempts, setAttempts] = useState([]);
-    const [testDateStartValue, setTestDateStartValue] = useState(null); // строковое значение
-    const [testDateEndValue, setTestDateEndValue] = useState(null);     // строковое значение
+    const [testDateStartValue, setTestDateStartValue] = useState(null);
+    const [testDateEndValue, setTestDateEndValue] = useState(null);
     const [typeTest, setTypeTest] = useState(null);
     const [testTheme, setTestTheme] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
@@ -25,6 +23,9 @@ const StartTestPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [password, setPassword] = useState('');
+    const [testPassword, setTestPassword] = useState('');
 
     const options = {
         year: 'numeric',
@@ -38,6 +39,7 @@ const StartTestPage = () => {
     };
 
     localStorage.setItem('info', "На этой странице вы сможете просмотреть всю информацию по тесту, а также о пройденных попытках");
+
     useEffect(() => {
         function getCookie(name) {
             let matches = document.cookie.match(new RegExp(
@@ -45,13 +47,14 @@ const StartTestPage = () => {
             ));
             return matches ? decodeURIComponent(matches[1]) : undefined;
         }
+
         async function fetchTest() {
             try {
                 const testid = getCookie("test");
                 if (!testid) {
-                    navigate(-1, { replace: true })
+                    navigate(-1, { replace: true });
                 }
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', { //получить пользователя
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
                     credentials: "include",
                 });
                 if (!response.ok) {
@@ -60,37 +63,37 @@ const StartTestPage = () => {
                 const user = await response.json();
                 setCurrentUser(user);
 
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'test/id:' + testid);
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL + 'test/id:' + testid);
                 if (!response1.ok) {
                     throw new Error('Ошибка сети');
                 }
                 const test = await response1.json();
                 console.log(test);
 
-                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'test/find-testing-attempt-by-test', {
+                setTestPassword(test.testPassword || "");
+
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL + 'test/find-testing-attempt-by-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
-                    body: JSON.stringify(
-                        {
-                            user: {
-                                id: user.id
-                            },
-                            test: {
-                                id: test.id
-                            }
+                    body: JSON.stringify({
+                        user: {
+                            id: user.id
+                        },
+                        test: {
+                            id: test.id
                         }
-                    )
+                    })
                 });
                 if (!response2.ok) {
                     throw new Error('Ошибка сети');
                 }
                 const attemptsJson = await response2.json();
                 console.log(attemptsJson);
-                setAttempts(attemptsJson)
+                setAttempts(attemptsJson);
 
-                const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-tasks-test', {
+                const response3 = await fetch(process.env.REACT_APP_SERVER_URL + 'test/get-tasks-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -101,8 +104,7 @@ const StartTestPage = () => {
                     throw new Error("Ошибка получения вопросов");
                 }
                 const questionsJson = await response3.json();
-                setTestTaskCount(questionsJson)
-                // console.log(questionsJson.length)
+                setTestTaskCount(questionsJson);
 
                 setTypeTest(test.typeTest.id);
                 setTestTheme(test.theme);
@@ -113,24 +115,9 @@ const StartTestPage = () => {
                 setTestDateStartValue(new Date(test.openingDateAndTime));
                 setTestDateEndValue(new Date(test.closingDateAndTime));
                 setTestTime(test.passageTime || "неограничено");
-                setTestTryCount(test.numberOfAttemptsToPass || "неограничено")
+                setTestTryCount(test.numberOfAttemptsToPass || "неограничено");
 
                 setTopText(test.theme.themeName + ": " + test.typeTest.nameOfTestType);
-                // заполнение попыток
-                /* setAttempts(
-                     [
-                         {
-                             id: 1,
-                             date: "Завершен: среда, 1 января 2025 г. в 00:00",
-                             score: "3/5"
-                         },
-                         {
-                         id: 2,
-                         date: "Завершен: четверг, 2 января 2025 г. в 02:00",
-                         score: "5/5"
-                         }
-                     ]
-                 )*/
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
@@ -146,22 +133,35 @@ const StartTestPage = () => {
         setShowErrorToast(true);
     };
 
+    const handleStartTestClick = () => {
+        if (testPassword) {
+            setShowPasswordModal(true);
+        } else {
+            StartTest();
+        }
+    };
+
+    const handlePasswordSubmit = () => {
+        if (password === testPassword) {
+            StartTest();
+        } else {
+            ErrorToast("Неверный пароль!");
+        }
+        setShowPasswordModal(false);
+    };
+
     async function StartTest() {
-        // Проверка, что количество попыток больше или равно количеству сделанных попыток
         if (attempts.length < testTryCount) {
-            // Проверка наличия заданий в тесте
-            if (testTask.length != 0 || (typeTest == 2 && testTask.length == 0)) {
+            if (testTask.length !== 0 || (typeTest === 2 && testTask.length === 0)) {
                 const now = new Date();
-                // Проверка, что тест уже начался
                 if (testDateStartValue <= now) {
-                    // Проверка, что тест еще не закончился
                     if (testDateEndValue >= now) {
                         sessionStorage.setItem('startDate', new Date());
                         if (typeTest === 2) {
                             StartTrainingTest();
                         } else {
-                            sessionStorage.setItem("tasksForTest",JSON.stringify(testTask))
-                            console.log(testTask)
+                            sessionStorage.setItem("tasksForTest", JSON.stringify(testTask));
+                            console.log(testTask);
                             navigate("/test");
                         }
                     } else {
@@ -182,8 +182,8 @@ const StartTestPage = () => {
         let sendData = {
             user: currentUser,
             theme: testTheme
-        }
-        const response = await fetch(process.env.REACT_APP_SERVER_URL+'test/create-test-simulator', {
+        };
+        const response = await fetch(process.env.REACT_APP_SERVER_URL + 'test/create-test-simulator', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8'
@@ -194,14 +194,13 @@ const StartTestPage = () => {
             throw new Error('Ошибка сети');
         }
         const resJson = await response.json();
-        if(resJson.length > 0){
+        if (resJson.length > 0) {
             console.log(resJson);
-            sessionStorage.setItem("tasksForTest",JSON.stringify(resJson))
+            sessionStorage.setItem("tasksForTest", JSON.stringify(resJson));
             navigate("/test");
         } else {
-            ErrorToast("Отсутсвуют задания для тренировки!");
+            ErrorToast("Отсутствуют задания для тренировки!");
         }
-
     }
 
     return (
@@ -218,13 +217,40 @@ const StartTestPage = () => {
                         <TestAttemptsDisplay attempts={attempts} />
 
                         <div className="button-container">
-                            <Button onClick={() => { StartTest() }} className="start-test-button">
+                            <Button onClick={handleStartTestClick} className="start-test-button">
                                 Начать попытку
                             </Button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <Modal show={showPasswordModal} onHide={() => setShowPasswordModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Введите пароль</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formBasicPassword">
+                            <Form.Label>Пароль</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Введите пароль"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowPasswordModal(false)}>
+                        Закрыть
+                    </Button>
+                    <Button variant="primary" onClick={handlePasswordSubmit}>
+                        Подтвердить
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
             {showErrorToast && (
                 <Toast
@@ -235,17 +261,17 @@ const StartTestPage = () => {
                         bottom: '20px',
                         right: '20px',
                         zIndex: 100000,
-                        backgroundColor: showSuccessToast ? 'green':'red',
+                        backgroundColor: showSuccessToast ? 'green' : 'red',
                         color: 'white'
                     }}
                 >
                     <Toast.Header closeButton={false}>
                         <strong className="mr-auto">Успешно</strong>
                         <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
-                            {/*&times;*/} x
+                            x
                         </Button>
                     </Toast.Header>
-                    <Toast.Body>{showSuccessToast ? 'Успешно': errorMessage}</Toast.Body>
+                    <Toast.Body>{showSuccessToast ? 'Успешно' : errorMessage}</Toast.Body>
                 </Toast>
             )}
         </div>
