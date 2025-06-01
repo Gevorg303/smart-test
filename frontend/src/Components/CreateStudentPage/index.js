@@ -16,7 +16,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         };
         return roleMap[roleId] || '';
     };
-
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [email, setEmail] = useState("");
@@ -166,6 +165,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     login: login,
                     patronymic: patronymic,
                     roleId: role,
+                    id: editItem ? editItem.id : null,
                 },
                 role: {
                     id: role,
@@ -186,9 +186,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
             const response = await fetch(url, {
                 method,
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
                 body: JSON.stringify(requestBody)
             });
 
