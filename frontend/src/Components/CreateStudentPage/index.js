@@ -186,6 +186,9 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
             const response = await fetch(url, {
                 method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(requestBody)
             });
 
