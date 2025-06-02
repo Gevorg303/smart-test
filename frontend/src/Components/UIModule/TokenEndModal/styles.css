@@ -1,12 +1,4 @@
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.0); /* Semi-transparent black */
-    z-index: 1000; /* Ensure backdrop is above other content */
-}
+
 .custom-modal-backdrop{
     position: fixed;
     top: 0;

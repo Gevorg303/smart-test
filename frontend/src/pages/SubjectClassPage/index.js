@@ -78,7 +78,7 @@ const SubjectClass = () => {
                 setSubjects(array);
 
                 //setCreateModal(<ClassModal targetSubject={currentSubject} showModal={showModal} /*classes={currentClasses} setClasses={setCurrentClasses}*//>)
-                setTopText("Предмет-класс");
+                setTopText("Подписание классов");
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }

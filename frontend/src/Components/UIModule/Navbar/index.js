@@ -22,14 +22,14 @@ const Navbar = ({setShowHandbook,userRole}) => {
             <BootstrapNavbar.Collapse id="basic-navbar-nav" className="justify-content-between">
                 <Nav className="navbar-links">
                     <Nav.Link as={Link} to="/home" className="navbar-link">Предметы</Nav.Link>
-                    <NavDropdown title="Банк заданий" id="bank-dropdown"
+                    <NavDropdown title="Управление" id="bank-dropdown"
                                  className="navbar-link dropdown">
                         <NavDropdown.Item as={Link} to="/testbank" className="dropdown-item">Тесты</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/taskbank" className="dropdown-item">Задания</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/indicatorbank" className="dropdown-item">Индикаторы</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/themebank" className="dropdown-item">Темы</NavDropdown.Item>
                         <NavDropdown.Item as={Link} to="/itembank" className="dropdown-item">Предметы</NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="/subjectclass" className="dropdown-item">Предмет-класс</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/subjectclass" className="dropdown-item">Подписание классов</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link as={Link} to="/results" className="navbar-link">Результаты</Nav.Link>
                     <NavDropdown title="Регистрация пользователя" id="register-dropdown"

@@ -8,7 +8,7 @@ const TokenEndModal = () => {
     let navigate = useNavigate()
     return (
         <div className={"custom-modal-backdrop"}>
-            <Modal show={true} backdrop={'static'} centered>
+            <Modal show={true} backdrop={false} centered>
                 <Modal.Header centered>
                     <Modal.Title>Сессия истекла</Modal.Title>
                 </Modal.Header>
