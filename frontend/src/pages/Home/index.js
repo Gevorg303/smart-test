@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import SubjectCard from "../../Components/SubjectCard";
+import SubjectCard from "../../Components/HomeModule/SubjectCard";
 import "./styles.css";
 import { useOutletContext } from 'react-router-dom';
 

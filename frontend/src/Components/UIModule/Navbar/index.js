@@ -3,7 +3,7 @@ import { Navbar as BootstrapNavbar, Nav, Container, NavDropdown } from 'react-bo
 import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles.css';
-import Full_logo from '../../images/Full_logo.png';
+import Full_logo from '../../../images/Full_logo.png';
 
 const Navbar = ({setShowHandbook,userRole}) => {
     return (userRole!==3?

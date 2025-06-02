@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Toast, Modal, Form } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import './styles.css';
-import TestAttemptsDisplay from "../../Components/TestAttemptsDisplay";
+import TestAttemptsDisplay from "../../Components/TestingModule/TestAttemptsDisplay";
 import { useOutletContext } from 'react-router-dom';
 
 const StartTestPage = () => {

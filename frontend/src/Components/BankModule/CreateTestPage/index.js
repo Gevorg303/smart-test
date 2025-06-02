@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
-import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
-import TaskForTestSelector from "../TaskForTestSelector";
+import ThemeAndIndicatorSelector from "../../FormModule/ThemeAndIndicatorSelector";
+import TaskForTestSelector from "../../FormModule/TaskForTestSelector";
 import './styles.css';
 
 const CreateTestPage = ({ editItem, onCreate, onError}) => {

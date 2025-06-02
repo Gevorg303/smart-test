@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './styles.css';
 import {Button} from "react-bootstrap";
-import EditImage from '../../images/pencil.png';
+import EditImage from '../../../images/pencil.png';
 import { Accordion } from 'react-bootstrap';
 
 

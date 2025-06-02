@@ -11,13 +11,13 @@ body {
     background-size: 170%;*/
 }
 .body {
-    background: url(../../images/fon2.svg);
+    background: url(../../../images/fon2.svg);
     background-size: 90%;
     min-height: 100vh;
     position: relative;
 }
 .admin-body {
-    background: url(../../images/adminBackground.svg);
+    background: url(../../../images/adminBackground.svg);
     background-size: 90%;
     min-height: 100vh;
     position: relative;

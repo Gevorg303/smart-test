@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from "react-bootstrap";
-import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
+import ThemeAndIndicatorSelector from "../../FormModule/ThemeAndIndicatorSelector";
 import CreateIndicatorPage from "../CreateIndicatorPage";
-import SingleIndicatorSelector from "../SingleIndicatorSelector";
+import SingleIndicatorSelector from "../../FormModule/SingleIndicatorSelector";
 import "./styles.css";
 
 const Sorting = ({ type, setBankItems }) => {

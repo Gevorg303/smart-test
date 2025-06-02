@@ -15,7 +15,7 @@ import ThemePage from './pages/ThemePage';
 import ProfilePage from './pages/ProfilePage';
 import QuestionBankPage from './pages/QuestionBankPage';
 import PrivateRoutes from './utils/router/privateRoute';
-import Layout from './Components/Layout';
+import Layout from './Components/UIModule/Layout';
 import ResultsPage from "./pages/ResultsPage";
 import SubjectClassPage from "./pages/SubjectClassPage";
 import RouterByRole from "./utils/router/routerByRole";

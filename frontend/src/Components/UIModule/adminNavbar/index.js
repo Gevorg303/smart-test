@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
-import Full_logo from '../../images/Full_logo.png';
+import Full_logo from '../../../images/Full_logo.png';
 
 const AdminNavbar = ({ onFormSelect }) => {
     const navigate = useNavigate();

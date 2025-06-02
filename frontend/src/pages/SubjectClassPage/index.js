@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Form, Button, Toast, ToastContainer} from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
-import BankCard from "../../Components/BankCard";
+import BankCard from "../../Components/BankModule/BankCard";
 import "./styles.css";
-import Navbar from "../../Components/Navbar";
-import Footer from "../../Components/Footer";
+import Navbar from "../../Components/UIModule/Navbar";
+import Footer from "../../Components/UIModule/Footer";
 import {useNavigate, useOutletContext} from "react-router-dom";
-import SubjectCardForClass from "../../Components/SubjectCardForClass";
-import ClassModal from "../../Components/ClassModal";
+import SubjectCardForClass from "../../Components/BankModule/SubjectCardForClass";
+import ClassModal from "../../Components/BankModule/ClassModal";
 
 const SubjectClass = () => {
 

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer } from 'react-bootstrap';
-import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
+import ThemeAndIndicatorSelector from "../../FormModule/ThemeAndIndicatorSelector";
 import './styles.css';
 
-const CreateThemePage = ({editItem, onCreate, onError}) => {
+const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
     const [subjects, setSubjects] = useState([]); // предметы
     const [targetSubject, setTargetSubject] = useState(0); // id выбранного предмета
     //const [show, setShow] = useState(false); // отображение тоста
     //const [toastText, setToastText] = useState(""); // текст тоста
 
     const [currentName, setCurrentName] = useState(""); // введеное название
+    const [currentTheme, setCurrentTheme] = useState(-1); // id выбранной темы
 
-    // Валидация названия темы
-    const isValidThemeName = (name) => {
+    // Валидация названия индикатора
+    const isValidIndicatorName = (name) => {
         return name.length <= 100;
     };
 
@@ -23,17 +24,22 @@ const CreateThemePage = ({editItem, onCreate, onError}) => {
         const errors = [];
 
         if (!currentName || currentName.trim() === "") {
-            errors.push('Название темы не должно быть пустым.');
+            errors.push('Название индикатора не должно быть пустым.');
+        }
+
+        // Проверка поля Название индикатора
+        if (!isValidIndicatorName(currentName)) {
+            errors.push('Название индикатора превышает 100 символов.');
         }
 
         if (targetSubject <= 0) {
             errors.push('Предмет должен быть выбран.');
         }
 
-        // Проверка поля Название темы
-        if (!isValidThemeName(currentName)) {
-            errors.push('Название темы превышает 100 символов.');
+        if (currentTheme <= 0) {
+            errors.push('Тема должна быть выбрана.');
         }
+
 
         if (errors.length > 0) {
             // Вывести сообщение об ошибке
@@ -42,69 +48,67 @@ const CreateThemePage = ({editItem, onCreate, onError}) => {
             return;
         }
 
-
         try {
+            const theme = parseInt(currentTheme , 10 );
 
-            /*console.log(
-                {
-                    test: {
-                        name : currentName,
-                        id : null,
-                        theme:{
-                            id: theme
-                        },
-                    },
 
-                }
+             /*console.log(
+                 {
+                     test: {
+                         name : currentName,
+                         id : null,
+                         theme:{
+                             id: theme
+                         },
+                     },
 
-            );*/
+                 }
+
+             );*/
             let toastText;
-
             if(editItem==null){
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'theme/add', { // добавить тему
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/add', { // добавить индикатор
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
                     body: JSON.stringify(
                         {
-                            themeName : currentName,
+                            nameOfTheIndicator : currentName,
                             id : null,
-                            subject: {
-                                id: targetSubject
+                            theme:{
+                                id: theme
                             }
                         }
                     )
                 });
-
                 if (!response.ok) {
-                    toastText = "Ошибка создания темы";
+                    toastText = "Ошибка создания индикатора";
                     throw new Error();
                 }
-                toastText = "Тема успешно создана.";
+                toastText = "Индикатор успешно создан.";
             }
             else{
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'theme/update-theme', { // добавить тему
-                    method: 'PUT',
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/update-indicator', { // добавить индикатор
+                    method: 'PUt',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
                     body: JSON.stringify(
                         {
-                            themeName : currentName,
+                            nameOfTheIndicator : currentName,
                             id : editItem.id,
-                            subject: {
-                                id: targetSubject
+                            theme:{
+                                id: theme
                             }
                         }
                     )
                 });
-
                 if (!response.ok) {
-                    toastText = "Ошибка редактирования темы";
+                    toastText = "Ошибка редактирования индикатора";
                     throw new Error();
                 }
-                toastText = "Тема успешно редактирована.";
+                toastText = "Индикатор успешно редактирован.";
             }
 
             onCreate(toastText);
@@ -115,6 +119,7 @@ const CreateThemePage = ({editItem, onCreate, onError}) => {
     useEffect(() => {
         async function fetchSubjects() {
             try {
+                console.log("тема: "+currentTheme)
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
@@ -140,25 +145,32 @@ const CreateThemePage = ({editItem, onCreate, onError}) => {
                 console.log(subjectsJson)
                 setSubjects(subjectsJson)
 
+
             } catch (error) {
                 console.error('Ошибка получения данных:', error);
             }
         }
         if(editItem!=null){ //выполняется если предается предмет который нужно изменить
 
-            setTargetSubject(editItem.subject.id)
-            setCurrentName(editItem.themeName);
+            setTargetSubject(editItem.theme.subject.id);
+            setCurrentName(editItem.nameOfTheIndicator);
+            setCurrentTheme(editItem.theme.id);
+
         }
-        else if(targetSubject<0){
-            setTargetSubject(-1)
-            setCurrentName();
+        else {
+            if(currentTheme == null) {
+                setTargetSubject(-1);
+                setCurrentTheme(-1);
+            }
+            setCurrentName("");
         }
+
         fetchSubjects();
-    }, [editItem]);
+    }, [/*currentTheme,*/editItem]);
     return (
         <div>
-            <h1>{editItem ? "Редактирование темы" : "Создание темы"}</h1>
-            <h3>Выберите предмет и введите название темы</h3>
+            <h1>{editItem ? "Редактирование индикатора" : "Создание индикатора"}</h1>
+            <h3>Выберите предмет и тему теста</h3>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
                     <Form.Select
@@ -171,21 +183,26 @@ const CreateThemePage = ({editItem, onCreate, onError}) => {
 
                     </Form.Select>
                 </Form.Group>
+                <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
+                                           currentTheme={currentTheme} setCurrentTheme={setCurrentTheme}/>
+
+
                 <Form.Group className="mb-3">
-                    <Form.Label>Название темы</Form.Label>
+                    <Form.Label>Название индикатора</Form.Label>
                     <Form.Control value={currentName} onChange={(e) => {
                         setCurrentName(e.target.value);
                     }}/>
                 </Form.Group>
+
                 <Button variant="primary" className="custom-button-create-window" type="submit" onClick={() => {
                     //setShow(true); /*console.log(currentAnswers)*/
                 }}>
                     {editItem==null?"Создать":"Редактировать"}
                 </Button>
-            </Form>
 
+            </Form>
         </div>
     );
 };
 
-export default CreateThemePage;
+export default CreateIndicatorPage;

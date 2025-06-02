@@ -3,12 +3,12 @@ import { Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import avatarImage from '../../images/аватар.jpg'; // Исправленный путь к изображению
 import './styles.css';
-import Navbar from "../../Components/Navbar";
-import Footer from "../../Components/Footer";
-import Question from "../../Components/Question";
-import SubjectCard from "../../Components/SubjectCard"; // Импортируем файл стилей
+import Navbar from "../../Components/UIModule/Navbar";
+import Footer from "../../Components/UIModule/Footer";
+import Question from "../../Components/TestingModule/Question";
+import SubjectCard from "../../Components/HomeModule/SubjectCard"; // Импортируем файл стилей
 import { useOutletContext } from 'react-router-dom';
-import subjectCardForClass from "../../Components/SubjectCardForClass";
+import subjectCardForClass from "../../Components/BankModule/SubjectCardForClass";
 
 const ProfilePage = () => {
 

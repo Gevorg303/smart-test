@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,Toast,ToastContainer,Stack } from 'react-bootstrap';
-import ThemeAndIndicatorSelector from "../ThemeAndIndicatorSelector";
-import FormSelectAnswer from "../FormSelectAnswer";
+import ThemeAndIndicatorSelector from "../../FormModule/ThemeAndIndicatorSelector";
+import FormSelectAnswer from "../../FormModule/FormSelectAnswer";
 import './styles.css';
 
 

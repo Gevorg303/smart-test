@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './styles.css';
-import Maskot from '../../images/maskot_for_handbook.png'; // Импортируем изображение
+import Maskot from '../../../images/maskot_for_handbook.png'; // Импортируем изображение
 
 const Handbook = ({isModalOpen, setIsModalOpen}) => {
 

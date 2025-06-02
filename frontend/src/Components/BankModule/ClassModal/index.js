@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Form, Button, Toast, ToastContainer} from 'react-bootstrap';
-import ClassSelector from "../ClassSelector";
+import ClassSelector from "../../FormModule/ClassSelector";
 
 const ClassModal = ({targetSubject, showModal, onCreate/*classes, setClasses*/}) => {
     //const [classes, setClasses] = useState([]);//classes, setClasses
