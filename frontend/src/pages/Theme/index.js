@@ -91,6 +91,7 @@ const Theme = (props) => {
                 });
 
                 const arrayScoresForTest = []
+                let countOfFirstTestAttempts = 0;
                 for await (const testForBlock of sortedTests)  {
                     const lastAttempt = await getLastAttempt(testForBlock.id, user.id);
                     const type = testForBlock.typeTest.id;
@@ -98,6 +99,7 @@ const Theme = (props) => {
                     switch (type)
                     {
                         case 1:
+                            countOfFirstTestAttempts = lastAttempt? 1 : 0;
                             arrayScoresForTest[0] = lastAttempt? lastAttempt.testResult : 0;
                             break;
                         case 2:
@@ -112,8 +114,9 @@ const Theme = (props) => {
                 const array = sortedTests.map((test, index) => {
                     const testType = test.typeTest.nameOfTestType;
                     const isDisabled =
-                        ((testType === 'Тренажер' && arrayScoresForTest[0] === 0) || (testType === 'Тренажер' && arrayScoresForTest[0] === 100)) ||
+                        ((testType === 'Тренажер' && arrayScoresForTest[0] === 0 && countOfFirstTestAttempts===0) || (testType === 'Тренажер' && arrayScoresForTest[0] === 100)) ||
                         (testType === 'Итоговый тест' && arrayScoresForTest[0] !== 100 && (arrayScoresForTest[1] === 0 || arrayScoresForTest[1] < test.passThreshold));
+
 
                     console.log(`Test Type: ${testType}, Scores: ${arrayScoresForTest}, Is Disabled: ${isDisabled}`); // Логирование логики
 
