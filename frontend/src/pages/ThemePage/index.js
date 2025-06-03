@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "../../Components/UIModule/Navbar";
-import Theme from "../Theme";
+import Theme from "../../Components/TestingModule/Theme";
 import Footer from "../../Components/UIModule/Footer";
 import { useNavigate } from "react-router-dom";
 import './styles.css'; // Импортируйте стили

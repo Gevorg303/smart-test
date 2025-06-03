@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Navigate, Outlet, useOutletContext} from "react-router-dom";
 import { useLocation } from 'react-router'
-import SubjectCard from "../../Components/HomeModule/SubjectCard";
+import SubjectCard from "../../Components/TestingModule/SubjectCard";
 import TokenEndModal from "../../Components/UIModule/TokenEndModal";
 
 const RouterByRole = ({rolesWithoutAccess, element}) => {
