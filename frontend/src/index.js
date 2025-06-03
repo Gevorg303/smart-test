@@ -14,11 +14,11 @@ import ViewTestResultsPage from './pages/ViewOneTestResultPage';
 import ThemePage from './pages/ThemePage';
 import ProfilePage from './pages/ProfilePage';
 import QuestionBankPage from './pages/QuestionBankPage';
-import PrivateRoutes from './utils/router/privateRoute';
+import PrivateRoutes from './Components/RouterModule/privateRoute';
 import Layout from './Components/UIModule/Layout';
 import ResultsPage from "./pages/ResultsPage";
 import SubjectClassPage from "./pages/SubjectClassPage";
-import RouterByRole from "./utils/router/routerByRole";
+import RouterByRole from "./Components/RouterModule/routerByRole";
 import AdminHome from "./pages/AdminHome";
 import TeacherResultsPage from "./pages/TeacherResultsPage";
 
