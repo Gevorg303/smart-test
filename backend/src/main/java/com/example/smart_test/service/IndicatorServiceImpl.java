@@ -159,4 +159,9 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
     public void deleteByThemeId(Long idTheme) {
         indicatorRepositoryInterface.deleteByThemeId(idTheme);
     }
+
+    @Override
+    public void deleteByIndicatorId(Long idIndicator) {
+        indicatorRepositoryInterface.deleteById(idIndicator);
+    }
 }

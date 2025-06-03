@@ -225,15 +225,17 @@ public class UserServiceImpl implements UserServiceInterface {
     public void updateUser(UserUpdateRequest request) {
         if (request != null) {
             if (request.getUser() != null && request.getUser().getId() != null) {
-                User user = userRepository.getReferenceById(request.getUser().getId());
                 UserDto userDto = request.getUser();
-                user.setSurname(userDto.getSurname());
-                user.setName(userDto.getName());
-                user.setPatronymic(userDto.getPatronymic());
-                user.setEmail(userDto.getEmail());
-                user.setPatronymic(userDto.getPatronymic());
-                //user.setRoles(request.getRole());
-                userRepository.save(user);
+                User user = userRepository.getReferenceById(userDto.getId());
+                if (user.getId() != null) {
+                    user.setSurname(userDto.getSurname());
+                    user.setName(userDto.getName());
+                    user.setPatronymic(userDto.getPatronymic());
+                    user.setEmail(userDto.getEmail());
+                    user.setPatronymic(userDto.getPatronymic());
+                    //user.setRoles(request.getRole());
+                    userRepository.save(user);
+                }
             }
             if (request.getStudentClass() != null && request.getStudentClass().getId() != null && request.getUser() != null && request.getUser().getId() != null) {
                 userClassService.deleteUserClassByUserId(request.getUser().getId());

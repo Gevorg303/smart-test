@@ -2,14 +2,12 @@ package com.example.smart_test.service.api;
 
 
 import com.example.smart_test.domain.StudentClass;
-import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.SubjectUser;
 import com.example.smart_test.domain.User;
-import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
 import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.dto.UserDto;
-import com.example.smart_test.request.ClassStatusResponse;
+import com.example.smart_test.response.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

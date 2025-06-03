@@ -160,24 +160,48 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
     @Transactional
     public void deleteSubjectDto(SubjectDto dto) {
         try {
+            log.info("Начало удаления предмет с ID: {}", dto.getId());
+
             subjectUserRepository.deleteBySubjectId(dto.getId());
+            log.info("Удалены связи с пользователями по предмету ID: {}", dto.getId());
+
             List<Theme> themeList = themeService.findThemeByIdSubject(dto);
             for (Theme theme : themeList) {
+                log.info("Обработка темы ID: {}, название: {}", theme.getId(), theme.getThemeName());
+
                 List<Indicator> indicatorList = indicatorService.findIndicatorByIdTheme(theme);
                 for (Indicator indicator : indicatorList) {
+                    log.info("Удаляется индикатор ID: {}, название: {}", indicator.getId(), indicator.getNameOfTheIndicator());
+
                     List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdIndicator(indicator);
-                    taskOfIndicatorService.deleteByIndicatorId(indicator.getId());
                     for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
-                        taskService.deleteTask(taskOfIndicator.getTask());
+                        taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
+                        //taskOfIndicatorService.deleteByIndicatorId(indicator.getId());
+                        log.info("Удалены связи индикатора с заданиями, ID индикатора: {}", indicator.getId());
+                        Task task = taskOfIndicator.getTask();
+                        log.info("Удаляется задание ID: {}", task.getId());
+                        taskService.deleteTask(task);
                     }
-                    testService.deleteByThemeId(theme.getId());
-                    indicatorService.deleteByThemeId(theme.getId());
+
+                    indicatorService.deleteByIndicatorId(indicator.getId());
+                    log.info("Удалён индикатор ID: {}", indicator.getId());
                 }
+
+                testService.deleteByThemeId(theme.getId());
+                log.info("Удалены тесты по теме ID: {}", theme.getId());
+
                 themeService.deleteThemeDto(themeMapper.toDTO(theme));
+                log.info("Удалена тема ID: {}", theme.getId());
             }
+
             subjectRepository.delete(subjectMapper.toEntity(dto));
+            log.info("Удалён предмет ID: {}", dto.getId());
+
         } catch (Exception e) {
-            throw new RuntimeException("Не удалось удалить предмет" + e.getMessage(), e);
+            log.error("Ошибка при удалении предмета ID: {}. Причина: {}", dto.getId(), e.getMessage(), e);
+            throw new RuntimeException("Не удалось удалить предмет: " + e.getMessage(), e);
         }
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.smart_test.request;
+package com.example.smart_test.response;
 
 import com.example.smart_test.dto.StudentClassDto;
 import lombok.Data;
