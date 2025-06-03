@@ -1,29 +1,35 @@
 package com.example.smart_test.controller;
 
-import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.SubjectDto;
-import com.example.smart_test.request.ClassStatusResponse;
+import com.example.smart_test.response.ClassStatusResponse;
 import com.example.smart_test.request.SubjectClassRequest;
 import com.example.smart_test.service.api.SubjectUserServiceInterface;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/user-subject")
 @Slf4j
+@Tag(name = "Subject User Controller", description = "API для управления связями между предметами и пользователями")
 public class SubjectUserController {
     @Autowired
     private SubjectUserServiceInterface subjectService;
 
-    /**
-     * Метод для подписания класса на предмет, на вход необходимо подать лист классов и предмет
-     * */
+    @Operation(summary = "Подписать класс на предмет", description = "Подписывает класс на указанный предмет")
+    @ApiResponse(responseCode = "200", description = "Класс успешно подписан на предмет",
+            content = @Content(schema = @Schema(implementation = String.class)))
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     @PostMapping("/add")
     public ResponseEntity<String> addSubjectTeacherDto(@RequestBody SubjectClassRequest request) {
         try {
@@ -36,9 +42,10 @@ public class SubjectUserController {
         }
     }
 
-    /**
-     * Метод для вывода классов связанных с предметом, выводит объект ClassStatusResponse который содержит класс и статус (входит класс в этот предмет или нет)
-     * */
+    @Operation(summary = "Найти классы по предмету", description = "Возвращает список классов, связанных с указанным предметом, с информацией о статусе")
+    @ApiResponse(responseCode = "200", description = "Список классов успешно получен",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = ClassStatusResponse.class))))
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     @PostMapping("/find-class-by-subject")
     public ResponseEntity<?> findClassBySubject(@RequestBody SubjectDto dto) {
         try {
@@ -51,9 +58,10 @@ public class SubjectUserController {
         }
     }
 
-    /**
-     * Метод для отписки класса от предмета, на вход необходимо подать лист классов и предмет
-     */
+    @Operation(summary = "Отписать класс от предмета", description = "Отписывает класс от указанного предмета")
+    @ApiResponse(responseCode = "200", description = "Класс успешно отписан от предмета",
+            content = @Content(schema = @Schema(implementation = String.class)))
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     @DeleteMapping("/remove")
     public ResponseEntity<String> removeSubjectTeacherDto(@RequestBody SubjectClassRequest request) {
         try {
@@ -65,15 +73,4 @@ public class SubjectUserController {
                     .body("Ошибка: " + e.getMessage());
         }
     }
-
-//
-//    @DeleteMapping("/delete")
-//    public void deleteSubjectTeacherDto(@RequestBody SubjectUserDto subjectDto) {
-//        subjectService.deleteSubjectUserDto(subjectDto);
-//    }
-//
-//    @GetMapping("/all")
-//    public List<SubjectUserDto> getSubjectTeacherDto() {
-//        return subjectService.getAllSubjectTeachers();
-//    }
 }

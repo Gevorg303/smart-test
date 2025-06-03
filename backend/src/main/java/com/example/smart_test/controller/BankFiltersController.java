@@ -9,6 +9,12 @@ import com.example.smart_test.request.IndicatorFilterRequest;
 import com.example.smart_test.request.TaskFilterRequest;
 import com.example.smart_test.request.TestFilterRequest;
 import com.example.smart_test.service.api.BankFilterServiceInterface;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +24,28 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/bank-filters")
+@Tag(name = "Bank Filters Controller", description = "API для фильтрации данных в системе")
 public class BankFiltersController {
     @Autowired
     private BankFilterServiceInterface bankFilterService;
+
+    /**
+     * Получает список индикаторов пользователя с возможностью фильтрации по предмету.
+     *
+     * @param request Объект `IndicatorFilterRequest`, содержащий:
+     *                - `user` (обязательный) - пользователь, для которого запрашиваются индикаторы.
+     *                - `subject` (необязательный) - предмет, по которому нужно отфильтровать индикаторы.
+     * 1. Если `subject` не задан, возвращает все индикаторы пользователя.
+     * 2. Если `subject` задан, возвращает только индикаторы, относящиеся к указанному предмету.
+     */
+    @Operation(summary = "Получить индикаторы с фильтрацией", description = "Получает список индикаторов пользователя с возможностью фильтрации по предмету")
+    @ApiResponse(responseCode = "200", description = "Список индикаторов успешно получен",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = IndicatorDto.class))))
+    @PostMapping("/indicators")
+    public ResponseEntity<List<IndicatorDto>> getIndicatorFilter(@RequestBody IndicatorFilterRequest request) {
+        List<IndicatorDto> sortedIndicators = bankFilterService.getIndicatorFilter(request.getUser(), request.getSubject());
+        return ResponseEntity.ok(sortedIndicators);
+    }
 
     /**
      * Обработчик запроса для получения списка заданий, отфильтрованных по заданным критериям.
@@ -78,6 +103,9 @@ public class BankFiltersController {
      * Если задания найдены, возвращается HTTP-статус 200 OK с отфильтрованным списком заданий.
      * Если задания отсутствуют, возвращается пустой список.
      */
+    @Operation(summary = "Получить задачи с фильтрацией", description = "Получает список задач с возможностью фильтрации по пользователю, предмету, теме и индикатору")
+    @ApiResponse(responseCode = "200", description = "Список задач успешно получен",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = TaskDto.class))))
     @PostMapping("/tasks")
     public ResponseEntity<List<TaskDto>> getTasksFilter(@RequestBody TaskFilterRequest testFilterRequest) {
         List<TaskDto> sortedTasks = bankFilterService.getTasksFilter(
@@ -88,7 +116,6 @@ public class BankFiltersController {
         );
         return ResponseEntity.ok(sortedTasks);
     }
-
 
     /**
      * Получение отсортированных тестов с фильтрацией по типу теста, предмету и/или теме.
@@ -119,36 +146,27 @@ public class BankFiltersController {
      *   "theme": { "id": 5 }
      * }
      */
+    @Operation(summary = "Получить тесты с фильтрацией", description = "Получает список тестов с возможностью фильтрации по типу теста, предмету и теме")
+    @ApiResponse(responseCode = "200", description = "Список тестов успешно получен",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = TestDto.class))))
     @PostMapping("/tests")
     public ResponseEntity<Set<TestDto>> getTestsFilter(@RequestBody TestFilterRequest request) {
         Set<TestDto> sortedTests = bankFilterService.getTestsFilter(request.getTestType(), request.getUser(), request.getSubject(), request.getTheme());
         return ResponseEntity.ok(sortedTests);
     }
 
-    /**
-     * Получает список индикаторов пользователя с возможностью фильтрации по предмету.
-     *
-     * @param request Объект `IndicatorFilterRequest`, содержащий:
-     *                - `user` (обязательный) - пользователь, для которого запрашиваются индикаторы.
-     *                - `subject` (необязательный) - предмет, по которому нужно отфильтровать индикаторы.
-     * 1. Если `subject` не задан, возвращает все индикаторы пользователя.
-     * 2. Если `subject` задан, возвращает только индикаторы, относящиеся к указанному предмету.
-     */
-    @PostMapping("/indicators")
-    public ResponseEntity<List<IndicatorDto>> getIndicatorFilter(@RequestBody IndicatorFilterRequest request) {
-        List<IndicatorDto> sortedIndicators = bankFilterService.getIndicatorFilter(request.getUser(), request.getSubject());
-        return ResponseEntity.ok(sortedIndicators);
-    }
-
+    @Operation(summary = "Получить предметы с фильтрацией", description = "Получает список предметов, связанных с указанным классом")
+    @ApiResponse(responseCode = "200", description = "Список предметов успешно получен",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = SubjectDto.class))))
     @PostMapping("/subjects")
     public ResponseEntity<Set<SubjectDto>> getSubjectFilter(@RequestBody StudentClassDto request){
         Set<SubjectDto> subjectDto = bankFilterService.getSubjectFilter(request);
         return ResponseEntity.ok(subjectDto);
     }
 
-    /**
-     * Фильтр для вывода пользователей по классу
-     * */
+    @Operation(summary = "Получить пользователей с фильтрацией", description = "Получает список пользователей, связанных с указанным классом")
+    @ApiResponse(responseCode = "200", description = "Список пользователей успешно получен",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDto.class))))
     @PostMapping("/user")
     public ResponseEntity<Set<UserDto>> getUserFilter(@RequestBody StudentClassDto request){
         Set<UserDto> userDtoSet = bankFilterService.getUserFilter(request);
