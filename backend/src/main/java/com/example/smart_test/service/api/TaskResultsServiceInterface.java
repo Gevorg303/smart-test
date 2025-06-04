@@ -23,4 +23,10 @@ public interface TaskResultsServiceInterface {
     List<TaskResults> findTaskResultsByTestingAttempt(TestingAttemptDto testingAttempt);
 
     void deleteByTestingAttemptId(TestingAttemptDto testingAttempt);
+
+    void deleteByTaskId(Long taskId);
+
+    List<TaskResults> findByTaskId(Long taskId);
+
+    void updateTaskResults(TaskResults taskResults);
 }

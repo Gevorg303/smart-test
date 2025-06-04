@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface IndicatorRepositoryInterface extends JpaRepository<Indicator, Long> {
     List<Indicator> findByTheme(Theme theme);
+    void deleteByThemeId(Long themeId);
 }

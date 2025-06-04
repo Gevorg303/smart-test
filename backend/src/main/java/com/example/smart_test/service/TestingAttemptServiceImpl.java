@@ -9,7 +9,6 @@ import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TestingAttemptRepositoryInterface;
 import com.example.smart_test.service.api.TestingAttemptServiceInterface;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,5 +60,10 @@ public class TestingAttemptServiceImpl implements TestingAttemptServiceInterface
             }
         }
         return testingAttemptDtoList;
+    }
+
+    @Override
+    public void deleteTestingAttempt(Long id) {
+        testingAttemptRepository.deleteById(id);
     }
 }

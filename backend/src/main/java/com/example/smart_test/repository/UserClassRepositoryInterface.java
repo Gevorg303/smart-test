@@ -29,4 +29,6 @@ public interface UserClassRepositoryInterface extends JpaRepository<UserClass, L
     @Query("SELECT COUNT(uc) FROM UserClass uc WHERE uc.studentClass.id = :classId AND uc.user.isDelete = false")
     int countUsersByClassId(@Param("classId") Long classId);
 
+    @Query(value = "DELETE FROM пользователь_класс WHERE идентификатор_пользователя = :userId", nativeQuery = true)
+    void deleteByUserId(@Param("userId") Long userId);
 }

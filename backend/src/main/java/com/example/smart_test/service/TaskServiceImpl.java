@@ -52,6 +52,10 @@ public class TaskServiceImpl implements TaskServiceInterface {
     private TaskOfIndicatorMapperInterface taskOfIndicatorMapper;
     @Autowired
     private IndicatorMapperInterface indicatorMapper;
+    @Autowired
+    private TaskResultsServiceInterface taskResultsService;
+    @Autowired
+    private TestingAttemptServiceInterface testingAttemptService;
 
     @Override
     @Transactional
@@ -73,18 +77,40 @@ public class TaskServiceImpl implements TaskServiceInterface {
     @Override
     @Transactional
     public void deleteTask(Task task) {
-        if (findTaskById(task.getId())) {
-            List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdTask(task);
-            for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
-                taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
-            }
-            List<ResponseOption> responseOptionList = responseOptionService.findAllResponseOptionsByTaskId(task);
-            for (ResponseOption responseOption : responseOptionList) {
-                responseOptionService.deleteResponseOption(responseOptionMapper.toDTO(responseOption));
-            }
-            taskRepositoryInterface.delete(task);
-        } else {
+        if (!findTaskById(task.getId())) {
             log.error("Задача с идентификатором " + task.getId() + " не найдена");
+            return;
+        }
+
+        deleteAllTaskOfIndicators(task);
+        deleteAllResponseOptions(task);
+        updateAllTaskResults(task);
+
+        taskRepositoryInterface.delete(task);
+    }
+
+    private void deleteAllTaskOfIndicators(Task task) {
+        List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdTask(task);
+        for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
+            log.info("ID задания по индикатору: {}", taskOfIndicator.getId());
+            taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
+        }
+    }
+
+    private void deleteAllResponseOptions(Task task) {
+        List<ResponseOption> responseOptionList = responseOptionService.findAllResponseOptionsByTaskId(task);
+        for (ResponseOption responseOption : responseOptionList) {
+            log.info("ID варианта ответа: {}", responseOption.getId());
+            responseOptionService.deleteResponseOption(responseOptionMapper.toDTO(responseOption));
+        }
+    }
+
+    private void updateAllTaskResults(Task task) {
+        List<TaskResults> taskResultsList = taskResultsService.findByTaskId(task.getId());
+        for (TaskResults taskResults : taskResultsList) {
+            log.info("ID попытки тестирования: {}", taskResults.getTestingAttempt().getId());
+            log.info("ID результата задания: {}", taskResults.getId());
+            taskResultsService.updateTaskResults(taskResults);
         }
     }
 

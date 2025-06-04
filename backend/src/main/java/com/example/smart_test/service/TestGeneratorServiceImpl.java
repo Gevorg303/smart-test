@@ -24,13 +24,13 @@ public class TestGeneratorServiceImpl implements TestGeneratorServiceInterface {
 
     @Transactional
     @Override
-    public Set<Task> generatorTasks(User user, TestDto test, int numberOfTasks) {
+    public Set<Task> generatorTasks(User user, TestDto entryTest, TestDto trainerTest, int numberOfTasks) {
         Set<Task> tasks = new LinkedHashSet<>();
         Set<Task> processedTasks = new HashSet<>();
         List<Task> availableTasks = new ArrayList<>();
         int counter = 0;
 
-        TestingAttemptDto testingAttempt = testingAttemptService.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, test);
+        TestingAttemptDto testingAttempt = testingAttemptService.findTopByUserAndTest_IdOrderByStartDateTimeDesc(user, entryTest);
         List<TaskResults> taskResultsList = taskResultsService.findTaskResultsByTestingAttempt(testingAttempt);
 
         for (TaskResults taskResults : taskResultsList) {
@@ -50,7 +50,7 @@ public class TestGeneratorServiceImpl implements TestGeneratorServiceInterface {
 
                 for (TaskOfIndicator taskOfIndicator1 : taskOfIndicatorByIndicator) {
                     Task candidateTask = taskOfIndicator1.getTask();
-                    if (!availableTasks.contains(candidateTask)) {
+                    if (candidateTask.getTest() != null && candidateTask.getTest().getId().equals(trainerTest.getId()) && !availableTasks.contains(candidateTask)) {
                         availableTasks.add(candidateTask);
                     }
                 }

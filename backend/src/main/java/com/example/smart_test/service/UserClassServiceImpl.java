@@ -50,13 +50,18 @@ public class UserClassServiceImpl implements UserClassServiceInterface {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteTeacherClassDto(UserClassDto dto) {
+    public void deleteUserClassDto(UserClassDto dto) {
         if (findTeacherClassById(dto.getId())) {
             UserClass teacherClass = userClassMapperInterface.toEntity(dto);
             userClassRepositoryInterface.delete(teacherClass);
         } else {
             log.error("Индикатор с идентификатором " + dto.getId() + " не существует");
         }
+    }
+
+    @Override
+    public void deleteUserClassByUserId(Long userId) {
+        userClassRepositoryInterface.deleteByUserId(userId);
     }
 
     @Override

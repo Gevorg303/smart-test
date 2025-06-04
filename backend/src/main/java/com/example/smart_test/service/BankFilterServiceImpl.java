@@ -33,8 +33,8 @@ public class BankFilterServiceImpl implements BankFilterServiceInterface {
     @Autowired
     private SubjectMapperInterface subjectMapper;
 
-    @Transactional
     @Override
+    @Transactional
     public Set<TestDto> getTestsFilter(TypeTest typeTest, UserDto user, Subject subject, Theme theme) {
         Set<TestDto> testDtoList = testService.getUserTests(user);
         Set<TestDto> filteredList = new HashSet<>();

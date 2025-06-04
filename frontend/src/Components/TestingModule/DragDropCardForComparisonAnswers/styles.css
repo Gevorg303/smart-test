@@ -1,0 +1,22 @@
+.drag-drop-card{
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border: solid;
+    border-radius: 1vh;
+    background-color: Snow;
+    box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.2);
+}
+.drag-drop-card:hover{
+    border: solid;
+    border-radius: 1vh;
+    background-color: gray;
+    box-shadow: 0 2vh 4vh rgba(0, 0, 0, 0.2);
+}
+.drag-drop-card-view{
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border: solid;
+    border-radius: 1vh;
+    background-color: Snow;
+    box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.2);
+}

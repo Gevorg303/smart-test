@@ -12,7 +12,7 @@ public class ClassNumberScheduler {
     private final StudentClassServiceInterface studentClassService;
 
     /**
-     * Выполняется 1 сентября каждый год в 00:00
+     * Выполняется 31 августа каждый год в 00:00
      */
     @Scheduled(cron = "0 0 0 31 8 *")
     public void updateClassNumbers() {

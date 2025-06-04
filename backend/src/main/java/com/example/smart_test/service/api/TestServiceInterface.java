@@ -29,4 +29,6 @@ public interface TestServiceInterface {
     List<TestingAttemptDto> findTestingAttemptByTest(TestingAttemptAndTest request);
 
     void updateTest(EditingTheTestRequest request);
+
+    void deleteByThemeId(Long themeId);
 }

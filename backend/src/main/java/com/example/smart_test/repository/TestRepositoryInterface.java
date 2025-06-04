@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TestRepositoryInterface extends JpaRepository<Test, Long> {
+    void deleteByThemeId(Long themeId);
 }

@@ -1,26 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from './Components/Home';
-import BetaPage from "./Components/BetaPage";
-import ClassBank from './Components/ClassBank';
-import StudentBank from './Components/StudentBank';
-import LoginPage from './Components/Login';
+import HomePage from './pages/Home';
+import BetaPage from "./pages/BetaPage";
+import ClassBank from './pages/ClassBank';
+import StudentBank from './pages/StudentBank';
+import LoginPage from './pages/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import StartTestPage from './Components/StartTestPage';
-import TestPage from './Components/TestPage';
-import RegistrationPage from './Components/Registration';
-import ViewTestResultsPage from './Components/ViewOneTestResultPage';
-import ThemePage from './Components/ThemePage';
-import ProfilePage from './Components/ProfilePage';
-import QuestionBankPage from './Components/QuestionBankPage';
-import PrivateRoutes from './utils/router/privateRoute';
-import Layout from './Components/Layout';
-import ResultsPage from "./Components/ResultsPage";
-import SubjectClassPage from "./Components/SubjectClassPage";
-import RouterByRole from "./utils/router/routerByRole";
-import AdminHome from "./Components/AdminHome";
-import TeacherResultsPage from "./Components/TeacherResultsPage";
+import StartTestPage from './pages/StartTestPage';
+import TestPage from './pages/TestPage';
+import RegistrationPage from './pages/Registration';
+import ViewTestResultsPage from './pages/ViewOneTestResultPage';
+import ThemePage from './pages/ThemePage';
+import ProfilePage from './pages/ProfilePage';
+import QuestionBankPage from './pages/QuestionBankPage';
+import PrivateRoutes from './Components/RouterModule/privateRoute';
+import Layout from './Components/UIModule/Layout';
+import ResultsPage from "./pages/ResultsPage";
+import SubjectClassPage from "./pages/SubjectClassPage";
+import RouterByRole from "./Components/RouterModule/routerByRole";
+import AdminHome from "./pages/AdminHome";
+import TeacherResultsPage from "./pages/TeacherResultsPage";
 
 
 const App = () => {

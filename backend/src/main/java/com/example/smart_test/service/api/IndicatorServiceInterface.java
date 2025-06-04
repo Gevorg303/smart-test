@@ -29,4 +29,8 @@ public interface IndicatorServiceInterface {
     List<IndicatorDto> getUserIndicators(UserDto dto);
 
     Indicator updateIndicator(IndicatorDto updatedIndicator);
+
+    void deleteByThemeId(Long idTheme);
+
+    void deleteByIndicatorId(Long idIndicator);
 }

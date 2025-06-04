@@ -7,6 +7,7 @@ import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.request.UserBiRoleRequest;
 import com.example.smart_test.request.UserRequest;
+import com.example.smart_test.request.UserUpdateRequest;
 import com.example.smart_test.response.UserResponse;
 import jakarta.transaction.Transactional;
 
@@ -34,4 +35,6 @@ public interface UserServiceInterface {
     List<UserDto> getUser(UserDto userDto, RoleDto roleDto);
 
     EducationalInstitutionDto findEducationalInstitutionByUser(UserDto userDto);
+
+    void updateUser(UserUpdateRequest request);
 }

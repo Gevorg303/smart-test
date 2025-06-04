@@ -5,6 +5,7 @@ import com.example.smart_test.dto.StudentClassDto;
 import com.example.smart_test.dto.UserClassDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.service.api.UserClassServiceInterface;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,18 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/teacherClass")
+@Tag(name = "User Class Controller", description = "API для управления связями пользователь-класс")
 public class UserClassController {
     @Autowired
     private UserClassServiceInterface teacherClassService;
 
-//    @PostMapping("/add")
-//    public UserClassDto addTeacherClassDto(@RequestBody UserClassDto teacherClassDto) {
-//        return teacherClassService.addUserClassDto(teacherClassDto);
-//    }
-
     @DeleteMapping("/delete")
     public void deleteTeacherClassDto(@RequestBody UserClassDto teacherClassDto) {
-        teacherClassService.deleteTeacherClassDto(teacherClassDto);
+        teacherClassService.deleteUserClassDto(teacherClassDto);
     }
 
     @GetMapping("/all")

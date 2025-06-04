@@ -58,7 +58,7 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
     public void deleteThemeDto(ThemeDto dto) {
         if (findThemeById(dto.getId())) {
             Theme theme = themeMapper.toEntity(dto);
-            themeRepository.delete(theme);
+            themeRepository.deleteById(theme.getId());
         } else {
             log.error("Тема с идентификатором " + dto.getId() + " не существует");
         }

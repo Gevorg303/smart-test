@@ -1,6 +1,5 @@
 package com.example.smart_test.service.api;
 
-import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.domain.UserClass;
 import com.example.smart_test.dto.StudentClassDto;
@@ -17,7 +16,9 @@ public interface UserClassServiceInterface {
     UserClassDto addUserClass(UserClass userClass);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    void deleteTeacherClassDto(UserClassDto dto);
+    void deleteUserClassDto(UserClassDto dto);
+
+    void deleteUserClassByUserId(Long userId);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<UserClassDto> getAllTeacherClasses();
