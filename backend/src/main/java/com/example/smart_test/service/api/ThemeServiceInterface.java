@@ -14,7 +14,6 @@ import java.util.List;
 public interface ThemeServiceInterface {
     ThemeDto addThemeDto(ThemeDto dto);
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void deleteThemeDto(ThemeDto dto);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

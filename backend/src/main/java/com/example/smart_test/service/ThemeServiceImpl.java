@@ -55,13 +55,10 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
     }
 
     @Override
+    @Transactional
     public void deleteThemeDto(ThemeDto dto) {
-        if (findThemeById(dto.getId())) {
-            Theme theme = themeMapper.toEntity(dto);
-            themeRepository.deleteById(theme.getId());
-        } else {
-            log.error("Тема с идентификатором " + dto.getId() + " не существует");
-        }
+        Theme theme = themeMapper.toEntity(dto);
+        themeRepository.delete(theme);
     }
 
     @Override

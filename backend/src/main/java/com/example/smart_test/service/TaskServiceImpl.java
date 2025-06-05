@@ -76,7 +76,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
     @Override
     @Transactional
-    public void deleteTask(Task task) {
+    public void deleteTask(Task task, boolean isDelete) {
         if (!findTaskById(task.getId())) {
             log.error("Задача с идентификатором " + task.getId() + " не найдена");
             return;
@@ -84,7 +84,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
         deleteAllTaskOfIndicators(task);
         deleteAllResponseOptions(task);
-        updateAllTaskResults(task);
+        updateAllTaskResults(task, isDelete);
 
         taskRepositoryInterface.delete(task);
     }
@@ -105,12 +105,12 @@ public class TaskServiceImpl implements TaskServiceInterface {
         }
     }
 
-    private void updateAllTaskResults(Task task) {
+    private void updateAllTaskResults(Task task, boolean isDelete) {
         List<TaskResults> taskResultsList = taskResultsService.findByTaskId(task.getId());
         for (TaskResults taskResults : taskResultsList) {
             log.info("ID попытки тестирования: {}", taskResults.getTestingAttempt().getId());
             log.info("ID результата задания: {}", taskResults.getId());
-            taskResultsService.updateTaskResults(taskResults);
+            taskResultsService.updateTaskResults(taskResults, isDelete);
         }
     }
 

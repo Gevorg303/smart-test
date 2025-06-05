@@ -2,9 +2,12 @@ package com.example.smart_test.service;
 
 import com.example.smart_test.domain.*;
 import com.example.smart_test.dto.SubjectDto;
+import com.example.smart_test.dto.TestDto;
+import com.example.smart_test.dto.TestingAttemptDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
+import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.ThemeMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.SubjectRepositoryInterface;
@@ -49,6 +52,10 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
     private TaskServiceInterface taskService;
     @Autowired
     private TestServiceInterface testService;
+    @Autowired
+    private TestingAttemptServiceInterface testingAttemptService;
+    @Autowired
+    private TaskResultsServiceInterface taskResultsService;
 
     @Override
     @Transactional
@@ -160,48 +167,102 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
     @Transactional
     public void deleteSubjectDto(SubjectDto dto) {
         try {
-            log.info("Начало удаления предмет с ID: {}", dto.getId());
+            log.info("Начало удаления предмета ID: {}", dto.getId());
 
-            subjectUserRepository.deleteBySubjectId(dto.getId());
-            log.info("Удалены связи с пользователями по предмету ID: {}", dto.getId());
-
-            List<Theme> themeList = themeService.findThemeByIdSubject(dto);
-            for (Theme theme : themeList) {
-                log.info("Обработка темы ID: {}, название: {}", theme.getId(), theme.getThemeName());
-
-                List<Indicator> indicatorList = indicatorService.findIndicatorByIdTheme(theme);
-                for (Indicator indicator : indicatorList) {
-                    log.info("Удаляется индикатор ID: {}, название: {}", indicator.getId(), indicator.getNameOfTheIndicator());
-
-                    List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdIndicator(indicator);
-                    for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
-                        taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
-                        //taskOfIndicatorService.deleteByIndicatorId(indicator.getId());
-                        log.info("Удалены связи индикатора с заданиями, ID индикатора: {}", indicator.getId());
-                        Task task = taskOfIndicator.getTask();
-                        log.info("Удаляется задание ID: {}", task.getId());
-                        taskService.deleteTask(task);
-                    }
-
-                    indicatorService.deleteByIndicatorId(indicator.getId());
-                    log.info("Удалён индикатор ID: {}", indicator.getId());
-                }
-
-                testService.deleteByThemeId(theme.getId());
-                log.info("Удалены тесты по теме ID: {}", theme.getId());
-
-                themeService.deleteThemeDto(themeMapper.toDTO(theme));
-                log.info("Удалена тема ID: {}", theme.getId());
-            }
+            deleteSubjectUserLinks(dto.getId());
+            deleteThemesAndChildren(dto);
 
             subjectRepository.delete(subjectMapper.toEntity(dto));
             log.info("Удалён предмет ID: {}", dto.getId());
-
         } catch (Exception e) {
             log.error("Ошибка при удалении предмета ID: {}. Причина: {}", dto.getId(), e.getMessage(), e);
             throw new RuntimeException("Не удалось удалить предмет: " + e.getMessage(), e);
         }
     }
 
+    private void deleteSubjectUserLinks(Long subjectId) {
+        subjectUserRepository.deleteBySubjectId(subjectId);
+        log.info("Удалены связи предмета с пользователями, ID: {}", subjectId);
+    }
 
+    private void deleteThemesAndChildren(SubjectDto dto) {
+        List<Theme> themeList = themeService.findThemeByIdSubject(dto);
+        for (Theme theme : themeList) {
+            log.info("Обработка темы ID: {}, название: {}", theme.getId(), theme.getThemeName());
+
+            deleteIndicatorsAndTasks(theme);
+            deleteTests(theme.getId());
+            deleteTheme(theme);
+        }
+    }
+
+    private void deleteIndicatorsAndTasks(Theme theme) {
+        List<Indicator> indicatorList = indicatorService.findIndicatorByIdTheme(theme);
+        for (Indicator indicator : indicatorList) {
+            log.info("Удаляется индикатор ID: {}, название: {}", indicator.getId(), indicator.getNameOfTheIndicator());
+
+            deleteTasksOfIndicator(indicator, theme);
+            indicatorService.deleteByIndicatorId(indicator.getId());
+            log.info("Удалён индикатор ID: {}", indicator.getId());
+        }
+    }
+
+    private void deleteTasksOfIndicator(Indicator indicator, Theme theme) {
+        List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdIndicator(indicator);
+
+        if (taskOfIndicatorList != null && !taskOfIndicatorList.isEmpty()) {
+            deleteLinkedTasks(taskOfIndicatorList, indicator);
+        } else {
+            deleteTestingAttemptsByTheme(theme);
+        }
+    }
+
+    private void deleteLinkedTasks(List<TaskOfIndicator> taskOfIndicatorList, Indicator indicator) {
+        for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
+            taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
+            log.info("Удалена связь индикатора с заданием, ID индикатора: {}", indicator.getId());
+
+            Task task = taskOfIndicator.getTask();
+            if (task != null) {
+                taskService.deleteTask(task, true);
+                log.info("Удалено задание ID: {}", task.getId());
+            }
+        }
+    }
+
+    private void deleteTestingAttemptsByTheme(Theme theme) {
+        List<TestDto> testList = testService.outputTestsByIDTheme(themeMapper.toDTO(theme));
+
+        if (testList != null && !testList.isEmpty()) {
+            for (TestDto test : testList) {
+                deleteTestingAttemptsByTest(test);
+            }
+        }
+    }
+
+    private void deleteTestingAttemptsByTest(TestDto test) {
+        List<TestingAttemptDto> testingAttemptList = testingAttemptService.findByTest(test);
+
+        if (testingAttemptList != null && !testingAttemptList.isEmpty()) {
+            for (TestingAttemptDto testingAttemptDto : testingAttemptList) {
+                taskResultsService.deleteByTestingAttemptId(testingAttemptDto);
+                testingAttemptService.deleteTestingAttempt(testingAttemptDto.getId());
+                log.info("Удалена попытка тестирования ID: {}", testingAttemptDto.getId());
+            }
+        }
+    }
+
+    private void deleteTests(Long themeId) {
+        testService.deleteByThemeId(themeId);
+        log.info("Удалены тесты по теме ID: {}", themeId);
+    }
+
+    private void deleteTheme(Theme theme) {
+        List<Indicator> remaining = indicatorService.findIndicatorByIdTheme(theme);
+        if (!remaining.isEmpty()) {
+            throw new IllegalStateException("Невозможно удалить тему: остались связанные индикаторы");
+        }
+        themeService.deleteThemeDto(themeMapper.toDTO(theme));
+        log.info("Удалена тема ID: {}", theme.getId());
+    }
 }

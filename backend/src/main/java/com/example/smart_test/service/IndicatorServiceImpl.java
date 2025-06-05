@@ -162,6 +162,6 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
     @Override
     public void deleteByIndicatorId(Long idIndicator) {
-        indicatorRepositoryInterface.deleteById(idIndicator);
+        indicatorRepositoryInterface.deleteByIndicatorId(idIndicator);
     }
 }

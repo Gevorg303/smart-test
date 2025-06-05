@@ -28,5 +28,5 @@ public interface TaskResultsServiceInterface {
 
     List<TaskResults> findByTaskId(Long taskId);
 
-    void updateTaskResults(TaskResults taskResults);
+    void updateTaskResults(TaskResults taskResults,  boolean isDelete);
 }
