@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {useOutletContext} from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 const ResultsPage = () => {
     const [subjects, setSubjects] = useState([]);
@@ -11,12 +11,14 @@ const ResultsPage = () => {
     const [subjectList, setSubjectList] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState('');
     const canvasRef = useRef(null);
-
     const [topText, setTopText] = useOutletContext();
 
     localStorage.setItem('info', "На этой странице отображается статистика учеников. Тут можно посмотреть за успеваемостью учеников по различным предметам.");
 
     useEffect(() => {
+        // Очистка topText при монтировании компонента
+        setTopText("");
+
         // Fetch user data
         const fetchUser = async () => {
             try {
@@ -36,12 +38,19 @@ const ResultsPage = () => {
         };
 
         fetchUser();
-    }, []);
+
+        // Очистка topText при размонтировании компонента
+        return () => {
+            setTopText("");
+        };
+    }, [setTopText]);
 
     useEffect(() => {
         if (user) {
             const fetchData = async () => {
                 try {
+                    setTopText("Результаты");
+
                     // Fetch student statistics
                     const response = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/student', {
                         method: 'POST',
@@ -90,9 +99,6 @@ const ResultsPage = () => {
         if (selectedSubject && user) {
             const fetchTeacherStats = async () => {
                 try {
-
-                    setTopText("Результаты");
-
                     const teacherStatsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/teacher', {
                         method: 'POST',
                         headers: {
@@ -127,10 +133,9 @@ const ResultsPage = () => {
 
             fetchTeacherStats();
         }
-    }, [selectedSubject, user, subjectList, setTopText]);
+    }, [selectedSubject, user, subjectList]);
 
     useEffect(() => {
-        // Call drawPieChart whenever the data changes
         if (excellentStudents.length > 0 || goodStudents.length > 0 || averageStudents.length > 0 || poorStudents.length > 0) {
             drawPieChart();
         }
@@ -155,7 +160,6 @@ const ResultsPage = () => {
         const centerY = canvas.height / 2;
         const radius = Math.min(centerX, centerY) - 10;
 
-        // Calculate total number of students
         const totalStudents = excellentStudents.length + goodStudents.length + averageStudents.length + poorStudents.length;
 
         if (totalStudents === 0) {
@@ -163,7 +167,6 @@ const ResultsPage = () => {
             return;
         }
 
-        // Calculate percentages
         const excellentPercentage = (excellentStudents.length / totalStudents) * 100;
         const goodPercentage = (goodStudents.length / totalStudents) * 100;
         const averagePercentage = (averageStudents.length / totalStudents) * 100;
@@ -252,7 +255,6 @@ const ResultsPage = () => {
             <div className="result-container">
                 <div className="container-wrapper-2">
                     <div className="container-home-2">
-                        {/*<h2>Сведения об успеваемости</h2>*/}
                         <div className="dropdowns">
                             <select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
                                 <option value="">Предмет</option>

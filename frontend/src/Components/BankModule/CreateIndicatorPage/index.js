@@ -14,7 +14,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
 
     // Валидация названия индикатора
     const isValidIndicatorName = (name) => {
-        return name.length <= 100;
+        return name.length <= 300;
     };
 
 
@@ -29,7 +29,7 @@ const CreateIndicatorPage = ({editItem, onCreate, onError}) => {
 
         // Проверка поля Название индикатора
         if (!isValidIndicatorName(currentName)) {
-            errors.push('Название индикатора превышает 100 символов.');
+            errors.push('Название индикатора превышает 300 символов.');
         }
 
         if (targetSubject <= 0) {

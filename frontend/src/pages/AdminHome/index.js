@@ -31,7 +31,12 @@ const AdminHome = () => {
         };
 
         fetchUser();
-    }, []);
+
+        // Очистка topText при размонтировании компонента
+        return () => {
+            setTopText("");
+        };
+    }, [setTopText]);
 
     useEffect(() => {
         if (user) {
@@ -39,13 +44,12 @@ const AdminHome = () => {
                 try {
                     setTopText("Домашняя страница админа");
 
-                    // Запрос на получение количества пользователей по ролям
                     const userCountResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/admin-count-user', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
                         },
-                        body: JSON.stringify(user) // Передаем весь объект пользователя
+                        body: JSON.stringify(user)
                     });
 
                     if (!userCountResponse.ok) {
@@ -56,18 +60,16 @@ const AdminHome = () => {
                     const userCountData = await userCountResponse.json();
                     console.log("User count data:", userCountData);
 
-                    // Обновляем состояние roleCounts массивом строк в формате "[role.role]: [count]"
                     const counts = userCountData.map(item => `${item.role.role}: ${item.count}`);
                     setRoleCounts(counts);
                     setTotalUsers(userCountData.reduce((sum, item) => sum + item.count, 0));
 
-                    // Запрос на получение количества учеников в классах
                     const classCountResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/admin-count-student-class', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8'
                         },
-                        body: JSON.stringify(user) // Передаем весь объект пользователя
+                        body: JSON.stringify(user)
                     });
 
                     if (!classCountResponse.ok) {
@@ -86,7 +88,6 @@ const AdminHome = () => {
 
                     setClassStudentCounts(classCounts);
 
-                    // Пример данных, которые вы получите из БД
                     const mockData = [
                         { name: "Илья", role: "Админ", class: " " },
                         { name: "Петя", role: "Админ", class: " " },

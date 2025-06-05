@@ -236,6 +236,9 @@ const Sorting = ({ type, setBankItems }) => {
 
     return (
         <>
+            {type !== 'student' && type !== 'subject' && (
+                <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
+            )}
             {type === 'task' ?
                 <>
                     <div className="button-containers-filter">
@@ -406,9 +409,7 @@ const Sorting = ({ type, setBankItems }) => {
                     </div>
                 </>
             )}
-            {type !== 'student' && type !== 'subject' && (
-                <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
-            )}
+
             {mainBlock}
         </>
     );
