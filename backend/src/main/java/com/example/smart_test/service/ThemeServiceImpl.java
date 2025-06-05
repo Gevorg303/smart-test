@@ -1,7 +1,6 @@
 package com.example.smart_test.service;
 
 
-import com.example.smart_test.domain.Subject;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.SubjectDto;
@@ -9,18 +8,15 @@ import com.example.smart_test.dto.SubjectUserDto;
 import com.example.smart_test.dto.ThemeDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
-import com.example.smart_test.mapper.api.SubjectMapperInterface;
 import com.example.smart_test.mapper.api.ThemeMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.ThemeRepositoryInterface;
-import com.example.smart_test.service.api.SubjectUserServiceInterface;
-import com.example.smart_test.service.api.ThemeServiceInterface;
-import com.example.smart_test.service.api.UserEducationalInstitutionServiceInterface;
-import com.example.smart_test.service.api.UserServiceInterface;
+import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +38,9 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    @Lazy
+    private SubjectServiceInterface subjectService;
 
     @Override
     public ThemeDto addThemeDto(ThemeDto dto) {
@@ -133,7 +132,6 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
         return new ArrayList<>(userThemes);
     }
 
-
     @Override
     public Theme updateTheme(Theme updatedTheme) {
         return themeRepository.findById(updatedTheme.getId())
@@ -143,5 +141,12 @@ public class ThemeServiceImpl implements ThemeServiceInterface {
                     return themeRepository.save(theme);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Тема с ID " + updatedTheme.getId() + " не найдена"));
+    }
+
+    @Transactional
+    @Override
+    public void deleteIndicatorsAndTasks(ThemeDto theme) {
+        List<Theme> themeList = List.of(themeMapper.toEntity(theme));
+        subjectService.deleteThemesAndChildren(themeList);
     }
 }

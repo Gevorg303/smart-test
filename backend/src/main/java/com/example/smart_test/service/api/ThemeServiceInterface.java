@@ -31,4 +31,7 @@ public interface ThemeServiceInterface {
     List<ThemeDto> getUserThemes(UserDto dto);
 
     Theme updateTheme(Theme updatedTheme);
+
+    @Transactional
+    void deleteIndicatorsAndTasks(ThemeDto theme);
 }

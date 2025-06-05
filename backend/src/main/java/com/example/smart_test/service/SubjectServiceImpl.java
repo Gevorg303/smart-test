@@ -7,7 +7,6 @@ import com.example.smart_test.dto.TestingAttemptDto;
 import com.example.smart_test.dto.UserDto;
 import com.example.smart_test.enums.UserRoleEnum;
 import com.example.smart_test.mapper.api.SubjectMapperInterface;
-import com.example.smart_test.mapper.api.TestMapperInterface;
 import com.example.smart_test.mapper.api.ThemeMapperInterface;
 import com.example.smart_test.mapper.api.UserMapperInterface;
 import com.example.smart_test.repository.SubjectRepositoryInterface;
@@ -170,7 +169,10 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
             log.info("Начало удаления предмета ID: {}", dto.getId());
 
             deleteSubjectUserLinks(dto.getId());
-            deleteThemesAndChildren(dto);
+            List<Theme> themeList = themeService.findThemeByIdSubject(dto);
+            if (themeList != null && !themeList.isEmpty()) {
+                deleteThemesAndChildren(themeList);
+            }
 
             subjectRepository.delete(subjectMapper.toEntity(dto));
             log.info("Удалён предмет ID: {}", dto.getId());
@@ -185,8 +187,8 @@ public class SubjectServiceImpl implements SubjectServiceInterface {
         log.info("Удалены связи предмета с пользователями, ID: {}", subjectId);
     }
 
-    private void deleteThemesAndChildren(SubjectDto dto) {
-        List<Theme> themeList = themeService.findThemeByIdSubject(dto);
+    @Override
+    public void deleteThemesAndChildren(List<Theme> themeList) {
         for (Theme theme : themeList) {
             log.info("Обработка темы ID: {}, название: {}", theme.getId(), theme.getThemeName());
 
