@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Form, Button, Toast, ToastContainer} from 'react-bootstrap';
+import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import BankCard from "../../Components/BankModule/BankCard";
 import "./styles.css";
@@ -14,67 +14,41 @@ import { useOutletContext } from 'react-router-dom';
 import CreateStudentPage from "../../Components/BankModule/CreateStudentPage";
 import CreateClassPage from "../../Components/BankModule/CreateClassPage";
 
-const QuestionBankPage = ({type}) => {
+const QuestionBankPage = ({ type }) => {
     const [editItem, setEditItem] = useState(null);
     const [bankItems, setBankItems] = useState([]);
-    const [title, setTitle] = useState();
     const [createModal, setCreateModal] = useState();
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const navigate = useNavigate();
-    const [showToast, setShowToast] = useState(false);
-    const [toastText, setToastText] = useState("");
-    const [topText, setTopText] = useOutletContext();
     const [showErrorToast, setShowErrorToast] = useState(false);
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-
-    function EditFunc(item) {
-        setEditItem(item)
-        setShowEditModal(true)
-    }
-
-    const handleCreate = (message) => {
-        setShowCreateModal(false);
-        setShowEditModal(false)
-        setShowSuccessToast(true);
-        setShowErrorToast(true);
-        setEditItem(null)
-    };
-
-    const ErrorToast = (messages) => {
-        if (Array.isArray(messages)) {
-            setErrorMessage(messages.join('\n'));
-        } else {
-            setErrorMessage(messages);
-        }
-        setShowSuccessToast(false);
-        setShowErrorToast(true);
-    };
-
-    const sortById = (items) => {
-        return [...items].sort((a, b) => b.id - a.id);
-    };
-
+    const [topText, setTopText] = useOutletContext();
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
 
     useEffect(() => {
+        // Очистка topText при монтировании компонента
+        setTopText("");
+
         async function fetchTests() {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
+
+                const response1 = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
                     credentials: "include",
                 });
                 if (!response1.ok) {
                     throw new Error('Ошибка сети');
                 }
                 const user = await response1.json();
+
                 switch (type) {
                     case "test":
                         localStorage.setItem('info', "На этой странице можно отсортировать все тесты по предмету, теме, типу теста и просмотреть");
                         setTopText("Банк тестов");
-                        setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'test/get-user-tests', {
+                        setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
+                        const response2 = await fetch(process.env.REACT_APP_SERVER_URL + 'test/get-user-tests', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -90,8 +64,8 @@ const QuestionBankPage = ({type}) => {
                     case "task":
                         localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
                         setTopText("Банк заданий");
-                        setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response3 = await fetch(process.env.REACT_APP_SERVER_URL+'task/get-user-tasks', {
+                        setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
+                        const response3 = await fetch(process.env.REACT_APP_SERVER_URL + 'task/get-user-tasks', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -107,8 +81,8 @@ const QuestionBankPage = ({type}) => {
                     case "subject":
                         localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
                         setTopText("Банк предметов");
-                        setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response4 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
+                        setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
+                        const response4 = await fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -124,8 +98,8 @@ const QuestionBankPage = ({type}) => {
                     case "theme":
                         localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
                         setTopText("Банк тем");
-                        setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response5 = await fetch(process.env.REACT_APP_SERVER_URL+'theme/get-theme-by-id-user', {
+                        setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
+                        const response5 = await fetch(process.env.REACT_APP_SERVER_URL + 'theme/get-theme-by-id-user', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -141,8 +115,8 @@ const QuestionBankPage = ({type}) => {
                     case "indicator":
                         localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
                         setTopText("Банк индикаторов");
-                        setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response6 = await fetch(process.env.REACT_APP_SERVER_URL+'indicator/indicator-by-user', {
+                        setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
+                        const response6 = await fetch(process.env.REACT_APP_SERVER_URL + 'indicator/indicator-by-user', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -158,8 +132,8 @@ const QuestionBankPage = ({type}) => {
                     case "student":
                         localStorage.setItem('info', "На этой странице посмотреть список учеников");
                         setTopText("Банк пользователей");
-                        setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response7 = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+                        setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
+                        const response7 = await fetch(process.env.REACT_APP_SERVER_URL + 'users/all', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -170,7 +144,7 @@ const QuestionBankPage = ({type}) => {
                             })
                         });
                         if (!response7.ok) {
-                            throw new Error('Ошибка получения индикаторов');
+                            throw new Error('Ошибка получения пользователей');
                         }
                         const students = await response7.json();
                         setBankItems(sortById(students));
@@ -178,8 +152,8 @@ const QuestionBankPage = ({type}) => {
                     case "class":
                         localStorage.setItem('info', "На этой странице можно отсортировать все классы и просмотреть");
                         setTopText("Банк классов");
-                        setCreateModal(<CreateClassPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast}/>);
-                        const response8 = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user', {
+                        setCreateModal(<CreateClassPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
+                        const response8 = await fetch(process.env.REACT_APP_SERVER_URL + 'users/find-student-class-by-user', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8'
@@ -202,18 +176,50 @@ const QuestionBankPage = ({type}) => {
         }
 
         fetchTests();
-    }, [type, editItem, showSuccessToast, ]);
+
+        // Очистка topText при размонтировании компонента
+        return () => {
+            setTopText("");
+        };
+    }, [type, editItem]);
+
+    function EditFunc(item) {
+        setEditItem(item);
+        setShowEditModal(true);
+    }
+
+    const handleCreate = (message) => {
+        setShowCreateModal(false);
+        setShowEditModal(false);
+        setShowSuccessToast(true);
+        setShowErrorToast(false);
+        setEditItem(null);
+    };
+
+    const ErrorToast = (messages) => {
+        if (Array.isArray(messages)) {
+            setErrorMessage(messages.join('\n'));
+        } else {
+            setErrorMessage(messages);
+        }
+        setShowSuccessToast(false);
+        setShowErrorToast(true);
+    };
+
+    const sortById = (items) => {
+        return [...items].sort((a, b) => b.id - a.id);
+    };
 
     return (
         <div className="scrollable-container">
             <div className="page-container-quest">
                 <div className="button-containers">
+                    {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
                     {type !== "student" && (
                         <Button variant="success" className="create-button" onClick={() => {
                             setShowCreateModal(true);
                         }}>Создать</Button>
                     )}
-                    {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
                 </div>
                 <Modal
                     show={showCreateModal || showEditModal}
@@ -252,7 +258,7 @@ const QuestionBankPage = ({type}) => {
                         bottom: '20px',
                         right: '20px',
                         zIndex: 100000,
-                        backgroundColor: showSuccessToast ? 'green':'red',
+                        backgroundColor: showSuccessToast ? 'green' : 'red',
                         color: 'white'
                     }}
                 >
@@ -262,7 +268,7 @@ const QuestionBankPage = ({type}) => {
                             x
                         </Button>
                     </Toast.Header>
-                    <Toast.Body>{showSuccessToast ? 'Успешно': errorMessage}</Toast.Body>
+                    <Toast.Body>{showSuccessToast ? 'Успешно' : errorMessage}</Toast.Body>
                 </Toast>
             )}
         </div>

@@ -11,11 +11,9 @@ const RegistrationPage = () => {
     const [topText, setTopText] = useOutletContext();
     let selectedOption;
     if (location.pathname.includes('multiple')) {
-        setTopText("Регистрация");
         localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
         selectedOption = 'multiple';
     } else {
-        setTopText("Регистрация");
         localStorage.setItem('info', "Введите здесь данные ученика");
         selectedOption = 'single';
     }
