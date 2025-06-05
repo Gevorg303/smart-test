@@ -14,7 +14,6 @@ const BetaPage = () => {
     const [roles, setRoles] = useState([]);
     const [selectedClass, setSelectedClass] = useState(null);
     const [selectedRole, setSelectedRole] = useState(null);
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [users, setUsers] = useState([]);
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
@@ -23,19 +22,12 @@ const BetaPage = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const location = useLocation();
 
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const formType = params.get('form');
         if (formType) {
             setSelectedForm(formType);
-        }
-
-        if (location.pathname.includes('multiple')) {
-            setTopText("Регистрация");
-            localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
-        } else {
-            setTopText("Регистрация");
-            localStorage.setItem('info', "Введите здесь данные ученика");
         }
 
         fetchClasses();
@@ -95,17 +87,13 @@ const BetaPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Submit button clicked'); // Логирование нажатия кнопки
-
         setErrorMessage('');
         setShowErrorToast(false);
         setShowSuccessToast(false);
 
         if (selectedForm === 'single') {
-            console.log('Handling single registration'); // Логирование начала обработки одиночной регистрации
             await handleSingleRegistration(event);
         } else if (selectedForm === 'multiple' && file) {
-            console.log('Handling multiple registration'); // Логирование начала обработки множественной регистрации
             await handleMultipleRegistration();
         }
     };
@@ -114,8 +102,6 @@ const BetaPage = () => {
         const form = event.target;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
-
-        console.log('Form data:', data); // Логирование данных формы
 
         const errors = [];
 
@@ -155,8 +141,6 @@ const BetaPage = () => {
             studentClass: selectedClass
         };
 
-        console.log('User request:', userRequest); // Логирование запроса пользователя
-
         const userRequestList = [userRequest];
 
         const isEmailRegistered = users.some(user => user.email === data.email);
@@ -177,7 +161,6 @@ const BetaPage = () => {
 
             if (response.ok) {
                 const answers = await response.json();
-                console.log('Registration successful:', answers); // Логирование успешной регистрации
                 setShowSuccessToast(true);
                 form.reset();
                 setSelectedClass(null);
@@ -278,7 +261,6 @@ const BetaPage = () => {
 
                 if (response.ok) {
                     const answers = await response.json();
-                    console.log('Multiple registration successful:', answers); // Логирование успешной множественной регистрации
                     setShowSuccessToast(true);
                     setSelectedClass(null);
                     setSelectedRole(null);
@@ -355,6 +337,7 @@ const BetaPage = () => {
     return (
         <div className="cont">
             <AdminNavbar onFormSelect={setSelectedForm} />
+            {topText && <div className="top-text">{topText}</div>}
             <AdminRegistrationForm
                 selectedForm={selectedForm}
                 classes={classes}

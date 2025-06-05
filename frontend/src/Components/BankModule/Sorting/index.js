@@ -236,6 +236,7 @@ const Sorting = ({ type, setBankItems }) => {
 
     return (
         <>
+
             {type === 'task' ?
                 <>
                     <div className="button-containers-filter">

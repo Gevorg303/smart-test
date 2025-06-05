@@ -16,20 +16,21 @@ const HomePage = () => {
             try {
                 document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
                     credentials: "include",
                 });
                 if (!response.ok) {
                     throw new Error('Ошибка сети');
                 }
                 const user = await response.json();
-                console.log(user);
                 setTopText("Здравствуйте, " + user.name + " (" + user.role.role + ")");
 
                 const container = document.querySelector('.all-container');
-                container.classList.add('page-style-1');
+                if (container) {
+                    container.classList.add('page-style-1');
+                }
 
-                const response2 = await fetch(process.env.REACT_APP_SERVER_URL+'subject/print-user-subject', {
+                const response2 = await fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -50,36 +51,13 @@ const HomePage = () => {
         }
 
         fetchUser();
+
+        // Очистка topText при размонтировании компонента
+        return () => {
+            setTopText("");
+        };
     }, [setTopText]);
 
-    /*useEffect(() => {
-        const adjustStyleBasedOnHeight = () => {
-            const element = containerRef.current;
-            if (element) {
-                const height = element.offsetHeight;
-                if (height > 200) {
-                    element.style.backgroundColor = 'lightblue';
-
-                } else {
-                    element.style.backgroundColor = 'lightgray';
-                    element.style.marginBottom = '220px'; // Указываем единицы измерения
-                }
-            }
-        };
-
-        // Вызовите функцию при монтировании компонента
-        adjustStyleBasedOnHeight();
-
-        // Вызовите функцию при изменении размера окна
-        window.addEventListener('resize', adjustStyleBasedOnHeight);
-
-        // Очистка события при размонтировании компонента
-        return () => {
-            window.removeEventListener('resize', adjustStyleBasedOnHeight);
-        };
-    }, [subjects]);
-
-*/
     return (
         <div className="home-page" ref={containerRef2}>
             <div className="container-wrapper">
