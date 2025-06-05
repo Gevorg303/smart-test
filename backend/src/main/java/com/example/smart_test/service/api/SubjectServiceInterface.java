@@ -32,4 +32,6 @@ public interface SubjectServiceInterface {
     List<Theme> getThemesBySubjectId(Long subjectId);
 
     Subject updateSubject(Subject updatedSubject);
+
+    void deleteThemesAndChildren(List<Theme> themeList);
 }

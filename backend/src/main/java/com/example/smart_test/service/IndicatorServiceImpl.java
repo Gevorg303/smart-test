@@ -2,6 +2,7 @@ package com.example.smart_test.service;
 
 
 import com.example.smart_test.domain.Indicator;
+import com.example.smart_test.domain.TaskOfIndicator;
 import com.example.smart_test.domain.Theme;
 import com.example.smart_test.domain.User;
 import com.example.smart_test.dto.*;
@@ -13,6 +14,7 @@ import com.example.smart_test.service.api.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,12 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
     private UserEducationalInstitutionServiceInterface userEducationalInstitutionService;
     @Autowired
     private UserMapperInterface userMapper;
+    @Autowired
+    @Lazy
+    private TaskOfIndicatorServiceInterface taskOfIndicatorService;
+    @Autowired
+    @Lazy
+    private TaskServiceInterface taskService;
 
     @Override
     public IndicatorDto addIndicatorDto(IndicatorDto dto) {
@@ -54,6 +62,18 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
     public void deleteIndicatorDto(IndicatorDto dto) {
         if (findIndicatorById(dto.getId())) {
             Indicator indicator = indicatorMapperInterface.toEntity(dto);
+            List<TaskOfIndicator> taskOfIndicatorList = taskOfIndicatorService.findTaskOfIndicatorByIdIndicator(indicator);
+
+            if (!taskOfIndicatorList.isEmpty()) {
+                for (TaskOfIndicator taskOfIndicator : taskOfIndicatorList) {
+                    // Проверяем, есть ли у задания только одна связь "Задание по индикатору"
+                    if (taskOfIndicatorService.countByTaskId(taskOfIndicator.getTask().getId()) == 1) {
+                        // Если это единственная связь, удаляем задание
+                        taskService.deleteTask(taskOfIndicator.getTask(), false);
+                    }
+                    taskOfIndicatorService.deleteTaskOfIndicator(taskOfIndicator);
+                }
+            }
             indicatorRepositoryInterface.delete(indicator);
         } else {
             log.error("Индикатор с идентификатором " + dto.getId() + " не существует");
@@ -162,6 +182,6 @@ public class IndicatorServiceImpl implements IndicatorServiceInterface {
 
     @Override
     public void deleteByIndicatorId(Long idIndicator) {
-        indicatorRepositoryInterface.deleteById(idIndicator);
+        indicatorRepositoryInterface.deleteByIndicatorId(idIndicator);
     }
 }

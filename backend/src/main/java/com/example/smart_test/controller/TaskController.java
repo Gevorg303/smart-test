@@ -36,7 +36,7 @@ public class TaskController {
     @ApiResponse(responseCode = "200", description = "Задача успешно удалена")
     @DeleteMapping("/delete")
     public void deleteTask(@RequestBody Task task) {
-        taskService.deleteTask(task);
+        taskService.deleteTask(task, false);
     }
 
     @Operation(summary = "Получить все задачи", description = "Возвращает список всех задач")

@@ -10,6 +10,7 @@ import com.example.smart_test.mapper.api.TestResultsMapperInterface;
 import com.example.smart_test.mapper.api.TestingAttemptMapperInterface;
 import com.example.smart_test.repository.TaskResultsRepositoryInterface;
 import com.example.smart_test.service.api.TaskResultsServiceInterface;
+import com.example.smart_test.service.api.TestingAttemptServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,8 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     private TaskMapperInterface taskMapper;
     @Autowired
     private TestingAttemptMapperInterface testingAttemptMapper;
+    @Autowired
+    private TestingAttemptServiceInterface testingAttemptService;
 
     @Override
     @Transactional
@@ -87,11 +90,19 @@ public class TaskResultsServiceImpl implements TaskResultsServiceInterface {
     }
 
     @Override
-    public void updateTaskResults(TaskResults taskResults) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateTaskResults(TaskResults taskResults, boolean isDelete) {
         if (taskResults != null && taskResults.getId() != null) {
             TaskResults oldTaskResults = taskResultsRepositoryInterface.findById(taskResults.getId()).orElse(null);
-            Objects.requireNonNull(oldTaskResults).setTask(null);
-            taskResultsRepositoryInterface.save(oldTaskResults);
+            if (isDelete && oldTaskResults != null
+                    && oldTaskResults.getTestingAttempt() != null
+                    && oldTaskResults.getTestingAttempt().getId() != null) {
+                taskResultsRepositoryInterface.delete(oldTaskResults);
+                testingAttemptService.deleteTestingAttempt(oldTaskResults.getTestingAttempt().getId());
+            } else {
+                Objects.requireNonNull(oldTaskResults).setTask(null);
+                taskResultsRepositoryInterface.save(oldTaskResults);
+            }
         }
     }
 }

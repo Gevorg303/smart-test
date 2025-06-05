@@ -22,7 +22,7 @@ public interface TaskServiceInterface {
     TaskDto addTask(Task task, List<ResponseOption> responseOption, List<Indicator> indicator);
 
     @Transactional
-    void deleteTask(Task task);
+    void deleteTask(Task task, boolean isDelete);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     List<TaskDto> getAllTasks();

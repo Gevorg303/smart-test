@@ -38,7 +38,7 @@ public class ThemeController {
     @ApiResponse(responseCode = "200", description = "Тема успешно удалена")
     @DeleteMapping("/delete")
     public void deleteTheme(@RequestBody ThemeDto themeDto) {
-        themeService.deleteThemeDto(themeDto);
+        themeService.deleteIndicatorsAndTasks(themeDto);
     }
 
     @Operation(summary = "Получить все темы", description = "Возвращает список всех тем")

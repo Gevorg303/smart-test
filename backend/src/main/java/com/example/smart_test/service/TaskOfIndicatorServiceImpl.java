@@ -111,4 +111,9 @@ public class TaskOfIndicatorServiceImpl implements TaskOfIndicatorServiceInterfa
     public void deleteByIndicatorId(Long id) {
         taskOfIndicatorRepositoryInterface.deleteByIndicatorId(id);
     }
+
+    @Override
+    public long countByTaskId(Long taskId) {
+        return taskOfIndicatorRepositoryInterface.countByTaskId(taskId);
+    }
 }
