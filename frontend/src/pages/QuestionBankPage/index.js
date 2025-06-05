@@ -208,12 +208,12 @@ const QuestionBankPage = ({type}) => {
         <div className="scrollable-container">
             <div className="page-container-quest">
                 <div className="button-containers">
-                    {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
                     {type !== "student" && (
                         <Button variant="success" className="create-button" onClick={() => {
                             setShowCreateModal(true);
                         }}>Создать</Button>
                     )}
+                    {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
                 </div>
                 <Modal
                     show={showCreateModal || showEditModal}
