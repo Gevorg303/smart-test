@@ -34,4 +34,6 @@ public interface TaskOfIndicatorServiceInterface {
     List<IndicatorDto> findIndicatorByTask(Task task);
 
     void deleteByIndicatorId(Long id);
+
+    long countByTaskId(Long taskId);
 }
