@@ -9,7 +9,7 @@ import { useOutletContext } from 'react-router-dom';
 
 const ViewTestResultsPage = (props) => {
 
-    localStorage.setItem('info', "Здесь вы можете просмотреть правильность выполнения теста.");
+    localStorage.setItem('info', "Здесь Вы можете посмотреть результаты выполненного теста.");
 
     const [questions, setQuestions] = useState([]);
     const validList = JSON.parse(`${sessionStorage.getItem("testResult")}`)||[];

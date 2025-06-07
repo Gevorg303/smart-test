@@ -11,7 +11,7 @@ const ThemePage = () => {
     const [themes, setThemes] = useState([]);
     const navigate = useNavigate();
     const [topText, setTopText] = useOutletContext();
-    localStorage.setItem('info', "Здесь содержатся темы по выбранному предмету, а также виды тестов по отдельной теме");
+    localStorage.setItem('info', "Здесь содержатся темы по выбранному предмету, а также виды тестов по отдельной теме.");
 
     useEffect(() => {
         function getCookie(name) {

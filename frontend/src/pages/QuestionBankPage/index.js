@@ -48,7 +48,7 @@ const QuestionBankPage = ({ type }) => {
 
                 switch (type) {
                     case "test":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все тесты по предмету, теме, типу теста и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами тесты, а также при необходимости отсортировать эти тесты по предмету, теме и типу теста. Также на данной странице вы можете создать новый тест.");
                         setTopText("Банк тестов");
                         setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response2 = await fetch(process.env.REACT_APP_SERVER_URL + 'test/get-user-tests', {
@@ -65,7 +65,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(tests));
                         break;
                     case "task":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами задания, а также при необходимости отсортировать эти задания по предмету, теме и индикатору. Также на данной странице вы можете создать новое задание.");
                         setTopText("Банк заданий");
                         setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response3 = await fetch(process.env.REACT_APP_SERVER_URL + 'task/get-user-tasks', {
@@ -82,7 +82,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(questions));
                         break;
                     case "subject":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами предметы. Также на данной странице вы можете создать новый предмет.");
                         setTopText("Банк предметов");
                         setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response4 = await fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
@@ -99,7 +99,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(subjects));
                         break;
                     case "theme":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами темы, а также при необходимости отсортировать эти темы по предмету. Также на данной странице вы можете создать новую тему.");
                         setTopText("Банк тем");
                         setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response5 = await fetch(process.env.REACT_APP_SERVER_URL + 'theme/get-theme-by-id-user', {
@@ -116,7 +116,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(theme));
                         break;
                     case "indicator":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами индикаторы, а также при необходимости отсортировать эти индикаторы по предмету и теме. Также на данной странице вы можете создать новый индикатор.");
                         setTopText("Банк индикаторов");
                         setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response6 = await fetch(process.env.REACT_APP_SERVER_URL + 'indicator/indicator-by-user', {
@@ -133,7 +133,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(indicator));
                         break;
                     case "student":
-                        localStorage.setItem('info', "На этой странице посмотреть список учеников");
+                        localStorage.setItem('info', "На этой странице посмотреть список учеников.");
                         setTopText("Банк пользователей");
                         setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response7 = await fetch(process.env.REACT_APP_SERVER_URL + 'users/all', {
@@ -153,7 +153,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(students));
                         break;
                     case "class":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все классы и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть список классов.");
                         setTopText("Банк классов");
                         setCreateModal(<CreateClassPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response8 = await fetch(process.env.REACT_APP_SERVER_URL + 'users/find-student-class-by-user', {

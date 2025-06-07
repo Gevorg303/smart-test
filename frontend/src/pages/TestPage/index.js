@@ -24,7 +24,7 @@ const TestPage = () => {
     const [timer, setTimer] = useState();
     const [topText, setTopText] = useOutletContext();
 
-    localStorage.setItem('info', "Это тест с последовательным порядком выведения заданий. Можно пропускать и возвращаться к пропущенным заданиям. По выполнению всех заданий завершите тест");
+    localStorage.setItem('info', "Это тест с последовательным порядком вывода заданий. Задания можно пропускать и возвращаться к ним. По выполнению всех заданий нажмите на кнопку 'Завершить тест'.");
 
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(

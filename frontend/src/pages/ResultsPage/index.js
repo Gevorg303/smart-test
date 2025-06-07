@@ -8,7 +8,7 @@ const ResultsPage = () => {
     const [topText, setTopText] = useOutletContext();
     const [user, setUser] = useState(null);
 
-    localStorage.setItem('info', "Здесь вы можете увидеть вашу среднюю оценку за предмет");
+    localStorage.setItem('info', "Здесь Вы можете увидеть Ваш средний балл за итоговые тесты по каждому из предметов.");
 
     useEffect(() => {
         const fetchUser = async () => {

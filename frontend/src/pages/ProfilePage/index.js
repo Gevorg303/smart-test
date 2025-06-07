@@ -11,7 +11,7 @@ import { useOutletContext } from 'react-router-dom';
 import subjectCardForClass from "../../Components/BankModule/SubjectCardForClass";
 
 const ProfilePage = () => {
-    localStorage.setItem('info', "Здесь вы можете увидеть ваши данные личного кабинета");
+    localStorage.setItem('info', "Здесь Вы можете увидеть Ваши персональные данные.");
 
     const navigate = useNavigate();
     const [userState, setUserState] = useState();

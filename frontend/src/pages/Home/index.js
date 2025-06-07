@@ -9,7 +9,7 @@ const HomePage = () => {
     const [subjects, setSubjects] = useState([]);
     const [topText, setTopText] = useOutletContext();
 
-    localStorage.setItem('info', "Здесь находятся ваши предметы");
+    localStorage.setItem('info', "Здесь находятся Ваши предметы.");
 
     useEffect(() => {
         async function fetchUser() {

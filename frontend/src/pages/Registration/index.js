@@ -12,7 +12,7 @@ const RegistrationPage = () => {
     let selectedOption;
     if (location.pathname.includes('multiple')) {
         setTopText("Регистрация");
-        localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
+        localStorage.setItem('info', "В пункте 'Выберите класс' укажите класс, в который хотите добавить учеников. Далее, выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Почта");
         selectedOption = 'multiple';
     } else {
         setTopText("Регистрация");

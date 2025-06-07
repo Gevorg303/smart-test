@@ -13,7 +13,7 @@ const ResultsPage = () => {
     const canvasRef = useRef(null);
     const [topText, setTopText] = useOutletContext();
 
-    localStorage.setItem('info', "На этой странице отображается статистика учеников. Тут можно посмотреть за успеваемостью учеников по различным предметам.");
+    localStorage.setItem('info', "На этой странице отображается статистика учеников. Можно посмотреть успеваемость учеников по различным предметам.");
 
     useEffect(() => {
         // Очистка topText при монтировании компонента
