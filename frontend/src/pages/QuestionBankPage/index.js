@@ -219,13 +219,13 @@ const QuestionBankPage = ({ type }) => {
                 <div className="button-containers">
                     {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
 
-
+                    <div className="button-group-2">
                         {type !== "student" && (
                             <Button variant="success" className="create-button" onClick={() => {
                                 setShowCreateModal(true);
                             }}>Создать</Button>
                         )}
-
+                    </div>
 
                 </div>
 

@@ -36,8 +36,8 @@
 
 
 .button-containers {
-  /*  width: 100%;
-  /*  display: flex;*/
+  /*  width: 100%;*/
+    display: flex;
 /*    flex-direction: row;*/
 /*    height: 3em;
     margin-bottom: 2em;
@@ -47,14 +47,23 @@
   /*  padding: 10px;*/
     width: 90%;
 }
+
+.button-group-2 {
+    flex-grow: 1;
+    justify-content: center; /* Центрирует содержимое по горизонтали */
+    gap: 10px; /* Расстояние между кнопками */
+
+}
+
 .create-button{
    /* margin-right: 1em;
     margin-left: 2em;*/
     background-color: #4CAF50;
     border-color:#4CAF50;
     color: #333333;
-    width: 15em;
-    margin-left: auto;
+    width: 14em;
+    height: 5em;
+
 }
 .create-button:hover{
     color: #f0f0f0;

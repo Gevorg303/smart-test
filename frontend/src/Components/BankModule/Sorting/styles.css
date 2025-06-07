@@ -11,8 +11,14 @@
     color: #333333;
     background-color: #bdaa4a;
     border-color: #bdaa4a;
-    width: 15em;
-    margin-left: auto;
+    width: 14em;
+    height: 5em;
+}
+.button-group {
+
+    justify-content: center; /* Центрирует содержимое по горизонтали */
+    gap: 10px; /* Расстояние между кнопками */
+    width: 30%; /* Убедитесь, что контейнер занимает всю доступную ширину */
 }
 
 .search-button:hover {
@@ -24,4 +30,9 @@
     color: #f0f0f0;
     background-color: darkgoldenrod !important;
     border-color: darkgoldenrod !important;
+}
+.search-button-container {
+    display: flex;
+    justify-content: center; /* Центрирует содержимое по горизонтали */
+    width: 100%; /* Убедитесь, что контейнер занимает всю доступную ширину */
 }

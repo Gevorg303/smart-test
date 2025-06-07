@@ -451,13 +451,10 @@ const Sorting = ({ type, setBankItems }) => {
                 </Row>
 
             </Container>
-
                 {type !== 'student' && type !== 'subject' && (
-
+                    <div className="button-group">
                         <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
-
-
-
+                    </div>
                 )}
 
         </>
