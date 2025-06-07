@@ -11,9 +11,11 @@ const RegistrationPage = () => {
     const [topText, setTopText] = useOutletContext();
     let selectedOption;
     if (location.pathname.includes('multiple')) {
+        setTopText("Регистрация");
         localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
         selectedOption = 'multiple';
     } else {
+        setTopText("Регистрация");
         localStorage.setItem('info', "Введите здесь данные ученика");
         selectedOption = 'single';
     }
@@ -350,7 +352,7 @@ const RegistrationPage = () => {
         <Container>
 
             <div className="registration-box">
-                <h2>Регистрация учеников</h2>
+                {/*<h2>Регистрация учеников</h2>*/}
                 {selectedOption === 'single' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>
                         <Form.Group controlId="formLastName">
