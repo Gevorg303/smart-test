@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
+import { Form, Button, Toast, ToastContainer,Stack } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import BankCard from "../../Components/BankModule/BankCard";
 import "./styles.css";
@@ -13,6 +13,9 @@ import Sorting from "../../Components/BankModule/Sorting";
 import { useOutletContext } from 'react-router-dom';
 import CreateStudentPage from "../../Components/BankModule/CreateStudentPage";
 import CreateClassPage from "../../Components/BankModule/CreateClassPage";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const QuestionBankPage = ({ type }) => {
     const [editItem, setEditItem] = useState(null);
@@ -215,12 +218,18 @@ const QuestionBankPage = ({ type }) => {
             <div className="page-container-quest">
                 <div className="button-containers">
                     {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
-                    {type !== "student" && (
-                        <Button variant="success" className="create-button" onClick={() => {
-                            setShowCreateModal(true);
-                        }}>Создать</Button>
-                    )}
+
+
+                        {type !== "student" && (
+                            <Button variant="success" className="create-button" onClick={() => {
+                                setShowCreateModal(true);
+                            }}>Создать</Button>
+                        )}
+
+
                 </div>
+
+
                 <Modal
                     show={showCreateModal || showEditModal}
                     onHide={() => {

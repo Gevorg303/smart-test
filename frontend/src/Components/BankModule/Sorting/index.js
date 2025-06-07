@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Stack } from "react-bootstrap";
 import ThemeAndIndicatorSelector from "../../FormModule/ThemeAndIndicatorSelector";
 import CreateIndicatorPage from "../CreateIndicatorPage";
 import SingleIndicatorSelector from "../../FormModule/SingleIndicatorSelector";
 import "./styles.css";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const Sorting = ({ type, setBankItems }) => {
     const roleMapping = {
@@ -236,90 +239,110 @@ const Sorting = ({ type, setBankItems }) => {
 
     return (
         <>
+            <Container fluid={true}>
+                <Row>
 
             {type === 'task' ?
                 <>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Предмет</Form.Label>
-                            <Form.Select
-                                onChange={(e) => {
-                                    setTargetSubject(e.target.value);
-                                    console.log(targetSubject)
-                                }} value={targetSubject}>
-                                <option value={-1}>Выберите предмет</option>
-                                {subjects.map((item, index) => <option key={item.id}
-                                                                       value={item.id}> {item.subjectName}  </option>)}
-                            </Form.Select>
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Тема</Form.Label>
-                            <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
-                                                       currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Индикатор</Form.Label>
-                            <SingleIndicatorSelector targetTheme={currentTheme} currentIndicator={currentIndicator}
-                                                     setCurrentIndicator={setCurrentIndicator} />
-                        </Form.Group>
-                    </div>
+
+                        <Col>
+                            <div className="button-containers-filter">
+                                <Form.Group>
+                                    <Form.Label>Предмет</Form.Label>
+                                    <Form.Select
+                                        onChange={(e) => {
+                                            setTargetSubject(e.target.value);
+                                            console.log(targetSubject)
+                                        }} value={targetSubject}>
+                                        <option value={-1}>Выберите предмет</option>
+                                        {subjects.map((item, index) => <option key={item.id}
+                                                                               value={item.id}> {item.subjectName}  </option>)}
+                                    </Form.Select>
+                                </Form.Group>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className="button-containers-filter">
+                                <Form.Group>
+                                    <Form.Label>Тема</Form.Label>
+                                    <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
+                                                               currentTheme={currentTheme}
+                                                               setCurrentTheme={setCurrentTheme}/>
+                                </Form.Group>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className="button-containers-filter">
+                                <Form.Group>
+                                    <Form.Label>Индикатор</Form.Label>
+                                    <SingleIndicatorSelector targetTheme={currentTheme}
+                                                             currentIndicator={currentIndicator}
+                                                             setCurrentIndicator={setCurrentIndicator}/>
+                                </Form.Group>
+                            </div>
+                        </Col>
                 </>
                 : <></>
             }
             {type === 'test' ?
                 <>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Предмет</Form.Label>
-                            <Form.Select
-                                onChange={(e) => {
-                                    setTargetSubject(e.target.value);
-                                    console.log(targetSubject)
-                                }} value={targetSubject}>
-                                <option value={-1}>Выберите предмет</option>
-                                {subjects.map((item, index) => <option key={item.id}
-                                                                       value={item.id}> {item.subjectName}  </option>)}
-                            </Form.Select>
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Тема</Form.Label>
-                            <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
-                                                       currentTheme={currentTheme}
-                                                       setCurrentTheme={setCurrentTheme} />
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Тип теста</Form.Label>
-                            <Form.Select
-                                value={targetTypeTest}
-                                onChange={(e) => {
-                                    setTargetTypeTest(e.target.value)
-                                }}
-                            >
-                                <option value={-1}>Выберите тип теста</option>
-                                {testTypes.length > 0 ? (
-                                    testTypes.map((testType) => (
-                                        <option key={testType.id} value={testType.id}>
-                                            {testType.nameOfTestType}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option disabled>Нет данных</option>
-                                )}
-                            </Form.Select>
-                        </Form.Group>
-                    </div>
+                    <Col>
+                        <div className="button-containers-filter">
+                            <Form.Group>
+                                <Form.Label>Предмет</Form.Label>
+                                <Form.Select
+                                    onChange={(e) => {
+                                        setTargetSubject(e.target.value);
+                                        console.log(targetSubject)
+                                    }} value={targetSubject}>
+                                    <option value={-1}>Выберите предмет</option>
+                                    {subjects.map((item, index) => <option key={item.id}
+                                                                           value={item.id}> {item.subjectName}  </option>)}
+                                </Form.Select>
+                            </Form.Group>
+                        </div>
+                    </Col>
+
+                    <Col>
+                        <div className="button-containers-filter">
+                            <Form.Group>
+                                <Form.Label>Тема</Form.Label>
+                                <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
+                                                           currentTheme={currentTheme}
+                                                           setCurrentTheme={setCurrentTheme}/>
+                            </Form.Group>
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className="button-containers-filter">
+                            <Form.Group>
+                                <Form.Label>Тип теста</Form.Label>
+                                <Form.Select
+                                    value={targetTypeTest}
+                                    onChange={(e) => {
+                                        setTargetTypeTest(e.target.value)
+                                    }}
+                                >
+                                    <option value={-1}>Выберите тип теста</option>
+                                    {testTypes.length > 0 ? (
+                                        testTypes.map((testType) => (
+                                            <option key={testType.id} value={testType.id}>
+                                                {testType.nameOfTestType}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option disabled>Нет данных</option>
+                                    )}
+                                </Form.Select>
+                            </Form.Group>
+                        </div>
+                    </Col>
+
                 </>
                 : <></>}
             {type === 'indicator' ?
                 <>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Предмет</Form.Label>
@@ -334,6 +357,8 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
+                        </Col>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Тема</Form.Label>
@@ -343,10 +368,12 @@ const Sorting = ({ type, setBankItems }) => {
                                                        setCurrentTheme={setCurrentTheme} />
                         </Form.Group>
                     </div>
+                        </Col>
                 </>
                 : <></>}
             {type === 'theme' ?
                 <>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Предмет</Form.Label>
@@ -361,10 +388,22 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
+                        </Col>
                 </>
                 : <></>}
             {type === 'student' && (
                 <>
+
+
+                            <Col>
+                            <Button variant="secondary" className="reset-button" onClick={resetFilters}>Сбросить фильтры</Button>
+                                </Col>
+                            <Col>
+                            <Button variant="primary" className="search-button" onClick={() => handleSearch(selectedFilter)}>Применить фильтр</Button>
+                            </Col>
+
+
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Фильтр</Form.Label>
@@ -377,6 +416,8 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
+                        </Col>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>{filterType === 'class' ? 'Класс' : 'Роль'}</Form.Label>
@@ -401,16 +442,24 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
-                    <div className="button-containers-filter">
-                        <Button variant="secondary" className="reset-button" onClick={resetFilters}>Сбросить фильтры</Button>
-                        <Button variant="primary" className="search-button" onClick={() => handleSearch(selectedFilter)}>Применить фильтр</Button>
-                    </div>
+                        </Col>
+
                 </>
             )}
-            {type !== 'student' && type !== 'subject' && (
-                <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
-            )}
+
             {mainBlock}
+                </Row>
+
+            </Container>
+
+                {type !== 'student' && type !== 'subject' && (
+
+                        <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
+
+
+
+                )}
+
         </>
     );
 };
