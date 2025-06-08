@@ -483,9 +483,11 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                             required
                         />
                     </div>
-                    <button type="submit" className="custom-button">
-                        Зарегистрировать
-                    </button>
+                    <div className="button-container">
+                        <button type="submit" className="custom-button">
+                            Зарегистрировать
+                        </button>
+                    </div>
                     {showErrorToast && (
                         <Toast
                             onClose={() => setShowErrorToast(false)}
@@ -503,7 +505,8 @@ const AdminRegistrationForm = ({ selectedForm }) => {
                         >
                             <Toast.Header closeButton={false}>
                                 <strong className="mr-auto">Ошибка</strong>
-                                <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
+                                <Button variant="light" onClick={() => setShowErrorToast(false)}
+                                        style={{marginLeft: 'auto', width: '15%'}}>
                                     x
                                 </Button>
                             </Toast.Header>

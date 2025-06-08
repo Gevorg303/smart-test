@@ -13,6 +13,7 @@
         justify-content: center;
         padding: 20px;
         background-color: transparent;
+
     }
 
 
@@ -23,14 +24,15 @@
         padding: 20px;
         max-width: 600px; /* Увеличено в 1.5 раза */
         width: 100%;
-        margin: 0 auto;
         font-family: Arial, sans-serif;
         box-sizing: border-box;
+
     }
 
     .container{
 
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
     }
 
     .form-title {
@@ -76,10 +78,15 @@
         margin: 0 auto; /* Центрируем кнопку */
         display: block; /* Делаем кнопку блочным элементом */
         transition: background-color 0.3s;
+        align-items: center;
+        justify-content: center;
     }
 
     .single-user-submit-button:hover {
         background-color: #0056b3;
+        align-items: center;
+        justify-content: center;
+
     }
 
     /* Стили для кнопок регистрации нескольких учеников */
@@ -94,7 +101,22 @@
         cursor: pointer;
         transition: background-color 0.3s;
     }
+    .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px; /* Настройте по необходимости */
+    }
 
+    .custom-button
+    {
+        align-items: center;
+        justify-content: center;
+    }
+    .button-container
+    {
+        display: flex;
+        justify-content: center; /* центрирование по горизонтали */
+    }
     .multiple-users-button:hover {
         background-color: #0056b3;
     }
@@ -111,5 +133,6 @@
         display: flex;
         justify-content: space-between;
         gap: 10px;
+
     }
 }

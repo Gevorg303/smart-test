@@ -164,7 +164,7 @@ const AdminHome = () => {
                                 <p>Общее количество пользователей: {totalUsers}</p>
                             </div>
                             <div className="bar-chart-container">
-                                <h3>Количество учеников в классах</h3>
+                                <h3>Количество учеников в классах:</h3>
                                 <div className="scroll-container">
                                     <div className="chart-wrapper">
                                         <canvas ref={canvasRef} width={Object.keys(classStudentCounts).length * 70} height="300"></canvas>
