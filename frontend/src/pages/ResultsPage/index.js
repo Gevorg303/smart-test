@@ -70,12 +70,12 @@ const ResultsPage = () => {
             <div className="result-container">
                 <div className="container-wrapper-2">
                     <div className="container-home-2">
-                        <h2>Сведения об успеваемости</h2>
+                        {/*<h2>Сведения об успеваемости</h2>*/}
                         <Table className="result-table" striped bordered hover>
                             <thead>
                             <tr>
                                 <th>Предмет</th>
-                                <th>Средняя оценка</th>
+                                <th>Средний балл</th>
                             </tr>
                             </thead>
                             <tbody>
