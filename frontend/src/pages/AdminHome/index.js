@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useOutletContext } from "react-router-dom";
 import { Table } from "react-bootstrap";
+import "./styles.css";
 
 const AdminHome = () => {
     const [subjects, setSubjects] = useState([]);
@@ -150,7 +151,9 @@ const AdminHome = () => {
                 <div className="result-container">
                     <div className="container-wrapper-2">
                         <div className="container-home-2">
+                            <div className="HeadText">
                             <h2>Сведения о пользователях</h2>
+                            </div>
                             <div>
                                 <h3>Количество пользователей по ролям:</h3>
                                 <ul>
