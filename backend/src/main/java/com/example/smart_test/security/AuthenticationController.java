@@ -44,9 +44,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/tokens")
-    public ResponseEntity<Map<String, String>> refreshTokens(@RequestBody Map<String, String> tokens) {
-        String accessToken = tokens.get("accessToken");
-        String refreshToken = tokens.get("refreshToken");
+    public ResponseEntity<Map<String, String>> refreshTokens(@CookieValue("accessToken") String accessToken, @CookieValue("refreshToken") String refreshToken) {
+        //String accessToken = tokens.get("accessToken");
+        //String refreshToken = tokens.get("refreshToken");
         try {
             Jwt expiredAccessToken = jwtUtils.decodeToken(accessToken);
             if (Objects.requireNonNull(expiredAccessToken.getExpiresAt()).isBefore(Instant.now())) {
