@@ -487,10 +487,6 @@ const CreateQuestionPage = ({editItem, onCreate, onError}) => {
                         setText(e.target.value);
                     }}/>
                 </Form.Group>
-                <Form.Group controlId="formFile" className="mb-3">
-                    <Form.Label>Добавить картинку</Form.Label>
-                    <Form.Control type="file"/>
-                </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Пояснение</Form.Label>
                     <Form.Control value={currentExplanation} as="textarea" rows={3} onChange={(e) => {

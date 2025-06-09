@@ -14,7 +14,11 @@ const TokenEndModal = () => {
                 </Modal.Header>
                 <Modal.Body centered>
                    <h2> Ваша сессия закончилась, необходимо заново войти в ваш личный кабинет</h2>
-                    <Button onClick={() => navigate("/")}>Выйти</Button>
+                    <Button onClick={() => {
+                        document.cookie = "accessToken=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                        document.cookie = "refreshToken=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+                        navigate("/")}
+                    }>Выйти</Button>
 
                 </Modal.Body>
             </Modal>

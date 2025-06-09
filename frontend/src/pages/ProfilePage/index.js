@@ -93,7 +93,8 @@ const ProfilePage = () => {
     const handleLogout = () => {
         document.cookie = "sub=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
         document.cookie = "test=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-        document.cookie = "jwtToken=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+        document.cookie = "accessToken=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+        document.cookie = "refreshToken=; path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
         navigate("/");
     };
 

@@ -25,6 +25,20 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
                 }
                 const user = await response.json();
                 console.log(user);
+
+                 const response1 = await fetch(process.env.REACT_APP_SERVER_URL+'api/tokens', {
+                    credentials: "include",
+                });
+                if (!response1.ok) {
+                    setPage(<TokenEndModal/>)
+                    throw new Error('Ошибка авторизации');
+                }
+                const tokens = await response1.json();
+                console.log(tokens);
+                if(tokens.accessToken != undefined && tokens.refreshToken != undefined){
+                    document.cookie = "accessToken="+tokens.accessToken+"; secure; max-age=900; path=/;"
+                    document.cookie = "refreshToken="+tokens.refreshToken+"; secure; max-age="+30 * 24 * 60 * 60+"; path=/;"
+                }
                 //setUserRole(user.role.id)
 
 

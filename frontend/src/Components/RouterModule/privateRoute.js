@@ -10,7 +10,7 @@ export default function PrivateRoutes() {
         ));
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
-    let  userid = getCookie("jwtToken")
+    let  userid = getCookie("accessToken")
     return (
         <>
             {userid ? <Outlet  /> : <Navigate to="/" />}
