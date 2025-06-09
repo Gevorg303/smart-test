@@ -43,13 +43,15 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/tokens")
+    @GetMapping("/tokens")
     public ResponseEntity<Map<String, String>> refreshTokens(@CookieValue("accessToken") String accessToken, @CookieValue("refreshToken") String refreshToken) {
         //String accessToken = tokens.get("accessToken");
         //String refreshToken = tokens.get("refreshToken");
         try {
             Jwt expiredAccessToken = jwtUtils.decodeToken(accessToken);
-            if (Objects.requireNonNull(expiredAccessToken.getExpiresAt()).isBefore(Instant.now())) {
+            Jwt expiredRefreshToken = jwtUtils.decodeToken(refreshToken);
+            if (Objects.requireNonNull(expiredAccessToken.getExpiresAt()).isBefore(Instant.now())
+                    && !Objects.requireNonNull(expiredRefreshToken.getExpiresAt()).isBefore(Instant.now())) {
                 Jwt decoderAccessToken = jwtUtils.decodeToken(refreshToken);
                 String username = decoderAccessToken.getSubject();
 
@@ -61,7 +63,10 @@ public class AuthenticationController {
                 newTokens.put("refreshToken", newRefreshToken);
 
                 return ResponseEntity.ok(newTokens);
-            } else {
+            } else if (Objects.requireNonNull(expiredRefreshToken.getExpiresAt()).isBefore(Instant.now())) {
+                return ResponseEntity.internalServerError().body(Map.of("error", "An error occurred"));
+            }
+            else {
                 return ResponseEntity.ok(Map.of("info", "Access token expired"));
             }
         } catch (Exception e) {
