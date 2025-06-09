@@ -62,7 +62,7 @@ public class AuthenticationController {
 
                 return ResponseEntity.ok(newTokens);
             } else {
-                return ResponseEntity.badRequest().body(Map.of("error", "Access token expired"));
+                return ResponseEntity.ok(Map.of("info", "Access token expired"));
             }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", "An error occurred"));
