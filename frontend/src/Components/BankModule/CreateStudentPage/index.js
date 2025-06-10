@@ -1,5 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Toast } from 'react-bootstrap';
+
+const RoleSelector = ({ role, setRole, roles }) => {
+    return (
+        <Form.Group className="mb-3">
+            <Form.Label>Роль</Form.Label>
+            <Form.Select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+            >
+                <option value="">Выберите роль</option>
+                {roles.map((roleItem) => (
+                    <option key={roleItem.id} value={roleItem.id}>
+                        {roleItem.name}
+                    </option>
+                ))}
+            </Form.Select>
+        </Form.Group>
+    );
+};
 
 const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     const roleMapping = {
@@ -8,14 +27,12 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         'Ученик': 3
     };
 
-    const getRoleName = (roleId) => {
-        const roleMap = {
-            1: 'Админ',
-            2: 'Учитель',
-            3: 'Ученик'
-        };
-        return roleMap[roleId] || '';
-    };
+    const roles = [
+        { id: 1, name: 'Админ' },
+        { id: 2, name: 'Учитель' },
+        { id: 3, name: 'Ученик' }
+    ];
+
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [email, setEmail] = useState("");
@@ -24,6 +41,9 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
     const [patronymic, setPatronymic] = useState("");
     const [classes, setClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState("");
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [showErrorToast, setShowErrorToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         async function fetchClasses() {
@@ -89,12 +109,8 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
                     if (defaultClassArray && defaultClassArray.length > 0) {
                         const defaultClass = defaultClassArray[0];
-                        console.log('numberOfInstitution:', defaultClass.numberOfInstitution);
-                        console.log('letterDesignation:', defaultClass.letterDesignation);
-
                         if (defaultClass.numberOfInstitution && defaultClass.letterDesignation) {
                             const defaultClassValue = `${defaultClass.numberOfInstitution} ${defaultClass.letterDesignation}`;
-                            console.log('Устанавливаем класс по умолчанию:', defaultClassValue);
                             setSelectedClass(defaultClassValue);
                         } else {
                             console.error('Класс по умолчанию не содержит ожидаемых полей numberOfInstitution и letterDesignation');
@@ -115,15 +131,11 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             setName(editItem.name);
             setSurname(editItem.surname);
             setEmail(editItem.email);
-            setRole(editItem.role);
+            setRole(editItem.role.id); // Убедитесь, что editItem.role содержит корректное значение
             setLogin(editItem.login);
             setPatronymic(editItem.patronymic);
         }
     }, [editItem]);
-
-    useEffect(() => {
-        console.log('Current role:', role);
-    }, [role]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -139,9 +151,6 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         if (!role) {
             errors.push('Роль не может быть пустой.');
         }
-        if (!login) {
-            errors.push('Логин не может быть пустым.');
-        }
         if (!patronymic) {
             errors.push('Отчество не может быть пустым.');
         }
@@ -150,14 +159,12 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         }
 
         if (errors.length > 0) {
-            onError(errors);
-            console.error('Ошибки валидации:', errors.join(', '));
+            setErrorMessage(errors.join(', '));
+            setShowErrorToast(true);
             return;
         }
 
         try {
-            let toastText;
-            // Найти выбранный класс по значению selectedClass
             const selectedClassObj = classes.find(cls => `${cls.numberOfInstitution} ${cls.letterDesignation}` === selectedClass);
 
             const requestBody = {
@@ -168,14 +175,14 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                     email: email,
                     login: login,
                     patronymic: patronymic,
-                    roleId: role,
+                    roleId: Number(role),
                 },
                 role: {
-                    id: role,
-                    role: getRoleName(role)
+                    id: Number(role),
+                    name: roles.find(r => r.id == role)?.name
                 },
-                studentClass:{
-                    id: selectedClassObj ? selectedClassObj.id : null, // id класса
+                studentClass: {
+                    id: selectedClassObj ? selectedClassObj.id : null,
                     numberOfInstitution: selectedClassObj ? selectedClassObj.numberOfInstitution : null,
                     letterDesignation: selectedClassObj ? selectedClassObj.letterDesignation : null
                 }
@@ -196,21 +203,33 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                 body: JSON.stringify(requestBody)
             });
 
-            const responseData = await response.json();
-            console.log('Ответ сервера:', responseData);
+            const responseText = await response.text();
 
-            if (!response.ok) {
-                toastText = editItem ? "Ошибка редактирования ученика" : "Ошибка создания ученика";
-                throw new Error();
+            try {
+                const responseData = responseText ? JSON.parse(responseText) : {};
+                console.log('Ответ сервера:', responseData);
+
+                if (!response.ok) {
+                    throw new Error(editItem ? "Ошибка редактирования ученика" : "Ошибка создания ученика");
+                }
+
+                setShowSuccessToast(true);
+                onCreate(editItem ? "Ученик успешно отредактирован." : "Ученик успешно создан.");
+            } catch (error) {
+                console.error('Ошибка разбора JSON:', error);
+                if (response.ok) {
+                    setShowSuccessToast(true);
+                    onCreate(editItem ? "Ученик успешно отредактирован." : "Ученик успешно создан.");
+                } else {
+                    throw new Error(editItem ? "Ошибка редактирования ученика" : "Ошибка создания ученика");
+                }
             }
-
-            toastText = editItem ? "Ученик успешно отредактирован." : "Ученик успешно создан.";
-            onCreate(toastText);
         } catch (error) {
             console.error('Ошибка отправки данных:', error);
+            setErrorMessage(error.message);
+            setShowErrorToast(true);
         }
     };
-
 
     return (
         <div>
@@ -248,20 +267,7 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Роль</Form.Label>
-                    <Form.Select
-                        value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                    >
-                        <option value="">{getRoleName(role)}</option>
-                        {Object.keys(roleMapping).map((roleName) => (
-                            <option key={roleMapping[roleName]} value={roleMapping[roleName]}>
-                                {roleName}
-                            </option>
-                        ))}
-                    </Form.Select>
-                </Form.Group>
+                <RoleSelector role={role} setRole={setRole} roles={roles} />
                 {role == roleMapping['Ученик'] && (
                     <Form.Group className="mb-3">
                         <Form.Label>Класс</Form.Label>
@@ -277,19 +283,56 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
                         </Form.Select>
                     </Form.Group>
                 )}
-                <Form.Group className="mb-3">
-                    <Form.Label>Логин</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={login}
-                        onChange={(e) => setLogin(e.target.value)}
-                    />
-                </Form.Group>
-
                 <Button variant="primary" className="custom-button-create-window" type="submit">
                     {editItem ? "Редактировать" : "Создать"}
                 </Button>
             </Form>
+
+            <Toast
+                onClose={() => setShowSuccessToast(false)}
+                show={showSuccessToast}
+                delay={3000}
+                autohide
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    zIndex: 1000,
+                    backgroundColor: 'green',
+                    color: 'white'
+                }}
+            >
+                <Toast.Header closeButton={false}>
+                    <strong className="mr-auto">Успешно</strong>
+                    <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto' }}>
+                        &times;
+                    </Button>
+                </Toast.Header>
+                <Toast.Body>{editItem ? "Ученик успешно отредактирован." : "Ученик успешно создан."}</Toast.Body>
+            </Toast>
+
+            <Toast
+                onClose={() => setShowErrorToast(false)}
+                show={showErrorToast}
+                delay={3000}
+                autohide
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    zIndex: 1000,
+                    backgroundColor: 'red',
+                    color: 'white'
+                }}
+            >
+                <Toast.Header closeButton={false}>
+                    <strong className="mr-auto">Ошибка</strong>
+                    <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto' }}>
+                        &times;
+                    </Button>
+                </Toast.Header>
+                <Toast.Body>{errorMessage}</Toast.Body>
+            </Toast>
         </div>
     );
 };

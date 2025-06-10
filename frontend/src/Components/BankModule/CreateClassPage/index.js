@@ -128,7 +128,7 @@ const CreateClassPage = ({ editItem, onCreate, onError }) => {
                 numberOfInstitution,
                 letterDesignation,
                 educationalInstitution: {
-                    id: educationalInstitutionId // Используем полученный id
+                    id: educationalInstitutionId
                 },
                 isDelete: false,
                 id: editItem ? editItem.id : null
