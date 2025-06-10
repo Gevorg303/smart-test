@@ -20,7 +20,7 @@ const RoleSelector = ({ role, setRole, roles }) => {
     );
 };
 
-const CreateStudentPage = ({ editItem, onCreate, onError }) => {
+const CreateStudentPage = ({ editItem, onCreate, onError, onClose }) => {
     const roleMapping = {
         'Админ': 1,
         'Учитель': 2,
@@ -90,52 +90,57 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
         }
 
         async function fetchDefaultClass() {
-            if (editItem) {
-                try {
-                    const response = await fetch(process.env.REACT_APP_SERVER_URL + `student-class/teacherid=${editItem.id}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        credentials: 'include',
-                    });
+            try {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + `student-class/teacherid=${editItem.id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
 
-                    if (!response.ok) {
-                        throw new Error('Ошибка получения данных о классе по умолчанию');
-                    }
-
-                    const defaultClassArray = await response.json();
-                    console.log('Класс по умолчанию:', defaultClassArray);
-
-                    if (defaultClassArray && defaultClassArray.length > 0) {
-                        const defaultClass = defaultClassArray[0];
-                        if (defaultClass.numberOfInstitution && defaultClass.letterDesignation) {
-                            const defaultClassValue = `${defaultClass.numberOfInstitution} ${defaultClass.letterDesignation}`;
-                            setSelectedClass(defaultClassValue);
-                        } else {
-                            console.error('Класс по умолчанию не содержит ожидаемых полей numberOfInstitution и letterDesignation');
-                        }
-                    } else {
-                        console.error('Массив классов по умолчанию пуст или не определен');
-                    }
-                } catch (error) {
-                    console.error('Ошибка получения данных о классе по умолчанию:', error);
+                if (!response.ok) {
+                    throw new Error('Ошибка получения данных о классе по умолчанию');
                 }
+
+                const defaultClassArray = await response.json();
+                console.log('Класс по умолчанию:', defaultClassArray);
+
+                if (defaultClassArray && defaultClassArray.length > 0) {
+                    const defaultClass = defaultClassArray[0];
+                    if (defaultClass.numberOfInstitution && defaultClass.letterDesignation) {
+                        const defaultClassValue = `${defaultClass.numberOfInstitution} ${defaultClass.letterDesignation}`;
+                        setSelectedClass(defaultClassValue);
+                    } else {
+                        console.error('Класс по умолчанию не содержит ожидаемых полей numberOfInstitution и letterDesignation');
+                    }
+                } else {
+                    console.error('Массив классов по умолчанию пуст или не определен');
+                }
+            } catch (error) {
+                console.error('Ошибка получения данных о классе по умолчанию:', error);
             }
         }
 
         fetchClasses();
-        fetchDefaultClass();
-
         if (editItem) {
+            fetchDefaultClass();
             setName(editItem.name);
             setSurname(editItem.surname);
             setEmail(editItem.email);
-            setRole(editItem.role.id); // Убедитесь, что editItem.role содержит корректное значение
+            setRole(editItem.role.id);
             setLogin(editItem.login);
             setPatronymic(editItem.patronymic);
         }
     }, [editItem]);
+
+    useEffect(() => {
+        if (role == roleMapping['Ученик'] && classes.length > 0 && !selectedClass) {
+            // Установите значение по умолчанию только если оно еще не установлено
+            setSelectedClass(`${classes[0].numberOfInstitution} ${classes[0].letterDesignation}`);
+        }
+    }, [role, classes, selectedClass]);
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -215,11 +220,19 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
 
                 setShowSuccessToast(true);
                 onCreate(editItem ? "Ученик успешно отредактирован." : "Ученик успешно создан.");
+                // Закрытие модального окна
+                if (onClose) {
+                    onClose();
+                }
             } catch (error) {
                 console.error('Ошибка разбора JSON:', error);
                 if (response.ok) {
                     setShowSuccessToast(true);
                     onCreate(editItem ? "Ученик успешно отредактирован." : "Ученик успешно создан.");
+                    // Закрытие модального окна
+                    if (onClose) {
+                        onClose();
+                    }
                 } else {
                     throw new Error(editItem ? "Ошибка редактирования ученика" : "Ошибка создания ученика");
                 }
@@ -230,6 +243,8 @@ const CreateStudentPage = ({ editItem, onCreate, onError }) => {
             setShowErrorToast(true);
         }
     };
+
+
 
     return (
         <div>
