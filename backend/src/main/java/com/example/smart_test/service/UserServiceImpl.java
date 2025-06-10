@@ -233,13 +233,24 @@ public class UserServiceImpl implements UserServiceInterface {
                     user.setPatronymic(userDto.getPatronymic());
                     user.setEmail(userDto.getEmail());
                     user.setPatronymic(userDto.getPatronymic());
-                    //user.setRoles(request.getRole());
+                    user.setRoles(request.getRole());
                     userRepository.save(user);
                 }
             }
+            if (request.getUser() != null && request.getRole() != null) {
+                long roleId = request.getRole().getId();
+                if (roleId == 1 || roleId == 2) {
+                    userClassService.deleteUserClassByUserId(request.getUser().getId());
+                }
+            }
+
             if (request.getStudentClass() != null && request.getStudentClass().getId() != null && request.getUser() != null && request.getUser().getId() != null) {
-                userClassService.deleteUserClassByUserId(request.getUser().getId());
-                userClassService.addUserClass(new UserClass(studentClassMapper.toEntity(request.getStudentClass()), userMapper.toEntity(request.getUser())));
+                long roleId = request.getRole().getId();
+
+                if (roleId == 3) {
+                    userClassService.deleteUserClassByUserId(request.getUser().getId());
+                    userClassService.addUserClass(new UserClass(studentClassMapper.toEntity(request.getStudentClass()), userMapper.toEntity(request.getUser())));
+                }
             }
         }
     }
