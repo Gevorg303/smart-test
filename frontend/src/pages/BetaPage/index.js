@@ -3,13 +3,14 @@ import AdminNavbar from '../../Components/UIModule/adminNavbar';
 import AdminRegistrationForm from '../adminRegistrationForm';
 import { useLocation } from 'react-router-dom';
 import { Container, Form, Button, Toast } from 'react-bootstrap';
+import { useOutletContext } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 
 const BetaPage = () => {
     const [selectedForm, setSelectedForm] = useState(null);
-    const [topText, setTopText] = useState("");
+    const [topText, setTopText] = useOutletContext();
     const [classes, setClasses] = useState([]);
     const [roles, setRoles] = useState([]);
     const [selectedClass, setSelectedClass] = useState(null);
@@ -22,14 +23,19 @@ const BetaPage = () => {
     const [showSuccessToast, setShowSuccessToast] = useState(false);
     const location = useLocation();
 
-
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const formType = params.get('form');
         if (formType) {
             setSelectedForm(formType);
         }
-
+        if(formType === "multipleUsers")
+        {
+            setTopText("Регистрация нескольких пользователей");
+        }
+        if (formType === "singleUser"){
+            setTopText("Регистрация одного пользователя");
+        }
         fetchClasses();
         fetchRoles();
         fetchUsers();
@@ -335,9 +341,7 @@ const BetaPage = () => {
     };
 
     return (
-        <div className="cont">
-            <AdminNavbar onFormSelect={setSelectedForm} />
-            {topText && <div className="top-text">{topText}</div>}
+        <>
             <AdminRegistrationForm
                 selectedForm={selectedForm}
                 classes={classes}
@@ -400,7 +404,7 @@ const BetaPage = () => {
                     <Toast.Body>{errorMessage}</Toast.Body>
                 </Toast>
             )}
-        </div>
+        </>
     );
 };
 
