@@ -36,7 +36,7 @@ const App = () => {
                     <Route element={<Layout />}>
                         <Route path="admin-home" element={<RouterByRole rolesWithoutAccess={[2,3]} element={<AdminHome />} />} />
                         <Route path="home" element={<RouterByRole rolesWithoutAccess={[1]} element={<HomePage />} />} />
-                        <Route path="bPage" element={<BetaPage />} />
+                        <Route path="bPage" element={<RouterByRole rolesWithoutAccess={[2,3]} element={<BetaPage />} />} />
                         <Route path="start-test" element={<RouterByRole rolesWithoutAccess={[]} element={<StartTestPage />} />} />
                         <Route path="test" element={<RouterByRole rolesWithoutAccess={[]} element={<TestPage />} />} />
                         <Route path="register/single" element={<RouterByRole rolesWithoutAccess={[3]} element={<RegistrationPage />} />} />
