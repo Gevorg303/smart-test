@@ -254,7 +254,7 @@ const QuestionBankPage = ({ type }) => {
 
                 {bankItems.length > 0 ? (
                     bankItems.map((item, index) => (
-                        <BankCard key={index} id={item.id} objectItem={item} type={type} setEditItem={EditFunc} />
+                        <BankCard key={index} id={item.id} objectItem={item} type={type} setEditItem={EditFunc} notification={handleCreate}/>
                     ))
                 ) : (
                     <p className="no-items-message">Нет доступных элементов</p>
@@ -263,7 +263,7 @@ const QuestionBankPage = ({ type }) => {
 
             {showErrorToast  && (
                 <Toast
-                    onClose={() => setShowErrorToast(false)}
+                    onClose={() => {setShowErrorToast(false);setShowSuccessToast(false)} }
                     show={showErrorToast}
                     delay={3000}
                     autohide
