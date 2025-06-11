@@ -49,10 +49,10 @@
 }
 
 .button-group-2 {
-    flex-grow: 1;
+    /*flex-grow: 1;
     justify-content: center; /* Центрирует содержимое по горизонтали */
     gap: 10px; /* Расстояние между кнопками */
-
+    margin-left: auto;
 }
 
 .create-button{

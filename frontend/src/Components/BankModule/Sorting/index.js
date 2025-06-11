@@ -462,7 +462,7 @@ const Sorting = ({ type, setBankItems }) => {
                     </div>
                         </Col>
                     <Col>
-                        <Button variant="secondary" className="reset-button" onClick={resetFilters}>Сбросить фильтры</Button>
+                        <Button variant="secondary" className="reset-button" onClick={resetFilters} >Сбросить фильтры</Button>
                     </Col>
                     <Col>
                         <Button variant="primary" className="search-button" onClick={() => handleSearch(selectedFilter)}>Применить фильтр</Button>

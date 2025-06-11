@@ -266,7 +266,7 @@ const StartTestPage = () => {
                     }}
                 >
                     <Toast.Header closeButton={false}>
-                        <strong className="mr-auto">Успешно</strong>
+                        <strong className="mr-auto">Уведомление</strong>
                         <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: '15%' }}>
                             x
                         </Button>
