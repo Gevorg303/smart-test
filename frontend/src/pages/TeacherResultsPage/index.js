@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useOutletContext } from "react-router-dom";
+import './styles.css'; // Подключаем CSS файл для стилей
 
 const ResultsPage = () => {
     const [subjects, setSubjects] = useState([]);
@@ -144,13 +145,13 @@ const ResultsPage = () => {
     const drawPieChart = () => {
         const canvas = canvasRef.current;
         if (!canvas) {
-            console.error("Canvas element is not available");
+            console.error("Элемент Canvas недоступен");
             return;
         }
 
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-            console.error("Could not get canvas context");
+            console.error("Не удалось получить контекст холста");
             return;
         }
 
@@ -163,7 +164,7 @@ const ResultsPage = () => {
         const totalStudents = excellentStudents.length + goodStudents.length + averageStudents.length + poorStudents.length;
 
         if (totalStudents === 0) {
-            console.error("No students data available");
+            console.error("Нет данных об учениках");
             return;
         }
 
@@ -183,7 +184,9 @@ const ResultsPage = () => {
 
         gradeData.forEach(grade => {
             const sliceAngle = (grade.percentage / 100) * 2 * Math.PI;
+            const midAngle = startAngle + sliceAngle / 2;
 
+            // Рисуем сектор диаграммы
             ctx.fillStyle = grade.color;
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
@@ -191,9 +194,21 @@ const ResultsPage = () => {
             ctx.closePath();
             ctx.fill();
 
+            // Рисуем подпись с процентами
+            const labelRadius = radius * 0.6; // Позиционируем подпись внутри сектора
+            const labelX = centerX + Math.cos(midAngle) * labelRadius;
+            const labelY = centerY + Math.sin(midAngle) * labelRadius;
+
+            ctx.fillStyle = '#000'; // Устанавливаем цвет текста
+            ctx.font = '14px Arial'; // Устанавливаем размер и семейство шрифта
+            ctx.textAlign = 'center'; // Выравниваем текст по центру
+            ctx.textBaseline = 'middle'; // Выравниваем текст по середине
+            ctx.fillText(`${grade.percentage.toFixed(1)}%`, labelX, labelY);
+
             startAngle += sliceAngle;
         });
     };
+
 
     const renderStudentPerformance = () => {
         const lastFivePoorStudents = poorStudents.length > 0
@@ -209,16 +224,16 @@ const ResultsPage = () => {
         return (
             <div className="student-performance">
                 <div>
-                    <strong>Отлично:</strong> {firstFiveExcellentStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Отлично: </strong> {firstFiveExcellentStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
                 </div>
                 <div>
-                    <strong>Хорошо:</strong> {firstFiveGoodStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Хорошо: </strong> {firstFiveGoodStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
                 </div>
                 <div>
-                    <strong>Удовлетворительно:</strong> {firstFiveAverageStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Удовлетворительно: </strong> {firstFiveAverageStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
                 </div>
                 <div>
-                    <strong>Неудовлетворительно:</strong>
+                    <strong>Неудовлетворительно: </strong>
                     {lastFivePoorStudents.length > 0
                         ? lastFivePoorStudents.map(student => `${student.name} ${student.surname}`).join(', ')
                         : "Нет данных"}
@@ -264,9 +279,13 @@ const ResultsPage = () => {
                             </select>
                         </div>
                         {renderStudentPerformance()}
-                        <div className="pie-chart-container">
-                            <canvas ref={canvasRef} width="400" height="400"></canvas>
-                            {renderGradeLegend()}
+                        <div className="chart-and-legend">
+                            <div className="pie-chart-container">
+                                <canvas ref={canvasRef} width="400" height="400"></canvas>
+                            </div>
+                            <div className="grade-labels">
+                                {renderGradeLegend()}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -274,5 +293,4 @@ const ResultsPage = () => {
         </div>
     );
 };
-
 export default ResultsPage;
