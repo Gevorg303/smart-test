@@ -24,7 +24,7 @@ body {
 }
 
 body :not(.admin-registration-form) .all-container {
-    background: #f2f2f2;
+    background: #fff;
     width: 80%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
