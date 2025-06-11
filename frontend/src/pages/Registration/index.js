@@ -9,7 +9,16 @@ import { useOutletContext } from 'react-router-dom';
 const RegistrationPage = () => {
     const location = useLocation();
     const [topText, setTopText] = useOutletContext();
-    const [selectedOption, setSelectedOption] = useState(null);
+    let selectedOption;
+    if (location.pathname.includes('multiple')) {
+        setTopText("Регистрация");
+        localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
+        selectedOption = 'multiple';
+    } else {
+        setTopText("Регистрация");
+        localStorage.setItem('info', "Введите здесь данные ученика");
+        selectedOption = 'single';
+    }
     const [classes, setClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState(null);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
@@ -20,21 +29,16 @@ const RegistrationPage = () => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
+
+    const isValidName = (name) => {
+        const nameRegex = /^[a-zA-Zа-яА-ЯёЁ'-]{2,50}$/;
+        return nameRegex.test(name);
+    };
+
     useEffect(() => {
-        // Очистка topText при монтировании компонента
-        setTopText("");
-
-        if (location.pathname.includes('multiple')) {
-            setSelectedOption('multiple');
-            localStorage.setItem('info', "В пункте 'Выберите класс' укажите класс, в который хотите добавить учеников. Далее, выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Почта");
-        } else {
-            setSelectedOption('single');
-            localStorage.setItem('info', "Введите здесь данные ученика");
-        }
-
         async function fetchClasses() {
             try {
-                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
+                const responseCurrent = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -43,13 +47,13 @@ const RegistrationPage = () => {
                 });
 
                 if (!responseCurrent.ok) {
-                    throw new Error('Ошибка получения данных о текущем пользователе');
+                    throw new Error('Ошибка получения данных о классах');
                 }
 
                 const user = await responseCurrent.json();
-                console.log('Текущий пользователь:', user);
+                console.log('ntreobq gjkmpjdfnktq:', user); // Проверьте, что данные получены
 
-                const responseAll = await fetch(process.env.REACT_APP_SERVER_URL + 'users/all', {
+                const responseAll = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -66,7 +70,7 @@ const RegistrationPage = () => {
                 console.log('Все пользователи:', data2);
                 setUsers(data2);
 
-                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/find-student-class-by-user', {
+                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/find-student-class-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -80,7 +84,7 @@ const RegistrationPage = () => {
                 }
 
                 const data = await response.json();
-                console.log('Полученные классы:', data);
+                console.log('Полученные классы:', data); // Проверьте, что данные получены
 
                 if (Array.isArray(data) && data.length > 0) {
                     setClasses(data);
@@ -93,19 +97,18 @@ const RegistrationPage = () => {
         }
 
         fetchClasses();
+        // fetchUsers();
+    }, []);
 
-        // Очистка topText при размонтировании компонента
-        return () => {
-            setTopText("");
-        };
-    }, [location.pathname, setTopText]);
+    useEffect(() => {
+        console.log('Состояние classes обновлено:', classes);
+    }, [classes]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setErrorMessage('');
         setShowErrorToast(false);
         setShowSuccessToast(false);
-
         if (selectedOption === 'single') {
             await handleSingleRegistration(event);
         } else if (selectedOption === 'multiple' && file) {
@@ -155,6 +158,7 @@ const RegistrationPage = () => {
 
         const userRequestList = [userRequest];
 
+        // Проверка, зарегистрирован ли уже email
         const isEmailRegistered = users.some(user => user.email === data.email);
         if (isEmailRegistered) {
             setErrorMessage('Пользователь с такой почтой уже зарегистрирован');
@@ -163,7 +167,7 @@ const RegistrationPage = () => {
         }
 
         try {
-            const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/add', {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,13 +179,14 @@ const RegistrationPage = () => {
                 const answers = await response.json();
                 setShowSuccessToast(true);
                 form.reset();
-                setSelectedClass(null);
-
-                const userDetails = answers.map((item) => ({
+                setSelectedClass(null); // Очистить выбранный класс
+                // await fetchUsers();
+                // Сгенерировать и скачать XLS файл
+                const userDetails = answers.map((item, index) => ({
                     ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
                     Логин: item.login,
                     Пароль: item.rawPassword
-                }));
+                }))
 
                 downloadXLS(userDetails, 'UserDetails');
             }
@@ -197,70 +202,85 @@ const RegistrationPage = () => {
             return;
         }
 
+        if (!selectedClass) {
+            setErrorMessage('Класс не выбран');
+            setShowErrorToast(true);
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = async (e) => {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-            const userRequests = [];
-            const errors = [];
-
-            jsonData.slice(1).forEach((row, index) => {
-                const [lastName, firstName, middleName, email] = row;
-                const rowErrors = [];
-
-                if (!lastName || !isValidName(lastName)) {
-                    rowErrors.push('Фамилия');
-                }
-                if (!firstName || !isValidName(firstName)) {
-                    rowErrors.push('Имя');
-                }
-                if (!middleName || !isValidName(middleName)) {
-                    rowErrors.push('Отчество');
-                }
-                if (!email || !isValidEmail(email)) {
-                    rowErrors.push('Эл. почта');
-                }
-
-                if (rowErrors.length > 0) {
-                    errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
-                    return;
-                }
-
-                const isEmailRegistered = users.some(user => user.email === email);
-                if (isEmailRegistered) {
-                    errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
-                    return;
-                }
-
-                userRequests.push({
-                    user: {
-                        surname: lastName,
-                        name: firstName,
-                        patronymic: middleName,
-                        role: { id: 3 },
-                        email: email
-                    },
-                    studentClass: { id: parseInt(selectedClass, 10) }
-                });
-            });
-
-            if (errors.length > 0) {
-                setErrorMessage(errors.join('\n'));
-                setShowErrorToast(true);
-                return;
-            }
-
-            if (userRequests.length === 0) {
-                setErrorMessage('Строки в файле заполнены некорректно, либо пользователь был ранее зарегистрирован');
-                setShowErrorToast(true);
-                return;
-            }
-
             try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                console.log('Данные из файла:', jsonData);
+
+                const userRequests = [];
+                const errors = [];
+
+                jsonData.slice(1).forEach((row, index) => {
+                    // Пропускаем пустые строки
+                    if (row.length === 0 || row.every(cell => cell === null || cell === undefined || cell === '')) {
+                        return;
+                    }
+
+                    const [lastName, firstName, middleName, email] = row.map(cell => cell.toString().trim());
+                    const rowErrors = [];
+
+                    if (!lastName || !isValidName(lastName)) {
+                        rowErrors.push('Фамилия');
+                    }
+                    if (!firstName || !isValidName(firstName)) {
+                        rowErrors.push('Имя');
+                    }
+                    if (!middleName || !isValidName(middleName)) {
+                        rowErrors.push('Отчество');
+                    }
+                    if (!email || !isValidEmail(email)) {
+                        rowErrors.push('Эл. почта');
+                    }
+
+                    if (rowErrors.length > 0) {
+                        errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
+                        return;
+                    }
+
+                    const isEmailRegistered = users.some(user => user.email === email);
+                    if (isEmailRegistered) {
+                        errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
+                        return;
+                    }
+
+                    userRequests.push({
+                        user: {
+                            surname: lastName,
+                            name: firstName,
+                            patronymic: middleName,
+                            role: { id: 3 },
+                            email: email
+                        },
+                        studentClass: { id: parseInt(selectedClass, 10) }
+                    });
+                });
+
+                if (errors.length > 0) {
+                    setErrorMessage(errors.join('\n'));
+                    setShowErrorToast(true);
+                    return;
+                }
+
+                if (userRequests.length === 0) {
+                    setErrorMessage('Нет корректных данных для регистрации');
+                    setShowErrorToast(true);
+                    return;
+                }
+
+                console.log('Запросы пользователей:', userRequests);
+
                 const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/add', {
                     method: 'POST',
                     headers: {
@@ -274,19 +294,28 @@ const RegistrationPage = () => {
                     setShowSuccessToast(true);
                     setSelectedClass(null);
 
+                    // Generate and download XLS file
                     const userDetails = answers.map((item) => ({
                         ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
                         Логин: item.login,
                         Пароль: item.rawPassword
                     }));
                     downloadXLS(userDetails, 'UserDetails');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Ошибка сервера:', errorData);
+                    setErrorMessage('Ошибка сервера: ' + JSON.stringify(errorData));
+                    setShowErrorToast(true);
                 }
             } catch (error) {
-                console.error('Ошибка регистрации пользователей:', error);
+                console.error('Ошибка обработки файла:', error);
+                setErrorMessage('Ошибка обработки файла: ' + error.message);
+                setShowErrorToast(true);
             }
         };
         reader.readAsArrayBuffer(file);
     };
+
 
     const handleDownloadTemplate = () => {
         const link = document.createElement('a');
@@ -306,15 +335,33 @@ const RegistrationPage = () => {
         }
     };
 
-    const isValidName = (name) => {
-        const nameRegex = /^[a-zA-Zа-яА-ЯёЁ'-]{2,50}$/;
-        return nameRegex.test(name);
-    };
-
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
+
+    /* const fetchUsers = async () => {
+         try {
+             const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/all', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json;charset=UTF-8'
+                 },
+                 body: JSON.stringify({
+                     userDto: currentUser,
+                     roleDto: null
+                 })
+             });
+             if (!response.ok) {
+                 throw new Error('Ошибка получения данных о пользователях');
+             }
+             const data = await response.json();
+             console.log('Все пользователи:', data);
+             setUsers(data);
+         } catch (error) {
+             console.error('Ошибка получения данных о пользователях:', error);
+         }
+     };*/
 
     const downloadXLS = (data, filename) => {
         const worksheet = XLSX.utils.json_to_sheet(data);
@@ -325,10 +372,11 @@ const RegistrationPage = () => {
 
     return (
         <Container>
+
             <div className="registration-box">
+                {/*<h2>Регистрация учеников</h2>*/}
                 {selectedOption === 'single' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>
-                        <h2>Регистрация</h2>
                         <Form.Group controlId="formLastName">
                             <Form.Control type="text" name="lastName" placeholder="Фамилия"/>
                         </Form.Group>
@@ -371,7 +419,6 @@ const RegistrationPage = () => {
                 {selectedOption === 'multiple' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>
                         <Form.Group controlId="formClass">
-                            <h2>Регистрация учеников</h2>
                             <Form.Control
                                 as="select"
                                 name="class"
@@ -389,7 +436,8 @@ const RegistrationPage = () => {
                         </Form.Group>
 
                         <Form.Group controlId="formFile">
-                            <Form.Control type="file" name="file" placeholder="Прикрепить файл" onChange={handleFileChange} />
+                            <Form.Control type="file" name="file" placeholder="Прикрепить файл"
+                                          onChange={handleFileChange}/>
                             {fileName && <div>Выбранный файл: {fileName}</div>}
                         </Form.Group>
 
@@ -421,8 +469,9 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Успешно</strong>
-                            <Button variant="light" onClick={() => setShowSuccessToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
-                                x
+                            <Button variant="light" onClick={() => setShowSuccessToast(false)}
+                                    style={{marginLeft: 'auto', width: 50}}>
+                                {/*&times;*/}x
                             </Button>
                         </Toast.Header>
                         <Toast.Body>Вы успешно зарегистрировали пользователя</Toast.Body>
@@ -446,8 +495,9 @@ const RegistrationPage = () => {
                     >
                         <Toast.Header closeButton={false}>
                             <strong className="mr-auto">Ошибка</strong>
-                            <Button variant="light" onClick={() => setShowErrorToast(false)} style={{ marginLeft: 'auto', width: 50 }}>
-                                x
+                            <Button variant="light" onClick={() => setShowErrorToast(false)}
+                                    style={{marginLeft: 'auto', width: 50}}>
+                                {/*&times;*/}x
                             </Button>
                         </Toast.Header>
                         <Toast.Body>{errorMessage}</Toast.Body>
