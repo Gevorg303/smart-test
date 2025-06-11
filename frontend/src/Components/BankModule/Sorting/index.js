@@ -146,35 +146,58 @@ const Sorting = ({ type, setBankItems }) => {
 
             switch (type) {
                 case 'test':
-                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/tests';
-                    requestBody = {
-                        user,
-                        subject: subjectId > 0 ? { id: subjectId } : null,
-                        theme: themeId > 0 ? { id: themeId } : null,
-                        testType: testTypeId > 0 ? { id: testTypeId } : null,
-                    };
+                    if(subjectId > 0 && themeId > 0 && testTypeId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/tests';
+                        requestBody = {
+                            user,
+                            subject: subjectId > 0 ? { id: subjectId } : null,
+                            theme: themeId > 0 ? { id: themeId } : null,
+                            testType: testTypeId > 0 ? { id: testTypeId } : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'test/get-user-tests';
+                        requestBody = user;
+                    }
+
+
                     break;
                 case 'task':
-                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/tasks';
-                    requestBody = {
-                        user,
-                        subject: subjectId > 0 ? { id: subjectId } : null,
-                        theme: themeId > 0 ? { id: themeId } : null,
-                        indicator: indicatorId > 0 ? { id: indicatorId } : null,
-                    };
+                    if(subjectId > 0 && themeId > 0 && indicatorId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/tasks';
+                        requestBody = {
+                            user,
+                            subject: subjectId > 0 ? { id: subjectId } : null,
+                            theme: themeId > 0 ? { id: themeId } : null,
+                            indicator: indicatorId > 0 ? { id: indicatorId } : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'task/get-user-tasks';
+                        requestBody = user;
+                    }
+
                     break;
                 case 'subject':
-                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/subjects';
-                    requestBody = {
-                        user,
-                        class: classId > 0 ? { id: classId } : null,
-                    };
+                    if(classId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/subjects';
+                        requestBody = {
+                            user,
+                            class: classId > 0 ? { id: classId } : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'subject/print-user-subject';
+                        requestBody = user;
+                    }
                     break;
                 case 'theme':
-                    url = process.env.REACT_APP_SERVER_URL+'theme/get-by-subject';
-                    requestBody = {
-                        id: subjectId
-                    };
+                    if(subjectId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'theme/get-by-subject';
+                        requestBody = {
+                            id: subjectId > 0 ?  subjectId : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'theme/get-theme-by-id-user';
+                        requestBody = user;
+                    }
                     break;
                 case 'indicator':
                     if (subjectId > 0 && themeId > 0) {
@@ -395,12 +418,7 @@ const Sorting = ({ type, setBankItems }) => {
                 <>
 
 
-                            <Col>
-                            <Button variant="secondary" className="reset-button" onClick={resetFilters}>Сбросить фильтры</Button>
-                                </Col>
-                            <Col>
-                            <Button variant="primary" className="search-button" onClick={() => handleSearch(selectedFilter)}>Применить фильтр</Button>
-                            </Col>
+
 
 
                     <Col>
@@ -443,7 +461,12 @@ const Sorting = ({ type, setBankItems }) => {
                         </Form.Group>
                     </div>
                         </Col>
-
+                    <Col>
+                        <Button variant="secondary" className="reset-button" onClick={resetFilters}>Сбросить фильтры</Button>
+                    </Col>
+                    <Col>
+                        <Button variant="primary" className="search-button" onClick={() => handleSearch(selectedFilter)}>Применить фильтр</Button>
+                    </Col>
                 </>
             )}
 

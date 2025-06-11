@@ -46,7 +46,7 @@ class LoginPage extends React.Component {
                const token = await response.json();
                console.log('Received token:', token.accessToken);
                console.log('Received token:', token.refreshToken);
-               document.cookie = "accessToken="+token.accessToken+"; secure; max-age=900; path=/;"
+               document.cookie = "accessToken="+token.accessToken+"; secure; path=/;"
                document.cookie = "refreshToken="+token.refreshToken+"; secure; max-age="+30 * 24 * 60 * 60+"; path=/;"
                window.location.replace("/home") ; // Перенаправление на другую страницу
            } else {

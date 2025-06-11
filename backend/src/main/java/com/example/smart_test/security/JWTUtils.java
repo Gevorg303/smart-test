@@ -21,7 +21,7 @@ public class JWTUtils {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(30, ChronoUnit.MINUTES))
+                .expiresAt(now.plus(15, ChronoUnit.MINUTES))
                 .subject(username)
                 .claim("type" , "access")
                 .build();

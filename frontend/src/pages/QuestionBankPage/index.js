@@ -26,8 +26,9 @@ const QuestionBankPage = ({ type }) => {
     const navigate = useNavigate();
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessrMessage] = useState('');
     const [topText, setTopText] = useOutletContext();
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [showSuccessToast, setShowSuccessToast] = useState(false); // используется вместе с showErrorToast!!!
 
     useEffect(() => {
         // Очистка topText при монтировании компонента
@@ -184,29 +185,33 @@ const QuestionBankPage = ({ type }) => {
         return () => {
             setTopText("");
         };
-    }, [type, editItem]);
+    }, [type, editItem,showSuccessToast]);
 
     function EditFunc(item) {
         setEditItem(item);
         setShowEditModal(true);
+        console.log("edit")
     }
 
     const handleCreate = (message) => {
         setShowCreateModal(false);
         setShowEditModal(false);
-        setShowSuccessToast(true);
-        setShowErrorToast(false);
+        setShowSuccessToast(true);// выбор типа уведомления
+        setShowErrorToast(true);// открытие уведомления
         setEditItem(null);
+        setSuccessrMessage(message);
+        console.log("create" + message)
     };
 
     const ErrorToast = (messages) => {
+        console.log("create" + messages)
         if (Array.isArray(messages)) {
             setErrorMessage(messages.join('\n'));
         } else {
             setErrorMessage(messages);
         }
-        setShowSuccessToast(false);
-        setShowErrorToast(true);
+        setShowSuccessToast(false);// выбор типа уведомления
+        setShowErrorToast(true);// открытие уведомления
     };
 
     const sortById = (items) => {
@@ -256,7 +261,7 @@ const QuestionBankPage = ({ type }) => {
                 )}
             </div>
 
-            {showErrorToast && (
+            {showErrorToast  && (
                 <Toast
                     onClose={() => setShowErrorToast(false)}
                     show={showErrorToast}
@@ -277,7 +282,7 @@ const QuestionBankPage = ({ type }) => {
                             x
                         </Button>
                     </Toast.Header>
-                    <Toast.Body>{showSuccessToast ? 'Успешно' : errorMessage}</Toast.Body>
+                    <Toast.Body>{showSuccessToast ? successMessage : errorMessage}</Toast.Body>
                 </Toast>
             )}
         </div>
