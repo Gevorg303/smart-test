@@ -21,6 +21,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [currentUser, setCurrentUser] = useState(null);
+    const [topText, setTopText] = useState("");
 
     const roleMapping = {
         'Админ': 1,
@@ -358,6 +359,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
 
     const fetchUsers = async () => {
         try {
+            
             console.log('Fetching current user...');
             const currentUserResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
                 method: 'GET',
@@ -403,7 +405,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
     if (selectedForm === 'singleUser') {
         return (
             <div className="registration-box-one">
-                <h2>Регистрация</h2>
+                <h2>{/*Регистрация*/}</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="admin-form-group">
                         <input
@@ -523,7 +525,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             <div className="admin-registration-form">
                 <form className="registration-box-one" onSubmit={handleMultipleRegistration}>
                     <h2>
-                        {selectedForm === 'multipleStudents' ? 'Регистрация нескольких пользователей' : 'Регистрация нескольких пользователей'}
+                        {/*selectedForm === 'multipleStudents' ? 'Регистрация нескольких пользователей' : 'Регистрация нескольких пользователей'*/}
                     </h2>
                     <div className="admin-form-group file-input-container">
                         <input

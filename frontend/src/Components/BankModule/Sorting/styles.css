@@ -11,8 +11,8 @@
     color: #333333;
     background-color: #bdaa4a;
     border-color: #bdaa4a;
-    width: 14em;
-    height: 5em;
+    width: 10em;
+    height: 4em;
 }
 .button-group {
 
@@ -39,6 +39,6 @@
 }
 
 .reset-button {
-    width:14em;
-    height:5em;
+    width: 10em;
+    height: 4em;
 }
