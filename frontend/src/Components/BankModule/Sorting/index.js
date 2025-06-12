@@ -146,7 +146,7 @@ const Sorting = ({ type, setBankItems }) => {
 
             switch (type) {
                 case 'test':
-                    if(subjectId > 0 && themeId > 0 && testTypeId > 0){
+                    if(subjectId > 0 || themeId > 0 || testTypeId > 0){
                         url = process.env.REACT_APP_SERVER_URL+'bank-filters/tests';
                         requestBody = {
                             user,
@@ -162,7 +162,7 @@ const Sorting = ({ type, setBankItems }) => {
 
                     break;
                 case 'task':
-                    if(subjectId > 0 && themeId > 0 && indicatorId > 0){
+                    if(subjectId > 0 || themeId > 0 || indicatorId > 0){
                         url = process.env.REACT_APP_SERVER_URL+'bank-filters/tasks';
                         requestBody = {
                             user,
@@ -200,7 +200,7 @@ const Sorting = ({ type, setBankItems }) => {
                     }
                     break;
                 case 'indicator':
-                    if (subjectId > 0 && themeId > 0) {
+                    if (subjectId > 0 || themeId > 0) {
                         url = process.env.REACT_APP_SERVER_URL+'indicator/indicator-by-theme';
                         requestBody = { id: themeId }
                     } else {
