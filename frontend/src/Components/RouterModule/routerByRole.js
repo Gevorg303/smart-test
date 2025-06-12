@@ -10,8 +10,7 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
     const [userRole, setUserRole] = useState();
     const [topText, setTopText] = useOutletContext();
     const [page, setPage] = useState();
-
-    setInterval(refreshCookie, 300000);
+    const [activeTimer, setActiveTimer] = useState(null)
 
     async function refreshCookie() {
         try {
@@ -36,7 +35,6 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
     useEffect(() => {
         async function fetchUser() {
             try {
-
                 const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/current', {
                     credentials: "include",
                 });
@@ -47,7 +45,9 @@ const RouterByRole = ({rolesWithoutAccess, element}) => {
                 }
                 const user = await response.json();
                 console.log(user);
-                refreshCookie();
+                if(activeTimer === null){
+                    setActiveTimer(setInterval(refreshCookie, 300000));
+                }
 
                 setPage(rolesWithoutAccess.includes(user.role.id) ?  <Navigate to={user.role.id == 1? "/admin-home":"/home"} state={{ from: location }} replace /> : element)
             } catch (error) {
