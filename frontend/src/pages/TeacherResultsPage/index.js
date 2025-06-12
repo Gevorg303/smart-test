@@ -208,9 +208,15 @@ const ResultsPage = () => {
             startAngle += sliceAngle;
         });
     };
-
+    const hasData = () => {
+        return excellentStudents.length > 0 || goodStudents.length > 0 || averageStudents.length > 0 || poorStudents.length > 0;
+    };
 
     const renderStudentPerformance = () => {
+        if (!selectedSubject) {
+            return <div className="no-subject-selected">Предмет не выбран</div>;
+        }
+
         const lastFivePoorStudents = poorStudents.length > 0
             ? poorStudents.length > 5
                 ? poorStudents.slice(-5)
@@ -224,25 +230,38 @@ const ResultsPage = () => {
         return (
             <div className="student-performance">
                 <div>
-                    <strong>Отлично: </strong> {firstFiveExcellentStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Отлично: </strong>
+                    {firstFiveExcellentStudents.length > 0
+                        ?firstFiveExcellentStudents.map(student => `${student.name} ${student.surname}`).join(', ')
+                        : " Нет данных"}
                 </div>
                 <div>
-                    <strong>Хорошо: </strong> {firstFiveGoodStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Хорошо: </strong>
+                    {firstFiveGoodStudents.length > 0
+                    ?firstFiveGoodStudents.map(student => `${student.name} ${student.surname}`).join(', ')
+                    :" Нет данных"}
                 </div>
                 <div>
-                    <strong>Удовлетворительно: </strong> {firstFiveAverageStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Удовлетворительно: </strong>
+                    {firstFiveAverageStudents.length > 0
+                    ?firstFiveAverageStudents.map(student => `${student.name} ${student.surname}`).join(', ')
+                    :" Нет данных"}
                 </div>
                 <div>
                     <strong>Неудовлетворительно: </strong>
                     {lastFivePoorStudents.length > 0
                         ? lastFivePoorStudents.map(student => `${student.name} ${student.surname}`).join(', ')
-                        : "Нет данных"}
+                        : " Нет данных"}
                 </div>
             </div>
         );
     };
 
     const renderGradeLegend = () => {
+        if (!selectedSubject || !hasData()) {
+            return null;
+        }
+
         return (
             <div className="grade-legend">
                 <div>
@@ -279,18 +298,21 @@ const ResultsPage = () => {
                             </select>
                         </div>
                         {renderStudentPerformance()}
-                        <div className="chart-and-legend">
-                            <div className="pie-chart-container">
-                                <canvas ref={canvasRef} width="400" height="400"></canvas>
+                        {selectedSubject && hasData() && (
+                            <div className="chart-and-legend">
+                                <div className="pie-chart-container">
+                                    <canvas ref={canvasRef} width="400" height="400"></canvas>
+                                </div>
+                                <div className="grade-labels">
+                                    {renderGradeLegend()}
+                                </div>
                             </div>
-                            <div className="grade-labels">
-                                {renderGradeLegend()}
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
         </div>
     );
 };
+
 export default ResultsPage;
