@@ -209,8 +209,9 @@ public class UserServiceImpl implements UserServiceInterface {
                     .collect(Collectors.toList());
         }
 
+        Long currentUserId = userDto.getId();
         return userList.stream()
-                .filter(user -> !user.getIsDelete())
+                .filter(user -> !user.getId().equals(currentUserId) && !user.getIsDelete())
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
