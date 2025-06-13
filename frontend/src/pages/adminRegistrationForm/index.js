@@ -229,7 +229,7 @@ const AdminRegistrationForm = ({ selectedForm }) => {
             };
 
             jsonData.slice(1).forEach((row, index) => {
-                const [lastName, firstName, middleName, email, role] = row;
+                const [lastName, firstName, middleName, email, role] = row.map(item => item ? item.toString().trim() : '');
                 const rowErrors = [];
 
                 if (!lastName || !isValidName(lastName)) {
