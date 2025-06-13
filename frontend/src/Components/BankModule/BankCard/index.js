@@ -9,9 +9,17 @@ import DisplayThemeCard from "../DisplayThemeCard";
 import DisplayIndicatorCard from "../DisplayIndicatorCard";
 import DisplayStudentCard from "../DisplayStudentCard";
 import DisplayClassCard from "../DisplayClassCard";
+import Modal from 'react-bootstrap/Modal';
 
-const BankCard = ({ id, objectItem, type, setEditItem }) => {
+const BankCard = ({ id, objectItem, type, setEditItem, notification}) => {
     const [item, setItem] = useState();
+    const [deleteUrl, setDeleteUrlText] = useState()
+    const [deleteTitle, setDeleteTitle] = useState()
+    const [deleteText, setDeleteText] = useState()
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const handleDelete = async (event) => {
         try {
@@ -20,31 +28,62 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
             switch (type) {
                 case "test":
                     url = process.env.REACT_APP_SERVER_URL+'test/delete';
+                    setDeleteTitle("Вы действительно хотите удалить тест?")
+                    setDeleteText("При удалении теста также удалятся задания, принаджежащие данному тесту");
                     break;
                 case "task":
                     url = process.env.REACT_APP_SERVER_URL+'task/delete';
+                    setDeleteTitle("Вы действительно хотите удалить задание?")
+                    setDeleteText("");
                     break;
                 case "indicator":
                     url = process.env.REACT_APP_SERVER_URL+'indicator/delete';
+                    setDeleteTitle("Вы действительно хотите удалить индикатор?")
+                    setDeleteText("При удалении индикатора также удалятся задания в которых этот индикатор единственный.");
                     break;
                 case "theme":
                     url = process.env.REACT_APP_SERVER_URL+'theme/delete';
+                    setDeleteTitle("Вы действительно хотите удалить тему?")
+                    setDeleteText("При удалении темы также удалятся индикаторы, задания и тесты, принаджежащие данной теме");
                     break;
                 case "subject":
                     url = process.env.REACT_APP_SERVER_URL+'subject/delete';
+                    setDeleteTitle("Вы действительно хотите удалить предмет?")
+                    setDeleteText("При удалении предмета также удалятся темы, индикаторы, задания и  тесты, принаджежащие данному предмету");
                     break;
                 case "student":
                     url = process.env.REACT_APP_SERVER_URL+'users/delete';
+                    setDeleteTitle("Вы действительно хотите удалить данного пользователя?")
+                    setDeleteText("");
                     break;
                 case "class":
                     url = process.env.REACT_APP_SERVER_URL+'student-class/delete';
+                    setDeleteTitle("Вы действительно хотите удалить класс учеников?")
+                    setDeleteText("");
                     break;
                 default:
                     throw new Error("Неизвестный тип");
             }
-
+            setDeleteUrlText(url)
+            setShow(true)
             console.log("Отправка запроса на URL: " + url + " с id: " + id);
-            const response = await fetch(url, {
+
+        } catch (error) {
+            console.error('Ошибка удаления данных:', error);
+        }
+    };
+    const handleEdit =  (event) => {
+        try {
+            console.log("Редактировать: " + id + " (" + type + ")");
+            setEditItem(objectItem);
+        } catch (error) {
+            console.error('Ошибка редактирования данных:', error);
+        }
+    };
+
+    const deleteEntity = async (event) => {
+        try {
+            const response = await fetch(deleteUrl, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8'
@@ -56,30 +95,44 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                 throw new Error("Ошибка удаления объекта");
             }
             console.log("Объект успешно удалён");
-            window.location.reload();
+           // window.location.reload();
         } catch (error) {
             console.error('Ошибка удаления данных:', error);
         }
-    };
+        handleClose();
+        notification("Успешно удалено")
 
-    const handleEdit = async (event) => {
-        try {
-            console.log("Редактировать: " + id + " (" + type + ")");
-            setEditItem(objectItem);
-        } catch (error) {
-            console.error('Ошибка редактирования данных:', error);
-        }
     };
 
     useEffect(() => {
         async function fetchQuestions() {
-            if (type === "test") setItem(<DisplayTestCard objectItem={objectItem} />);
-            if (type === "task") setItem(<DisplayTaskCard objectItem={objectItem} />);
-            if (type === "subject") setItem(<DisplaySubjectCard objectItem={objectItem} />);
-            if (type === "theme") setItem(<DisplayThemeCard objectItem={objectItem} />);
-            if (type === "indicator") setItem(<DisplayIndicatorCard objectItem={objectItem} />);
-            if (type === "student") setItem(<DisplayStudentCard objectItem={objectItem} />);
-            if (type === "class") setItem(<DisplayClassCard objectItem={objectItem} />);
+            switch (type) {
+                case "test":
+                    setItem(<DisplayTestCard objectItem={objectItem} />);
+                    break;
+                case "task":
+                    setItem(<DisplayTaskCard objectItem={objectItem} />);
+                    break;
+                case "subject":
+                    setItem(<DisplaySubjectCard objectItem={objectItem} />);
+                    break;
+                case "theme":
+                    setItem(<DisplayThemeCard objectItem={objectItem} />);
+                    break;
+                case "indicator":
+                    setItem(<DisplayIndicatorCard objectItem={objectItem} />);
+                    break;
+                case "student":
+                    setItem(<DisplayStudentCard objectItem={objectItem} />);
+                    break;
+                case "class":
+                    setItem(<DisplayClassCard objectItem={objectItem} />);
+                    break;
+                default:
+                    setItem(<></>);
+                    break;
+            }
+
         }
 
         fetchQuestions();
@@ -104,6 +157,25 @@ const BankCard = ({ id, objectItem, type, setEditItem }) => {
                     </div>
                 </Stack>
             </Stack>
+            <Modal centered={true} show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{deleteTitle}</Modal.Title>
+                </Modal.Header>
+                {deleteText !== "" ?
+                    <Modal.Body>{deleteText}</Modal.Body>
+                    :
+                    <></>
+                }
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Отмена
+                    </Button>
+                    <Button variant="danger" onClick={deleteEntity}>
+                        Удалить
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

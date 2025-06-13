@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Toast, ToastContainer } from 'react-bootstrap';
+import { Form, Button, Toast, ToastContainer,Stack } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import BankCard from "../../Components/BankModule/BankCard";
 import "./styles.css";
@@ -13,6 +13,9 @@ import Sorting from "../../Components/BankModule/Sorting";
 import { useOutletContext } from 'react-router-dom';
 import CreateStudentPage from "../../Components/BankModule/CreateStudentPage";
 import CreateClassPage from "../../Components/BankModule/CreateClassPage";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const QuestionBankPage = ({ type }) => {
     const [editItem, setEditItem] = useState(null);
@@ -23,8 +26,9 @@ const QuestionBankPage = ({ type }) => {
     const navigate = useNavigate();
     const [showErrorToast, setShowErrorToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessrMessage] = useState('');
     const [topText, setTopText] = useOutletContext();
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [showSuccessToast, setShowSuccessToast] = useState(false); // используется вместе с showErrorToast!!!
 
     useEffect(() => {
         // Очистка topText при монтировании компонента
@@ -45,7 +49,7 @@ const QuestionBankPage = ({ type }) => {
 
                 switch (type) {
                     case "test":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все тесты по предмету, теме, типу теста и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами тесты, а также при необходимости отсортировать эти тесты по предмету, теме и типу теста. Также на данной странице вы можете создать новый тест.");
                         setTopText("Банк тестов");
                         setCreateModal(<CreateTestPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response2 = await fetch(process.env.REACT_APP_SERVER_URL + 'test/get-user-tests', {
@@ -62,7 +66,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(tests));
                         break;
                     case "task":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все задания по предмету, теме, индикатору и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами задания, а также при необходимости отсортировать эти задания по предмету, теме и индикатору. Также на данной странице вы можете создать новое задание.");
                         setTopText("Банк заданий");
                         setCreateModal(<CreateQuestionPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response3 = await fetch(process.env.REACT_APP_SERVER_URL + 'task/get-user-tasks', {
@@ -79,7 +83,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(questions));
                         break;
                     case "subject":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все предметы по классам и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами предметы. Также на данной странице вы можете создать новый предмет.");
                         setTopText("Банк предметов");
                         setCreateModal(<CreateSubjectPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response4 = await fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
@@ -96,7 +100,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(subjects));
                         break;
                     case "theme":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все темы по предмету и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами темы, а также при необходимости отсортировать эти темы по предмету. Также на данной странице вы можете создать новую тему.");
                         setTopText("Банк тем");
                         setCreateModal(<CreateThemePage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response5 = await fetch(process.env.REACT_APP_SERVER_URL + 'theme/get-theme-by-id-user', {
@@ -113,7 +117,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(theme));
                         break;
                     case "indicator":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все индикаторы по предмету, теме и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть и редактировать созданные Вами индикаторы, а также при необходимости отсортировать эти индикаторы по предмету и теме. Также на данной странице вы можете создать новый индикатор.");
                         setTopText("Банк индикаторов");
                         setCreateModal(<CreateIndicatorPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response6 = await fetch(process.env.REACT_APP_SERVER_URL + 'indicator/indicator-by-user', {
@@ -130,7 +134,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(indicator));
                         break;
                     case "student":
-                        localStorage.setItem('info', "На этой странице посмотреть список учеников");
+                        localStorage.setItem('info', "На этой странице посмотреть список учеников.");
                         setTopText("Банк пользователей");
                         setCreateModal(<CreateStudentPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response7 = await fetch(process.env.REACT_APP_SERVER_URL + 'users/all', {
@@ -150,7 +154,7 @@ const QuestionBankPage = ({ type }) => {
                         setBankItems(sortById(students));
                         break;
                     case "class":
-                        localStorage.setItem('info', "На этой странице можно отсортировать все классы и просмотреть");
+                        localStorage.setItem('info', "На этой странице можно посмотреть список классов.");
                         setTopText("Банк классов");
                         setCreateModal(<CreateClassPage editItem={editItem} onCreate={handleCreate} onError={ErrorToast} />);
                         const response8 = await fetch(process.env.REACT_APP_SERVER_URL + 'users/find-student-class-by-user', {
@@ -181,29 +185,33 @@ const QuestionBankPage = ({ type }) => {
         return () => {
             setTopText("");
         };
-    }, [type, editItem]);
+    }, [type, editItem,showSuccessToast]);
 
     function EditFunc(item) {
         setEditItem(item);
         setShowEditModal(true);
+        console.log("edit")
     }
 
     const handleCreate = (message) => {
         setShowCreateModal(false);
         setShowEditModal(false);
-        setShowSuccessToast(true);
-        setShowErrorToast(false);
+        setShowSuccessToast(true);// выбор типа уведомления
+        setShowErrorToast(true);// открытие уведомления
         setEditItem(null);
+        setSuccessrMessage(message);
+        console.log("create" + message)
     };
 
     const ErrorToast = (messages) => {
+        console.log("create" + messages)
         if (Array.isArray(messages)) {
             setErrorMessage(messages.join('\n'));
         } else {
             setErrorMessage(messages);
         }
-        setShowSuccessToast(false);
-        setShowErrorToast(true);
+        setShowSuccessToast(false);// выбор типа уведомления
+        setShowErrorToast(true);// открытие уведомления
     };
 
     const sortById = (items) => {
@@ -215,12 +223,18 @@ const QuestionBankPage = ({ type }) => {
             <div className="page-container-quest">
                 <div className="button-containers">
                     {type !== "class" && <Sorting type={type} setBankItems={setBankItems} />}
-                    {type !== "student" && (
-                        <Button variant="success" className="create-button" onClick={() => {
-                            setShowCreateModal(true);
-                        }}>Создать</Button>
-                    )}
+
+                    <div className="button-group-2">
+                        {type !== "student" && (
+                            <Button variant="success" className="create-button" onClick={() => {
+                                setShowCreateModal(true);
+                            }}>Создать</Button>
+                        )}
+                    </div>
+
                 </div>
+
+
                 <Modal
                     show={showCreateModal || showEditModal}
                     onHide={() => {
@@ -240,16 +254,16 @@ const QuestionBankPage = ({ type }) => {
 
                 {bankItems.length > 0 ? (
                     bankItems.map((item, index) => (
-                        <BankCard key={index} id={item.id} objectItem={item} type={type} setEditItem={EditFunc} />
+                        <BankCard key={index} id={item.id} objectItem={item} type={type} setEditItem={EditFunc} notification={handleCreate}/>
                     ))
                 ) : (
                     <p className="no-items-message">Нет доступных элементов</p>
                 )}
             </div>
 
-            {showErrorToast && (
+            {showErrorToast  && (
                 <Toast
-                    onClose={() => setShowErrorToast(false)}
+                    onClose={() => {setShowErrorToast(false);setShowSuccessToast(false)} }
                     show={showErrorToast}
                     delay={3000}
                     autohide
@@ -268,7 +282,7 @@ const QuestionBankPage = ({ type }) => {
                             x
                         </Button>
                     </Toast.Header>
-                    <Toast.Body>{showSuccessToast ? 'Успешно' : errorMessage}</Toast.Body>
+                    <Toast.Body>{showSuccessToast ? successMessage : errorMessage}</Toast.Body>
                 </Toast>
             )}
         </div>

@@ -84,7 +84,7 @@ const ClassBank = () => {
     }, []);
 
     const getTokenFromCookie = () => {
-        const name = "jwtToken=";
+        const name = "accessToken=";
         const decodedCookie = decodeURIComponent(document.cookie);
         const ca = decodedCookie.split(';');
         for (let i = 0; i < ca.length; i++) {

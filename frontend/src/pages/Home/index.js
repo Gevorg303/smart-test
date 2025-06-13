@@ -9,7 +9,7 @@ const HomePage = () => {
     const [subjects, setSubjects] = useState([]);
     const [topText, setTopText] = useOutletContext();
 
-    localStorage.setItem('info', "Здесь находятся ваши предметы");
+    localStorage.setItem('info', "Здесь находятся Ваши предметы.");
 
     useEffect(() => {
         async function fetchUser() {
@@ -23,7 +23,7 @@ const HomePage = () => {
                     throw new Error('Ошибка сети');
                 }
                 const user = await response.json();
-                setTopText("Здравствуйте, " + user.name + " (" + user.role.role + ")");
+                setTopText("Здравствуйте, " + user.name + " " + user.patronymic );
 
                 const container = document.querySelector('.all-container');
                 if (container) {

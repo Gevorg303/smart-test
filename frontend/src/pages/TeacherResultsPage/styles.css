@@ -69,15 +69,8 @@ html, body {
 }
 .container-wrapper-2 .container-home-2 h2 {text-align: left; padding-left: 5%;}
 
-.pie-chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px;
-}
-
 canvas {
-    border: 1px solid #000;
+    display: block; /* Убираем дополнительные отступы под холстом */
 }
 
 
@@ -87,11 +80,6 @@ canvas {
     margin: 0 20px;
 }
 
-.grade-labels {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
 
 .dropdowns {
     margin-bottom: 20px;
@@ -105,16 +93,44 @@ canvas {
 .student-performance {
     margin-bottom: 20px;
 }
+
+
+.chart-and-legend {
+    display: flex;
+    align-items: center;
+    gap: 2px; /* Расстояние между диаграммой и легендой */
+    width: 50%; /* Фиксированная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера по горизонтали */
+}
+
+.pie-chart-container {
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center; /* Центрирование по вертикали */
+    padding: 3px; /* Внутренние отступы */
+    width: fit-content; /* Ширина по содержимому */
+    margin: 0 auto; /* Центрирование контейнера */
+}
+
+
+
+.grade-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
 .grade-legend {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
 }
 
 .grade-legend div {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    margin-left:-70px;
 }
 
 .legend-color {
@@ -123,4 +139,10 @@ canvas {
     height: 20px;
     margin-right: 10px;
     border: 1px solid #ccc;
+}
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* или любая другая высота, которая вам подходит */
 }

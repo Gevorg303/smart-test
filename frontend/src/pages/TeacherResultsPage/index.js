@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useOutletContext } from "react-router-dom";
+import './styles.css';
+import Spinner from 'react-bootstrap/Spinner';
 
 const ResultsPage = () => {
     const [subjects, setSubjects] = useState([]);
@@ -10,16 +12,12 @@ const ResultsPage = () => {
     const [poorStudents, setPoorStudents] = useState([]);
     const [subjectList, setSubjectList] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const canvasRef = useRef(null);
     const [topText, setTopText] = useOutletContext();
 
-    localStorage.setItem('info', "На этой странице отображается статистика учеников. Тут можно посмотреть за успеваемостью учеников по различным предметам.");
-
     useEffect(() => {
-        // Очистка topText при монтировании компонента
         setTopText("");
-
-        // Fetch user data
         const fetchUser = async () => {
             try {
                 const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/current', {
@@ -39,7 +37,6 @@ const ResultsPage = () => {
 
         fetchUser();
 
-        // Очистка topText при размонтировании компонента
         return () => {
             setTopText("");
         };
@@ -48,39 +45,37 @@ const ResultsPage = () => {
     useEffect(() => {
         if (user) {
             const fetchData = async () => {
+                setIsLoading(true);
                 try {
                     setTopText("Результаты");
 
-                    // Fetch student statistics
-                    const response = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/student', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify(user)
-                    });
+                    const [statisticsResponse, subjectsResponse] = await Promise.all([
+                        fetch(process.env.REACT_APP_SERVER_URL + 'statistics/student', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            },
+                            body: JSON.stringify(user)
+                        }),
+                        fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8'
+                            },
+                            body: JSON.stringify(user)
+                        })
+                    ]);
 
-                    if (!response.ok) {
-                        throw new Error('Ошибка получения данных об успеваемости');
+                    if (!statisticsResponse.ok || !subjectsResponse.ok) {
+                        throw new Error('Ошибка получения данных');
                     }
 
-                    const statisticsData = await response.json();
+                    const [statisticsData, subjectsData] = await Promise.all([
+                        statisticsResponse.json(),
+                        subjectsResponse.json()
+                    ]);
+
                     setSubjects(statisticsData);
-
-                    // Fetch subject list
-                    const subjectsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'subject/print-user-subject', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify(user)
-                    });
-
-                    if (!subjectsResponse.ok) {
-                        throw new Error('Ошибка получения списка предметов');
-                    }
-
-                    const subjectsData = await subjectsResponse.json();
                     setSubjectList(subjectsData);
 
                     if (subjectsData.length > 0) {
@@ -88,6 +83,8 @@ const ResultsPage = () => {
                     }
                 } catch (error) {
                     console.error("Error fetching data: ", error);
+                } finally {
+                    setIsLoading(false);
                 }
             };
 
@@ -95,62 +92,55 @@ const ResultsPage = () => {
         }
     }, [user]);
 
-    useEffect(() => {
+    const fetchTeacherStats = useCallback(async () => {
         if (selectedSubject && user) {
-            const fetchTeacherStats = async () => {
-                try {
-                    const teacherStatsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/teacher', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=UTF-8'
-                        },
-                        body: JSON.stringify({
-                            user: user,
-                            subject: subjectList.find(subject => subject.id === parseInt(selectedSubject))
-                        })
-                    });
+            setIsLoading(true);
+            try {
+                const teacherStatsResponse = await fetch(process.env.REACT_APP_SERVER_URL + 'statistics/teacher', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        user: user,
+                        subject: subjectList.find(subject => subject.id === parseInt(selectedSubject))
+                    })
+                });
 
-                    if (!teacherStatsResponse.ok) {
-                        throw new Error('Ошибка получения данных об отличниках и неуспевающих');
-                    }
-
-                    const teacherStatsData = await teacherStatsResponse.json();
-                    const firstStat = teacherStatsData[0] || {};
-
-                    setExcellentStudents(firstStat.excellentStudents || []);
-                    setGoodStudents(firstStat.goodStudents || []);
-                    setAverageStudents(firstStat.averageStudents || []);
-                    setPoorStudents(firstStat.poorStudents || []);
-
-                    console.log("Excellent Students:", firstStat.excellentStudents);
-                    console.log("Good Students:", firstStat.goodStudents);
-                    console.log("Average Students:", firstStat.averageStudents);
-                    console.log("Poor Students:", firstStat.poorStudents);
-                } catch (error) {
-                    console.error("Error fetching teacher stats: ", error);
+                if (!teacherStatsResponse.ok) {
+                    throw new Error('Ошибка получения данных об отличниках и неуспевающих');
                 }
-            };
 
-            fetchTeacherStats();
+                const teacherStatsData = await teacherStatsResponse.json();
+                const firstStat = teacherStatsData[0] || {};
+
+                setExcellentStudents(firstStat.excellentStudents || []);
+                setGoodStudents(firstStat.goodStudents || []);
+                setAverageStudents(firstStat.averageStudents || []);
+                setPoorStudents(firstStat.poorStudents || []);
+
+            } catch (error) {
+                console.error("Error fetching teacher stats: ", error);
+            } finally {
+                setIsLoading(false);
+            }
         }
     }, [selectedSubject, user, subjectList]);
 
     useEffect(() => {
-        if (excellentStudents.length > 0 || goodStudents.length > 0 || averageStudents.length > 0 || poorStudents.length > 0) {
-            drawPieChart();
-        }
-    }, [excellentStudents, goodStudents, averageStudents, poorStudents]);
+        fetchTeacherStats();
+    }, [fetchTeacherStats]);
 
-    const drawPieChart = () => {
+    const drawPieChart = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) {
-            console.error("Canvas element is not available");
+            console.error("Элемент Canvas недоступен");
             return;
         }
 
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-            console.error("Could not get canvas context");
+            console.error("Не удалось получить контекст холста");
             return;
         }
 
@@ -163,7 +153,7 @@ const ResultsPage = () => {
         const totalStudents = excellentStudents.length + goodStudents.length + averageStudents.length + poorStudents.length;
 
         if (totalStudents === 0) {
-            console.error("No students data available");
+            console.error("Нет данных об учениках");
             return;
         }
 
@@ -183,6 +173,7 @@ const ResultsPage = () => {
 
         gradeData.forEach(grade => {
             const sliceAngle = (grade.percentage / 100) * 2 * Math.PI;
+            const midAngle = startAngle + sliceAngle / 2;
 
             ctx.fillStyle = grade.color;
             ctx.beginPath();
@@ -191,11 +182,35 @@ const ResultsPage = () => {
             ctx.closePath();
             ctx.fill();
 
+            const labelRadius = radius * 0.6;
+            const labelX = centerX + Math.cos(midAngle) * labelRadius;
+            const labelY = centerY + Math.sin(midAngle) * labelRadius;
+
+            ctx.fillStyle = '#000';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`${grade.percentage.toFixed(1)}%`, labelX, labelY);
+
             startAngle += sliceAngle;
         });
-    };
+    }, [excellentStudents, goodStudents, averageStudents, poorStudents]);
 
-    const renderStudentPerformance = () => {
+    useEffect(() => {
+        if (excellentStudents.length > 0 || goodStudents.length > 0 || averageStudents.length > 0 || poorStudents.length > 0) {
+            drawPieChart();
+        }
+    }, [drawPieChart, excellentStudents, goodStudents, averageStudents, poorStudents]);
+
+    const hasData = useMemo(() => {
+        return excellentStudents.length > 0 || goodStudents.length > 0 || averageStudents.length > 0 || poorStudents.length > 0;
+    }, [excellentStudents, goodStudents, averageStudents, poorStudents]);
+
+    const renderStudentPerformance = useCallback(() => {
+        if (!selectedSubject) {
+            return <div className="no-subject-selected">Предмет не выбран</div>;
+        }
+
         const lastFivePoorStudents = poorStudents.length > 0
             ? poorStudents.length > 5
                 ? poorStudents.slice(-5)
@@ -209,25 +224,38 @@ const ResultsPage = () => {
         return (
             <div className="student-performance">
                 <div>
-                    <strong>Отлично:</strong> {firstFiveExcellentStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Отлично: </strong>
+                    {firstFiveExcellentStudents.length > 0
+                        ? firstFiveExcellentStudents.map(student => `${student.name} ${student.surname}`).join(', ')
+                        : " Нет данных"}
                 </div>
                 <div>
-                    <strong>Хорошо:</strong> {firstFiveGoodStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Хорошо: </strong>
+                    {firstFiveGoodStudents.length > 0
+                        ? firstFiveGoodStudents.map(student => `${student.name} ${student.surname}`).join(', ')
+                        : " Нет данных"}
                 </div>
                 <div>
-                    <strong>Удовлетворительно:</strong> {firstFiveAverageStudents.map(student => `${student.name} ${student.surname}`).join(', ')}
+                    <strong>Удовлетворительно: </strong>
+                    {firstFiveAverageStudents.length > 0
+                        ? firstFiveAverageStudents.map(student => `${student.name} ${student.surname}`).join(', ')
+                        : " Нет данных"}
                 </div>
                 <div>
-                    <strong>Неудовлетворительно:</strong>
+                    <strong>Неудовлетворительно: </strong>
                     {lastFivePoorStudents.length > 0
                         ? lastFivePoorStudents.map(student => `${student.name} ${student.surname}`).join(', ')
-                        : "Нет данных"}
+                        : " Нет данных"}
                 </div>
             </div>
         );
-    };
+    }, [selectedSubject, excellentStudents, goodStudents, averageStudents, poorStudents]);
 
-    const renderGradeLegend = () => {
+    const renderGradeLegend = useCallback(() => {
+        if (!selectedSubject || !hasData) {
+            return null;
+        }
+
         return (
             <div className="grade-legend">
                 <div>
@@ -248,7 +276,7 @@ const ResultsPage = () => {
                 </div>
             </div>
         );
-    };
+    }, [selectedSubject, hasData, excellentStudents, goodStudents, averageStudents, poorStudents]);
 
     return (
         <div className="page-container">
@@ -263,11 +291,25 @@ const ResultsPage = () => {
                                 ))}
                             </select>
                         </div>
-                        {renderStudentPerformance()}
-                        <div className="pie-chart-container">
-                            <canvas ref={canvasRef} width="400" height="400"></canvas>
-                            {renderGradeLegend()}
-                        </div>
+                        {isLoading ? (
+                            <div className="spinner-container">
+                                <Spinner animation="border" variant="dark" style={{ width: '5rem', height: '5rem' }} />
+                            </div>
+                        ) : (
+                            <>
+                                {renderStudentPerformance()}
+                                {selectedSubject && hasData && (
+                                    <div className="chart-and-legend">
+                                        <div className="pie-chart-container">
+                                            <canvas ref={canvasRef} width="400" height="400"></canvas>
+                                        </div>
+                                        <div className="grade-labels">
+                                            {renderGradeLegend()}
+                                        </div>
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

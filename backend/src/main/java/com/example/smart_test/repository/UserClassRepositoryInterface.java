@@ -5,6 +5,7 @@ import com.example.smart_test.domain.Role;
 import com.example.smart_test.domain.StudentClass;
 import com.example.smart_test.domain.UserClass;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,8 @@ public interface UserClassRepositoryInterface extends JpaRepository<UserClass, L
     @Query("SELECT COUNT(uc) FROM UserClass uc WHERE uc.studentClass.id = :classId AND uc.user.isDelete = false")
     int countUsersByClassId(@Param("classId") Long classId);
 
+    @Modifying(clearAutomatically = true)
     @Query(value = "DELETE FROM пользователь_класс WHERE идентификатор_пользователя = :userId", nativeQuery = true)
     void deleteByUserId(@Param("userId") Long userId);
+
 }

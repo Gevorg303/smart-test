@@ -43,9 +43,11 @@ class LoginPage extends React.Component {
            });
 
            if (response.ok) {
-               const token = await response.text();
-               console.log('Received token:', token);
-               document.cookie = "jwtToken="+token+"; path=/;"
+               const token = await response.json();
+               console.log('Received token:', token.accessToken);
+               console.log('Received token:', token.refreshToken);
+               document.cookie = "accessToken="+token.accessToken+"; secure; path=/;"
+               document.cookie = "refreshToken="+token.refreshToken+"; secure; max-age="+30 * 24 * 60 * 60+"; path=/;"
                window.location.replace("/home") ; // Перенаправление на другую страницу
            } else {
                const errorText = await response.text();

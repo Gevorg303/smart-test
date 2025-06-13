@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useOutletContext } from "react-router-dom";
 import { Table } from "react-bootstrap";
+import "./styles.css";
 
 const AdminHome = () => {
     const [subjects, setSubjects] = useState([]);
@@ -146,11 +147,13 @@ const AdminHome = () => {
 
     return (
         <div className={"all-container-admin"}>
-            <div className="page-container">
-                <div className="result-container">
+            <div className="page-container-3">
+                <div className="result-container-3">
                     <div className="container-wrapper-2">
                         <div className="container-home-2">
+                            <div className="HeadText">
                             <h2>Сведения о пользователях</h2>
+                            </div>
                             <div>
                                 <h3>Количество пользователей по ролям:</h3>
                                 <ul>
@@ -161,8 +164,8 @@ const AdminHome = () => {
                                 <p>Общее количество пользователей: {totalUsers}</p>
                             </div>
                             <div className="bar-chart-container">
-                                <h3>Количество учеников в классах</h3>
-                                <div className="scroll-container">
+                                <h3>Количество учеников в классах:</h3>
+                                <div className="scroll-container-3">
                                     <div className="chart-wrapper">
                                         <canvas ref={canvasRef} width={Object.keys(classStudentCounts).length * 70} height="300"></canvas>
                                     </div>

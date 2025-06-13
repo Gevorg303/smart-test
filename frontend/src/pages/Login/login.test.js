@@ -23,7 +23,7 @@ Object.defineProperty(window, "location", {
 // Мокаем document.cookie
 Object.defineProperty(document, "cookie", {
     writable: true,
-    value: "jwtToken=exampleToken; path=/;",
+    value: "accessToken=exampleToken; path=/;",
 });
 
 test('Проверка начального состояния', () => {
@@ -63,12 +63,12 @@ describe("LoginPage - JWT token deletion", () => {
         const { getByText } = render(<LoginPage />);
 
         // Устанавливаем значение JWT токена
-        document.cookie = "jwtToken=exampleToken; path=/;";
+        document.cookie = "accessToken=exampleToken; path=/;";
 
         // Мокаем вызов logout (например, удаление куки)
-        document.cookie = "jwtToken=; Max-Age=0; path=/;";
+        document.cookie = "accessToken=; Max-Age=0; path=/;";
 
         // Проверяем, что JWT токен удалён
-        expect(document.cookie).not.toContain("jwtToken=exampleToken");
+        expect(document.cookie).not.toContain("accessToken=exampleToken");
     });
 });

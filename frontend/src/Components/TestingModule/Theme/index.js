@@ -90,6 +90,11 @@ const Theme = (props) => {
                     return testOrder[a.typeTest.nameOfTestType] - testOrder[b.typeTest.nameOfTestType];
                 });
 
+                if (sortedTests.length === 0) {
+                    setTests(<p>В данной теме нет тестов</p>);
+                    return;
+                }
+
                 const arrayScoresForTest = []
                 let countOfFirstTestAttempts = 0;
                 for await (const testForBlock of sortedTests)  {

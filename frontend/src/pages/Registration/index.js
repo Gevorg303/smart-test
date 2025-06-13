@@ -11,9 +11,11 @@ const RegistrationPage = () => {
     const [topText, setTopText] = useOutletContext();
     let selectedOption;
     if (location.pathname.includes('multiple')) {
+        setTopText("Регистрация");
         localStorage.setItem('info', "Выберите файл в формате .xlsx,.xlsm,.xls,.xltx или .xltm с данными нескольких учеников в формате: Фамилия, Имя, Отчество, Класс, Почта");
         selectedOption = 'multiple';
     } else {
+        setTopText("Регистрация");
         localStorage.setItem('info', "Введите здесь данные ученика");
         selectedOption = 'single';
     }
@@ -200,71 +202,86 @@ const RegistrationPage = () => {
             return;
         }
 
+        if (!selectedClass) {
+            setErrorMessage('Класс не выбран');
+            setShowErrorToast(true);
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = async (e) => {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-            const userRequests = [];
-            const errors = [];
-
-            jsonData.slice(1).forEach((row, index) => {
-                const [lastName, firstName, middleName, email] = row;
-                const rowErrors = [];
-
-                if (!lastName || !isValidName(lastName)) {
-                    rowErrors.push('Фамилия');
-                }
-                if (!firstName || !isValidName(firstName)) {
-                    rowErrors.push('Имя');
-                }
-                if (!middleName || !isValidName(middleName)) {
-                    rowErrors.push('Отчество');
-                }
-                if (!email || !isValidEmail(email)) {
-                    rowErrors.push('Эл. почта');
-                }
-
-                if (rowErrors.length > 0) {
-                    errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
-                    return;
-                }
-
-                const isEmailRegistered = users.some(user => user.email === email);
-                if (isEmailRegistered) {
-                    errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
-                    return;
-                }
-
-                userRequests.push({
-                    user: {
-                        surname: lastName,
-                        name: firstName,
-                        patronymic: middleName,
-                        role: { id: 3 },
-                        email: email
-                    },
-                    studentClass: { id: parseInt(selectedClass, 10) }
-                });
-            });
-
-            if (errors.length > 0) {
-                setErrorMessage(errors.join('\n'));
-                setShowErrorToast(true);
-                return;
-            }
-
-            if (userRequests.length === 0) {
-                setErrorMessage('Строки в файле заполнены некорректно, либо пользователь был ранее зарегистрирован');
-                setShowErrorToast(true);
-                return;
-            }
-
             try {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL+'users/add', {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                console.log('Данные из файла:', jsonData);
+
+                const userRequests = [];
+                const errors = [];
+
+                jsonData.slice(1).forEach((row, index) => {
+                    // Пропускаем пустые строки
+                    if (row.length === 0 || row.every(cell => cell === null || cell === undefined || cell === '')) {
+                        return;
+                    }
+
+                    const [lastName, firstName, middleName, email] = row.map(cell => cell.toString().trim());
+                    const rowErrors = [];
+
+                    if (!lastName || !isValidName(lastName)) {
+                        rowErrors.push('Фамилия');
+                    }
+                    if (!firstName || !isValidName(firstName)) {
+                        rowErrors.push('Имя');
+                    }
+                    if (!middleName || !isValidName(middleName)) {
+                        rowErrors.push('Отчество');
+                    }
+                    if (!email || !isValidEmail(email)) {
+                        rowErrors.push('Эл. почта');
+                    }
+
+                    if (rowErrors.length > 0) {
+                        errors.push(`Строка ${index + 2}: Заполнено некорректно: ${rowErrors.join(', ')}`);
+                        return;
+                    }
+
+                    const isEmailRegistered = users.some(user => user.email === email);
+                    if (isEmailRegistered) {
+                        errors.push(`Строка ${index + 2}: Пользователь с почтой ${email} уже зарегистрирован`);
+                        return;
+                    }
+
+                    userRequests.push({
+                        user: {
+                            surname: lastName,
+                            name: firstName,
+                            patronymic: middleName,
+                            role: { id: 3 },
+                            email: email
+                        },
+                        studentClass: { id: parseInt(selectedClass, 10) }
+                    });
+                });
+
+                if (errors.length > 0) {
+                    setErrorMessage(errors.join('\n'));
+                    setShowErrorToast(true);
+                    return;
+                }
+
+                if (userRequests.length === 0) {
+                    setErrorMessage('Нет корректных данных для регистрации');
+                    setShowErrorToast(true);
+                    return;
+                }
+
+                console.log('Запросы пользователей:', userRequests);
+
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + 'users/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -275,23 +292,30 @@ const RegistrationPage = () => {
                 if (response.ok) {
                     const answers = await response.json();
                     setShowSuccessToast(true);
-                    setSelectedClass(null); // Clear selected class
-                    // await fetchUsers();
+                    setSelectedClass(null);
 
                     // Generate and download XLS file
-                    const userDetails = answers.map((item, index) => ({
+                    const userDetails = answers.map((item) => ({
                         ФИО: `${item.surname} ${item.name} ${item.patronymic}`,
                         Логин: item.login,
                         Пароль: item.rawPassword
-                    }))
+                    }));
                     downloadXLS(userDetails, 'UserDetails');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Ошибка сервера:', errorData);
+                    setErrorMessage('Ошибка сервера: ' + JSON.stringify(errorData));
+                    setShowErrorToast(true);
                 }
             } catch (error) {
-                console.error('Ошибка регистрации пользователей:', error);
+                console.error('Ошибка обработки файла:', error);
+                setErrorMessage('Ошибка обработки файла: ' + error.message);
+                setShowErrorToast(true);
             }
         };
         reader.readAsArrayBuffer(file);
     };
+
 
     const handleDownloadTemplate = () => {
         const link = document.createElement('a');
@@ -350,7 +374,7 @@ const RegistrationPage = () => {
         <Container>
 
             <div className="registration-box">
-                <h2>Регистрация учеников</h2>
+                {/*<h2>Регистрация учеников</h2>*/}
                 {selectedOption === 'single' && (
                     <Form className="mt-4" onSubmit={handleSubmit}>
                         <Form.Group controlId="formLastName">

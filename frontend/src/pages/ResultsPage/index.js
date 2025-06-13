@@ -8,7 +8,7 @@ const ResultsPage = () => {
     const [topText, setTopText] = useOutletContext();
     const [user, setUser] = useState(null);
 
-    localStorage.setItem('info', "Здесь вы можете увидеть вашу среднюю оценку за предмет");
+    localStorage.setItem('info', "Здесь Вы можете увидеть Ваш средний балл за итоговые тесты по каждому из предметов.");
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -70,12 +70,12 @@ const ResultsPage = () => {
             <div className="result-container">
                 <div className="container-wrapper-2">
                     <div className="container-home-2">
-                        <h2>Сведения об успеваемости</h2>
+                        {/*<h2>Сведения об успеваемости</h2>*/}
                         <Table className="result-table" striped bordered hover>
                             <thead>
                             <tr>
                                 <th>Предмет</th>
-                                <th>Средняя оценка</th>
+                                <th>Средний балл</th>
                             </tr>
                             </thead>
                             <tbody>

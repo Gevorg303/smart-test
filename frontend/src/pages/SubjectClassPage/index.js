@@ -10,7 +10,7 @@ import SubjectCardForClass from "../../Components/BankModule/SubjectCardForClass
 import ClassModal from "../../Components/BankModule/ClassModal";
 
 const SubjectClass = () => {
-    localStorage.setItem('info', "Здесь вы можете подписать классы на предметы");
+    localStorage.setItem('info', "Здесь Вы можете подписать класс на предмет.");
 
     const [showModal, setShowModal] = useState(false);
     const [showToast, setShowToast] = useState(false);

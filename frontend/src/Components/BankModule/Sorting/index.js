@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Stack } from "react-bootstrap";
 import ThemeAndIndicatorSelector from "../../FormModule/ThemeAndIndicatorSelector";
 import CreateIndicatorPage from "../CreateIndicatorPage";
 import SingleIndicatorSelector from "../../FormModule/SingleIndicatorSelector";
 import "./styles.css";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const Sorting = ({ type, setBankItems }) => {
     const roleMapping = {
@@ -143,38 +146,61 @@ const Sorting = ({ type, setBankItems }) => {
 
             switch (type) {
                 case 'test':
-                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/tests';
-                    requestBody = {
-                        user,
-                        subject: subjectId > 0 ? { id: subjectId } : null,
-                        theme: themeId > 0 ? { id: themeId } : null,
-                        testType: testTypeId > 0 ? { id: testTypeId } : null,
-                    };
+                    if(subjectId > 0 || themeId > 0 || testTypeId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/tests';
+                        requestBody = {
+                            user,
+                            subject: subjectId > 0 ? { id: subjectId } : null,
+                            theme: themeId > 0 ? { id: themeId } : null,
+                            testType: testTypeId > 0 ? { id: testTypeId } : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'test/get-user-tests';
+                        requestBody = user;
+                    }
+
+
                     break;
                 case 'task':
-                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/tasks';
-                    requestBody = {
-                        user,
-                        subject: subjectId > 0 ? { id: subjectId } : null,
-                        theme: themeId > 0 ? { id: themeId } : null,
-                        indicator: indicatorId > 0 ? { id: indicatorId } : null,
-                    };
+                    if(subjectId > 0 || themeId > 0 || indicatorId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/tasks';
+                        requestBody = {
+                            user,
+                            subject: subjectId > 0 ? { id: subjectId } : null,
+                            theme: themeId > 0 ? { id: themeId } : null,
+                            indicator: indicatorId > 0 ? { id: indicatorId } : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'task/get-user-tasks';
+                        requestBody = user;
+                    }
+
                     break;
                 case 'subject':
-                    url = process.env.REACT_APP_SERVER_URL+'bank-filters/subjects';
-                    requestBody = {
-                        user,
-                        class: classId > 0 ? { id: classId } : null,
-                    };
+                    if(classId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'bank-filters/subjects';
+                        requestBody = {
+                            user,
+                            class: classId > 0 ? { id: classId } : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'subject/print-user-subject';
+                        requestBody = user;
+                    }
                     break;
                 case 'theme':
-                    url = process.env.REACT_APP_SERVER_URL+'theme/get-by-subject';
-                    requestBody = {
-                        id: subjectId
-                    };
+                    if(subjectId > 0){
+                        url = process.env.REACT_APP_SERVER_URL+'theme/get-by-subject';
+                        requestBody = {
+                            id: subjectId > 0 ?  subjectId : null,
+                        };
+                    } else {
+                        url = process.env.REACT_APP_SERVER_URL+'theme/get-theme-by-id-user';
+                        requestBody = user;
+                    }
                     break;
                 case 'indicator':
-                    if (subjectId > 0 && themeId > 0) {
+                    if (subjectId > 0 || themeId > 0) {
                         url = process.env.REACT_APP_SERVER_URL+'indicator/indicator-by-theme';
                         requestBody = { id: themeId }
                     } else {
@@ -236,90 +262,110 @@ const Sorting = ({ type, setBankItems }) => {
 
     return (
         <>
+            <Container fluid={true}>
+                <Row>
 
             {type === 'task' ?
                 <>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Предмет</Form.Label>
-                            <Form.Select
-                                onChange={(e) => {
-                                    setTargetSubject(e.target.value);
-                                    console.log(targetSubject)
-                                }} value={targetSubject}>
-                                <option value={-1}>Выберите предмет</option>
-                                {subjects.map((item, index) => <option key={item.id}
-                                                                       value={item.id}> {item.subjectName}  </option>)}
-                            </Form.Select>
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Тема</Form.Label>
-                            <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
-                                                       currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Индикатор</Form.Label>
-                            <SingleIndicatorSelector targetTheme={currentTheme} currentIndicator={currentIndicator}
-                                                     setCurrentIndicator={setCurrentIndicator} />
-                        </Form.Group>
-                    </div>
+
+                        <Col>
+                            <div className="button-containers-filter">
+                                <Form.Group>
+                                    <Form.Label>Предмет</Form.Label>
+                                    <Form.Select
+                                        onChange={(e) => {
+                                            setTargetSubject(e.target.value);
+                                            console.log(targetSubject)
+                                        }} value={targetSubject}>
+                                        <option value={-1}>Выберите предмет</option>
+                                        {subjects.map((item, index) => <option key={item.id}
+                                                                               value={item.id}> {item.subjectName}  </option>)}
+                                    </Form.Select>
+                                </Form.Group>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className="button-containers-filter">
+                                <Form.Group>
+                                    <Form.Label>Тема</Form.Label>
+                                    <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
+                                                               currentTheme={currentTheme}
+                                                               setCurrentTheme={setCurrentTheme}/>
+                                </Form.Group>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className="button-containers-filter">
+                                <Form.Group>
+                                    <Form.Label>Индикатор</Form.Label>
+                                    <SingleIndicatorSelector targetTheme={currentTheme}
+                                                             currentIndicator={currentIndicator}
+                                                             setCurrentIndicator={setCurrentIndicator}/>
+                                </Form.Group>
+                            </div>
+                        </Col>
                 </>
                 : <></>
             }
             {type === 'test' ?
                 <>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Предмет</Form.Label>
-                            <Form.Select
-                                onChange={(e) => {
-                                    setTargetSubject(e.target.value);
-                                    console.log(targetSubject)
-                                }} value={targetSubject}>
-                                <option value={-1}>Выберите предмет</option>
-                                {subjects.map((item, index) => <option key={item.id}
-                                                                       value={item.id}> {item.subjectName}  </option>)}
-                            </Form.Select>
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Тема</Form.Label>
-                            <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
-                                                       currentTheme={currentTheme}
-                                                       setCurrentTheme={setCurrentTheme} />
-                        </Form.Group>
-                    </div>
-                    <div className="button-containers-filter">
-                        <Form.Group>
-                            <Form.Label>Тип теста</Form.Label>
-                            <Form.Select
-                                value={targetTypeTest}
-                                onChange={(e) => {
-                                    setTargetTypeTest(e.target.value)
-                                }}
-                            >
-                                <option value={-1}>Выберите тип теста</option>
-                                {testTypes.length > 0 ? (
-                                    testTypes.map((testType) => (
-                                        <option key={testType.id} value={testType.id}>
-                                            {testType.nameOfTestType}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option disabled>Нет данных</option>
-                                )}
-                            </Form.Select>
-                        </Form.Group>
-                    </div>
+                    <Col>
+                        <div className="button-containers-filter">
+                            <Form.Group>
+                                <Form.Label>Предмет</Form.Label>
+                                <Form.Select
+                                    onChange={(e) => {
+                                        setTargetSubject(e.target.value);
+                                        console.log(targetSubject)
+                                    }} value={targetSubject}>
+                                    <option value={-1}>Выберите предмет</option>
+                                    {subjects.map((item, index) => <option key={item.id}
+                                                                           value={item.id}> {item.subjectName}  </option>)}
+                                </Form.Select>
+                            </Form.Group>
+                        </div>
+                    </Col>
+
+                    <Col>
+                        <div className="button-containers-filter">
+                            <Form.Group>
+                                <Form.Label>Тема</Form.Label>
+                                <ThemeAndIndicatorSelector needIndicators={false} targetSubject={targetSubject}
+                                                           currentTheme={currentTheme}
+                                                           setCurrentTheme={setCurrentTheme}/>
+                            </Form.Group>
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className="button-containers-filter">
+                            <Form.Group>
+                                <Form.Label>Тип теста</Form.Label>
+                                <Form.Select
+                                    value={targetTypeTest}
+                                    onChange={(e) => {
+                                        setTargetTypeTest(e.target.value)
+                                    }}
+                                >
+                                    <option value={-1}>Выберите тип теста</option>
+                                    {testTypes.length > 0 ? (
+                                        testTypes.map((testType) => (
+                                            <option key={testType.id} value={testType.id}>
+                                                {testType.nameOfTestType}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option disabled>Нет данных</option>
+                                    )}
+                                </Form.Select>
+                            </Form.Group>
+                        </div>
+                    </Col>
+
                 </>
                 : <></>}
             {type === 'indicator' ?
                 <>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Предмет</Form.Label>
@@ -334,6 +380,8 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
+                        </Col>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Тема</Form.Label>
@@ -343,10 +391,12 @@ const Sorting = ({ type, setBankItems }) => {
                                                        setCurrentTheme={setCurrentTheme} />
                         </Form.Group>
                     </div>
+                        </Col>
                 </>
                 : <></>}
             {type === 'theme' ?
                 <>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Предмет</Form.Label>
@@ -361,10 +411,17 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
+                        </Col>
                 </>
                 : <></>}
             {type === 'student' && (
                 <>
+
+
+
+
+
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>Фильтр</Form.Label>
@@ -377,6 +434,8 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
+                        </Col>
+                    <Col>
                     <div className="button-containers-filter">
                         <Form.Group>
                             <Form.Label>{filterType === 'class' ? 'Класс' : 'Роль'}</Form.Label>
@@ -401,16 +460,26 @@ const Sorting = ({ type, setBankItems }) => {
                             </Form.Select>
                         </Form.Group>
                     </div>
-                    <div className="button-containers-filter">
-                        <Button variant="secondary" className="reset-button" onClick={resetFilters}>Сбросить фильтры</Button>
+                        </Col>
+                    <Col>
+                        <Button variant="secondary" className="reset-button" onClick={resetFilters} >Сбросить фильтры</Button>
+                    </Col>
+                    <Col>
                         <Button variant="primary" className="search-button" onClick={() => handleSearch(selectedFilter)}>Применить фильтр</Button>
-                    </div>
+                    </Col>
                 </>
             )}
-            {type !== 'student' && type !== 'subject' && (
-                <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
-            )}
+
             {mainBlock}
+                </Row>
+
+            </Container>
+                {type !== 'student' && type !== 'subject' && (
+                    <div className="button-group">
+                        <Button variant="primary" className="search-button" onClick={handleSearch}>Поиск</Button>
+                    </div>
+                )}
+
         </>
     );
 };

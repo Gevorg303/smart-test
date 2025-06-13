@@ -81,7 +81,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Текущий пользователь успешно получен",
             content = @Content(schema = @Schema(implementation = UserDto.class)))
     @GetMapping("/current")
-    public UserDto getCurrentUser(@CookieValue("jwtToken") String token) {
+    public UserDto getCurrentUser(@CookieValue("accessToken") String token) {
         var jwt = jwtUtils.decodeToken(token);
         var login = jwt.getClaims().get("sub").toString();
         User currentUser = userService.getUserByLogin(login);
