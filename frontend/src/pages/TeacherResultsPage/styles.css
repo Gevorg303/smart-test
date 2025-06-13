@@ -140,3 +140,9 @@ canvas {
     margin-right: 10px;
     border: 1px solid #ccc;
 }
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* или любая другая высота, которая вам подходит */
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useOutletContext } from "react-router-dom";
 import './styles.css';
+import Spinner from 'react-bootstrap/Spinner';
 
 const ResultsPage = () => {
     const [subjects, setSubjects] = useState([]);
@@ -290,16 +291,24 @@ const ResultsPage = () => {
                                 ))}
                             </select>
                         </div>
-                        {isLoading ? <div>Загрузка...</div> : renderStudentPerformance()}
-                        {selectedSubject && hasData && (
-                            <div className="chart-and-legend">
-                                <div className="pie-chart-container">
-                                    <canvas ref={canvasRef} width="400" height="400"></canvas>
-                                </div>
-                                <div className="grade-labels">
-                                    {renderGradeLegend()}
-                                </div>
+                        {isLoading ? (
+                            <div className="spinner-container">
+                                <Spinner animation="border" variant="dark" style={{ width: '5rem', height: '5rem' }} />
                             </div>
+                        ) : (
+                            <>
+                                {renderStudentPerformance()}
+                                {selectedSubject && hasData && (
+                                    <div className="chart-and-legend">
+                                        <div className="pie-chart-container">
+                                            <canvas ref={canvasRef} width="400" height="400"></canvas>
+                                        </div>
+                                        <div className="grade-labels">
+                                            {renderGradeLegend()}
+                                        </div>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
